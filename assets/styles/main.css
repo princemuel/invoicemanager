@@ -1,3 +1,16 @@
+/* -------------------------------- */
+/*               BASE               */
+/* -------------------------------- */
+
+/*!Theme Name:
+Theme URI: https://invoicenote.vercel.app/
+Repository: https://github.com/princemuel/invoicer
+Description: A web app where you can send .This web application presents the products using the most user-friendly format with accessibility in mind.
+Author's Name: Samuel Chukwuzube
+Author's Moniker: princemuel
+Version: 01
+
+*/
 /**
  * This injects Tailwind's base styles and any base styles registered by
  * plugins.
@@ -9,12 +22,11 @@
  * registered by plugins.
  */
 @import 'tailwindcss/components';
-
-/**
- * This injects Tailwind's utility classes and any utility classes registered
- * by plugins.
- */
-@import 'tailwindcss/utilities';
+@import './components.css' '
+  /**
+ * This injects Tailwind' s utility classes and
+  any utility classes registered * by plugins. * / @import
+  'tailwindcss/utilities';
 
 /**
  * Use this directive to control where Tailwind injects the hover focus,
