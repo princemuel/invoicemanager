@@ -22,8 +22,8 @@ Version: 01
  * registered by plugins.
  */
 @import 'tailwindcss/components';
-@import './components.css' '
-  /**
+@import './components.css';
+/**
  * This injects Tailwind' s utility classes and
   any utility classes registered * by plugins. * / @import
   'tailwindcss/utilities';
