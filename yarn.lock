@@ -1398,6 +1398,11 @@ imurmurhash@^0.1.4:
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==
 
+infer-next-props-type@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/infer-next-props-type/-/infer-next-props-type-0.1.0.tgz#6329c39412c8622b9df1736d2d03ff19b3e6965b"
+  integrity sha512-mcd1A2hqDzeWi3u8TxoIUqsTCbcAxdzlrGWnIac9hqcJsTDQVnM4vpET9moqmlH/Q3vstB2hZXG51j+DjUz34w==
+
 inflight@^1.0.4:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/inflight/-/inflight-1.0.6.tgz#49bd6331d7d02d0c09bc910a1075ba8165b56df9"

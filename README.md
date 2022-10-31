@@ -25,11 +25,11 @@ This project uses the STAR approach.
 
 ### Project Links
 
-Press . on the keyboard to view this project's code just like in Visual Studio Code
+Press `.` on the keyboard to view this project's code just like in Visual Studio Code
 
 - Solution URL: [Frontend Repo](https://github.com/princemuel/invoice-web-app)
 - Solution URL: [Backend Repo](https://your-solution-url.com)
-- Live Site URL: [Live Site](https://invoicer.vercel.app)
+- Live Site URL: [Live Site](https://invoicenote.vercel.app)
 
 ## My process
 

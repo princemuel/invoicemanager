@@ -24,11 +24,11 @@
       {
         "name": "Brand Guidelines",
         "quantity": 1,
-        "price": 1800.90,
-        "total": 1800.90
+        "price": 1800.9,
+        "total": 1800.9
       }
     ],
-    "total": 1800.90
+    "total": 1800.9
   },
   {
     "id": "XM9141",
@@ -55,17 +55,17 @@
       {
         "name": "Banner Design",
         "quantity": 1,
-        "price": 156.00,
-        "total": 156.00
+        "price": 156.0,
+        "total": 156.0
       },
       {
         "name": "Email Design",
         "quantity": 2,
-        "price": 200.00,
-        "total": 400.00
+        "price": 200.0,
+        "total": 400.0
       }
     ],
-    "total": 556.00
+    "total": 556.0
   },
   {
     "id": "RG0314",
@@ -160,8 +160,8 @@
       {
         "name": "Brand Guidelines",
         "quantity": 1,
-        "price": 2500.00,
-        "total": 2500.00
+        "price": 2500.0,
+        "total": 2500.0
       }
     ],
     "total": 4032.33
