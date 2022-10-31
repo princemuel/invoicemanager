@@ -1,10 +1,10 @@
-# Invoicer (In Progress)
+# Invoice Note (In Progress)
 
 ![Design preview](./preview.jpg)
 
 ## Table of contents
 
-- [Invoicer (In Progress)](#invoicer-in-progress)
+- [Invoice Note (In Progress)](#invoice-note-in-progress)
   - [Table of contents](#table-of-contents)
   - [Overview](#overview)
     - [Screenshot](#screenshot)
@@ -21,7 +21,7 @@ This project uses the STAR approach.
 
 ### Screenshot
 
-![Invoicer](./screenshot.jpg)
+![Invoice Note](./screenshot.jpg)
 
 ### Project Links
 
@@ -29,7 +29,7 @@ Press `.` on the keyboard to view this project's code just like in Visual Studio
 
 - Solution URL: [Frontend Repo](https://github.com/princemuel/invoice-web-app)
 - Solution URL: [Backend Repo](https://your-solution-url.com)
-- Live Site URL: [Live Site](https://invoicenote.vercel.app)
+- Live Site URL: [Live Site](https://invoicenote.vercel.app/)
 
 ## My process
 

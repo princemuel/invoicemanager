@@ -1,0 +1,11 @@
+@layer components {
+  .btn {
+    @apply text-300 font-sans font-normal text-center tracking-widest leading-200;
+  }
+  .btn-primary {
+    /* @apply  */
+  }
+  .btn-secondary {
+    /* @apply  */
+  }
+}

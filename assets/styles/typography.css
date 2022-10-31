@@ -1,0 +1,23 @@
+/* *********** TYPOGRAPHY  ************* */
+@layer base {
+  h1 {
+    @apply text-primary-300 text-900 font-serif font-bold tracking-tightest leading-800;
+  }
+  h2 {
+    @apply text-primary-300 text-800 font-serif font-bold tracking-tighter leading-700;
+  }
+  h3 {
+    @apply text-primary-300 text-700 font-serif font-bold tracking-tighter leading-600;
+  }
+
+  .body-100 {
+    @apply text-primary-300 text-500 font-sans font-normal leading-500;
+  }
+  .body-200 {
+    @apply text-primary-300 text-500 font-sans font-normal leading-500;
+  }
+
+  :where(li a) {
+    @apply text-300 font-sans font-normal no-underline uppercase;
+  }
+}

@@ -1,0 +1,143 @@
+/* ================================= */
+/*               RESETS              */
+/* ================================= */
+
+@layer base {
+  html {
+    box-sizing: border-box;
+    font-size: 56.25%;
+    text-rendering: optimizeSpeed;
+    -webkit-text-size-adjust: none;
+
+    @media (min-width: 75em) {
+      font-size: 62.5%;
+    }
+    @media (min-width: 112.5em) {
+      font-size: 75%;
+    }
+  }
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    box-sizing: inherit;
+  }
+
+  :where([hidden]:not([hidden='until-found'])) {
+    display: none !important;
+  }
+
+  /*********** SCROLLBARS: REFACTOR THIS ************/
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+  }
+  html::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Chrome/Safari/Webkit */
+  }
+
+  /* Set core body defaults */
+  :where(body) {
+    /* Changed to min- to prevent cropping */
+    /* min-height: 100%; */
+    min-block-size: 100vh;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    position: relative;
+  }
+
+  :where(h1, h2, h3) {
+    line-height: calc(1em + 0.5rem);
+  }
+  :where(p, h1, h2, h3, h4, h5, h6) {
+    overflow-wrap: break-word;
+  }
+
+  :where(hr) {
+    border: none;
+    border-block-start: 1px solid;
+    color: inherit;
+    block-size: 0;
+    overflow: visible;
+  }
+
+  :where(input, button, textarea, select) {
+    font: inherit;
+    color: inherit;
+  }
+  :where(button, label, select, summary, [role='button'], [role='option']) {
+    cursor: pointer;
+  }
+  :where(textarea) {
+    resize: vertical;
+    resize: block;
+  }
+  :where(:disabled) {
+    cursor: not-allowed;
+  }
+  :where(label:has(> input:disabled), label:has(+ input:disabled)) {
+    cursor: not-allowed;
+  }
+
+  /* Remove list styles on ul, ol elements  */
+  :where(ul, ol) {
+    list-style: none;
+  }
+
+  :where(img, svg, video, canvas, audio, iframe, embed, object) {
+    display: block;
+  }
+  :where(img, picture, svg) {
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+  @media not all and (min-resolution: 0.001dpcm) {
+    :where(img[loading='lazy']) {
+      clip-path: inset(0.5px);
+    }
+  }
+
+  /* Anchor elements that don't have a class get default styles */
+  :where(a) {
+    text-decoration: none;
+    text-underline-offset: 0.2ex;
+  }
+  :where(a:not([class])) {
+    text-decoration-skip-ink: auto;
+  }
+
+  :where(:focus-visible) {
+    outline: 2px solid var(--focus-color, Highlight);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(html:focus-within) {
+      scroll-behavior: smooth;
+      scroll-behavior: auto;
+    }
+  }
+
+  /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+  @media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
