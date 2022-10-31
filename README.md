@@ -1,34 +1,70 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Invoicer (In Progress)
 
-## Getting Started
+![Design preview](./preview.jpg)
 
-First, run the development server:
+## Table of contents
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- [Invoicer (In Progress)](#invoicer-in-progress)
+  - [Table of contents](#table-of-contents)
+  - [Overview](#overview)
+    - [Screenshot](#screenshot)
+    - [Project Links](#project-links)
+  - [My process](#my-process)
+    - [Building with](#building-with)
+    - [The challenge (Situation)](#the-challenge-situation)
+    - [Expected Behaviour (Tasks)](#expected-behaviour-tasks)
+  - [Author](#author)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+This project uses the STAR approach.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Screenshot
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+![Invoicer](./screenshot.jpg)
 
-## Learn More
+### Project Links
 
-To learn more about Next.js, take a look at the following resources:
+Press . on the keyboard to view this project's code just like in Visual Studio Code
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Solution URL: [Frontend Repo](https://github.com/princemuel/invoice-web-app)
+- Solution URL: [Backend Repo](https://your-solution-url.com)
+- Live Site URL: [Live Site](https://invoicer.vercel.app)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## My process
 
-## Deploy on Vercel
+### Building with
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Semantic HTML5 markup
+- CSS custom properties
+- Flexbox
+- CSS Grid
+- Mobile-first workflow
+- [React](https://reactjs.org/) - JS library
+- [Next.js](https://nextjs.org/) - React framework
+- [Tailwind CSS](https://tailwindcss.com/docs) - For component composition and styles
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### The challenge (Situation)
+
+View the User Stories at the [User Stories Markdown File](./stories.md)
+
+### Expected Behaviour (Tasks)
+
+- Creating an invoice
+  - When creating a new invoice, an ID needs to be created. Each ID should be 2 random uppercased letters followed by 4 random numbers.
+  - Invoices can be created either as drafts or as pending. Clicking "Save as Draft" should allow the user to leave any form field blank, but should create an ID if one doesn't exist and set the status to "draft". Clicking "Save & Send" should require all forms fields to be filled in, and should set the status to "pending".
+  - Changing the Payments Terms field should set the `paymentDue` property based on the `createdAt` date plus the numbers of days set for the payment terms.
+  - The `total` should be the sum of all items on the invoice.
+- Editing an invoice
+  - When saving changes to an invoice, all fields are required when the "Save Changes" button is clicked. If the user clicks "Cancel", any unsaved changes should be reset.
+  - If the invoice being edited is a "draft", the status needs to be updated to "pending" when the "Save Changes" button is clicked. All fields are required at this stage.
+- Users should be able to mark invoices as paid by clicking the "Mark as Paid" button. This should change the invoice's status to "paid".
+- Users should receive a confirmation modal when trying to delete invoices.
+- Feel free not to add custom styling for the date and dropdown form fields. The designs for those fields are optional extras and are mostly for illustration purposes.
+
+## Author
+
+- Website - [Prince Muel](https://princemuel.vercel.app/)
+- LinkedIn - [@princemuel](https://linkedin.com/in/princemuel/)
+- Twitter - [@iamprincemuel](https://twitter.com/iamprincemuel)
+- Frontend Mentor - [@princemuel](https://www.frontendmentor.io/profile/princemuel)
