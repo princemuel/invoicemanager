@@ -2,10 +2,6 @@
   "name": "invoice-web-app",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": ">=17.x",
-    "yarn": ">=1.22.x"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
