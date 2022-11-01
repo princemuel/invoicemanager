@@ -9,7 +9,7 @@ export const links = {
       img: null,
     },
   ],
-  logo: <LogoSVG />,
+  logo: <LogoSVG className='logo' />,
   // cart: <CartSVG className='icon' />,
   social: [
     {

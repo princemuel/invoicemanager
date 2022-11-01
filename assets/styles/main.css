@@ -161,7 +161,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply text-primary-900 dark:text-neutral-100 bg-neutral-300 dark:bg-primary-800 font-sans font-medium;
+    @apply text-primary-900 dark:text-neutral-100 bg-neutral-200 dark:bg-primary-800 font-sans font-medium;
   }
 
   :is(h1, h2, h3) {
@@ -211,6 +211,9 @@ Version: 01
   }
   .btn-secondary {
     /* @apply  */
+  }
+  .logo {
+    @apply fill-primary-500 dark:bg-primary-500;
   }
 }
 
