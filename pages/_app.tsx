@@ -3,7 +3,7 @@ import { Layout } from 'components';
 import Head from 'next/head';
 import type { AppPropsWithLayout } from 'types';
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
@@ -17,4 +17,4 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-export default MyApp;
+export default App;

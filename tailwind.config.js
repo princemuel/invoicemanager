@@ -21,6 +21,7 @@ module.exports = {
       neutral: {
         100: '#ffffff',
         200: '#F8F8FB',
+        300: '#F2F2F2',
       },
       primary: {
         100: '#DFE3FA',
@@ -44,6 +45,7 @@ module.exports = {
     },
 
     fontSize: {
+      ...defaultTheme.fontSize,
       100: '0.8rem',
       200: '1rem',
       300: '1.1rem',
@@ -68,9 +70,9 @@ module.exports = {
     letterSpacing: {
       100: '-0.23px',
       200: '-0.25px',
-      300: '-0.63rem',
-      400: '-0.8rem',
-      500: '-1rem',
+      300: '-0.63px',
+      400: '-0.8px',
+      500: '-1px',
     },
 
     screens: {
