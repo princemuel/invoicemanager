@@ -1,5 +1,3 @@
-import { LogoSVG } from './images';
-
 export const links = {
   navigation: [
     {
@@ -9,7 +7,7 @@ export const links = {
       img: null,
     },
   ],
-  logo: <LogoSVG className='logo' />,
+  logo: '/assets/images/logo.svg',
   // cart: <CartSVG className='icon' />,
   social: [
     {

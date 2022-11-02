@@ -121,6 +121,9 @@ Version: 01
       clip-path: inset(0.5px);
     }
   }
+  :where(svg) {
+    --clr-icon: currentColor;
+  }
 
   /* Anchor elements that don't have a class get default styles */
   :where(a) {
@@ -164,7 +167,7 @@ Version: 01
     @apply text-primary-900 dark:text-neutral-100 bg-neutral-200 dark:bg-primary-800 font-sans font-medium;
   }
 
-  :is(h1, h2, h3) {
+  :is(h1, h2, h3, button) {
     @apply font-bold;
   }
 
@@ -200,17 +203,26 @@ Version: 01
 @tailwind components;
 /*============================
       CUSTOM COMPONENTS
+      <button class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
   ============================
 */
 @layer components {
   .btn {
-    @apply text-300 font-sans font-normal text-center tracking-widest leading-200;
+    @apply inline-flex items-center gap-4 py-6 px-11 rounded-pill text-400 leading-200 tracking-200;
   }
-  .btn-primary {
-    /* @apply  */
+  .btn-invoice {
+    @apply p-4 text-neutral-100 bg-primary-500 hover:bg-primary-200;
   }
-  .btn-secondary {
-    /* @apply  */
+  .btn-paid {
+    @apply px-11 text-neutral-100 bg-primary-500 hover:bg-primary-200;
+  }
+  .btn-edit {
+    @apply text-primary-400 hover:text-primary-400  bg-neutral-300 hover:bg-primary-100  dark:text-primary-100 dark:hover:text-neutral-100  dark:bg-primary-600 dark:hover:bg-primary-100;
+  }
+  .btn-draft {
+    @apply text-primary-300 bg-[#373B53] hover:bg-primary-900 dark:text-primary-100 dark:hover:bg-[#373B53];
+  }
+  .btn-delete {
   }
   .logo {
     @apply fill-primary-500 dark:bg-primary-500;

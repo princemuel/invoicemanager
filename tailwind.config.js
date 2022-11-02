@@ -19,9 +19,9 @@ module.exports = {
       current: 'currentColor',
       transparent: 'transparent',
       neutral: {
-        100: '#ffffff',
+        100: '#FFFFFF',
         200: '#F8F8FB',
-        300: '#F2F2F2',
+        300: '#F9FAFE',
       },
       primary: {
         100: '#DFE3FA',
@@ -41,7 +41,7 @@ module.exports = {
     },
 
     fontFamily: {
-      sans: ['League Spartan', ...defaultTheme.fontFamily.sans],
+      sans: ['Spartan', ...defaultTheme.fontFamily.sans],
     },
 
     fontSize: {
