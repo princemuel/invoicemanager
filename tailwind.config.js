@@ -3,8 +3,10 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class', '[data-theme="dark"]'],
+  darkMode: 'class',
   content: [
+    './node_modules/flowbite/**/*.js',
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
@@ -99,10 +101,19 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
+    require('flowbite/plugin'),
+    plugin(function ({ addComponents, addUtilities, theme }) {
+      addComponents({
         '.btn': {
-          '--flow-space': '<value>',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '1rem',
+          paddingBlock: '1.5rem',
+          paddingInline: '2.75rem',
+          borderRadius: theme('borderRadius.pill'),
+          fontSize: theme('fontSize.400'),
+          lineHeight: theme('lineHeight.200'),
+          letterSpacing: theme('letterSpacing.200'),
         },
       });
     }),

@@ -182,13 +182,28 @@ const DesignSystem: NextPage = () => {
                 Delete
               </button>
             </div>
+            <div>
+              <button type='button' className='btn btn-add'>
+                &#43; Add New Item
+              </button>
+            </div>
           </div>
         </section>
 
         <section>
           <h2 className='text-primary-500'>Form Elements Light</h2>
           {/* FORM ELEMENTS LIGHT */}
-          <div></div>
+          <ul className='grid gap-8 mb-8 md:grid-cols-3'>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+          </ul>
         </section>
         <section className='bg-primary-900 w-full-shadow'>
           <h2 className='text-primary'>Form Elements Dark</h2>

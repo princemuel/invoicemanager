@@ -34,7 +34,7 @@ const Home: NextPage = () => {
         <div className='flex items-center justify-center'>
           <h2>This site is under construction</h2>
         </div>
-        <div className='flex items-center justify-center'>
+        <div className='flex items-center justify-center text-accent-200'>
           <Link href={'/design'} passHref>
             <a>See the design system</a>
           </Link>

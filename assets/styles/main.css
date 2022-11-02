@@ -207,9 +207,7 @@ Version: 01
   ============================
 */
 @layer components {
-  .btn {
-    @apply inline-flex items-center gap-4 py-6 px-11 rounded-pill text-400 leading-200 tracking-200;
-  }
+  /* ********** BUTTONS ********** */
   .btn-invoice {
     @apply p-4 text-neutral-100 bg-primary-500 hover:bg-primary-200;
   }
@@ -223,7 +221,13 @@ Version: 01
     @apply text-primary-300 bg-[#373B53] hover:bg-primary-900 dark:text-primary-100 dark:hover:bg-[#373B53];
   }
   .btn-delete {
+    @apply text-neutral-100 bg-accent-200 hover:bg-accent-100;
   }
+  .btn-add {
+    @apply px-32 text-primary-400 bg-neutral-300 hover:bg-primary-100;
+  }
+  /* ********** BUTTONS ********** */
+
   .logo {
     @apply fill-primary-500 dark:bg-primary-500;
   }
