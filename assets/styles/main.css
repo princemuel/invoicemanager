@@ -26,11 +26,15 @@ Version: 01
     font-size: 56.25%;
     text-rendering: optimizeSpeed;
     -webkit-text-size-adjust: none;
+  }
 
-    @media (min-width: 75em) {
+  @media (min-width: 75em) {
+    html {
       font-size: 62.5%;
     }
-    @media (min-width: 112.5em) {
+  }
+  @media (min-width: 112.5em) {
+    html {
       font-size: 75%;
     }
   }
@@ -100,7 +104,7 @@ Version: 01
   :where(:disabled) {
     cursor: not-allowed;
   }
-  :where(label:has(> input:disabled), label:has(+ input:disabled)) {
+  :where(label:has(* > input:disabled), label:has(* + input:disabled)) {
     cursor: not-allowed;
   }
 
@@ -121,8 +125,9 @@ Version: 01
       clip-path: inset(0.5px);
     }
   }
-  :where(svg) {
+  :where(svg[class]) {
     --clr-icon: currentColor;
+    fill: currentColor;
   }
 
   /* Anchor elements that don't have a class get default styles */

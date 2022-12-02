@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  IconAddSVG,
   IconArrowDownSVG,
   IconArrowLeftSVG,
   IconArrowRightSVG,
@@ -25,6 +26,7 @@ export const icons = {
     dark: (props: IconProps) => <IconMoonSVG {...props} />,
   },
   actions: {
+    add: (props: IconProps) => <IconAddSVG {...props} />,
     delete: (props: IconProps) => <IconDeleteSVG {...props} />,
     check: (props: IconProps) => <IconCheckSVG {...props} />,
   },
