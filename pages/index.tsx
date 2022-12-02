@@ -1,4 +1,4 @@
-import { LogoSVG } from 'common';
+import { icons } from 'common';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ const Home: NextPage = () => {
           <Link href={'/'} passHref>
             <a>
               <span>
-                <LogoSVG className='text-primary-500 dark:text-neutral-100' />
+                <icons.logo className='text-primary-500 dark:text-neutral-100' />
               </span>
               <span className='sr-only'>Logo and Link</span>
               {/* <Image
