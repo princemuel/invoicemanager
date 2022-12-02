@@ -6,11 +6,13 @@ import IconCalendarSVG from 'assets/svgs/icon-calendar.svg';
 import IconCheckSVG from 'assets/svgs/icon-check.svg';
 import IconDeleteSVG from 'assets/svgs/icon-delete.svg';
 import IconMoonSVG from 'assets/svgs/icon-moon.svg';
+import IconAddSVG from 'assets/svgs/icon-plus.svg';
 import IconSunSVG from 'assets/svgs/icon-sun.svg';
 import IconEmptySVG from 'assets/svgs/illustration-empty.svg';
 import LogoSVG from 'assets/svgs/logo.svg';
 
 export {
+  IconAddSVG,
   ProfilePicJPG,
   IconArrowRightSVG,
   IconArrowDownSVG,
