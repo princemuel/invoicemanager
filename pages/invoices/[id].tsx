@@ -1,4 +1,4 @@
-import { HomeTemplate } from 'components';
+import { InvoiceTemplate } from 'components';
 import Head from 'next/head';
 import { NextPageWithLayout } from 'types';
 
@@ -6,17 +6,17 @@ import { NextPageWithLayout } from 'types';
 // type Props = InferNextPropsType<typeof getStaticProps>;
 type Props = {};
 
-const Home: NextPageWithLayout<Props> = () => {
+const Invoice: NextPageWithLayout<Props> = () => {
   return (
     <>
       <Head>
-        <title>Invoice Notes</title>
+        <title>Single Invoice</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <HomeTemplate />
+      <InvoiceTemplate />
     </>
   );
 };
 
-export default Home;
+export default Invoice;
