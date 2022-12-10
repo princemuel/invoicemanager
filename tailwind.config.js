@@ -5,8 +5,6 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   darkMode: 'class',
   content: [
-    './node_modules/flowbite/**/*.js',
-    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
@@ -101,7 +99,6 @@ module.exports = {
     },
   },
   plugins: [
-    require('flowbite/plugin'),
     plugin(function ({ addComponents, addUtilities, theme }) {
       addComponents({
         '.btn': {
