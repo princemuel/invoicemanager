@@ -3,7 +3,7 @@ const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class', '[data-theme="dark"]'],
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
@@ -19,8 +19,9 @@ module.exports = {
       current: 'currentColor',
       transparent: 'transparent',
       neutral: {
-        100: '#ffffff',
+        100: '#FFFFFF',
         200: '#F8F8FB',
+        300: '#F9FAFE',
       },
       primary: {
         100: '#DFE3FA',
@@ -34,16 +35,17 @@ module.exports = {
         900: '#0C0E16',
       },
       accent: {
-        100: '#9277FF',
+        100: '#ff9797',
         200: '#EC5757',
       },
     },
 
     fontFamily: {
-      sans: ['League Spartan', ...defaultTheme.fontFamily.sans],
+      sans: ['Spartan', ...defaultTheme.fontFamily.sans],
     },
 
     fontSize: {
+      ...defaultTheme.fontSize,
       100: '0.8rem',
       200: '1rem',
       300: '1.1rem',
@@ -68,9 +70,9 @@ module.exports = {
     letterSpacing: {
       100: '-0.23px',
       200: '-0.25px',
-      300: '-0.63rem',
-      400: '-0.8rem',
-      500: '-1rem',
+      300: '-0.63px',
+      400: '-0.8px',
+      500: '-1px',
     },
 
     screens: {
@@ -97,10 +99,18 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(function ({ addUtilities }) {
-      addUtilities({
+    plugin(function ({ addComponents, addUtilities, theme }) {
+      addComponents({
         '.btn': {
-          '--flow-space': '<value>',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '1rem',
+          paddingBlock: '1.5rem',
+          paddingInline: '2.75rem',
+          borderRadius: theme('borderRadius.pill'),
+          fontSize: theme('fontSize.400'),
+          lineHeight: theme('lineHeight.200'),
+          letterSpacing: theme('letterSpacing.200'),
         },
       });
     }),

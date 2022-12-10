@@ -1,9 +1,10 @@
 import 'assets/styles/main.css';
 import { Layout } from 'components';
+import { ThemeProvider } from 'next-themes';
 import Head from 'next/head';
 import type { AppPropsWithLayout } from 'types';
 
-function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
 
   return (
@@ -12,9 +13,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       </Head>
 
-      {getLayout(<Component {...pageProps} />)}
+      <ThemeProvider enableSystem={true} attribute='class'>
+        {getLayout(<Component {...pageProps} />)}
+      </ThemeProvider>
     </>
   );
 }
 
-export default MyApp;
+export default App;
