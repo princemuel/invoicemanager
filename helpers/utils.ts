@@ -2,9 +2,7 @@ export const capitalize = (string: string) => {
   return string?.charAt(0)?.toUpperCase() + string?.slice(1);
 };
 
-export const trim = (string?: string) => {
-  return string?.trim();
-};
+export const trim = (string: string) => string?.trim();
 
 export function serialize<T>(data: T): T {
   return JSON.parse(JSON.stringify(data));
