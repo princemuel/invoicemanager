@@ -1,4 +1,3 @@
-import { icons } from 'common';
 import { ThemeButton } from 'components/atoms';
 import { PLACEHOLDER_IMAGE } from 'helpers';
 import Image from 'next/future/image';
@@ -8,12 +7,9 @@ type Props = {};
 
 const Sidebar = (props: Props) => {
   return (
-    <aside className='flex h-32 flex-row items-center justify-between bg-primary-600 max-sm:max-w-full md:min-h-screen md:w-40 md:flex-col '>
+    <aside className='flex h-32 flex-row items-center justify-between bg-primary-600 max-sm:max-w-full md:min-h-screen md:w-40 md:flex-col md:rounded-tr-[2rem] '>
       <Link href={'/'} passHref>
-        <a className='relative block h-full w-40 bg-primary-500 after:h-full md:h-40 md:w-full'>
-          <span>
-            <icons.logo className='text-primary-500 dark:text-neutral-100' />
-          </span>
+        <a className='relative block h-full w-32 rounded-tr-[2rem] rounded-br-[2rem] bg-primary-500 before:absolute before:z-[2] before:h-full before:w-full before:bg-[url(/assets/svgs/logo.svg)] before:bg-center before:bg-no-repeat after:absolute after:bottom-0 after:h-1/2 after:w-full after:rounded-br-[2rem] after:rounded-tl-[2rem] after:bg-primary-200 md:h-40 md:w-full'>
           <span className='sr-only'>Return To The Home Page</span>
         </a>
       </Link>
