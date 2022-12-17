@@ -10,7 +10,7 @@ const Home: NextPageWithLayout<Props> = () => {
   return (
     <>
       <Head>
-        <title>Invoice Notes</title>
+        <title>Invoice Mailer</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
