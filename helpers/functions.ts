@@ -1,4 +1,4 @@
-import { DraftInvoice, Invoice, PaidInvoice, PendingInvoice } from 'types';
+import type { DraftInvoice, Invoice, PaidInvoice, PendingInvoice } from 'types';
 
 export const isDraftInvoice = (invoice: Invoice): invoice is DraftInvoice => {
   return invoice.status === 'draft';
