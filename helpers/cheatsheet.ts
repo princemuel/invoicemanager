@@ -1,5 +1,76 @@
-const localStorageKey = '__bookshelf_token__';
+import { BREAKPOINT_SIZES } from './constants';
 
+type BreakPointRange = 'min' | 'max';
+
+type BreakpointFn = (value: BreakPointRange) => string;
+
+export const devices = {
+  /**
+   * @param value min or max
+   * @returns (min-width: 20em) or (max-width: 20em)
+   */
+  xs: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.xs / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 36em) or (max-width: 36em)
+   */
+  sm: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.sm / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 40em) or (max-width: 40em)
+   */
+  md: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.sx / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 45em) or (max-width: 45em)
+   */
+  tab: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.md / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 65em) or (max-width: 65em)
+   */
+  ipad: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.lg / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 75em) or (max-width: 75em)
+   */
+  desk: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.xl / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 93.75em) or (max-width: 93.75em)
+   */
+  large: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.xxl / 16}em)`,
+
+  /**
+   * @param value min or max
+   * @returns (min-width: 112.5em) or (max-width: 112.5em)
+   */
+  xxl: (value) => `(${media(value)}: ${BREAKPOINT_SIZES.xxxl / 16}em)`,
+} satisfies Record<string, BreakpointFn>;
+
+const media = (value: BreakPointRange) => {
+  return value === 'min' ? 'min-width' : 'max-width';
+};
+
+/**
+ *
+ * Constrained Identity Function
+ */
+const constrain =
+  <T extends unknown>() =>
+  <U extends T>(item: U) =>
+    item;
+
+/**
+ *
+ * Custom Fetch Function
+ */
 export async function client(
   endpoint: string,
   { body, ...customConfig } = {} as Record<string, any>
@@ -38,6 +109,7 @@ export async function client(
       }
     });
 }
+const localStorageKey = '__bookshelf_token__';
 
 function logout() {
   window.localStorage.removeItem(localStorageKey);
