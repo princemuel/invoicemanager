@@ -1,6 +1,6 @@
 import { data, icons, Link } from 'common';
 import { StatusButton, Text } from 'components/atoms';
-import { formatPrice } from 'helpers';
+import { formatPrice, isNotEmptyArray } from 'helpers';
 
 type Props = {};
 
@@ -49,37 +49,39 @@ const HomeTemplate = (props: Props) => {
       </header>
 
       <ul aria-label='List of Invoices' className='mt-20 flex flex-col gap-6'>
-        {(data || []).length > 0 ? (
-          data?.map((invoice) => (
+        {isNotEmptyArray(data) ? (
+          data.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-lg bg-neutral-100 p-7 shadow-md dark:bg-primary-700'
+              className='rounded-lg bg-neutral-100 py-7 px-8 shadow-md dark:bg-primary-700'
             >
               <Link href='/' passHref>
-                <a className='flex items-center gap-6 '>
-                  <Text className='body-100 flex-1 font-bold'>
+                <a className='grid grid-cols-2 grid-rows-4 sm:flex sm:items-center sx:gap-8'>
+                  <Text className='body-100 col-start-1 col-end-2 row-start-1 row-end-1 font-bold sm:flex-1'>
                     <span className='text-primary-400'>#</span>
                     <span className='text-primary-900 dark:text-neutral-100'>
                       {invoice?.id}
                     </span>
                   </Text>
 
-                  <Text className='body-100 flex-1 font-medium  text-primary-400'>
+                  <Text className='body-100 self-end font-medium text-primary-400 sm:flex-1 sm:self-center'>
                     <span>Due </span>
                     <time>{invoice?.paymentDue}</time>
                   </Text>
 
-                  <Text className='body-100 flex-1 font-medium text-[#858BB2] dark:text-neutral-100'>
+                  <Text className='body-100 col-start-2 col-end-3 row-start-1 row-end-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sm:flex-1'>
                     {invoice?.clientName}
                   </Text>
 
-                  <Text className='flex-1 text-600 font-bold leading-500 tracking-400 text-primary-900 dark:text-neutral-100'>
+                  <Text className='col-start-1 col-end-2 row-start-4 row-end-4 text-600 font-bold leading-500 tracking-400 text-primary-900 dark:text-neutral-100 sm:flex-1 sx:justify-end'>
                     <output>{formatPrice(invoice?.total)}</output>
                   </Text>
 
-                  <StatusButton status={invoice?.status} className='flex-1' />
-
-                  <Text>
+                  <StatusButton
+                    status={invoice?.status}
+                    className='col-start-2 col-end-3 row-start-3 row-end-5 sm:flex-1'
+                  />
+                  <Text className='hidden sx:block'>
                     <icons.arrow.right />
                   </Text>
                 </a>
