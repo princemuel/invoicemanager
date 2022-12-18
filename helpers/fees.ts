@@ -15,10 +15,10 @@ export const grandTotal = (total: number, shipping: number, vat: number) => {
 };
 
 export const formatPrice = (price: number) => {
-  return Intl.NumberFormat('en-US', {
+  return Intl.NumberFormat('en-GB', {
     maximumFractionDigits: 2,
     style: 'currency',
-    currency: 'USD',
+    currency: 'GBP',
   }).format(price);
 };
 

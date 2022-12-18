@@ -73,7 +73,7 @@ const HomeTemplate = (props: Props) => {
                     {invoice?.clientName}
                   </Text>
 
-                  <Text className='col-start-1 col-end-2 row-start-4 row-end-4 text-600 font-bold leading-500 tracking-400 text-primary-900 dark:text-neutral-100 sm:flex-1 sx:justify-end'>
+                  <Text className='col-start-1 col-end-2 row-start-4 row-end-4 text-600 font-bold leading-500 tracking-400 text-primary-900 dark:text-neutral-100 sm:flex-1 sm:text-right'>
                     <output>{formatPrice(invoice?.total)}</output>
                   </Text>
 
