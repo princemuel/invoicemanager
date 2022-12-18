@@ -22,6 +22,7 @@ module.exports = {
         100: '#FFFFFF',
         200: '#F8F8FB',
         300: '#F9FAFE',
+        400: '#F2F2F2',
       },
       primary: {
         100: '#DFE3FA',
@@ -82,11 +83,14 @@ module.exports = {
 
     extend: {
       screens: {
-        sm: '40em', // => @media (min-width: 640px) { ... }
-        md: '48em', // => @media (min-width: 768px) { ... }
+        xs: '20em', // => @media (min-width: 320px) { ... }
+        sm: '36em', // => @media (min-width: 576px) { ... }
+        sx: '40em', // => @media (min-width: 640px) { ... }
+        md: '45em', // => @media (min-width: 720px) { ... }
         lg: '64em', // => @media (min-width: 1024px) { ... }
         xl: '80em', // => @media (min-width: 1280px) { ... }
-        '2xl': '96em', // => @media (min-width: 1536px) { ... }
+        xxl: '96em', // => @media (min-width: 1280px) { ... }
+        xxxl: '112.5em', // => @media (min-width: 1800px) { ... }
       },
 
       gridTemplateColumns: {
@@ -94,25 +98,10 @@ module.exports = {
         'fill-16': 'repeat(auto-fill, minmax(4rem, 1fr))',
         'fill-20': 'repeat(auto-fill, minmax(5rem, 1fr))',
         'fit-big': 'repeat(auto-fit, minmax(25rem, 1fr))',
+        'fit-row': 'repeat(auto-fit, minmax(8rem, 1fr))',
         // etc.
       },
     },
   },
-  plugins: [
-    plugin(function ({ addComponents, addUtilities, theme }) {
-      addComponents({
-        '.btn': {
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '1rem',
-          paddingBlock: '1.5rem',
-          paddingInline: '2.75rem',
-          borderRadius: theme('borderRadius.pill'),
-          fontSize: theme('fontSize.400'),
-          lineHeight: theme('lineHeight.200'),
-          letterSpacing: theme('letterSpacing.200'),
-        },
-      });
-    }),
-  ],
+  plugins: [],
 };

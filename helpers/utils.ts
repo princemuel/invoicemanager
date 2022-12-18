@@ -12,6 +12,10 @@ export const removeFirstChar = (string: string) => {
   return string?.slice(1);
 };
 
+export const isNotEmptyArray = <T extends any[]>(array: T) => {
+  return (array || []).length > 0;
+};
+
 export const shortName = (name: string) => {
   const lastIndexOfSpace = name?.indexOf(' ');
   return name?.substring(0, lastIndexOfSpace);

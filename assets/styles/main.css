@@ -25,7 +25,7 @@ Version: 01
     box-sizing: border-box;
     font-size: 56.25%;
     text-rendering: optimizeSpeed;
-    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
   }
 
   @media (min-width: 75em) {
@@ -50,16 +50,6 @@ Version: 01
 
   :where([hidden]:not([hidden='until-found'])) {
     display: none !important;
-  }
-
-  /*********** SCROLLBARS: REFACTOR THIS ************/
-  html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
-  }
-  html::-webkit-scrollbar {
-    width: 0px;
-    background: transparent; /* Chrome/Safari/Webkit */
   }
 
   /* Set core body defaults */
@@ -169,7 +159,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply text-primary-900 dark:text-neutral-100 bg-neutral-200 dark:bg-primary-800 font-sans font-medium;
+    @apply bg-neutral-200 font-sans font-medium text-primary-900 dark:bg-primary-800 dark:text-neutral-100;
   }
 
   :is(h1, h2, h3, button) {
@@ -195,10 +185,6 @@ Version: 01
   .body-200 {
     @apply text-300 leading-300 tracking-100;
   }
-
-  :where(li a) {
-    @apply text-300 no-underline uppercase;
-  }
 }
 
 /**
@@ -213,23 +199,26 @@ Version: 01
 */
 @layer components {
   /* ********** BUTTONS ********** */
+  .btn {
+    @apply inline-flex items-center gap-4 rounded-pill leading-200 tracking-200;
+  }
   .btn-invoice {
-    @apply p-4 text-neutral-100 bg-primary-500 hover:bg-primary-200;
+    @apply h-[4.8rem] w-60 bg-primary-500 p-4 text-400  text-neutral-100 hover:bg-primary-200;
   }
   .btn-paid {
-    @apply px-11 text-neutral-100 bg-primary-500 hover:bg-primary-200;
+    @apply bg-primary-500 px-11 text-neutral-100 hover:bg-primary-200;
   }
   .btn-edit {
-    @apply text-primary-400 hover:text-primary-400  bg-neutral-300 hover:bg-primary-100  dark:text-primary-100 dark:hover:text-neutral-100  dark:bg-primary-600 dark:hover:bg-primary-100;
+    @apply bg-neutral-300 text-primary-400  hover:bg-primary-100 hover:text-primary-400  dark:bg-primary-600 dark:text-primary-100  dark:hover:bg-primary-100 dark:hover:text-neutral-100;
   }
   .btn-draft {
-    @apply text-primary-300 bg-[#373B53] hover:bg-primary-900 dark:text-primary-100 dark:hover:bg-[#373B53];
+    @apply bg-[#373B53] text-primary-300 hover:bg-primary-900 dark:text-primary-100 dark:hover:bg-[#373B53];
   }
   .btn-delete {
-    @apply text-neutral-100 bg-accent-200 hover:bg-accent-100;
+    @apply bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply px-32 text-primary-400 bg-neutral-300 hover:bg-primary-100;
+    @apply bg-neutral-300 px-32 text-primary-400 hover:bg-primary-100;
   }
   /* ********** BUTTONS ********** */
 
@@ -249,8 +238,8 @@ Version: 01
   ============================
 */
 @layer utilities {
-  .main-container {
-    --max-width: 111rem;
+  .h-container {
+    --max-width: 75rem;
     --container-padding: 1.6rem;
 
     width: min(var(--max-width), 100% - (var(--container-padding) * 2));
@@ -274,7 +263,7 @@ Version: 01
   }
 
   .skip-to-content {
-    @apply absolute mx-auto py-[1em] px-[0.5em]  text-neutral-100 bg-primary-300 z-[9999] translate-y-[-120%] transition-transform focus:translate-y-0 focus:outline-offset-2 focus:outline focus:outline-primary-300;
+    @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-primary-300 py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-primary-300;
   }
 }
 
