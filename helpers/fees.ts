@@ -15,7 +15,11 @@ export const grandTotal = (total: number, shipping: number, vat: number) => {
 };
 
 export const formatPrice = (price: number) => {
-  return Intl.NumberFormat().format(price);
+  return Intl.NumberFormat('en-US', {
+    maximumFractionDigits: 2,
+    style: 'currency',
+    currency: 'USD',
+  }).format(price);
 };
 
 const convertFee = (fee: number) => {

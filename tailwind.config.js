@@ -22,6 +22,7 @@ module.exports = {
         100: '#FFFFFF',
         200: '#F8F8FB',
         300: '#F9FAFE',
+        400: '#F2F2F2',
       },
       primary: {
         100: '#DFE3FA',
@@ -98,21 +99,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    plugin(function ({ addComponents, addUtilities, theme }) {
-      addComponents({
-        '.btn': {
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '1rem',
-          paddingBlock: '1.5rem',
-          paddingInline: '2.75rem',
-          borderRadius: theme('borderRadius.pill'),
-          fontSize: theme('fontSize.400'),
-          lineHeight: theme('lineHeight.200'),
-          letterSpacing: theme('letterSpacing.200'),
-        },
-      });
-    }),
-  ],
+  plugins: [],
 };
