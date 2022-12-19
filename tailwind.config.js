@@ -12,6 +12,7 @@ module.exports = {
   theme: {
     borderRadius: {
       ...defaultTheme.borderRadius,
+      default: '0.8rem',
       pill: '100vmax',
     },
 
@@ -77,22 +78,18 @@ module.exports = {
     },
 
     screens: {
+      s: '20em', // => @media (min-width: 320px) { ... }
       xs: '30em', // => @media (min-width: 480px) { ... }
-      ...defaultTheme.screens,
+      sm: '36em', // => @media (min-width: 576px) { ... }
+      sx: '40em', // => @media (min-width: 640px) { ... }
+      md: '45em', // => @media (min-width: 720px) { ... }
+      lg: '64em', // => @media (min-width: 1024px) { ... }
+      xl: '80em', // => @media (min-width: 1280px) { ... }
+      xxl: '96em', // => @media (min-width: 1280px) { ... }
+      xxxl: '112.5em', // => @media (min-width: 1800px) { ... }
     },
 
     extend: {
-      screens: {
-        xs: '20em', // => @media (min-width: 320px) { ... }
-        sm: '36em', // => @media (min-width: 576px) { ... }
-        sx: '40em', // => @media (min-width: 640px) { ... }
-        md: '45em', // => @media (min-width: 720px) { ... }
-        lg: '64em', // => @media (min-width: 1024px) { ... }
-        xl: '80em', // => @media (min-width: 1280px) { ... }
-        xxl: '96em', // => @media (min-width: 1280px) { ... }
-        xxxl: '112.5em', // => @media (min-width: 1800px) { ... }
-      },
-
       gridTemplateColumns: {
         // arbitrary values
         'fill-16': 'repeat(auto-fill, minmax(4rem, 1fr))',
@@ -100,6 +97,9 @@ module.exports = {
         'fit-big': 'repeat(auto-fit, minmax(25rem, 1fr))',
         'fit-row': 'repeat(auto-fit, minmax(8rem, 1fr))',
         // etc.
+      },
+      boxShadow: {
+        default: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397);',
       },
     },
   },
