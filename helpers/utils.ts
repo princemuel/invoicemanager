@@ -12,9 +12,9 @@ export const removeFirstChar = (string: string) => {
   return string?.slice(1);
 };
 
-export const isNotEmptyArray = <T extends Array<{ length: number }>>(
-  array: T | undefined
-): array is NonNullable<T> => {
+export const isNotEmptyArray = <T>(
+  array: T[] | undefined
+): array is NonNullable<T[]> => {
   return (array || []).length > 0;
 };
 
