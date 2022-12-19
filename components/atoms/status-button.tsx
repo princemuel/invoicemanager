@@ -33,12 +33,12 @@ const StatusButton = ({ status, className }: Props) => {
     <button
       type='button'
       className={trim(
-        `body-100 flex items-center justify-center gap-3 rounded-lg py-5 font-bold ${btnColors} ${
+        `body-100 flex items-center justify-center gap-3 rounded-default font-bold ${btnColors} ${
           className || ''
         }`
       )}
     >
-      <span className={`inline-block  h-3 w-3 rounded-full bg-current`}></span>
+      <span className={`inline-block h-3 w-3 rounded-full bg-current`}></span>
       <span>{btnText}</span>
     </button>
   );
