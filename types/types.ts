@@ -37,8 +37,8 @@ export type AppPropsWithLayout = AppProps & {
 */
 
 export interface Params extends ParsedUrlQuery {
-  category: string;
-  slug: string;
+  id: string;
+  status: string;
 }
 export type Unarray<T> = T extends Array<infer U> ? U : T;
 export type ReturnValue<T> = T extends (...args: any[]) => infer R ? R : T;
