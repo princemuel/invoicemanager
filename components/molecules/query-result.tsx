@@ -17,7 +17,7 @@ const QueryResult = ({ loading, error, data, children }: Props) => {
   }
   if (loading) {
     return (
-      <section className='flex items-center justify-center w-full min-h-screen'>
+      <section className='flex min-h-screen w-full items-center justify-center'>
         {/* <LoadingSpinner data-testid='spinner' size='large' theme='grayscale' /> */}
       </section>
     );
