@@ -4,6 +4,7 @@ import Head from 'next/head';
 import type { Invoice, Params } from 'types';
 import { GetStaticPaths, GetStaticProps, NextPageWithLayout } from 'types';
 
+import { InvoiceProvider } from 'context';
 import type { InferNextPropsType } from 'types';
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
@@ -16,7 +17,9 @@ const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <InvoiceTemplate data={invoice} />
+      <InvoiceProvider value={invoice}>
+        <InvoiceTemplate />
+      </InvoiceProvider>
     </>
   );
 };

@@ -1,13 +1,14 @@
 import { icons, Link } from 'common';
 import { StatusButton, Text } from 'components/atoms';
+import { useInvoices } from 'context';
 import { formatDate, formatPrice, isNotEmptyArray } from 'helpers';
-import type { Invoice } from 'types';
+import { Invoice } from 'types';
 
-type Props = {
-  data: Invoice[];
-};
+type Props = {};
 
-const HomeTemplate = ({ data }: Props) => {
+const HomeTemplate = (props: Props) => {
+  const data = useInvoices() as Invoice[];
+
   return (
     <section aria-labelledby='invoices-heading' className='h-container'>
       <header className='mt-20 flex items-center '>

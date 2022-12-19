@@ -1,3 +1,22 @@
+type IClsx = (...args: Array<undefined | null | string | boolean>) => string;
+
+/**
+ *
+ * @param args (string | boolean | null | undefined)[]
+ * @returns string
+ * @example clsx('base', undefined, ['more', 'classes'], hasError && 'bg-red', isEnabled || 'pointer-events-none', isTitle ? 'font-semibold' : 'font-normal')
+ * @returns "base more classes bg-red font-normal"
+ */
+export const clsx: IClsx = (...args) =>
+  trim(
+    args
+      .flat()
+      .filter(
+        (arg) => arg !== null && arg !== undefined && typeof arg !== 'boolean'
+      )
+      .join(' ')
+  );
+
 export const capitalize = (string: string) => {
   return string?.charAt(0)?.toUpperCase() + string?.slice(1);
 };
