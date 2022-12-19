@@ -1,12 +1,13 @@
 import { HomeTemplate } from 'components';
+import { fetchInvoices } from 'lib';
 import Head from 'next/head';
-import { NextPageWithLayout } from 'types';
+import { GetStaticProps, Invoice, NextPageWithLayout } from 'types';
 
-// import { InferNextPropsType } from 'types';
-// type Props = InferNextPropsType<typeof getStaticProps>;
-type Props = {};
+import type { InferNextPropsType } from 'types';
+type Props = InferNextPropsType<typeof getStaticProps>;
+// type Props = {};
 
-const Home: NextPageWithLayout<Props> = () => {
+const Home: NextPageWithLayout<Props> = ({ invoices }) => {
   return (
     <>
       <Head>
@@ -14,9 +15,27 @@ const Home: NextPageWithLayout<Props> = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <HomeTemplate />
+      <HomeTemplate data={invoices} />
     </>
   );
 };
 
 export default Home;
+
+export const getStaticProps: GetStaticProps<{
+  invoices: Invoice[];
+}> = async () => {
+  try {
+    const invoices = await fetchInvoices();
+
+    return {
+      props: {
+        invoices,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+};

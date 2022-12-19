@@ -1,12 +1,14 @@
 import { InvoiceTemplate } from 'components';
+import { getById, getInvoicePaths } from 'lib';
 import Head from 'next/head';
-import { NextPageWithLayout } from 'types';
+import type { Invoice, Params } from 'types';
+import { GetStaticPaths, GetStaticProps, NextPageWithLayout } from 'types';
 
-// import { InferNextPropsType } from 'types';
-// type Props = InferNextPropsType<typeof getStaticProps>;
-type Props = {};
+import type { InferNextPropsType } from 'types';
+type Props = InferNextPropsType<typeof getStaticProps>;
+// type Props = {};
 
-const Invoice: NextPageWithLayout<Props> = () => {
+const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
   return (
     <>
       <Head>
@@ -14,9 +16,38 @@ const Invoice: NextPageWithLayout<Props> = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <InvoiceTemplate />
+      <InvoiceTemplate data={invoice} />
     </>
   );
 };
 
 export default Invoice;
+
+export const getStaticProps: GetStaticProps<{
+  invoice: Invoice;
+}> = async (context) => {
+  try {
+    const { params } = context as { params: Params };
+    const invoice = (await getById(params?.id)) as Invoice;
+
+    return {
+      props: {
+        invoice,
+      },
+    };
+  } catch (error) {
+    return {
+      notFound: true,
+    };
+  }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const categories = await getInvoicePaths();
+  const paths = categories.map(({ id }) => ({ params: { id } }));
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
