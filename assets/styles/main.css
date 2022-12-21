@@ -159,7 +159,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply bg-neutral-200 font-sans font-medium text-primary-900 dark:bg-primary-800 dark:text-neutral-100;
+    @apply bg-neutral-100 font-sans font-medium text-primary-900 dark:bg-primary-800 dark:text-neutral-100;
   }
 
   :is(h1, h2, h3, button) {
@@ -203,7 +203,7 @@ Version: 01
 @layer components {
   /* ********** BUTTONS ********** */
   .btn {
-    @apply inline-flex items-center gap-4 rounded-pill leading-200 tracking-200;
+    @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200;
   }
   .btn-invoice {
     @apply h-[4.8rem] w-60 bg-primary-500 p-4 text-400  text-neutral-100 hover:bg-primary-200;
@@ -221,7 +221,7 @@ Version: 01
     @apply bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply bg-neutral-300 px-32 text-primary-400 hover:bg-primary-100;
+    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-primary-400 hover:bg-primary-100 dark:bg-primary-600 dark:text-primary-300;
   }
   /* ********** BUTTONS ********** */
 
