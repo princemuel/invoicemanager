@@ -1,9 +1,8 @@
-import { HomeTemplate } from 'components';
 import { fetchInvoices } from 'lib';
 import Head from 'next/head';
 import { GetStaticProps, Invoice, NextPageWithLayout } from 'types';
 
-import { InvoiceProvider } from 'context';
+import { CreateInvoice } from 'components/organisms';
 import type { InferNextPropsType } from 'types';
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
@@ -16,9 +15,11 @@ const Home: NextPageWithLayout<Props> = ({ invoices }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <InvoiceProvider value={invoices}>
+      {/* <InvoiceProvider value={invoices}>
         <HomeTemplate />
-      </InvoiceProvider>
+      </InvoiceProvider> */}
+
+      <CreateInvoice />
     </>
   );
 };
