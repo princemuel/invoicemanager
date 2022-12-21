@@ -101,6 +101,7 @@ module.exports = {
       },
       boxShadow: {
         default: '0px 10px 10px -10px rgba(72, 84, 159, 0.100397);',
+        input: '0px 10px 20px rgba(72, 84, 159, 0.25);',
       },
     },
   },

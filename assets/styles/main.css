@@ -248,17 +248,6 @@ Version: 01
     width: min(var(--max-width), 100% - (var(--container-padding) * 2));
     margin-inline: auto;
   }
-  .navigation-link:where(:hover, :focus),
-  [aria-current='page'] {
-    @apply text-primary-100;
-  }
-
-  :where(.flow > :not(:first-child)) {
-    margin-block-start: var(--flow-space, 1.6rem);
-  }
-  .flow-space--small {
-    --flow-space: 1rem;
-  }
 
   .w-full-shadow {
     box-shadow: 0 0 0 100vmax currentColor, 0 0 2rem currentColor;
