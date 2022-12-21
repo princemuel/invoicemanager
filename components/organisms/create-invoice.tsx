@@ -1,8 +1,9 @@
-import { icons } from 'common';
+import { clsx } from 'helpers';
 
 type Props = {};
 
 const CreateInvoice = (props: Props) => {
+  const cartIconClasses = clsx('btn');
   return (
     <section aria-labelledby='create-invoice' className='h-container'>
       <header className='mt-10'>
@@ -251,8 +252,8 @@ const CreateInvoice = (props: Props) => {
             Item List
           </legend>
 
-          <section className='mt-12 grid grid-cols-8 gap-x-6 gap-y-10'>
-            <div className='col-span-8'>
+          <section className='mt-12 grid grid-cols-8 gap-x-6 gap-y-10 sx:grid-cols-12'>
+            <div className='col-span-8 sx:col-span-5'>
               <label
                 htmlFor='name'
                 className='body-100 block text-primary-400 dark:text-primary-300'
@@ -278,11 +279,12 @@ const CreateInvoice = (props: Props) => {
                 type='number'
                 id='quantity'
                 name='quantity'
-                className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-5 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+                className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 p-6 font-bold  text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500 sm:px-8'
                 placeholder='1'
+                min='10'
               />
             </div>
-            <div className='col-span-3'>
+            <div className='col-span-3 sx:col-span-2'>
               <label
                 htmlFor='item-price'
                 className='body-100 block text-primary-400 dark:text-primary-300'
@@ -309,9 +311,11 @@ const CreateInvoice = (props: Props) => {
                 400.00
               </output>
             </div>
-            <div className='col-span-1 mt-[4.3rem]'>
-              <button type='button'>
-                <icons.actions.delete className='' />
+            <div className='col-span-1 mt-[4.2rem]'>
+              <button
+                type='button'
+                className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat hover:bg-[url(/assets/svgs/icon-delete-red.svg)] focus:bg-[url(/assets/svgs/icon-delete-red.svg)]'
+              >
                 <span className='sr-only'>Delete Item</span>
               </button>
             </div>
