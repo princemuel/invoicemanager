@@ -50,6 +50,9 @@ export const formatDate = (date?: string) => {
   return joinDate(new Date(date), formatOptions, ' ');
 };
 
+export function getMonth(string: string) {
+  return string?.split(/(?<=^\S+)\s/)[1];
+}
 const convertFee = (fee: number) => {
   return parseInt(fee.toFixed(0));
 };

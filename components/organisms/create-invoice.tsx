@@ -1,9 +1,15 @@
-import { clsx } from 'helpers';
+import { icons } from 'common';
+import { clsx, formatDate, getMonth } from 'helpers';
+import { useState } from 'react';
 
 type Props = {};
 
 const CreateInvoice = (props: Props) => {
+  const [showCalendar, setShowCalendar] = useState(true);
+  const today = formatDate(new Date(Date.now()).toISOString());
+
   const cartIconClasses = clsx('btn');
+
   return (
     <section aria-labelledby='create-invoice' className='h-container'>
       <header className='mt-10'>
@@ -196,7 +202,7 @@ const CreateInvoice = (props: Props) => {
         <fieldset className='mt-16 grid grid-cols-6 gap-6'>
           <legend className='sr-only'>Payment Info</legend>
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
+          <div className='relative col-span-6 sm:col-span-3'>
             <label
               htmlFor='createdAt'
               className='body-100 block text-primary-400 dark:text-primary-300'
@@ -207,12 +213,38 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='createdAt'
               name='createdAt'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
-              placeholder='21 Aug 2021'
+              className='body-100 mt-6 w-full cursor-pointer rounded-lg border border-primary-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              placeholder={today}
+              aria-controls=''
             />
+
+            {/* absolute bottom-0 left-0 z-10 w-full translate-y-full */}
+            <div className=' overflow-auto rounded-default py-6 px-8 shadow-lg'>
+              <div className='flex items-center justify-between'>
+                <button className='grid place-content-center'>
+                  <icons.arrow.left />
+                  <span className='sr-only'>Previous Month</span>
+                </button>
+
+                <p className='body-100 font-bold text-primary-900'>
+                  <time>{getMonth(today)}</time>
+                  <span className='sr-only'>Month</span>
+                  <span className='sr-only'>Year</span>
+                </p>
+
+                <button className='grid place-content-center'>
+                  <icons.arrow.right />
+                  <span className='sr-only'>Next Month</span>
+                </button>
+              </div>
+
+              <div className='relative grid grid-cols-7 gap-4'>
+                <p className='body-100 cursor-pointer font-bold text-primary-900'></p>
+              </div>
+            </div>
           </div>
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
+          <div className='relative col-span-6 sm:col-span-3'>
             <label
               htmlFor='paymentTerms'
               className='body-100 block text-primary-400 dark:text-primary-300'
@@ -223,9 +255,24 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='paymentTerms'
               name='paymentTerms'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 peer mt-6 mb-4 w-full cursor-pointer rounded-lg border border-primary-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
               placeholder='Net 30 Days'
             />
+
+            <ul className='invisible absolute bottom-0 left-0 z-10 w-full translate-y-0 overflow-auto rounded-default shadow-lg peer-focus:visible peer-focus:translate-y-full'>
+              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+                Net 1 Day
+              </li>
+              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+                Net 7 Days
+              </li>
+              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+                Net 14 Days
+              </li>
+              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+                Net 30 Days
+              </li>
+            </ul>
           </div>
 
           <div className='col-span-6'>
