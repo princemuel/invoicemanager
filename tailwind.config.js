@@ -19,6 +19,7 @@ module.exports = {
     colors: {
       current: 'currentColor',
       transparent: 'transparent',
+      inherit: 'inherit',
       neutral: {
         100: '#FFFFFF',
         200: '#F8F8FB',
