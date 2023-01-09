@@ -6,7 +6,7 @@ export type Invoices = Array<Invoice>;
 
 export type Invoice = DraftInvoice | PendingInvoice | PaidInvoice;
 
-export type InvoiceStatus = 'draft' | 'pending' | 'paid';
+export type InvoiceStatus = "DRAFT" | "PENDING" | "PAID";
 
 export type PaidInvoice = {
   id: string;
@@ -16,7 +16,7 @@ export type PaidInvoice = {
   paymentTerms: 1 | 7 | 14 | 30;
   clientName: string;
   clientEmail: string;
-  status: Extract<InvoiceStatus, 'paid'>;
+  status: Extract<InvoiceStatus, "PAID">;
   senderAddress: IAddress;
   clientAddress: IAddress;
   items: ILineItem[];
@@ -30,7 +30,7 @@ export type PendingInvoice = {
   paymentTerms: 1 | 7 | 14 | 30;
   clientName: string;
   clientEmail: string;
-  status: Extract<InvoiceStatus, 'pending'>;
+  status: Extract<InvoiceStatus, "PENDING">;
   senderAddress: IAddress;
   clientAddress: IAddress;
   items: ILineItem[];
@@ -44,7 +44,7 @@ export type DraftInvoice = {
   paymentTerms?: 1 | 7 | 14 | 30;
   clientName?: string;
   clientEmail?: string;
-  status: Extract<InvoiceStatus, 'draft'>;
+  status: Extract<InvoiceStatus, "DRAFT">;
   senderAddress?: IAddress;
   clientAddress?: Partial<IAddress>;
   items?: ILineItem[];
