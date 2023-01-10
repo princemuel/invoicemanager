@@ -3,10 +3,10 @@
 
 
 type Address {
-  city: String
-  country: String
-  postCode: String
-  street: String
+  city: String!
+  country: String!
+  postCode: String!
+  street: String!
 }
 
 """
@@ -18,44 +18,56 @@ scalar DateTime
 The object containing metadata about the invoice e.g. items purchased, when the payment is due, client address information, the current status, et cetera
 """
 type Invoice {
-  clientAddress: Address
-  clientEmail: String
-  clientName: String
+  clientAddress: Address!
+  clientEmail: String!
+  clientName: String!
 
   """The exact time the invoice was created"""
   createdAt: DateTime!
 
   """A high level description of the items listed in the invoice"""
-  description: String
+  description: String!
 
   """Id of the invoice"""
   id: ID!
-  items: [Item]
+  items: [InvoiceItem!]!
 
   """When the payment of the items listed in the invoice is due"""
-  paymentDue: DateTime
+  paymentDue: DateTime!
 
   """
   The number of days before an invoice's payment grace period expires. Can be 1, 7, 14 or 30 days
   """
-  paymentTerms: Int
-  senderAddress: Address
-  status: Status
-  total: Float
+  paymentTerms: Int!
+  senderAddress: Address!
+  status: Status!
+
+  """id used on the client to tag the invoice"""
+  tag: String!
+  total: Float!
 
   """The exact time the invoice was updated"""
-  updatedAt: DateTime
+  updatedAt: DateTime!
 }
 
-type Item {
-  name: String
-  price: Float
-  quantity: Int
-  total: Float
+type InvoiceItem {
+  name: String!
+  price: Float!
+  quantity: Int!
+  total: Float!
+}
+
+type Mutation {
+  createInvoice: Invoice
+  createInvoiceItem: InvoiceItem
+  deleteInvoice: Invoice
+  deleteInvoiceItem: InvoiceItem
+  updateInvoice: Invoice
 }
 
 type Query {
-  ok: Boolean!
+  invoice: Invoice
+  invoices: [Invoice!]
 }
 
 enum Role {
@@ -73,10 +85,10 @@ enum Status {
 type User {
   createdAt: DateTime!
   email: String!
+  firstName: String!
   id: ID!
-  image: String
-  name: String
-  paymentDue: DateTime
+  imageUrl: String!
+  lastName: String!
   role: Role!
   updatedAt: DateTime!
 }
