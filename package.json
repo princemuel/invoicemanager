@@ -6,7 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "npm -s run generate:prisma && npm -s run generate:nexus",
+    "generate:prisma": "prisma generate",
+    "generate:nexus": "ts-node pages/api"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "target": "esnext",
+      "module": "commonjs",
+      "strict": true
+    },
+    "transpileOnly": true
   },
   "dependencies": {
     "@prisma/client": "^4.8.1",
