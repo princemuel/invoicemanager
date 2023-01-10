@@ -1,13 +1,14 @@
 [
   {
     "id": "RT3080",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-08-18",
     "paymentDue": "2021-08-19",
     "description": "Re-branding",
     "paymentTerms": 1,
     "clientName": "Jensen Huang",
     "clientEmail": "jensenh@mail.com",
-    "status": "paid",
+    "status": "PAID",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -32,13 +33,14 @@
   },
   {
     "id": "XM9141",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-08-21",
     "paymentDue": "2021-09-20",
     "description": "Graphic Design",
     "paymentTerms": 30,
     "clientName": "Alex Grim",
     "clientEmail": "alexgrim@mail.com",
-    "status": "pending",
+    "status": "PENDING",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -69,13 +71,14 @@
   },
   {
     "id": "RG0314",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-09-24",
     "paymentDue": "2021-10-01",
     "description": "Website Redesign",
     "paymentTerms": 7,
     "clientName": "John Morrison",
     "clientEmail": "jm@myco.com",
-    "status": "paid",
+    "status": "PAID",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -100,13 +103,14 @@
   },
   {
     "id": "RT2080",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-10-11",
     "paymentDue": "2021-10-12",
     "description": "Logo Concept",
     "paymentTerms": 1,
     "clientName": "Alysa Werner",
     "clientEmail": "alysa@email.co.uk",
-    "status": "pending",
+    "status": "PENDING",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -131,13 +135,14 @@
   },
   {
     "id": "FV2653",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-11-05",
     "paymentDue": "2021-12-15",
     "description": "Brand Re-design",
     "paymentTerms": 7,
     "clientName": "Dwayne Johnson",
     "clientEmail": "",
-    "status": "draft",
+    "status": "DRAFT",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -162,13 +167,14 @@
   },
   {
     "id": "AA1449",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-10-7",
     "paymentDue": "2021-10-14",
     "description": "Re-branding",
     "paymentTerms": 7,
     "clientName": "Mellisa Clarke",
     "clientEmail": "mellisa.clarke@example.com",
-    "status": "pending",
+    "status": "PENDING",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -199,13 +205,14 @@
   },
   {
     "id": "TY9141",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-10-01",
     "paymentDue": "2021-10-31",
     "description": "Landing Page Design",
     "paymentTerms": 30,
     "clientName": "Thomas Wayne",
     "clientEmail": "thomas@dc.com",
-    "status": "pending",
+    "status": "PENDING",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",
@@ -230,13 +237,14 @@
   },
   {
     "id": "FV2353",
+    "userId": "63ba482c9f059541758449c4",
     "createdAt": "2021-11-05",
     "paymentDue": "2021-11-12",
     "description": "Logo Re-design",
     "paymentTerms": 7,
     "clientName": "Anita Wainwright",
     "clientEmail": "",
-    "status": "draft",
+    "status": "DRAFT",
     "senderAddress": {
       "street": "19 Union Terrace",
       "city": "London",

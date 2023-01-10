@@ -1,5 +1,15 @@
-type IClsx = (...args: Array<undefined | null | string | boolean>) => string;
+type ClassValue =
+  | ClassArray
+  | ClassDictionary
+  | string
+  | number
+  | null
+  | boolean
+  | undefined;
+type ClassDictionary = Record<string, any>;
+type ClassArray = ClassValue[];
 
+const filterBoolean = <T>(arg: T) => Boolean(arg) && typeof arg !== 'boolean';
 /**
  * This function returns classes based on conditions
  * that evaluate to true. It removes values that
@@ -9,12 +19,10 @@ type IClsx = (...args: Array<undefined | null | string | boolean>) => string;
  * @example clsx('base', undefined, ['more', 'classes'], hasError && 'bg-red', isEnabled || 'pointer-events-none', isTitle ? 'font-semibold' : 'font-normal')
  * @returns "base more classes bg-red font-normal"
  */
-export const clsx: IClsx = (...args) =>
-  args
-    .flat()
-    .filter((arg) => Boolean(arg) && typeof arg !== 'boolean')
-    .join(' ')
-    .trim();
+// (arg) => Boolean(arg) && typeof arg !== 'boolean'
+export function clsx(...args: ClassValue[]) {
+  return args.flat().filter(filterBoolean).join(' ').trim();
+}
 
 export const capitalize = (string: string) => {
   return string?.charAt(0)?.toUpperCase() + string?.slice(1);

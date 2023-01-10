@@ -25,29 +25,26 @@ export const formatPrice = (price?: number) => {
   }).format(price);
 };
 
-export function joinDate(
-  date: number | Date | undefined,
-  formatOptions: Intl.DateTimeFormatOptions[],
-  separator: string
-) {
-  function callback(options: Intl.DateTimeFormatOptions | undefined) {
-    let dateFormatter = new Intl.DateTimeFormat('en', options);
-    return dateFormatter.format(date);
-  }
-  return formatOptions?.map(callback).join(separator);
-}
+type FormatDateFunction = (
+  date?: string,
+  formatOptions?: Intl.DateTimeFormatOptions[],
+  separator?: string
+) => string;
 
-export const formatDate = (date?: string) => {
+export const formatDate: FormatDateFunction = (
+  date,
+  formatOptions = [{ day: 'numeric' }, { month: 'short' }, { year: 'numeric' }],
+  separator = ' '
+) => {
   if (typeof date !== 'string')
     throw new Error("The date must be of type 'string'");
 
-  let formatOptions: Intl.DateTimeFormatOptions[] = [
-    { day: 'numeric' },
-    { month: 'short' },
-    { year: 'numeric' },
-  ];
-
-  return joinDate(new Date(date), formatOptions, ' ');
+  return formatOptions
+    .map((options) => {
+      const dateFormatter = new Intl.DateTimeFormat('en', options);
+      return dateFormatter.format(new Date(date));
+    })
+    .join(separator);
 };
 
 export function getMonth(string: string) {
