@@ -167,6 +167,6 @@ dist-ssr
 design
 *.pem
 
-.local
+local
 *.local.*
 !README.md
