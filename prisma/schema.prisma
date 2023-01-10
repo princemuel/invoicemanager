@@ -24,18 +24,19 @@ model User {
 }
 
 model Invoice {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  tag           String
   paymentDue    DateTime
   description   String
   paymentTerms  Int
   clientName    String
   clientEmail   String
-  status        Status   @default(PENDING)
+  status        Status        @default(PENDING)
   senderAddress Address
   clientAddress Address
-  items         Item[]
+  items         InvoiceItem[]
   total         Float
 
   user   User   @relation(fields: [userId], references: [id])
@@ -51,7 +52,7 @@ type Address {
   country  String
 }
 
-type Item {
+type InvoiceItem {
   name     String
   quantity Int
   price    Float

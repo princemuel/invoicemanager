@@ -56,40 +56,42 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Address: { // root type
-    city?: string | null; // String
-    country?: string | null; // String
-    postCode?: string | null; // String
-    street?: string | null; // String
+    city: string; // String!
+    country: string; // String!
+    postCode: string; // String!
+    street: string; // String!
   }
   Invoice: { // root type
-    clientAddress?: NexusGenRootTypes['Address'] | null; // Address
-    clientEmail?: string | null; // String
-    clientName?: string | null; // String
+    clientAddress: NexusGenRootTypes['Address']; // Address!
+    clientEmail: string; // String!
+    clientName: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    description?: string | null; // String
+    description: string; // String!
     id: string; // ID!
-    items?: Array<NexusGenRootTypes['Item'] | null> | null; // [Item]
-    paymentDue?: NexusGenScalars['DateTime'] | null; // DateTime
-    paymentTerms?: number | null; // Int
-    senderAddress?: NexusGenRootTypes['Address'] | null; // Address
-    status?: NexusGenEnums['Status'] | null; // Status
-    total?: number | null; // Float
-    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    items: NexusGenRootTypes['InvoiceItem'][]; // [InvoiceItem!]!
+    paymentDue: NexusGenScalars['DateTime']; // DateTime!
+    paymentTerms: number; // Int!
+    senderAddress: NexusGenRootTypes['Address']; // Address!
+    status: NexusGenEnums['Status']; // Status!
+    tag: string; // String!
+    total: number; // Float!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
-  Item: { // root type
-    name?: string | null; // String
-    price?: number | null; // Float
-    quantity?: number | null; // Int
-    total?: number | null; // Float
+  InvoiceItem: { // root type
+    name: string; // String!
+    price: number; // Float!
+    quantity: number; // Int!
+    total: number; // Float!
   }
+  Mutation: {};
   Query: {};
   User: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
+    firstName: string; // String!
     id: string; // ID!
-    image?: string | null; // String
-    name?: string | null; // String
-    paymentDue?: NexusGenScalars['DateTime'] | null; // DateTime
+    imageUrl: string; // String!
+    lastName: string; // String!
     role: NexusGenEnums['Role']; // Role!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -107,42 +109,51 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Address: { // field return type
-    city: string | null; // String
-    country: string | null; // String
-    postCode: string | null; // String
-    street: string | null; // String
+    city: string; // String!
+    country: string; // String!
+    postCode: string; // String!
+    street: string; // String!
   }
   Invoice: { // field return type
-    clientAddress: NexusGenRootTypes['Address'] | null; // Address
-    clientEmail: string | null; // String
-    clientName: string | null; // String
+    clientAddress: NexusGenRootTypes['Address']; // Address!
+    clientEmail: string; // String!
+    clientName: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
-    description: string | null; // String
+    description: string; // String!
     id: string; // ID!
-    items: Array<NexusGenRootTypes['Item'] | null> | null; // [Item]
-    paymentDue: NexusGenScalars['DateTime'] | null; // DateTime
-    paymentTerms: number | null; // Int
-    senderAddress: NexusGenRootTypes['Address'] | null; // Address
-    status: NexusGenEnums['Status'] | null; // Status
-    total: number | null; // Float
-    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    items: NexusGenRootTypes['InvoiceItem'][]; // [InvoiceItem!]!
+    paymentDue: NexusGenScalars['DateTime']; // DateTime!
+    paymentTerms: number; // Int!
+    senderAddress: NexusGenRootTypes['Address']; // Address!
+    status: NexusGenEnums['Status']; // Status!
+    tag: string; // String!
+    total: number; // Float!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
-  Item: { // field return type
-    name: string | null; // String
-    price: number | null; // Float
-    quantity: number | null; // Int
-    total: number | null; // Float
+  InvoiceItem: { // field return type
+    name: string; // String!
+    price: number; // Float!
+    quantity: number; // Int!
+    total: number; // Float!
+  }
+  Mutation: { // field return type
+    createInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
+    createInvoiceItem: NexusGenRootTypes['InvoiceItem'] | null; // InvoiceItem
+    deleteInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
+    deleteInvoiceItem: NexusGenRootTypes['InvoiceItem'] | null; // InvoiceItem
+    updateInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    invoice: NexusGenRootTypes['Invoice'] | null; // Invoice
+    invoices: NexusGenRootTypes['Invoice'][] | null; // [Invoice!]
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
+    firstName: string; // String!
     id: string; // ID!
-    image: string | null; // String
-    name: string | null; // String
-    paymentDue: NexusGenScalars['DateTime'] | null; // DateTime
+    imageUrl: string; // String!
+    lastName: string; // String!
     role: NexusGenEnums['Role']; // Role!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -162,30 +173,39 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     description: 'String'
     id: 'ID'
-    items: 'Item'
+    items: 'InvoiceItem'
     paymentDue: 'DateTime'
     paymentTerms: 'Int'
     senderAddress: 'Address'
     status: 'Status'
+    tag: 'String'
     total: 'Float'
     updatedAt: 'DateTime'
   }
-  Item: { // field return type name
+  InvoiceItem: { // field return type name
     name: 'String'
     price: 'Float'
     quantity: 'Int'
     total: 'Float'
   }
+  Mutation: { // field return type name
+    createInvoice: 'Invoice'
+    createInvoiceItem: 'InvoiceItem'
+    deleteInvoice: 'Invoice'
+    deleteInvoiceItem: 'InvoiceItem'
+    updateInvoice: 'Invoice'
+  }
   Query: { // field return type name
-    ok: 'Boolean'
+    invoice: 'Invoice'
+    invoices: 'Invoice'
   }
   User: { // field return type name
     createdAt: 'DateTime'
     email: 'String'
+    firstName: 'String'
     id: 'ID'
-    image: 'String'
-    name: 'String'
-    paymentDue: 'DateTime'
+    imageUrl: 'String'
+    lastName: 'String'
     role: 'Role'
     updatedAt: 'DateTime'
   }

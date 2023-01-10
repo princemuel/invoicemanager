@@ -15,6 +15,9 @@ export const Invoice = objectType({
     t.datetime("paymentDue", {
       description: `When the payment of the items listed in the invoice is due`,
     });
+    t.string("tag", {
+      description: `id used on the client to tag the invoice`,
+    });
     t.string("description", {
       description: `A high level description of the items listed in the invoice`,
     });
@@ -27,6 +30,6 @@ export const Invoice = objectType({
     t.field("senderAddress", { type: "Address" });
     t.field("clientAddress", { type: "Address" });
     t.float("total");
-    t.list.field("items", { type: "Item" });
+    t.list.field("items", { type: "InvoiceItem" });
   },
 });

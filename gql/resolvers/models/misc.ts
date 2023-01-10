@@ -17,8 +17,8 @@ export const Role = enumType({
   members: ["DRAFT", "PENDING", "PAID"],
 });
 
-export const Item = objectType({
-  name: "Item",
+export const InvoiceItem = objectType({
+  name: "InvoiceItem",
   definition(t) {
     t.nonNull.string("name");
     t.int("quantity");
