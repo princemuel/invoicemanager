@@ -48,7 +48,7 @@ Version: 01
     box-sizing: inherit;
   }
 
-  :where([hidden]:not([hidden='until-found'])) {
+  :where([hidden]:not([hidden="until-found"])) {
     display: none !important;
   }
 
@@ -84,8 +84,8 @@ Version: 01
     font: inherit;
     color: inherit;
   }
-  :where(button, label, select, summary, [role='button'], [role='option']) {
-    cursor: pointer;
+  :where(button, label, select, summary, [role="button"], [role="option"]) {
+    @apply cursor-fancy;
   }
   :where(textarea) {
     resize: vertical;
@@ -111,7 +111,7 @@ Version: 01
     block-size: auto;
   }
   @media not all and (min-resolution: 0.001dpcm) {
-    :where(img[loading='lazy']) {
+    :where(img[loading="lazy"]) {
       clip-path: inset(0.5px);
     }
   }
@@ -159,7 +159,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply bg-neutral-100 font-sans font-medium text-primary-900 dark:bg-primary-800 dark:text-neutral-100;
+    @apply text-brand-900 dark:bg-brand-800 bg-neutral-100 font-sans font-medium dark:text-neutral-100;
   }
 
   :is(h1, h2, h3, button) {
@@ -206,27 +206,27 @@ Version: 01
     @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200;
   }
   .btn-invoice {
-    @apply h-[4.8rem] w-60 bg-primary-500 p-4 text-400  text-neutral-100 hover:bg-primary-200;
+    @apply bg-brand-500 hover:bg-brand-200 h-[4.8rem] w-60 p-4  text-400 text-neutral-100;
   }
   .btn-paid {
-    @apply bg-primary-500 px-11 text-neutral-100 hover:bg-primary-200;
+    @apply bg-brand-500 hover:bg-brand-200 px-11 text-neutral-100;
   }
   .btn-edit {
-    @apply bg-neutral-300 text-primary-400  hover:bg-primary-100 hover:text-primary-400  dark:bg-primary-600 dark:text-primary-100  dark:hover:bg-primary-100 dark:hover:text-neutral-100;
+    @apply text-brand-400 hover:bg-brand-100  hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 bg-neutral-300 dark:hover:text-neutral-100;
   }
   .btn-draft {
-    @apply bg-[#373B53] text-primary-300 hover:bg-primary-900 dark:text-primary-100 dark:hover:bg-[#373B53];
+    @apply text-brand-300 hover:bg-brand-900 dark:text-brand-100 bg-[#373B53] dark:hover:bg-[#373B53];
   }
   .btn-delete {
     @apply bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-primary-400 hover:bg-primary-100 focus:bg-primary-100 dark:bg-primary-600 dark:text-primary-300;
+    @apply body-100 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-300 w-full bg-neutral-300 py-[1.6rem] px-32;
   }
   /* ********** BUTTONS ********** */
 
   .logo {
-    @apply fill-primary-500 dark:bg-primary-500;
+    @apply fill-brand-500 dark:bg-brand-500;
   }
 }
 
@@ -255,7 +255,7 @@ Version: 01
   }
 
   .skip-to-content {
-    @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-primary-300 py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-primary-300;
+    @apply bg-brand-300 focus:outline-brand-300 absolute z-[9999]  mx-auto translate-y-[-120%] py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2;
   }
 }
 

@@ -1,11 +1,11 @@
-import { ProfilePicture, ThemeButton } from 'components/atoms';
-import { Logo } from 'components/atoms/logo';
+import { ProfilePicture, ThemeButton } from "components/atoms";
+import { Logo } from "components/atoms/logo";
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
   return (
-    <aside className='sticky top-0 z-50 flex h-32 flex-row items-center justify-between bg-primary-600 max-sx:max-w-full md:min-h-screen md:w-36 md:flex-col md:rounded-tr-[2rem]'>
+    <aside className='sticky top-0 z-50 flex h-32 flex-row items-center justify-between bg-brand-600 max-sx:max-w-full md:min-h-screen md:w-36 md:flex-col md:rounded-tr-[2rem]'>
       <Logo />
 
       <div className='flex flex-1 items-center justify-end pr-12 md:flex-col md:p-0 md:pb-12'>

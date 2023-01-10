@@ -1,11 +1,11 @@
-import { icons } from 'common';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Link from 'next/link';
+import { icons } from "common";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Link from "next/link";
 
 const DesignSystem: NextPage = () => {
   return (
-    <div className='main-container dark:bg-primary-900'>
+    <div className='main-container dark:bg-brand-900'>
       <Head>
         <title>Create Next App</title>
         <link rel='icon' href='/favicon.ico' />
@@ -13,10 +13,10 @@ const DesignSystem: NextPage = () => {
 
       <main className='body-100'>
         <div className='flex items-center justify-between'>
-          <Link href={'/'} passHref>
+          <Link href={"/"} passHref>
             <a>
               <span>
-                <icons.logo className='text-primary-500 dark:text-neutral-100' />
+                <icons.logo className='text-brand-500 dark:text-neutral-100' />
               </span>
               <span className='sr-only'>Logo and Link</span>
             </a>
@@ -25,37 +25,37 @@ const DesignSystem: NextPage = () => {
         </div>
 
         <section>
-          <h2 className='text-primary-500'>Colors</h2>
+          <h2 className='text-brand-500'>Colors</h2>
           {/* BOXES */}
           <ul className='grid grid-cols-fit-big gap-y-12 gap-x-8 font-bold text-neutral-100'>
-            <li className='rounded-default border border-solid border-primary-300 bg-neutral-200 py-16 px-10 text-primary-300 '>
+            <li className='rounded-default border border-solid border-brand-300 bg-neutral-200 py-16 px-10 text-brand-300 '>
               #F8F8FB
             </li>
-            <li className='rounded-default bg-primary-100 py-16 px-10 text-primary-400 '>
+            <li className='rounded-default bg-brand-100 py-16 px-10 text-brand-400 '>
               #DFE3FA
             </li>
-            <li className='rounded-default bg-primary-200 py-16 px-10'>
+            <li className='rounded-default bg-brand-200 py-16 px-10'>
               #9277FF
             </li>
-            <li className='rounded-default bg-primary-300 py-16 px-10'>
+            <li className='rounded-default bg-brand-300 py-16 px-10'>
               #888EB0
             </li>
-            <li className='rounded-default bg-primary-400 py-16 px-10'>
+            <li className='rounded-default bg-brand-400 py-16 px-10'>
               #7E88C3
             </li>
-            <li className='rounded-default bg-primary-500 py-16 px-10'>
+            <li className='rounded-default bg-brand-500 py-16 px-10'>
               #7C5DFA
             </li>
-            <li className='rounded-default bg-primary-600 py-16 px-10'>
+            <li className='rounded-default bg-brand-600 py-16 px-10'>
               #252945
             </li>
-            <li className='rounded-default bg-primary-700 py-16 px-10'>
+            <li className='rounded-default bg-brand-700 py-16 px-10'>
               #1E2139
             </li>
-            <li className='rounded-default bg-primary-800 py-16 px-10'>
+            <li className='rounded-default bg-brand-800 py-16 px-10'>
               #141625
             </li>
-            <li className='rounded-default bg-primary-900 py-16 px-10'>
+            <li className='rounded-default bg-brand-900 py-16 px-10'>
               #0C0E16
             </li>
             <li className='rounded-default bg-accent-100 py-16 px-10'>
@@ -67,14 +67,14 @@ const DesignSystem: NextPage = () => {
           </ul>
         </section>
         <section>
-          <h2 className='text-primary-500'>Typography</h2>
+          <h2 className='text-brand-500'>Typography</h2>
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi,
             rerum porro possimus, quas, libero ut numquam velit magni dolorum
           </p>
         </section>
         <section>
-          <h2 className='text-primary-500'>Buttons</h2>
+          <h2 className='text-brand-500'>Buttons</h2>
 
           <div className='grid grid-cols-fit-big gap-y-12 gap-x-8'>
             <div>
@@ -115,7 +115,7 @@ const DesignSystem: NextPage = () => {
         </section>
 
         <section>
-          <h2 className='text-primary-500 dark:bg-primary-900'>
+          <h2 className='text-brand-500 dark:bg-brand-900'>
             Form Elements Light
           </h2>
           {/* FORM ELEMENTS LIGHT */}
@@ -131,8 +131,8 @@ const DesignSystem: NextPage = () => {
             <li></li>
           </ul>
         </section>
-        <section className='w-full-shadow dark:bg-primary-900'>
-          <h2 className='text-primary'>Form Elements Dark</h2>
+        <section className='w-full-shadow dark:bg-brand-900'>
+          <h2 className='text-brand'>Form Elements Dark</h2>
           {/* FORM ELEMENTS DARK */}
           <div></div>
         </section>

@@ -1,21 +1,25 @@
-import { icons } from 'common';
-import { clsx, formatDate, getMonth } from 'helpers';
-import { useState } from 'react';
+import { icons } from "common";
+import { clsx, formatDate, getMonth, isNotEmptyArray } from "helpers";
+import { useState } from "react";
 
 type Props = {};
+
+const dummyArray = Array(31)
+  .fill(1)
+  .map((_, i) => String(i + 1));
 
 const CreateInvoice = (props: Props) => {
   const [showCalendar, setShowCalendar] = useState(true);
   const today = formatDate(new Date(Date.now()).toISOString());
 
-  const cartIconClasses = clsx('btn');
+  const cartIconClasses = clsx("btn");
 
   return (
     <section aria-labelledby='create-invoice' className='h-container'>
       <header className='mt-10'>
         <h1
           id='create-invoice'
-          className='text-primary-900 dark:text-neutral-100'
+          className='text-brand-900 dark:text-neutral-100'
         >
           New Invoice
         </h1>
@@ -24,13 +28,13 @@ const CreateInvoice = (props: Props) => {
       <form className='my-10'>
         {/*<!--------- SENDER DETAILS START ---------!>*/}
         <fieldset className='grid grid-cols-6 gap-6'>
-          <legend className='body-100 col-span-6 block font-bold text-primary-500'>
+          <legend className='body-100 col-span-6 block font-bold text-brand-500'>
             Bill From
           </legend>
           <div className='col-span-6 mt-10'>
             <label
               htmlFor='sender-street'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Street Address
             </label>
@@ -38,7 +42,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-street'
               name='sender-street'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='19 Union Terrace'
             />
           </div>
@@ -46,7 +50,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
             <label
               htmlFor='sender-city'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               City
             </label>
@@ -54,7 +58,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-city'
               name='sender-city'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='London'
             />
           </div>
@@ -62,7 +66,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
             <label
               htmlFor='sender-postCode'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Post Code
             </label>
@@ -70,7 +74,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-postCode'
               name='sender-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='E1 3EZ'
             />
           </div>
@@ -78,7 +82,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-6 sx:col-span-2'>
             <label
               htmlFor='sender-country'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Country
             </label>
@@ -87,7 +91,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-country'
               name='sender-country'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='United Kingdom'
             />
           </div>
@@ -96,13 +100,13 @@ const CreateInvoice = (props: Props) => {
 
         {/*<!--------- CLIENT DETAILS START ---------!>*/}
         <fieldset className='mt-20 grid grid-cols-6 gap-6'>
-          <legend className='body-100 col-span-6 block font-bold text-primary-500'>
+          <legend className='body-100 col-span-6 block font-bold text-brand-500'>
             Bill To
           </legend>
           <div className='col-span-6 mt-10'>
             <label
               htmlFor='client-name'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Client&#39;s Name
             </label>
@@ -110,7 +114,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-name'
               name='client-name'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='Alex Grim'
             />
           </div>
@@ -118,7 +122,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-6'>
             <label
               htmlFor='client-email'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Client&#39;s Email
             </label>
@@ -126,7 +130,7 @@ const CreateInvoice = (props: Props) => {
               type='email'
               id='client-email'
               name='client-email'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='e.g. alexgrim@mail.com'
             />
           </div>
@@ -134,7 +138,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-6'>
             <label
               htmlFor='client-street'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Street Address
             </label>
@@ -142,7 +146,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-street'
               name='client-street'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='84 Church Way'
             />
           </div>
@@ -150,7 +154,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
             <label
               htmlFor='client-city'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               City
             </label>
@@ -158,7 +162,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-city'
               name='client-city'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='Bradford'
             />
           </div>
@@ -166,7 +170,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
             <label
               htmlFor='client-postCode'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Post Code
             </label>
@@ -174,7 +178,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-postCode'
               name='client-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='BD1 9PB'
             />
           </div>
@@ -182,7 +186,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-6 sx:col-span-2'>
             <label
               htmlFor='client-country'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Country
             </label>
@@ -191,7 +195,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-country'
               name='client-country'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='United Kingdom'
             />
           </div>
@@ -205,7 +209,7 @@ const CreateInvoice = (props: Props) => {
           <div className='relative col-span-6 sm:col-span-3'>
             <label
               htmlFor='createdAt'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Invoice Date
             </label>
@@ -213,41 +217,51 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='createdAt'
               name='createdAt'
-              className='body-100 mt-6 w-full cursor-pointer rounded-lg border border-primary-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 peer mt-6 w-full cursor-fancy rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder={today}
               aria-controls=''
             />
 
             {/* absolute bottom-0 left-0 z-10 w-full translate-y-full */}
-            <div className=' overflow-auto rounded-default py-6 px-8 shadow-lg'>
-              <div className='flex items-center justify-between'>
-                <button className='grid place-content-center'>
+            <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-default bg-neutral-100 pt-12 pb-8 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
+              <div className='flex items-center justify-between px-12'>
+                <button type='button' className='grid place-content-center'>
                   <icons.arrow.left />
                   <span className='sr-only'>Previous Month</span>
                 </button>
 
-                <p className='body-100 font-bold text-primary-900'>
+                <p className='body-100 font-bold text-brand-900 dark:text-neutral-100'>
                   <time>{getMonth(today)}</time>
                   <span className='sr-only'>Month</span>
                   <span className='sr-only'>Year</span>
                 </p>
 
-                <button className='grid place-content-center'>
+                <button type='button' className='grid place-content-center'>
                   <icons.arrow.right />
                   <span className='sr-only'>Next Month</span>
                 </button>
               </div>
 
-              <div className='relative grid grid-cols-7 gap-4'>
-                <p className='body-100 cursor-pointer font-bold text-primary-900'></p>
-              </div>
+              <ul className='grid grid-cols-7 items-center justify-items-center gap-8 py-8 px-10'>
+                {isNotEmptyArray(dummyArray) &&
+                  dummyArray.map((el) => {
+                    return (
+                      <li
+                        key={el}
+                        className='body-100 cursor-fancy font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-neutral-100 dark:hover:text-brand-500 dark:focus:text-brand-500'
+                      >
+                        {el}
+                      </li>
+                    );
+                  })}
+              </ul>
             </div>
           </div>
 
           <div className='relative col-span-6 sm:col-span-3'>
             <label
               htmlFor='paymentTerms'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Payment Terms
             </label>
@@ -255,21 +269,21 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='paymentTerms'
               name='paymentTerms'
-              className='body-100 peer mt-6 mb-4 w-full cursor-pointer rounded-lg border border-primary-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 peer mt-6 w-full cursor-fancy rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='Net 30 Days'
             />
 
-            <ul className='invisible absolute bottom-0 left-0 z-10 w-full translate-y-0 overflow-auto rounded-default shadow-lg peer-focus:visible peer-focus:translate-y-full'>
-              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+            <ul className='absolute z-10 mt-8 w-full scale-y-0 rounded-default bg-neutral-100 py-6 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
+              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 1 Day
               </li>
-              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 7 Days
               </li>
-              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 14 Days
               </li>
-              <li className='body-100 cursor-pointer border-b border-primary-100 bg-neutral-100 p-7 font-bold text-primary-900 hover:text-primary-500 focus:text-primary-500'>
+              <li className='body-100 cursor-fancy p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-brand-100'>
                 Net 30 Days
               </li>
             </ul>
@@ -278,7 +292,7 @@ const CreateInvoice = (props: Props) => {
           <div className='col-span-6'>
             <label
               htmlFor='description'
-              className='body-100 block text-primary-400 dark:text-primary-300'
+              className='body-100 block text-brand-400 dark:text-brand-300'
             >
               Project Description
             </label>
@@ -286,7 +300,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='description'
               name='description'
-              className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='e.g. Graphic Design Service'
             />
           </div>
@@ -303,7 +317,7 @@ const CreateInvoice = (props: Props) => {
             <div className='col-span-8 sx:col-span-5'>
               <label
                 htmlFor='name'
-                className='body-100 block text-primary-400 dark:text-primary-300'
+                className='body-100 block text-brand-400 dark:text-brand-300'
               >
                 Item Name
               </label>
@@ -311,14 +325,14 @@ const CreateInvoice = (props: Props) => {
                 type='text'
                 id='name'
                 name='name'
-                className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
                 placeholder='Banner Design'
               />
             </div>
             <div className='col-span-2'>
               <label
                 htmlFor='quantity'
-                className='body-100 block text-primary-400 dark:text-primary-300'
+                className='body-100 block text-brand-400 dark:text-brand-300'
               >
                 Qty.
               </label>
@@ -326,7 +340,7 @@ const CreateInvoice = (props: Props) => {
                 type='number'
                 id='quantity'
                 name='quantity'
-                className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 p-6 font-bold  text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500 sm:px-8'
+                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 p-6 font-bold  text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500 sm:px-8'
                 placeholder='1'
                 min='10'
               />
@@ -334,7 +348,7 @@ const CreateInvoice = (props: Props) => {
             <div className='col-span-3 sx:col-span-2'>
               <label
                 htmlFor='item-price'
-                className='body-100 block text-primary-400 dark:text-primary-300'
+                className='body-100 block text-brand-400 dark:text-brand-300'
               >
                 Price
               </label>
@@ -342,14 +356,14 @@ const CreateInvoice = (props: Props) => {
                 type='number'
                 id='item-price'
                 name='item-price'
-                className='body-100 mt-6 w-full rounded-lg border border-primary-100 bg-neutral-100 py-6 px-8 font-bold text-primary-900 outline-none hover:border-primary-500 focus:border-primary-500 dark:border-primary-600 dark:bg-primary-700 dark:text-neutral-100 dark:hover:border-primary-500 dark:focus:border-primary-500'
+                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
                 placeholder='200.00'
               />
             </div>
             <div className='col-span-2'>
               <label
                 htmlFor='item-total'
-                className='body-100 block text-primary-400 dark:text-primary-300'
+                className='body-100 block text-brand-400 dark:text-brand-300'
               >
                 Total
               </label>
