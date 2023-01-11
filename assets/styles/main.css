@@ -85,7 +85,7 @@ Version: 01
     color: inherit;
   }
   :where(button, label, select, summary, [role="button"], [role="option"]) {
-    @apply cursor-fancy;
+    cursor: pointer;
   }
   :where(textarea) {
     resize: vertical;
@@ -159,7 +159,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply text-brand-900 dark:bg-brand-800 bg-neutral-100 font-sans font-medium dark:text-neutral-100;
+    @apply bg-neutral-100 font-sans font-medium text-brand-900 dark:bg-brand-800 dark:text-neutral-100;
   }
 
   :is(h1, h2, h3, button) {
@@ -202,26 +202,29 @@ Version: 01
 */
 @layer components {
   /* ********** BUTTONS ********** */
+  :is(button, a, label, select, summary, [role="button"], [role="option"]) {
+    @apply cursor-pointer;
+  }
   .btn {
     @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200;
   }
   .btn-invoice {
-    @apply bg-brand-500 hover:bg-brand-200 h-[4.8rem] w-60 p-4  text-400 text-neutral-100;
+    @apply h-[4.8rem] w-60 bg-brand-500 p-4 text-400  text-neutral-100 hover:bg-brand-200;
   }
   .btn-paid {
-    @apply bg-brand-500 hover:bg-brand-200 px-11 text-neutral-100;
+    @apply bg-brand-500 px-11 text-neutral-100 hover:bg-brand-200;
   }
   .btn-edit {
-    @apply text-brand-400 hover:bg-brand-100  hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 bg-neutral-300 dark:hover:text-neutral-100;
+    @apply bg-neutral-300 text-brand-400  hover:bg-brand-100 hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 dark:hover:text-neutral-100;
   }
   .btn-draft {
-    @apply text-brand-300 hover:bg-brand-900 dark:text-brand-100 bg-[#373B53] dark:hover:bg-[#373B53];
+    @apply bg-[#373B53] text-brand-300 hover:bg-brand-900 dark:text-brand-100 dark:hover:bg-[#373B53];
   }
   .btn-delete {
     @apply bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply body-100 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-300 w-full bg-neutral-300 py-[1.6rem] px-32;
+    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-300;
   }
   /* ********** BUTTONS ********** */
 
@@ -255,7 +258,7 @@ Version: 01
   }
 
   .skip-to-content {
-    @apply bg-brand-300 focus:outline-brand-300 absolute z-[9999]  mx-auto translate-y-[-120%] py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2;
+    @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-300 py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
   }
 }
 

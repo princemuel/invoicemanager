@@ -1,11 +1,11 @@
-import { InvoiceTemplate } from 'components';
-import { getById, getInvoicePaths } from 'lib';
-import Head from 'next/head';
-import type { Invoice, Params } from 'types';
-import { GetStaticPaths, GetStaticProps, NextPageWithLayout } from 'types';
+import { InvoiceTemplate } from "components";
+import { getById, getInvoicePaths } from "lib";
+import Head from "next/head";
+import type { Invoice, Params } from "types";
+import { GetStaticPaths, GetStaticProps, NextPageWithLayout } from "types";
 
-import { InvoiceProvider } from 'context';
-import type { InferNextPropsType } from 'types';
+import { InvoiceProvider } from "context";
+import type { InferNextPropsType } from "types";
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
 
