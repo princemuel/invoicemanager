@@ -1,9 +1,9 @@
-import { fetchInvoices } from 'lib';
-import Head from 'next/head';
-import { GetStaticProps, Invoice, NextPageWithLayout } from 'types';
+import { fetchInvoices } from "lib";
+import Head from "next/head";
+import { GetStaticProps, Invoice, NextPageWithLayout } from "types";
 
-import { CreateInvoice } from 'components/organisms';
-import type { InferNextPropsType } from 'types';
+import { CreateInvoice } from "components/organisms";
+import type { InferNextPropsType } from "types";
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
 
