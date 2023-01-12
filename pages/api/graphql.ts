@@ -1,5 +1,5 @@
 import { ApolloServer } from "apollo-server-micro";
-import { createContext, schema } from "gql";
+import { createContext, schema } from "lib";
 import { RequestHandler } from "micro";
 import cors from "micro-cors";
 import { NextApiHandler, PageConfig } from "next";
