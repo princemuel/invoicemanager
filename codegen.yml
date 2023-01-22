@@ -1,0 +1,24 @@
+schema: "./lib/schema/schema.gql"
+documents: "./lib/graphql/**/*.{graphql,gql}"
+overwrite: true
+watch: true
+generates:
+  ./hooks/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      noNamespaces: true
+      pureMagicComment: true
+      typesPrefix: "I"
+      skipTypename: true
+      interfacePrefix: "I"
+      declarationKind: "interface"
+      exposeQueryKeys: true
+      exposeFetcher: true
+      fetcher:
+        endpoint: "https://invoicemailer.onrender.com/graphql"
+        fetchParams:
+          headers:
+            Content-Type: application/json
