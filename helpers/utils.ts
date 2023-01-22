@@ -30,10 +30,6 @@ export const capitalize = (string: string) => {
 
 export const trim = (string: string) => string?.trim();
 
-export function serialize<T>(data: T): T {
-  return JSON.parse(JSON.stringify(data));
-}
-
 export const removeFirstChar = (string: string) => {
   return string?.slice(1);
 };
