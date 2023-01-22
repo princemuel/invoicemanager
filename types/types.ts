@@ -1,6 +1,6 @@
 import InferNextPropsType from "infer-next-props-type";
 import type { NextPage } from "next";
-import type { AppProps } from "next/app";
+import type { AppContext, AppProps } from "next/app";
 import { ParsedUrlQuery } from "querystring";
 import type { ReactElement, ReactNode } from "react";
 
@@ -27,8 +27,10 @@ export type { InferNextPropsType };
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
-export type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+export type AppPropsWithLayout<P = any> = AppProps<P> & {
+  Component: NextPageWithLayout<P>;
+} & {
+  getInitialProps?: (context: AppContext) => AppProps<P> | Promise<AppProps<P>>;
 };
 
 /*===============================*
