@@ -33,6 +33,11 @@ input AddressInput {
   street: String!
 }
 
+type AuthPayload {
+  accessToken: String!
+  user: User
+}
+
 input CreateInvoiceInput {
   clientAddress: AddressInput!
   clientEmail: String!
@@ -99,10 +104,17 @@ type Invoice {
 
   """The exact time the invoice was updated"""
   updatedAt: DateTime
+  user: User!
+
+  """The id of the invoice's owner"""
+  userId: ID
 }
 
 """An item listed in the invoice"""
 type InvoiceItem {
+  """The id of this item"""
+  itemId: ID
+
   """The name of this item"""
   name: String
 
@@ -119,29 +131,46 @@ type InvoiceItem {
 }
 
 input InvoiceItemInput {
+  itemId: ID!
   name: String!
   price: Float!
   quantity: Int!
   total: Float!
 }
 
-input InvoiceItemWhereUniqueInput {
+input ItemWhereUniqueInput {
   id: ID!
 }
 
-input InvoiceWhereUniqueInput {
-  id: ID!
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LogoutPayload {
+  message: String!
 }
 
 type Mutation {
   createInvoice(input: CreateInvoiceInput!): Invoice
-  deleteInvoice(where: InvoiceWhereUniqueInput!): Invoice
-  updateInvoice(input: UpdateInvoiceInput!, where: InvoiceWhereUniqueInput!): Invoice
+  deleteInvoice(where: ItemWhereUniqueInput!): Invoice
+  login(input: LoginInput!): AuthPayload!
+  logout: LogoutPayload!
+  refreshAuth: AuthPayload
+  register(input: RegisterInput!): AuthPayload!
+  updateInvoice(input: UpdateInvoiceInput!, where: ItemWhereUniqueInput!): Invoice
 }
 
 type Query {
-  invoice(where: InvoiceWhereUniqueInput!): Invoice
+  invoice(where: ItemWhereUniqueInput!): Invoice
   invoices: [Invoice!]!
+}
+
+input RegisterInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
 }
 
 """The current role of the user"""

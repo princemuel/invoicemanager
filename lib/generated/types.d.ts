@@ -4,7 +4,7 @@
  */
 
 
-import type { Context } from "./../database/context"
+import type { Context } from "./../src/lib/context"
 import type { core, connectionPluginCore } from "nexus"
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -58,16 +58,24 @@ export interface NexusGenInputs {
     total: number; // Float!
   }
   InvoiceItemInput: { // input type
+    itemId: string; // ID!
     name: string; // String!
     price: number; // Float!
     quantity: number; // Int!
     total: number; // Float!
   }
-  InvoiceItemWhereUniqueInput: { // input type
+  ItemWhereUniqueInput: { // input type
     id: string; // ID!
   }
-  InvoiceWhereUniqueInput: { // input type
-    id: string; // ID!
+  LoginInput: { // input type
+    email: string; // String!
+    password: string; // String!
+  }
+  RegisterInput: { // input type
+    email: string; // String!
+    firstName: string; // String!
+    lastName: string; // String!
+    password: string; // String!
   }
   UpdateInvoiceInput: { // input type
     clientAddress: NexusGenInputs['AddressInput']; // AddressInput!
@@ -104,6 +112,10 @@ export interface NexusGenObjects {
     postCode?: string | null; // String
     street?: string | null; // String
   }
+  AuthPayload: { // root type
+    accessToken: string; // String!
+    user?: NexusGenRootTypes['User'] | null; // User
+  }
   Invoice: { // root type
     clientAddress?: NexusGenRootTypes['Address'] | null; // Address
     clientEmail?: string | null; // String
@@ -118,12 +130,17 @@ export interface NexusGenObjects {
     tag?: string | null; // String
     total?: number | null; // Float
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    userId?: string | null; // ID
   }
   InvoiceItem: { // root type
+    itemId?: string | null; // ID
     name?: string | null; // String
     price?: number | null; // Float
     quantity?: number | null; // Int
     total?: number | null; // Float
+  }
+  LogoutPayload: { // root type
+    message: string; // String!
   }
   Mutation: {};
   Query: {};
@@ -156,6 +173,10 @@ export interface NexusGenFieldTypes {
     postCode: string | null; // String
     street: string | null; // String
   }
+  AuthPayload: { // field return type
+    accessToken: string; // String!
+    user: NexusGenRootTypes['User'] | null; // User
+  }
   Invoice: { // field return type
     clientAddress: NexusGenRootTypes['Address'] | null; // Address
     clientEmail: string | null; // String
@@ -171,16 +192,26 @@ export interface NexusGenFieldTypes {
     tag: string | null; // String
     total: number | null; // Float
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
+    user: NexusGenRootTypes['User']; // User!
+    userId: string | null; // ID
   }
   InvoiceItem: { // field return type
+    itemId: string | null; // ID
     name: string | null; // String
     price: number | null; // Float
     quantity: number | null; // Int
     total: number | null; // Float
   }
+  LogoutPayload: { // field return type
+    message: string; // String!
+  }
   Mutation: { // field return type
     createInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     deleteInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
+    login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    logout: NexusGenRootTypes['LogoutPayload']; // LogoutPayload!
+    refreshAuth: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
   }
   Query: { // field return type
@@ -206,6 +237,10 @@ export interface NexusGenFieldTypeNames {
     postCode: 'String'
     street: 'String'
   }
+  AuthPayload: { // field return type name
+    accessToken: 'String'
+    user: 'User'
+  }
   Invoice: { // field return type name
     clientAddress: 'Address'
     clientEmail: 'String'
@@ -221,16 +256,26 @@ export interface NexusGenFieldTypeNames {
     tag: 'String'
     total: 'Float'
     updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'ID'
   }
   InvoiceItem: { // field return type name
+    itemId: 'ID'
     name: 'String'
     price: 'Float'
     quantity: 'Int'
     total: 'Float'
   }
+  LogoutPayload: { // field return type name
+    message: 'String'
+  }
   Mutation: { // field return type name
     createInvoice: 'Invoice'
     deleteInvoice: 'Invoice'
+    login: 'AuthPayload'
+    logout: 'LogoutPayload'
+    refreshAuth: 'AuthPayload'
+    register: 'AuthPayload'
     updateInvoice: 'Invoice'
   }
   Query: { // field return type name
@@ -255,16 +300,22 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['CreateInvoiceInput']; // CreateInvoiceInput!
     }
     deleteInvoice: { // args
-      where: NexusGenInputs['InvoiceWhereUniqueInput']; // InvoiceWhereUniqueInput!
+      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+    }
+    login: { // args
+      input: NexusGenInputs['LoginInput']; // LoginInput!
+    }
+    register: { // args
+      input: NexusGenInputs['RegisterInput']; // RegisterInput!
     }
     updateInvoice: { // args
       input: NexusGenInputs['UpdateInvoiceInput']; // UpdateInvoiceInput!
-      where: NexusGenInputs['InvoiceWhereUniqueInput']; // InvoiceWhereUniqueInput!
+      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
   }
   Query: {
     invoice: { // args
-      where: NexusGenInputs['InvoiceWhereUniqueInput']; // InvoiceWhereUniqueInput!
+      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
   }
 }
