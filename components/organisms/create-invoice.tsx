@@ -1,5 +1,5 @@
 import { icons } from "common";
-import { clsx, formatDate, getMonth, isNotEmptyArray } from "helpers";
+import { clsx, formatDate, getMonth, hasValues } from "helpers";
 import { useState } from "react";
 
 type Props = {};
@@ -243,7 +243,7 @@ const CreateInvoice = (props: Props) => {
               </div>
 
               <ul className='grid grid-cols-7 items-center justify-items-center gap-8 py-8 px-10'>
-                {isNotEmptyArray(dummyArray) &&
+                {hasValues(dummyArray) &&
                   dummyArray.map((el) => {
                     return (
                       <li

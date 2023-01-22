@@ -1,7 +1,7 @@
 import { icons, Link } from "common";
 import { StatusButton, Text } from "components/atoms";
 import { useInvoices } from "context";
-import { formatDate, formatPrice, isNotEmptyArray } from "helpers";
+import { formatDate, formatPrice, hasValues } from "helpers";
 import { Invoice } from "types";
 
 type Props = {};
@@ -15,7 +15,7 @@ const HomeTemplate = (props: Props) => {
         <div className='flex-1'>
           <h1 id='invoices-heading'>Invoices</h1>
 
-          {isNotEmptyArray(data) ? (
+          {hasValues(data) ? (
             <Text>
               <span className='hidden md:inline'>
                 There are <output name='invoices'>{data.length}</output> total
@@ -52,7 +52,7 @@ const HomeTemplate = (props: Props) => {
       </header>
 
       <ul aria-label='List of Invoices' className='mt-20 flex flex-col gap-6'>
-        {isNotEmptyArray(data) ? (
+        {hasValues(data) ? (
           data.map((invoice) => (
             <li
               key={invoice?.id}

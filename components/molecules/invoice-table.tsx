@@ -1,4 +1,4 @@
-import { formatPrice, isNotEmptyArray } from "helpers";
+import { formatPrice, hasValues } from "helpers";
 import { Fragment } from "react";
 import type { Invoice } from "types";
 
@@ -22,7 +22,7 @@ const InvoiceTable = ({ data }: Props) => {
         </thead>
 
         <tbody className='flex flex-col gap-12 py-4'>
-          {isNotEmptyArray(items) ? (
+          {hasValues(items) ? (
             items.map((item) => {
               return (
                 <tr
@@ -64,7 +64,7 @@ const InvoiceTable = ({ data }: Props) => {
 
 export { InvoiceTable };
 
-// {isNotEmptyArray(items) ? (
+// {hasValues(items) ? (
 //           items.map((item) => (
 //
 
