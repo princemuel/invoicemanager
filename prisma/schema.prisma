@@ -17,7 +17,7 @@ model User {
   firstName String?
   lastName  String?
   email     String    @unique
-  password  String?
+  password  String
   photo     String?
   invoices  Invoice[]
 
@@ -34,7 +34,7 @@ model Invoice {
   paymentTerms  Int
   clientName    String
   clientEmail   String
-  status        Status        @default(PENDING)
+  status        Status?       @default(PENDING)
   senderAddress Address
   clientAddress Address
   items         InvoiceItem[]
