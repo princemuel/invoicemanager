@@ -1,0 +1,15 @@
+query GetInvoices {
+  invoices {
+    id
+    clientName
+    clientEmail
+  }
+}
+
+query GetInvoice($id: ID!) {
+  invoice(id: $id) {
+    id
+    clientName
+    clientEmail
+  }
+}
