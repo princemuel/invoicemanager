@@ -43,3 +43,20 @@ export const getStaticProps: GetStaticProps<{
     };
   }
 };
+
+// export async function getServerSideProps() {
+//   const queryClient = new QueryClient(queryOptions);
+
+//   await queryClient.prefetchQuery(
+//     useGetInvoicesQuery.getKey(),
+//     useGetInvoicesQuery.fetcher()
+//   );
+//   // await queryClient.prefetchQuery(['invoices'], () => getInvoices());
+
+//   return {
+//     props: {
+//       dehydratedState: createDehydratedState(queryClient),
+//       // dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
