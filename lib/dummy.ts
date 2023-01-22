@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { isNotEmptyArray, pluck } from "helpers";
+import { hasValues, pluck } from "helpers";
 import path from "path";
 import { Invoice } from "types";
 
@@ -10,7 +10,7 @@ export async function fetchInvoices() {
   const fileContents = await fs.readFile(filePath, "utf8");
   const data = JSON.parse(fileContents) as Invoice[];
 
-  return isNotEmptyArray(data)
+  return hasValues(data)
     ? data.sort(
         (a, b) =>
           Number(new Date(b.paymentDue!)) - Number(new Date(a.paymentDue!))

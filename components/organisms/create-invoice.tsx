@@ -1,5 +1,5 @@
 import { icons } from "common";
-import { clsx, formatDate, getMonth, isNotEmptyArray } from "helpers";
+import { clsx, formatDate, getMonth, hasValues } from "helpers";
 import { useState } from "react";
 
 type Props = {};
@@ -217,7 +217,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='createdAt'
               name='createdAt'
-              className='body-100 peer mt-6 w-full cursor-fancy rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
+              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder={today}
               aria-controls=''
             />
@@ -243,12 +243,12 @@ const CreateInvoice = (props: Props) => {
               </div>
 
               <ul className='grid grid-cols-7 items-center justify-items-center gap-8 py-8 px-10'>
-                {isNotEmptyArray(dummyArray) &&
+                {hasValues(dummyArray) &&
                   dummyArray.map((el) => {
                     return (
                       <li
                         key={el}
-                        className='body-100 cursor-fancy font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-neutral-100 dark:hover:text-brand-500 dark:focus:text-brand-500'
+                        className='body-100 cursor-pointer font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-neutral-100 dark:hover:text-brand-500 dark:focus:text-brand-500'
                       >
                         {el}
                       </li>
@@ -269,21 +269,21 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='paymentTerms'
               name='paymentTerms'
-              className='body-100 peer mt-6 w-full cursor-fancy rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
+              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:hover:border-brand-500 dark:focus:border-brand-500'
               placeholder='Net 30 Days'
             />
 
             <ul className='absolute z-10 mt-8 w-full scale-y-0 rounded-default bg-neutral-100 py-6 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
-              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
+              <li className='body-100 cursor-pointer border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 1 Day
               </li>
-              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
+              <li className='body-100 cursor-pointer border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 7 Days
               </li>
-              <li className='body-100 cursor-fancy border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
+              <li className='body-100 cursor-pointer border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 14 Days
               </li>
-              <li className='body-100 cursor-fancy p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-brand-100'>
+              <li className='body-100 cursor-pointer p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-brand-100'>
                 Net 30 Days
               </li>
             </ul>

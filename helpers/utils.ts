@@ -9,7 +9,7 @@ type ClassValue =
 type ClassDictionary = Record<string, any>;
 type ClassArray = ClassValue[];
 
-const filterBoolean = <T>(arg: T) => Boolean(arg) && typeof arg !== 'boolean';
+const filterBoolean = <T>(arg: T) => Boolean(arg) && typeof arg !== "boolean";
 /**
  * This function returns classes based on conditions
  * that evaluate to true. It removes values that
@@ -21,7 +21,7 @@ const filterBoolean = <T>(arg: T) => Boolean(arg) && typeof arg !== 'boolean';
  */
 // (arg) => Boolean(arg) && typeof arg !== 'boolean'
 export function clsx(...args: ClassValue[]) {
-  return args.flat().filter(filterBoolean).join(' ').trim();
+  return args.flat().filter(filterBoolean).join(" ").trim();
 }
 
 export const capitalize = (string: string) => {
@@ -30,29 +30,38 @@ export const capitalize = (string: string) => {
 
 export const trim = (string: string) => string?.trim();
 
-export function serialize<T>(data: T): T {
-  return JSON.parse(JSON.stringify(data));
-}
-
 export const removeFirstChar = (string: string) => {
   return string?.slice(1);
 };
 
-export const isNotEmptyArray = <T>(
+export const hasValues = <T>(
   array: T[] | undefined
 ): array is NonNullable<T[]> => {
   return (array || []).length > 0;
 };
 
 export const shortName = (name: string) => {
-  const lastIndexOfSpace = name?.indexOf(' ');
+  const lastIndexOfSpace = name?.indexOf(" ");
   return name?.substring(0, lastIndexOfSpace);
 };
 
-export const compose =
-  (...fns: any[]) =>
-  (res: any) =>
-    fns.reduce((accum, next) => next(accum), res);
+export const pipe = <T extends any[], R>(
+  first: (...args: T) => R,
+  ...fns: ((a: R) => R)[]
+) => {
+  const piped = fns.reduce(
+    (prev, next) => (value: R) => next(prev(value)),
+    (value) => value
+  );
+  return (...args: T) => piped(first(...args));
+};
+
+export const compose = <R, F extends (a: R, ...b: any[]) => R>(
+  first: F,
+  ...fns: ((a: R) => R)[]
+) => {
+  return fns.reduce((prev, next) => (value) => prev(next(value)), first) as F;
+};
 
 export function pluck<I, K extends keyof I>(items: I[], key: K): I[K][] {
   return items.map((item) => item[key]);
@@ -67,7 +76,7 @@ export function pluck<I, K extends keyof I>(items: I[], key: K): I[K][] {
 
 export const ranker = <T>(
   items: T[],
-  rank: 'asc' | 'desc',
+  rank: "asc" | "desc",
   callbackfn: (value: T) => number
 ): T[] => {
   return items
@@ -75,6 +84,6 @@ export const ranker = <T>(
       item,
       rank: callbackfn(item),
     }))
-    .sort((a, b) => (rank === 'asc' ? a.rank - b.rank : b.rank - a.rank))
+    .sort((a, b) => (rank === "asc" ? a.rank - b.rank : b.rank - a.rank))
     .map((ranked) => ranked.item);
 };

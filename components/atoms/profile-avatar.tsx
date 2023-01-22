@@ -1,5 +1,5 @@
-import { PLACEHOLDER_IMAGE } from 'helpers';
-import Image from 'next/future/image';
+import { constants } from "helpers";
+import Image from "next/future/image";
 
 type Props = {
   imgSrc: string;
@@ -10,11 +10,11 @@ const ProfilePicture = ({ imgSrc }: Props) => {
     <figure className='w-12 overflow-hidden rounded-full'>
       <Image
         src={imgSrc}
-        alt={'Your Profile Picture'}
+        alt={"Your Profile Picture"}
         width={80}
         height={80}
         placeholder='blur'
-        blurDataURL={PLACEHOLDER_IMAGE}
+        blurDataURL={constants.PLACEHOLDER_IMAGE}
         className=''
       />
     </figure>
