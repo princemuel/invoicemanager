@@ -50,6 +50,7 @@ input CreateInvoiceInput {
   status: Status!
   tag: String!
   total: Float!
+  userId: String!
 }
 
 """
@@ -197,6 +198,7 @@ input UpdateInvoiceInput {
   senderAddress: AddressInput!
   status: Status!
   total: Float!
+  userId: String!
 }
 
 type User {

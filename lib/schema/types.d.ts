@@ -56,6 +56,7 @@ export interface NexusGenInputs {
     status: NexusGenEnums['Status']; // Status!
     tag: string; // String!
     total: number; // Float!
+    userId: string; // String!
   }
   InvoiceItemInput: { // input type
     itemId: string; // ID!
@@ -88,6 +89,7 @@ export interface NexusGenInputs {
     senderAddress: NexusGenInputs['AddressInput']; // AddressInput!
     status: NexusGenEnums['Status']; // Status!
     total: number; // Float!
+    userId: string; // String!
   }
 }
 
