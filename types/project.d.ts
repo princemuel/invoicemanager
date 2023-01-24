@@ -12,3 +12,11 @@ export declare type $ElementProps<T> = T extends React.ComponentType<
     ? Props
     : never
   : never;
+
+export type PropsFrom<T> = T extends React.FC<infer Props>
+  ? Props
+  : T extends React.Component<infer Props>
+  ? Props
+  : T extends object
+  ? { [K in keyof T]: T[K] }
+  : never;
