@@ -1,12 +1,12 @@
+import type { Invoice } from "hooks";
 import * as React from "react";
-import type { Invoice } from "types";
 
-const InvoicesContext = React.createContext<Invoice[] | null>(null);
+const InvoicesContext = React.createContext<Partial<Invoice>[] | null>(null);
 const InvoiceContext = React.createContext<Invoice | null>(null);
 
 type InvoicesProps = {
   children: React.ReactNode;
-  value: Invoice[];
+  value: Partial<Invoice>[];
 };
 type InvoiceProps = {
   children: React.ReactNode;
