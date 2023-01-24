@@ -32,12 +32,10 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.16.4",
-    "@graphql-codegen/client-preset": "^1.2.6",
     "@graphql-codegen/typescript": "^2.8.7",
     "@graphql-codegen/typescript-graphql-request": "^4.5.8",
     "@graphql-codegen/typescript-operations": "^2.5.12",
     "@graphql-codegen/typescript-react-query": "^4.1.0",
-    "@graphql-codegen/typescript-resolvers": "^2.7.12",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "18.11.11",
     "@types/react": "18.0.26",
