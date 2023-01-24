@@ -125,6 +125,7 @@ export interface NexusGenObjects {
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     description?: string | null; // String
     id?: string | null; // ID
+    items: NexusGenRootTypes['InvoiceItem'][]; // [InvoiceItem!]!
     paymentDue?: string | null; // String
     paymentTerms?: number | null; // Int
     senderAddress?: NexusGenRootTypes['Address'] | null; // Address
