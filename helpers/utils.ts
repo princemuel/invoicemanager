@@ -34,8 +34,12 @@ export const removeFirstChar = (string: string) => {
   return string?.slice(1);
 };
 
+export const objectKeys = <O extends {}>(object: O): (keyof O)[] => {
+  return Object.keys(object) as (keyof O)[];
+};
+
 export const hasValues = <T>(
-  array: T[] | undefined
+  array: T[] | null | undefined
 ): array is NonNullable<T[]> => {
   return (array || []).length > 0;
 };
