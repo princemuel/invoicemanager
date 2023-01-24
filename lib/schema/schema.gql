@@ -7,16 +7,16 @@ The address object used for both the client and sender's address information. It
 """
 type Address {
   """The city where the person lives in"""
-  city: String
+  city: String!
 
   """The country where the person is located"""
-  country: String
+  country: String!
 
   """The post code of the person's state"""
-  postCode: String
+  postCode: String!
 
   """The street where the person resides"""
-  street: String
+  street: String!
 }
 
 input AddressInput {
@@ -50,7 +50,7 @@ input CreateInvoiceInput {
   status: Status!
   tag: String!
   total: Float!
-  userId: String!
+  userId: ID!
 }
 
 """
@@ -81,7 +81,7 @@ type Invoice {
   id: ID
 
   """The items listed in the invoice"""
-  items: [InvoiceItem]!
+  items: [InvoiceItem!]!
 
   """When the payment of the items listed in the invoice is due"""
   paymentDue: String
@@ -105,7 +105,6 @@ type Invoice {
 
   """The exact time the invoice was updated"""
   updatedAt: DateTime
-  user: User!
 
   """The id of the invoice's owner"""
   userId: ID
@@ -114,7 +113,7 @@ type Invoice {
 """An item listed in the invoice"""
 type InvoiceItem {
   """The id of this item"""
-  itemId: ID
+  id: ID
 
   """The name of this item"""
   name: String
@@ -132,7 +131,7 @@ type InvoiceItem {
 }
 
 input InvoiceItemInput {
-  itemId: ID!
+  id: ID!
   name: String!
   price: Float!
   quantity: Int!
@@ -153,7 +152,7 @@ type LogoutPayload {
 }
 
 type Mutation {
-  createInvoice(input: CreateInvoiceInput!): Invoice
+  createInvoice(input: CreateInvoiceInput!): Invoice!
   deleteInvoice(where: ItemWhereUniqueInput!): Invoice
   login(input: LoginInput!): AuthPayload!
   logout: LogoutPayload!
@@ -198,7 +197,7 @@ input UpdateInvoiceInput {
   senderAddress: AddressInput!
   status: Status!
   total: Float!
-  userId: String!
+  userId: ID!
 }
 
 type User {

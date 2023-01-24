@@ -56,10 +56,10 @@ export interface NexusGenInputs {
     status: NexusGenEnums['Status']; // Status!
     tag: string; // String!
     total: number; // Float!
-    userId: string; // String!
+    userId: string; // ID!
   }
   InvoiceItemInput: { // input type
-    itemId: string; // ID!
+    id: string; // ID!
     name: string; // String!
     price: number; // Float!
     quantity: number; // Int!
@@ -89,7 +89,7 @@ export interface NexusGenInputs {
     senderAddress: NexusGenInputs['AddressInput']; // AddressInput!
     status: NexusGenEnums['Status']; // Status!
     total: number; // Float!
-    userId: string; // String!
+    userId: string; // ID!
   }
 }
 
@@ -109,10 +109,10 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   Address: { // root type
-    city?: string | null; // String
-    country?: string | null; // String
-    postCode?: string | null; // String
-    street?: string | null; // String
+    city: string; // String!
+    country: string; // String!
+    postCode: string; // String!
+    street: string; // String!
   }
   AuthPayload: { // root type
     accessToken: string; // String!
@@ -135,7 +135,7 @@ export interface NexusGenObjects {
     userId?: string | null; // ID
   }
   InvoiceItem: { // root type
-    itemId?: string | null; // ID
+    id?: string | null; // ID
     name?: string | null; // String
     price?: number | null; // Float
     quantity?: number | null; // Int
@@ -170,10 +170,10 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   Address: { // field return type
-    city: string | null; // String
-    country: string | null; // String
-    postCode: string | null; // String
-    street: string | null; // String
+    city: string; // String!
+    country: string; // String!
+    postCode: string; // String!
+    street: string; // String!
   }
   AuthPayload: { // field return type
     accessToken: string; // String!
@@ -186,7 +186,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
     id: string | null; // ID
-    items: Array<NexusGenRootTypes['InvoiceItem'] | null>; // [InvoiceItem]!
+    items: NexusGenRootTypes['InvoiceItem'][]; // [InvoiceItem!]!
     paymentDue: string | null; // String
     paymentTerms: number | null; // Int
     senderAddress: NexusGenRootTypes['Address'] | null; // Address
@@ -194,11 +194,10 @@ export interface NexusGenFieldTypes {
     tag: string | null; // String
     total: number | null; // Float
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
-    user: NexusGenRootTypes['User']; // User!
     userId: string | null; // ID
   }
   InvoiceItem: { // field return type
-    itemId: string | null; // ID
+    id: string | null; // ID
     name: string | null; // String
     price: number | null; // Float
     quantity: number | null; // Int
@@ -208,7 +207,7 @@ export interface NexusGenFieldTypes {
     message: string; // String!
   }
   Mutation: { // field return type
-    createInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
+    createInvoice: NexusGenRootTypes['Invoice']; // Invoice!
     deleteInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['LogoutPayload']; // LogoutPayload!
@@ -258,11 +257,10 @@ export interface NexusGenFieldTypeNames {
     tag: 'String'
     total: 'Float'
     updatedAt: 'DateTime'
-    user: 'User'
     userId: 'ID'
   }
   InvoiceItem: { // field return type name
-    itemId: 'ID'
+    id: 'ID'
     name: 'String'
     price: 'Float'
     quantity: 'Int'
