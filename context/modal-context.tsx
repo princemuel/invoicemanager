@@ -4,10 +4,10 @@ import {
   ReactNode,
   useContext,
   useReducer,
-} from 'react';
+} from "react";
 
-type IAction = 'Add' | 'View' | 'Edit' | 'Delete';
-type ISubject = 'Board' | 'Task';
+type IAction = "Add" | "View" | "Edit" | "Delete";
+type ISubject = "Board" | "Task";
 
 type IModal = `${IAction}${ISubject}` | null;
 
@@ -17,8 +17,8 @@ interface IModalState {
 }
 
 type IModalActions =
-  | { type: 'OPEN_MODAL'; payload: { id: IModal } }
-  | { type: 'CLOSE_MODAL'; payload: { id: IModal } };
+  | { type: "OPEN_MODAL"; payload: { id: IModal } }
+  | { type: "CLOSE_MODAL"; payload: { id: IModal } };
 
 const initialState: IModalState = {
   open: false,
@@ -47,26 +47,26 @@ export const ModalProvider = ({ children }: ProviderProps) => {
 export const useModalState = () => {
   const context = useContext(Store);
   if (context == undefined)
-    throw new Error('useModalState must be used within a ModalProvider');
+    throw new Error("useModalState must be used within a ModalProvider");
   return context;
 };
 
 export const useModalDispatch = () => {
   const context = useContext(StoreDispatch);
   if (context == undefined)
-    throw new Error('useModalDispatch must be used within a ModalProvider');
+    throw new Error("useModalDispatch must be used within a ModalProvider");
   return context;
 };
 
 const reducer = (state: IModalState, action: IModalActions) => {
   switch (action.type) {
-    case 'OPEN_MODAL':
+    case "OPEN_MODAL":
       return {
         ...state,
         open: true,
         current: action.payload.id,
       };
-    case 'CLOSE_MODAL':
+    case "CLOSE_MODAL":
       return {
         ...state,
         open: false,
