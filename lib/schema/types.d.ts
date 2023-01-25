@@ -88,8 +88,8 @@ export interface NexusGenInputs {
     paymentTerms: number; // Int!
     senderAddress: NexusGenInputs['AddressInput']; // AddressInput!
     status: NexusGenEnums['Status']; // Status!
+    tag: string; // String!
     total: number; // Float!
-    userId: string; // ID!
   }
 }
 
