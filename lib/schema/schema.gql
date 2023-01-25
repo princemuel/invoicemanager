@@ -196,7 +196,6 @@ input UpdateInvoiceInput {
   paymentTerms: Int!
   senderAddress: AddressInput!
   status: Status!
-  tag: String!
   total: Float!
 }
 
