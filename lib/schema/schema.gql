@@ -35,7 +35,7 @@ input AddressInput {
 
 type AuthPayload {
   accessToken: String!
-  user: User
+  user: User!
 }
 
 input CreateInvoiceInput {
@@ -156,7 +156,7 @@ type Mutation {
   deleteInvoice(where: ItemWhereUniqueInput!): Invoice
   login(input: LoginInput!): AuthPayload!
   logout: LogoutPayload!
-  refreshAuth: AuthPayload
+  refreshAuth: RefreshPayload
   register(input: RegisterInput!): AuthPayload!
   updateInvoice(input: UpdateInvoiceInput!, where: ItemWhereUniqueInput!): Invoice
 }
@@ -164,6 +164,10 @@ type Mutation {
 type Query {
   invoice(where: ItemWhereUniqueInput!): Invoice
   invoices: [Invoice!]!
+}
+
+type RefreshPayload {
+  accessToken: String!
 }
 
 input RegisterInput {

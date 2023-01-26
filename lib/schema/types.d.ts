@@ -115,7 +115,7 @@ export interface NexusGenObjects {
   }
   AuthPayload: { // root type
     accessToken: string; // String!
-    user?: NexusGenRootTypes['User'] | null; // User
+    user: NexusGenRootTypes['User']; // User!
   }
   Invoice: { // root type
     clientAddress?: NexusGenRootTypes['Address'] | null; // Address
@@ -146,6 +146,9 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  RefreshPayload: { // root type
+    accessToken: string; // String!
+  }
   User: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -177,7 +180,7 @@ export interface NexusGenFieldTypes {
   }
   AuthPayload: { // field return type
     accessToken: string; // String!
-    user: NexusGenRootTypes['User'] | null; // User
+    user: NexusGenRootTypes['User']; // User!
   }
   Invoice: { // field return type
     clientAddress: NexusGenRootTypes['Address'] | null; // Address
@@ -211,13 +214,16 @@ export interface NexusGenFieldTypes {
     deleteInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['LogoutPayload']; // LogoutPayload!
-    refreshAuth: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    refreshAuth: NexusGenRootTypes['RefreshPayload'] | null; // RefreshPayload
     register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     updateInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
   }
   Query: { // field return type
     invoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     invoices: NexusGenRootTypes['Invoice'][]; // [Invoice!]!
+  }
+  RefreshPayload: { // field return type
+    accessToken: string; // String!
   }
   User: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -274,13 +280,16 @@ export interface NexusGenFieldTypeNames {
     deleteInvoice: 'Invoice'
     login: 'AuthPayload'
     logout: 'LogoutPayload'
-    refreshAuth: 'AuthPayload'
+    refreshAuth: 'RefreshPayload'
     register: 'AuthPayload'
     updateInvoice: 'Invoice'
   }
   Query: { // field return type name
     invoice: 'Invoice'
     invoices: 'Invoice'
+  }
+  RefreshPayload: { // field return type name
+    accessToken: 'String'
   }
   User: { // field return type name
     createdAt: 'DateTime'
