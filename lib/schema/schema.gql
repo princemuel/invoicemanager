@@ -50,7 +50,7 @@ input CreateInvoiceInput {
   status: Status!
   tag: String!
   total: Float!
-  userId: ID!
+  userId: ID
 }
 
 """
@@ -138,10 +138,6 @@ input InvoiceItemInput {
   total: Float!
 }
 
-input ItemWhereUniqueInput {
-  id: ID!
-}
-
 input LoginInput {
   email: String!
   password: String!
@@ -152,18 +148,18 @@ type LogoutPayload {
 }
 
 type Mutation {
-  createInvoice(input: CreateInvoiceInput!): Invoice!
-  deleteInvoice(where: ItemWhereUniqueInput!): Invoice
+  createInvoice(input: CreateInvoiceInput!): Invoice
+  deleteInvoice(where: UniqueIdInput!): Invoice
   login(input: LoginInput!): AuthPayload!
   logout: LogoutPayload!
   refreshAuth: RefreshPayload
   register(input: RegisterInput!): AuthPayload!
-  updateInvoice(input: UpdateInvoiceInput!, where: ItemWhereUniqueInput!): Invoice
+  updateInvoice(input: UpdateInvoiceInput!, where: UniqueIdInput!): Invoice
 }
 
 type Query {
-  invoice(where: ItemWhereUniqueInput!): Invoice
-  invoices: [Invoice!]!
+  invoice(where: UniqueIdInput!): Invoice
+  invoices: [Invoice]!
 }
 
 type RefreshPayload {
@@ -171,9 +167,15 @@ type RefreshPayload {
 }
 
 input RegisterInput {
+  """The reentered password to confirm that the passwords match"""
+  countersign: String
   email: String!
   firstName: String!
   lastName: String!
+
+  """
+  The password of the user. Must match the countersign i.e the reentered password
+  """
   password: String!
 }
 
@@ -188,6 +190,14 @@ enum Status {
   DRAFT
   PAID
   PENDING
+}
+
+input UniqueIdInput {
+  id: ID!
+}
+
+input UniqueUserId {
+  userId: ID!
 }
 
 input UpdateInvoiceInput {

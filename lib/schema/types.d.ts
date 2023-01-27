@@ -56,7 +56,7 @@ export interface NexusGenInputs {
     status: NexusGenEnums['Status']; // Status!
     tag: string; // String!
     total: number; // Float!
-    userId: string; // ID!
+    userId?: string | null; // ID
   }
   InvoiceItemInput: { // input type
     id: string; // ID!
@@ -65,18 +65,22 @@ export interface NexusGenInputs {
     quantity: number; // Int!
     total: number; // Float!
   }
-  ItemWhereUniqueInput: { // input type
-    id: string; // ID!
-  }
   LoginInput: { // input type
     email: string; // String!
     password: string; // String!
   }
   RegisterInput: { // input type
+    countersign?: string | null; // String
     email: string; // String!
     firstName: string; // String!
     lastName: string; // String!
     password: string; // String!
+  }
+  UniqueIdInput: { // input type
+    id: string; // ID!
+  }
+  UniqueUserId: { // input type
+    userId: string; // ID!
   }
   UpdateInvoiceInput: { // input type
     clientAddress: NexusGenInputs['AddressInput']; // AddressInput!
@@ -210,7 +214,7 @@ export interface NexusGenFieldTypes {
     message: string; // String!
   }
   Mutation: { // field return type
-    createInvoice: NexusGenRootTypes['Invoice']; // Invoice!
+    createInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     deleteInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['LogoutPayload']; // LogoutPayload!
@@ -220,7 +224,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     invoice: NexusGenRootTypes['Invoice'] | null; // Invoice
-    invoices: NexusGenRootTypes['Invoice'][]; // [Invoice!]!
+    invoices: Array<NexusGenRootTypes['Invoice'] | null>; // [Invoice]!
   }
   RefreshPayload: { // field return type
     accessToken: string; // String!
@@ -309,7 +313,7 @@ export interface NexusGenArgTypes {
       input: NexusGenInputs['CreateInvoiceInput']; // CreateInvoiceInput!
     }
     deleteInvoice: { // args
-      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+      where: NexusGenInputs['UniqueIdInput']; // UniqueIdInput!
     }
     login: { // args
       input: NexusGenInputs['LoginInput']; // LoginInput!
@@ -319,12 +323,12 @@ export interface NexusGenArgTypes {
     }
     updateInvoice: { // args
       input: NexusGenInputs['UpdateInvoiceInput']; // UpdateInvoiceInput!
-      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+      where: NexusGenInputs['UniqueIdInput']; // UniqueIdInput!
     }
   }
   Query: {
     invoice: { // args
-      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+      where: NexusGenInputs['UniqueIdInput']; // UniqueIdInput!
     }
   }
 }
