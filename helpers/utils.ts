@@ -73,14 +73,14 @@ export function pluck<I, K extends keyof I>(items: I[], key: K): I[K][] {
 
 /**
  * A Generic Ranking Algorithm
- * @param items T
- * @param rank 'asc' | 'desc'
+ * @param items T[]
+ * @param order 'asc' | 'desc'
  * @returns An array containing the sorted items according to the ranking algorithm
  */
 
-export const ranker = <T>(
+export const rank = <T>(
   items: T[],
-  rank: "asc" | "desc",
+  order: "asc" | "desc",
   callbackfn: (value: T) => number
 ): T[] => {
   return items
@@ -88,6 +88,6 @@ export const ranker = <T>(
       item,
       rank: callbackfn(item),
     }))
-    .sort((a, b) => (rank === "asc" ? a.rank - b.rank : b.rank - a.rank))
+    .sort((a, b) => (order === "asc" ? a.rank - b.rank : b.rank - a.rank))
     .map((ranked) => ranked.item);
 };
