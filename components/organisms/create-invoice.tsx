@@ -223,7 +223,7 @@ const CreateInvoice = (props: Props) => {
             />
 
             {/* absolute bottom-0 left-0 z-10 w-full translate-y-full */}
-            <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-default bg-neutral-100 pt-12 pb-8 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
+            <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-brand bg-neutral-100 pt-12 pb-8 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
               <div className='flex items-center justify-between px-12'>
                 <button type='button' className='grid place-content-center'>
                   <icons.arrow.left />
@@ -273,7 +273,7 @@ const CreateInvoice = (props: Props) => {
               placeholder='Net 30 Days'
             />
 
-            <ul className='absolute z-10 mt-8 w-full scale-y-0 rounded-default bg-neutral-100 py-6 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
+            <ul className='absolute z-10 mt-8 w-full scale-y-0 rounded-brand bg-neutral-100 py-6 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
               <li className='body-100 cursor-pointer border-b border-brand-100 p-7 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:border-brand-600 dark:text-brand-100'>
                 Net 1 Day
               </li>
