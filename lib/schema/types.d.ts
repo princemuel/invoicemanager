@@ -219,7 +219,7 @@ export interface NexusGenFieldTypes {
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     logout: NexusGenRootTypes['LogoutPayload']; // LogoutPayload!
     refreshAuth: NexusGenRootTypes['RefreshPayload'] | null; // RefreshPayload
-    register: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    register: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateInvoice: NexusGenRootTypes['Invoice'] | null; // Invoice
   }
   Query: { // field return type
