@@ -1,15 +1,16 @@
-import { InvoiceTemplate } from "components";
-import { getById, getInvoicePaths } from "lib";
+import { QueryClient } from "@tanstack/react-query";
+import { createDehydratedState } from "helpers";
+import { useGetInvoiceQuery } from "hooks";
+import { client, queryOptions } from "lib";
 import Head from "next/head";
-import type { Invoice, Params } from "types";
-import { GetStaticPaths, GetStaticProps, NextPageWithLayout } from "types";
+import type { GetServerSideProps, Invoice } from "types";
+import { NextPageWithLayout } from "types";
 
-import { InvoiceProvider } from "context";
-import type { InferNextPropsType } from "types";
-type Props = InferNextPropsType<typeof getStaticProps>;
-// type Props = {};
+// import type { InferNextPropsType } from "types";
+// type Props = InferNextPropsType<typeof getStaticProps>;
+type Props = {};
 
-const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
+const Invoice: NextPageWithLayout<Props> = () => {
   return (
     <>
       <Head>
@@ -17,40 +18,41 @@ const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <InvoiceProvider value={invoice}>
+      <div></div>
+
+      {/* <InvoiceProvider value={invoice}>
         <InvoiceTemplate />
-      </InvoiceProvider>
+      </InvoiceProvider> */}
     </>
   );
 };
 
 export default Invoice;
 
-export const getStaticProps: GetStaticProps<{
-  invoice: Invoice;
-}> = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { params } = context;
+  const queryClient = new QueryClient(queryOptions);
+
   try {
-    const { params } = context as { params: Params };
-    const invoice = (await getById(params?.id)) as Invoice;
-
-    return {
-      props: {
-        invoice,
-      },
-    };
+    await queryClient.prefetchQuery(
+      useGetInvoiceQuery.getKey({
+        where: {
+          id: params?.id! as string,
+        },
+      }),
+      useGetInvoiceQuery.fetcher(client, {
+        where: {
+          id: params?.id! as string,
+        },
+      })
+    );
   } catch (error) {
-    return {
-      notFound: true,
-    };
+    console.log(error);
   }
-};
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const categories = await getInvoicePaths();
-  const paths = categories.map(({ id }) => ({ params: { id } }));
 
   return {
-    paths,
-    fallback: false,
+    props: {
+      dehydratedState: createDehydratedState(queryClient),
+    },
   };
 };

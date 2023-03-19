@@ -3,7 +3,7 @@ import { capitalize, trim } from "helpers";
 type IStatus = ["PENDING", "DRAFT", "PAID"];
 
 type Props = {
-  status: IStatus[number];
+  status?: IStatus[number];
   className?: string;
 };
 
@@ -33,7 +33,7 @@ const StatusButton = ({ status, className }: Props) => {
     <button
       type='button'
       className={trim(
-        `body-100 flex items-center justify-center gap-3 rounded-default font-bold ${btnColors} ${
+        `body-100 rounded-brand flex items-center justify-center gap-3 font-bold ${btnColors} ${
           className || ""
         }`
       )}

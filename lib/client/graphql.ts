@@ -1,3 +1,4 @@
+import { QueryClientConfig } from "@tanstack/react-query";
 import { GraphQLClient } from "graphql-request";
 import { constants } from "helpers";
 
@@ -8,11 +9,12 @@ export const client = new GraphQLClient(GRAPHQL_ENDPOINT, {
   mode: "cors",
 });
 
-export const queryOptions = {
+export const queryOptions: QueryClientConfig = {
   defaultOptions: {
     queries: {
       refetchOnMount: false,
-      refetchOnReconnect: false,
+      refetchOnReconnect: true,
+      // refetchOnReconnect: false,
       refetchOnWindowFocus: false,
     },
   },

@@ -1,13 +1,30 @@
-import { fetchInvoices } from "lib";
+import { client, queryOptions } from "lib";
 import Head from "next/head";
-import { GetStaticProps, Invoice, NextPageWithLayout } from "types";
+import { NextPageWithLayout } from "types";
 
-import { CreateInvoice } from "components/organisms";
+import { QueryClient } from "@tanstack/react-query";
+import { HomeTemplate } from "components";
+import { InvoicesProvider } from "context";
+import { createDehydratedState, getErrorMessage, hasValues } from "helpers";
+import { useGetInvoicesQuery } from "hooks";
 import type { InferNextPropsType } from "types";
-type Props = InferNextPropsType<typeof getStaticProps>;
+type Props = InferNextPropsType<typeof getServerSideProps>;
 // type Props = {};
 
-const Home: NextPageWithLayout<Props> = ({ invoices }) => {
+const Home: NextPageWithLayout<Props> = () => {
+  const { data, error } = useGetInvoicesQuery(client);
+  let invoices = data?.invoices;
+  invoices = hasValues(invoices)
+    ? invoices.sort(
+        (a, b) =>
+          Number(new Date(b.paymentDue!)) - Number(new Date(a.paymentDue!))
+      )
+    : [];
+
+  let ex = getErrorMessage(error);
+
+  console.log(data);
+
   return (
     <>
       <Head>
@@ -15,48 +32,54 @@ const Home: NextPageWithLayout<Props> = ({ invoices }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      {/* <InvoiceProvider value={invoices}>
+      <InvoicesProvider value={invoices}>
         <HomeTemplate />
-      </InvoiceProvider> */}
+      </InvoicesProvider>
 
-      <CreateInvoice />
+      {/* <CreateInvoice /> */}
     </>
   );
 };
 
 export default Home;
 
-export const getStaticProps: GetStaticProps<{
-  invoices: Invoice[];
-}> = async () => {
+// export const getStaticProps: GetStaticProps = async () => {
+//   try {
+//     const queryClient = new QueryClient(queryOptions);
+
+//     await queryClient.prefetchQuery(
+//       useGetInvoicesQuery.getKey(),
+//       useGetInvoicesQuery.fetcher()
+//     );
+
+//     return {
+//       props: {
+//         dehydratedState: createDehydratedState(queryClient),
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+// };
+
+export async function getServerSideProps() {
+  const queryClient = new QueryClient(queryOptions);
+
   try {
-    const invoices = await fetchInvoices();
-
-    return {
-      props: {
-        invoices,
-      },
-    };
+    await queryClient.prefetchQuery(
+      useGetInvoicesQuery.getKey(),
+      useGetInvoicesQuery.fetcher(client)
+    );
   } catch (error) {
-    return {
-      notFound: true,
-    };
+    console.log(error);
   }
-};
 
-// export async function getServerSideProps() {
-//   const queryClient = new QueryClient(queryOptions);
-
-//   await queryClient.prefetchQuery(
-//     useGetInvoicesQuery.getKey(),
-//     useGetInvoicesQuery.fetcher()
-//   );
-//   // await queryClient.prefetchQuery(['invoices'], () => getInvoices());
-
-//   return {
-//     props: {
-//       dehydratedState: createDehydratedState(queryClient),
-//       // dehydratedState: dehydrate(queryClient),
-//     },
-//   };
-// }
+  return {
+    props: {
+      dehydratedState: createDehydratedState(queryClient),
+      // dehydratedState: dehydrate(queryClient),
+    },
+  };
+}

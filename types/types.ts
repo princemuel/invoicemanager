@@ -33,40 +33,20 @@ export type AppPropsWithLayout<P = any> = AppProps<P> & {
   getInitialProps?: (context: AppContext) => AppProps<P> | Promise<AppProps<P>>;
 };
 
-/*===============================*
-          HELPER TYPES
- *===============================*
-*/
-
 export interface Params extends ParsedUrlQuery {
   id: string;
   status: string;
 }
 
-export type RequiredKeys<T> = {
-  [K in keyof T]-?: {} extends { [P in K]: T[K] } ? never : K;
-}[keyof T];
-
-export type Expand<T> = T extends (...args: infer A) => infer R
-  ? (...args: Expand<A>) => Expand<R>
-  : T extends object
-  ? T extends infer O
-    ? { [K in keyof O]: Expand<O[K]> }
-    : never
-  : T;
-
-export type KeyValuePair<K extends keyof any = string, V = string> = Record<
-  K,
-  V
->;
-export interface RecursiveKeyValuePair<
-  K extends keyof any = string,
-  V = string
-> {
-  [key: string]: V | RecursiveKeyValuePair<K, V>;
+declare global {
+  interface GlobalReducerActions {}
 }
 
-export type OptionalUnion<
-  U extends Record<string, any>,
-  A extends keyof U = U extends U ? keyof U : never
-> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
+export type GlobalReducer<IState> = (
+  state: IState,
+  action: {
+    [ActionType in keyof GlobalReducerActions]: {
+      type: ActionType;
+    } & GlobalReducerActions[ActionType];
+  }[keyof GlobalReducerActions]
+) => IState;

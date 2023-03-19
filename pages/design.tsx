@@ -28,42 +28,22 @@ const DesignSystem: NextPage = () => {
           <h2 className='text-brand-500'>Colors</h2>
           {/* BOXES */}
           <ul className='grid grid-cols-fit-big gap-y-12 gap-x-8 font-bold text-neutral-100'>
-            <li className='rounded-default border border-solid border-brand-300 bg-neutral-200 py-16 px-10 text-brand-300 '>
+            <li className='rounded-brand border border-solid border-brand-300 bg-neutral-200 py-16 px-10 text-brand-300 '>
               #F8F8FB
             </li>
-            <li className='rounded-default bg-brand-100 py-16 px-10 text-brand-400 '>
+            <li className='rounded-brand bg-brand-100 py-16 px-10 text-brand-400 '>
               #DFE3FA
             </li>
-            <li className='rounded-default bg-brand-200 py-16 px-10'>
-              #9277FF
-            </li>
-            <li className='rounded-default bg-brand-300 py-16 px-10'>
-              #888EB0
-            </li>
-            <li className='rounded-default bg-brand-400 py-16 px-10'>
-              #7E88C3
-            </li>
-            <li className='rounded-default bg-brand-500 py-16 px-10'>
-              #7C5DFA
-            </li>
-            <li className='rounded-default bg-brand-600 py-16 px-10'>
-              #252945
-            </li>
-            <li className='rounded-default bg-brand-700 py-16 px-10'>
-              #1E2139
-            </li>
-            <li className='rounded-default bg-brand-800 py-16 px-10'>
-              #141625
-            </li>
-            <li className='rounded-default bg-brand-900 py-16 px-10'>
-              #0C0E16
-            </li>
-            <li className='rounded-default bg-accent-100 py-16 px-10'>
-              #FF9797
-            </li>
-            <li className='rounded-default bg-accent-200 py-16 px-10'>
-              #EC5757
-            </li>
+            <li className='rounded-brand bg-brand-200 py-16 px-10'>#9277FF</li>
+            <li className='rounded-brand bg-brand-300 py-16 px-10'>#888EB0</li>
+            <li className='rounded-brand bg-brand-400 py-16 px-10'>#7E88C3</li>
+            <li className='rounded-brand bg-brand-500 py-16 px-10'>#7C5DFA</li>
+            <li className='rounded-brand bg-brand-600 py-16 px-10'>#252945</li>
+            <li className='rounded-brand bg-brand-700 py-16 px-10'>#1E2139</li>
+            <li className='rounded-brand bg-brand-800 py-16 px-10'>#141625</li>
+            <li className='rounded-brand bg-brand-900 py-16 px-10'>#0C0E16</li>
+            <li className='rounded-brand bg-accent-100 py-16 px-10'>#FF9797</li>
+            <li className='rounded-brand bg-accent-200 py-16 px-10'>#EC5757</li>
           </ul>
         </section>
         <section>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 type Props = {
   loading: boolean;
@@ -8,7 +8,7 @@ type Props = {
 };
 
 /**
- * Query Results conditionally renders Apollo useQuery hooks states:
+ * The QueryResult component conditionally renders useQuery hook states:
  * loading, error or its children when data is ready
  */
 const QueryResult = ({ loading, error, data, children }: Props) => {

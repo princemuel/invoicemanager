@@ -8,6 +8,7 @@ import "assets/styles/main.css";
 import { Layout } from "components";
 import { ModalProvider } from "context";
 import { queryOptions } from "lib";
+import { DefaultSeo } from "next-seo";
 import { ThemeProvider } from "next-themes";
 import Head from "next/head";
 import * as React from "react";
@@ -26,6 +27,12 @@ function App({ Component, pageProps }: AppPropsWithLayout<PageProps>) {
       <Head>
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       </Head>
+
+      <DefaultSeo
+        defaultTitle='Invoice Mailer'
+        titleTemplate='%s | Invoice'
+        description='An appilication for ...'
+      />
 
       <ThemeProvider
         storageKey='preferred-theme'

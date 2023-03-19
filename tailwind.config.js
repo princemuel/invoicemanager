@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     borderRadius: {
       ...defaultTheme.borderRadius,
-      default: "0.8rem",
+      brand: "0.8rem",
       pill: "100vmax",
     },
 

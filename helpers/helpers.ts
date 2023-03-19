@@ -4,8 +4,8 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-export const approximate = (number: number, to = 0) => {
-  return parseInt(number.toFixed(to));
+export const approximate = (number: number, fractionDigits = 0) => {
+  return parseInt(number.toFixed(fractionDigits));
 };
 export const itemTotal = (quantity: number, price: number) => {
   return Number(price) * Number(quantity);
@@ -28,7 +28,7 @@ export const createDehydratedState = (
   client: QueryClient,
   options: DehydrateOptions = {}
 ) => {
-  if (!client) throw new Error("The query client must be defined");
+  if (!client) throw new ReferenceError("The query client must be defined");
   return serialize(dehydrate(client, options));
 };
 
@@ -55,7 +55,9 @@ export const formatDate: FormatDateFunction = (
   separator = " "
 ) => {
   if (typeof date !== "string")
-    throw new Error("The date must be of type 'string'");
+    throw new TypeError(
+      `The date must not be of type '${typeof date}' but of type 'string'`
+    );
 
   return formatOptions
     .map((options) => {
