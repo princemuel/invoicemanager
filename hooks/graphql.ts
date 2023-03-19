@@ -50,7 +50,7 @@ export interface AddressInput {
 
 export interface AuthPayload {
   accessToken: Scalars['String'];
-  user?: Maybe<User>;
+  user: User;
 }
 
 export interface CreateInvoiceInput {
@@ -142,7 +142,7 @@ export interface Mutation {
   deleteInvoice?: Maybe<Invoice>;
   login: AuthPayload;
   logout: LogoutPayload;
-  refreshAuth?: Maybe<AuthPayload>;
+  refreshAuth?: Maybe<RefreshPayload>;
   register: AuthPayload;
   updateInvoice?: Maybe<Invoice>;
 }
@@ -183,6 +183,10 @@ export interface QueryInvoiceArgs {
   where: ItemWhereUniqueInput;
 }
 
+export interface RefreshPayload {
+  accessToken: Scalars['String'];
+}
+
 export interface RegisterInput {
   email: Scalars['String'];
   firstName: Scalars['String'];
@@ -214,7 +218,6 @@ export interface UpdateInvoiceInput {
   senderAddress: AddressInput;
   status: Status;
   total: Scalars['Float'];
-  userId: Scalars['ID'];
 }
 
 export interface User {
@@ -268,14 +271,14 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { register: { accessToken: string, user?: { id: string, photo?: string, firstName?: string, lastName?: string } } };
+export type RegisterMutation = { register: { accessToken: string, user: { id: string, photo?: string, firstName?: string, lastName?: string } } };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
 
 
-export type LoginMutation = { login: { accessToken: string, user?: { id: string, photo?: string, firstName?: string, lastName?: string } } };
+export type LoginMutation = { login: { accessToken: string, user: { id: string, photo?: string, firstName?: string, lastName?: string } } };
 
 export type RefreshAuthMutationVariables = Exact<{ [key: string]: never; }>;
 
