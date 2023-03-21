@@ -9,7 +9,7 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  webpack(config) {
+  webpack(config, { isServer }) {
     config.experiments ||= {};
     config.experiments.topLevelAwait = true;
 
@@ -18,6 +18,13 @@ const nextConfig = {
       issuer: /\.[jt]sx?$/,
       use: ["@svgr/webpack"],
     });
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+      };
+    }
+
     return config;
   },
 };
