@@ -1,16 +1,16 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createDehydratedState } from "helpers";
-import { useGetInvoiceQuery } from "hooks";
-import { client, queryOptions } from "lib";
+import { InvoiceTemplate } from "components";
+import { InvoiceProvider } from "context";
+import { getById, getInvoicePaths } from "lib";
 import Head from "next/head";
-import type { GetServerSideProps, Invoice } from "types";
+import type { GetStaticPaths, GetStaticProps, Invoice, Params } from "types";
 import { NextPageWithLayout } from "types";
 
-// import type { InferNextPropsType } from "types";
-// type Props = InferNextPropsType<typeof getStaticProps>;
-type Props = {};
+import type { InferNextPropsType } from "types";
+type Props = InferNextPropsType<typeof getStaticProps>;
+// type Props = {};
 
-const Invoice: NextPageWithLayout<Props> = () => {
+const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
+  console.log(invoice);
   return (
     <>
       <Head>
@@ -20,39 +20,69 @@ const Invoice: NextPageWithLayout<Props> = () => {
 
       <div></div>
 
-      {/* <InvoiceProvider value={invoice}>
+      {/* @ts-expect-error */}
+      <InvoiceProvider value={invoice}>
         <InvoiceTemplate />
-      </InvoiceProvider> */}
+      </InvoiceProvider>
     </>
   );
 };
 
 export default Invoice;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { params } = context;
-  const queryClient = new QueryClient(queryOptions);
-
+export const getStaticProps: GetStaticProps<{
+  invoice: Invoice;
+}> = async (context) => {
   try {
-    await queryClient.prefetchQuery(
-      useGetInvoiceQuery.getKey({
-        where: {
-          id: params?.id! as string,
-        },
-      }),
-      useGetInvoiceQuery.fetcher(client, {
-        where: {
-          id: params?.id! as string,
-        },
-      })
-    );
+    const { params } = context as { params: Params };
+    const invoice = (await getById(params?.id)) as Invoice;
+
+    return {
+      props: {
+        invoice,
+      },
+    };
   } catch (error) {
-    console.log(error);
+    return {
+      notFound: true,
+    };
   }
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const categories = await getInvoicePaths();
+  const paths = categories.map(({ id }) => ({ params: { id } }));
 
   return {
-    props: {
-      dehydratedState: createDehydratedState(queryClient),
-    },
+    paths,
+    fallback: false,
   };
 };
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { params } = context;
+//   const queryClient = new QueryClient(queryOptions);
+
+//   try {
+//     await queryClient.prefetchQuery(
+//       useGetInvoiceQuery.getKey({
+//         where: {
+//           id: params?.id! as string,
+//         },
+//       }),
+//       useGetInvoiceQuery.fetcher(client, {
+//         where: {
+//           id: params?.id! as string,
+//         },
+//       })
+//     );
+//   } catch (error) {
+//     console.log(error);
+//   }
+
+//   return {
+//     props: {
+//       dehydratedState: createDehydratedState(queryClient),
+//     },
+//   };
+// };
