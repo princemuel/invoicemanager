@@ -1,4 +1,4 @@
-import { icons, Link } from "common";
+import { icons, Image, Link } from "common";
 import { StatusButton, Text } from "components/atoms";
 import { useInvoices } from "context";
 import { formatDate, formatPrice, hasValues } from "helpers";
@@ -55,34 +55,36 @@ const HomeTemplate = (props: Props) => {
           data.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-brand bg-neutral-100 py-7 px-8 shadow-default dark:bg-brand-700'
+              className='rounded-brand bg-neutral-100 py-7 px-8 shadow-100 dark:bg-brand-700'
             >
               <Link href={`/invoices/${invoice.id}`} passHref>
-                <a className='grid grid-cols-2 grid-rows-4 sm:flex sm:items-center sm:gap-8'>
-                  <Text className='body-100 col-start-1 col-end-2 row-start-1 row-end-1 font-bold'>
+                <a className='flex items-center justify-between '>
+                  <Text className='body-100 font-bold'>
                     <span className='text-brand-400'>#</span>
                     <span className='uppercase text-brand-900 dark:text-neutral-100'>
-                      {invoice?.tag}
+                      {invoice?.id}
+                      {/* {invoice?.tag} */}
                     </span>
                   </Text>
 
-                  <Text className='body-100 self-end font-medium text-brand-400 sm:flex-1 sm:self-center'>
-                    <span>Due </span>
+                  <Text className='body-100 font-medium text-brand-400'>
+                    <span>Due&nbsp;</span>
                     <time>{formatDate(invoice?.paymentDue)}</time>
                   </Text>
 
-                  <Text className='body-100 col-start-2 col-end-3 row-start-1 row-end-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sm:flex-1'>
+                  <Text className='body-100 font-medium text-[#858BB2] dark:text-neutral-100'>
                     {invoice?.clientName}
                   </Text>
 
-                  <Text className='col-start-1 col-end-2 row-start-4 row-end-4 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sm:flex-1 sm:text-right'>
+                  <Text className='text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100'>
                     <output>{formatPrice(invoice?.total)}</output>
                   </Text>
 
                   <StatusButton
                     status={invoice?.status}
-                    className='col-start-2 col-end-3  row-start-3 row-end-5 px-4 py-6 sm:flex-1'
+                    className='h-16 w-[11rem]'
                   />
+
                   <Text className='hidden sx:block'>
                     <icons.arrow.right />
                   </Text>
@@ -91,7 +93,30 @@ const HomeTemplate = (props: Props) => {
             </li>
           ))
         ) : (
-          <Text>No Invoices to show</Text>
+          <div className='flex min-h-full items-center justify-center'>
+            <article className='flex flex-col items-center gap-20 text-center'>
+              <Image
+                src={"/assets/svgs/illustration-empty.svg"}
+                width='242'
+                height='200'
+                className='w-full'
+                alt={"Invoices List Empty"}
+                priority={true}
+              />
+
+              <div className='flex  flex-col items-center gap-8 px-16'>
+                <h2>There is nothing here</h2>
+
+                <Text as='p' className='max-w-[22rem]'>
+                  Create an invoice by clicking the{" "}
+                  <Text as='em' className='font-bold'>
+                    New Invoice
+                  </Text>{" "}
+                  button and get started
+                </Text>
+              </div>
+            </article>
+          </div>
         )}
       </ul>
     </section>
