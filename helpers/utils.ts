@@ -25,7 +25,7 @@ export function clsx(...args: ClassValue[]) {
 }
 
 export const capitalize = (string: string) => {
-  return string?.charAt(0)?.toUpperCase() + string?.slice(1);
+  return string?.[0]?.toUpperCase() + string?.slice(1).toLowerCase();
 };
 
 export const trim = (string: string) => string?.trim();

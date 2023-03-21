@@ -54,15 +54,17 @@ export const formatDate: FormatDateFunction = (
   formatOptions = [{ day: "numeric" }, { month: "short" }, { year: "numeric" }],
   separator = " "
 ) => {
-  if (typeof date !== "string")
-    throw new TypeError(
-      `The date must not be of type '${typeof date}' but of type 'string'`
-    );
+  if (!date || typeof date !== "string") {
+    // throw new TypeError(
+    //   `The date must not be of type '${typeof date}' but of type 'string'`
+    // );
+    date = new Date().toISOString();
+  }
 
   return formatOptions
     .map((options) => {
       const dateFormatter = new Intl.DateTimeFormat("en", options);
-      return dateFormatter.format(new Date(date));
+      return dateFormatter.format(new Date(date as string));
     })
     .join(separator);
 };
