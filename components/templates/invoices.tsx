@@ -5,7 +5,7 @@ import { formatDate, formatPrice, hasValues } from "helpers";
 
 type Props = {};
 
-const HomeTemplate = (props: Props) => {
+const InvoicesTemplate = (props: Props) => {
   const data = useInvoices();
 
   return (
@@ -93,7 +93,7 @@ const HomeTemplate = (props: Props) => {
             </li>
           ))
         ) : (
-          <div className='flex min-h-full items-center justify-center'>
+          <li className='flex min-h-full items-center justify-center'>
             <article className='flex flex-col items-center gap-20 text-center'>
               <Image
                 src={"/assets/svgs/illustration-empty.svg"}
@@ -116,11 +116,11 @@ const HomeTemplate = (props: Props) => {
                 </Text>
               </div>
             </article>
-          </div>
+          </li>
         )}
       </ul>
     </section>
   );
 };
 
-export { HomeTemplate };
+export { InvoicesTemplate };
