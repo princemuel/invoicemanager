@@ -1,4 +1,4 @@
-import { Head, Html, Main, NextScript } from 'next/document';
+import { Head, Html, Main, NextScript } from "next/document";
 
 export default function MyDocument() {
   return (
@@ -23,7 +23,7 @@ export default function MyDocument() {
         <link
           rel='preconnect'
           href='https://fonts.gstatic.com'
-          crossOrigin={'true'}
+          crossOrigin={"anonymous"}
         />
         <link
           rel='stylesheet'

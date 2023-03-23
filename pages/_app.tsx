@@ -19,7 +19,12 @@ type PageProps = {
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout<PageProps>) {
-  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+  const getLayout =
+    Component.getLayout ??
+    function (page) {
+      return <Layout>{page}</Layout>;
+    };
+
   const [queryClient] = React.useState(() => new QueryClient(queryOptions));
 
   return (

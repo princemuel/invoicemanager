@@ -12,7 +12,7 @@ const InvoiceTemplate = (props: Props) => {
 
   return (
     <section aria-labelledby='invoice-heading' className='h-container'>
-      <Link href='/'>
+      <Link href='/invoices'>
         <a className='body-100 mt-20 flex items-center gap-8 font-bold'>
           <span>
             <icons.arrow.left />
@@ -22,7 +22,7 @@ const InvoiceTemplate = (props: Props) => {
       </Link>
 
       <div className='mt-10 grid gap-12'>
-        <header className='shadow-100 rounded-brand bg-neutral-100 py-12 px-10 dark:bg-brand-700'>
+        <header className='rounded-brand bg-neutral-100 py-12 px-10 shadow-100 dark:bg-brand-700'>
           <div className='flex items-center justify-between gap-8'>
             <Text className='body-100 text-[#858BB2] dark:text-brand-100'>
               Status
@@ -31,7 +31,7 @@ const InvoiceTemplate = (props: Props) => {
           </div>
         </header>
 
-        <div className='shadow-100 rounded-brand bg-neutral-100 p-16 dark:bg-brand-700'>
+        <div className='rounded-brand bg-neutral-100 p-16 shadow-100 dark:bg-brand-700'>
           <div className='flex justify-between'>
             <div className='> * + * items-start space-y-2'>
               <Text className='body-100 font-bold'>

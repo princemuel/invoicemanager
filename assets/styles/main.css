@@ -4,7 +4,7 @@
 
 /*!Theme Name:
 Theme URI: https://invoicenote.vercel.app/
-Repository: https://github.com/princemuel/invoicer
+Repository: https://github.com/princemuel/invoice-web-app
 Description: A web app where you can send .This web application presents the products using the most user-friendly format with accessibility in mind.
 Author's Name: Samuel Chukwuzube
 Author's Moniker: princemuel
@@ -159,7 +159,7 @@ Version: 01
 
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
-    @apply bg-neutral-100 font-sans font-medium text-brand-900 dark:bg-brand-800 dark:text-neutral-100;
+    @apply bg-neutral-200 font-sans font-medium text-brand-900 dark:bg-brand-800 dark:text-neutral-100;
   }
 
   :is(h1, h2, h3, button) {
@@ -246,7 +246,7 @@ Version: 01
 @layer utilities {
   .h-container {
     --max-width: 75rem;
-    --container-padding: 1.6rem;
+    --container-padding: 2.4rem;
 
     width: min(var(--max-width), 100% - (var(--container-padding) * 2));
     margin-inline: auto;

@@ -9,7 +9,7 @@ import type { InferNextPropsType } from "types";
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
 
-const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
+const Page: NextPageWithLayout<Props> = ({ invoice }) => {
   console.log(invoice);
   return (
     <>
@@ -28,7 +28,7 @@ const Invoice: NextPageWithLayout<Props> = ({ invoice }) => {
   );
 };
 
-export default Invoice;
+export default Page;
 
 export const getStaticProps: GetStaticProps<{
   invoice: Invoice;
