@@ -15,7 +15,7 @@ const InvoicesTemplate = (props: Props) => {
           <h1 id='invoices-heading'>Invoices</h1>
 
           {hasValues(data) ? (
-            <Text>
+            <Text as='p'>
               <span className='hidden md:inline'>
                 There are <output name='invoices'>{data.length}</output> total
                 invoices
@@ -27,7 +27,7 @@ const InvoicesTemplate = (props: Props) => {
               </span>
             </Text>
           ) : (
-            <p>No Invoices</p>
+            <Text as='p'>No Invoices</Text>
           )}
         </div>
 
@@ -41,6 +41,7 @@ const InvoicesTemplate = (props: Props) => {
             <div></div>
           </div>
         </div>
+
         <button type='button' className='btn-invoice btn'>
           <span className='grid place-content-center rounded-full bg-neutral-200 p-3'>
             <icons.actions.add />
@@ -55,11 +56,11 @@ const InvoicesTemplate = (props: Props) => {
           data.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-brand bg-neutral-100 py-7 px-8 shadow-100 dark:bg-brand-700'
+              className='rounded-brand bg-neutral-100 py-7 px-10 shadow-100 dark:bg-brand-700'
             >
               <Link href={`/invoices/${invoice.id}`} passHref>
-                <a className='flex items-center justify-between '>
-                  <Text className='body-100 font-bold'>
+                <a className='grid grid-cols-2 grid-rows-3 items-end sx:flex sx:items-center sx:gap-8'>
+                  <Text as='p' className='body-100 font-bold'>
                     <span className='text-brand-400'>#</span>
                     <span className='uppercase text-brand-900 dark:text-neutral-100'>
                       {invoice?.id}
@@ -67,25 +68,37 @@ const InvoicesTemplate = (props: Props) => {
                     </span>
                   </Text>
 
-                  <Text className='body-100 font-medium text-brand-400'>
+                  <Text
+                    as='p'
+                    className='body-100 flex-1 font-medium text-brand-100'
+                  >
                     <span>Due&nbsp;</span>
                     <time>{formatDate(invoice?.paymentDue)}</time>
                   </Text>
 
-                  <Text className='body-100 font-medium text-[#858BB2] dark:text-neutral-100'>
+                  <Text
+                    as='p'
+                    className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sx:justify-self-auto'
+                  >
                     {invoice?.clientName}
                   </Text>
 
-                  <Text className='text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100'>
+                  <Text
+                    as='p'
+                    className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sx:text-right'
+                  >
                     <output>{formatPrice(invoice?.total)}</output>
                   </Text>
 
                   <StatusButton
                     status={invoice?.status}
-                    className='h-16 w-[11rem]'
+                    className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end sx:justify-self-auto'
                   />
 
-                  <Text className='hidden sx:block'>
+                  <Text
+                    as='p'
+                    className='hidden sx:col-start-6 sx:col-end-7 sx:block'
+                  >
                     <icons.arrow.right />
                   </Text>
                 </a>
@@ -104,15 +117,13 @@ const InvoicesTemplate = (props: Props) => {
                 priority={true}
               />
 
-              <div className='flex  flex-col items-center gap-8 px-16'>
-                <h2>There is nothing here</h2>
+              <div className='flex flex-col items-center gap-8 px-16'>
+                <Text as='h2'>There is nothing here</Text>
 
                 <Text as='p' className='max-w-[22rem]'>
                   Create an invoice by clicking the{" "}
-                  <Text as='em' className='font-bold'>
-                    New Invoice
-                  </Text>{" "}
-                  button and get started
+                  <em className='font-bold'>New Invoice</em> button and get
+                  started
                 </Text>
               </div>
             </article>
