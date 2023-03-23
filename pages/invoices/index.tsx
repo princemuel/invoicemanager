@@ -18,8 +18,9 @@ const Page: NextPageWithLayout<Props> = ({ invoices }) => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
+      {/* <InvoicesProvider value={invoices}> */}
       {/* @ts-expect-error */}
-      <InvoicesProvider value={invoices}>
+      <InvoicesProvider value={[] || invoices}>
         <InvoicesTemplate />
       </InvoicesProvider>
 
