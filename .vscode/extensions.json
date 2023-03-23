@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "stivo.tailwind-fold",
+    "bradlc.vscode-tailwindcss",
+    "graphql.vscode-graphql-execution",
+    "graphql.vscode-graphql",
+    "graphql.vscode-graphql-syntax",
+    "esbenp.prettier-vscode",
+    "aaron-bond.better-comments",
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint"
+  ]
+}
