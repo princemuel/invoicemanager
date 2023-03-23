@@ -20,7 +20,7 @@ const Page: NextPageWithLayout<Props> = ({ invoices }) => {
       </Head>
 
       <Link href='/invoices'>
-        <a className='text-500 font-bold text-brand-900 underline'>
+        <a className='text-500 font-bold text-brand-900 underline dark:text-neutral-100'>
           Click this link to view the Invoices Page
         </a>
       </Link>
