@@ -2,6 +2,7 @@ import { InvoiceTemplate } from "components";
 import { InvoiceProvider } from "context";
 import { getById, getInvoicePaths } from "lib";
 import Head from "next/head";
+import * as React from "react";
 import type { GetStaticPaths, GetStaticProps, Invoice, Params } from "types";
 import { NextPageWithLayout } from "types";
 
@@ -12,19 +13,19 @@ type Props = InferNextPropsType<typeof getStaticProps>;
 const Page: NextPageWithLayout<Props> = ({ invoice }) => {
   console.log(invoice);
   return (
-    <>
+    <React.Fragment>
       <Head>
         <title>Single Invoice</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      <div></div>
-
-      {/* @ts-expect-error */}
-      <InvoiceProvider value={invoice}>
-        <InvoiceTemplate />
-      </InvoiceProvider>
-    </>
+      <React.Fragment>
+        {/* @ts-expect-error */}
+        <InvoiceProvider value={invoice}>
+          <InvoiceTemplate />
+        </InvoiceProvider>
+      </React.Fragment>
+    </React.Fragment>
   );
 };
 

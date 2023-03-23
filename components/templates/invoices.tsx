@@ -58,7 +58,7 @@ const InvoicesTemplate = (props: Props) => {
           data.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-brand bg-neutral-100 py-7 px-10 shadow-100 dark:bg-brand-700'
+              className='rounded-brand bg-neutral-100 p-10 shadow-100 dark:bg-brand-700 max-sx:pt-4'
             >
               <Link href={`/invoices/${invoice.id}`} passHref>
                 <a className='grid grid-cols-2 grid-rows-3 items-end sx:flex sx:items-center sx:gap-8'>

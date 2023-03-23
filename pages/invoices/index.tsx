@@ -1,10 +1,10 @@
 import { InvoicesTemplate } from "components";
 import { InvoicesProvider } from "context";
-import Head from "next/head";
-import { GetStaticProps, Invoice, NextPageWithLayout } from "types";
-
 import { fetchInvoices } from "lib";
+import Head from "next/head";
+import * as React from "react";
 import type { InferNextPropsType } from "types";
+import { GetStaticProps, Invoice, NextPageWithLayout } from "types";
 type Props = InferNextPropsType<typeof getStaticProps>;
 // type Props = {};
 
@@ -12,20 +12,22 @@ const Page: NextPageWithLayout<Props> = ({ invoices }) => {
   console.log(invoices);
 
   return (
-    <>
+    <React.Fragment>
       <Head>
         <title>Invoice Mailer</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
 
-      {/* <InvoicesProvider value={invoices}> */}
-      {/* @ts-expect-error */}
-      <InvoicesProvider value={[] || invoices}>
-        <InvoicesTemplate />
-      </InvoicesProvider>
+      <React.Fragment>
+        {/* <InvoicesProvider value={invoices}> */}
+        {/* @ts-expect-error */}
+        <InvoicesProvider value={invoices}>
+          <InvoicesTemplate />
+        </InvoicesProvider>
 
-      {/* <CreateInvoice /> */}
-    </>
+        {/* <CreateInvoice /> */}
+      </React.Fragment>
+    </React.Fragment>
   );
 };
 
