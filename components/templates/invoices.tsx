@@ -16,18 +16,20 @@ const InvoicesTemplate = (props: Props) => {
 
           {hasValues(data) ? (
             <Text as='p'>
-              <span className='hidden md:inline'>
+              <span className='hidden text-brand-300 dark:text-brand-100 md:inline'>
                 There are <output name='invoices'>{data.length}</output> total
                 invoices
               </span>
 
-              <span className='md:hidden'>
+              <span className='text-brand-300 dark:text-brand-100 md:hidden'>
                 <output name='invoices'>{data?.length}</output>
                 &nbsp;Invoices
               </span>
             </Text>
           ) : (
-            <Text as='p'>No Invoices</Text>
+            <Text as='p' className='text-brand-300 dark:text-brand-100'>
+              No Invoices
+            </Text>
           )}
         </div>
 
@@ -70,7 +72,7 @@ const InvoicesTemplate = (props: Props) => {
 
                   <Text
                     as='p'
-                    className='body-100 flex-1 font-medium text-brand-100'
+                    className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
                   >
                     <span>Due&nbsp;</span>
                     <time>{formatDate(invoice?.paymentDue)}</time>
