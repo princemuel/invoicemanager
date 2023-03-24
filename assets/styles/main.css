@@ -215,16 +215,16 @@ Version: 01
     @apply bg-brand-500 px-11 text-neutral-100 hover:bg-brand-200;
   }
   .btn-edit {
-    @apply bg-neutral-300 text-brand-400  hover:bg-brand-100 hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 dark:hover:text-neutral-100;
+    @apply h-[4.8rem] w-28 bg-neutral-300 text-brand-400  hover:bg-brand-100 hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 dark:hover:text-neutral-100;
   }
   .btn-draft {
     @apply bg-[#373B53] text-brand-300 hover:bg-brand-900 dark:text-brand-100 dark:hover:bg-[#373B53];
   }
   .btn-delete {
-    @apply bg-accent-200 text-neutral-100 hover:bg-accent-100;
+    @apply h-[4.8rem] w-36 bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-300;
+    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-brand-400 focus:bg-brand-100 hover:bg-brand-100 dark:bg-brand-600 dark:text-brand-300;
   }
   /* ********** BUTTONS ********** */
 
