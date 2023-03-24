@@ -4,6 +4,7 @@ import { formatDate, formatPrice, grandTotal } from "helpers";
 import { Invoice } from "hooks";
 import Link from "next/link";
 import * as React from "react";
+
 type Props = {
   invoice: Invoice;
 };
@@ -11,7 +12,7 @@ type Props = {
 const InvoiceDetailsMobile = ({ invoice }: Props) => {
   return (
     <React.Fragment>
-      <section className='h-container '>
+      <section className='h-container md:hidden'>
         <Link href='/invoices'>
           <a className='body-100 mt-20 flex items-center gap-8 font-bold'>
             <span>
@@ -21,7 +22,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
           </a>
         </Link>
 
-        <article className='mt-10 mb-20 grid gap-12 md:hidden'>
+        <article className='mt-10 mb-20 grid gap-12'>
           <header className='flex items-center justify-between rounded-brand bg-neutral-100 py-8 px-10 shadow-100 dark:bg-brand-700'>
             <Text className='body-100 text-[#858BB2] dark:text-brand-100'>
               Status
@@ -103,9 +104,9 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
               </div>
             </div>
 
-            <div className=''>
+            <div className='> * + * space-y-4'>
               <Text className='body-100 text-brand-400 dark:text-brand-100 '>
-                Sent To
+                Sent to
               </Text>
               <Text className='body-300'>{invoice?.clientEmail}</Text>
             </div>
@@ -150,7 +151,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
         </article>
       </section>
 
-      <div className='px-[2.4rem] py-9 dark:bg-brand-700'>
+      <div className='px-[2.4rem] py-9 dark:bg-brand-700 md:hidden'>
         <section className='flex items-center justify-between gap-4'>
           <button type='button' className='btn btn-edit font-bold'>
             Edit
