@@ -7,15 +7,15 @@ import {
 export const approximate = (number: number, fractionDigits = 0) => {
   return parseInt(number.toFixed(fractionDigits));
 };
-export const itemTotal = (quantity: number, price: number) => {
+export const totalPrice = (quantity = 0, price = 0) => {
   return Number(price) * Number(quantity);
 };
 
-type Item = { quantity: number; price: number };
+type Item = { quantity?: number; price?: number };
 export const grandTotal = <T extends Item>(items?: T[]) => {
   if (!items) return 0;
   return items.reduce((total, item) => {
-    total += itemTotal(item.quantity, item.price);
+    total += totalPrice(item.quantity, item.price);
     return total;
   }, 0);
 };

@@ -13,7 +13,7 @@ const InvoiceTable = ({ data }: Props) => {
 
   return (
     <Fragment>
-      <table className='shadow-100 grid auto-cols-min grid-cols-1 gap-8 overflow-hidden rounded-brand px-10 pt-10 dark:bg-brand-600'>
+      <table className='grid auto-cols-min grid-cols-1 gap-8 overflow-hidden rounded-brand px-10 pt-10 shadow-100 dark:bg-brand-600'>
         <thead className='text-brand-400 dark:text-brand-100'>
           <tr className='grid grid-cols-4 justify-items-end'>
             <th className='justify-self-start'>Item Name</th>
