@@ -3,15 +3,15 @@
 /* -------------------------------- */
 
 /*!Theme Name:
-Theme URI: https://invoicenote.vercel.app/
+Theme URI: https://pm-invoice.vercel.app/
 Repository: https://github.com/princemuel/invoice-web-app
 Description: A web app where you can send .This web application presents the products using the most user-friendly format with accessibility in mind.
 Author's Name: Samuel Chukwuzube
 Author's Moniker: princemuel
 Version: 02
-
 */
-/**
+
+/*
  * This injects Tailwind's base styles and any base styles registered by
  * plugins.
  */
