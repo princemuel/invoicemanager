@@ -1,3 +1,4 @@
+import { Layout } from '@src/components';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -8,7 +9,7 @@ import { InvoicesRoute } from './invoices';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<h1>Layout</h1>}>
+    <Route path='/' element={<Layout />}>
       <Route index element={<h1>Home</h1>} />
 
       <Route path='invoices'>
