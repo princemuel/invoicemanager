@@ -1,5 +1,4 @@
-# schema: "http://localhost:4000/graphql"
-schema: './lib/schema/schema.gql'
+schema: './lib/schema.gql'
 documents: './lib/graphql/**/*.{graphql,gql}'
 overwrite: true
 watch: true
