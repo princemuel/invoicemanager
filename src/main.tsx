@@ -2,24 +2,19 @@ import '@src/assets/styles/main.css';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import App from './App';
+import { RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from './context';
+import { router } from './routes';
 
-const root = createRoot(document.getElementById('root') as HTMLElement);
+const container = document.getElementById('root') as HTMLElement;
+const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            <HelmetProvider>
-              <App />
-            </HelmetProvider>
-          }
-        />
-      </Routes>
-    </Router>
+    <HelmetProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </HelmetProvider>
   </React.StrictMode>
 );
