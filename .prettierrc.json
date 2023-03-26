@@ -1,4 +1,5 @@
 {
+  "tailwindConfig": "./tailwind.config.cjs",
   "bracketSpacing": true,
   "endOfLine": "lf",
   "htmlWhitespaceSensitivity": "css",
@@ -10,5 +11,8 @@
   "trailingComma": "es5",
   "tabWidth": 2,
   "arrowParens": "always",
-  "semi": true
+  "semi": true,
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": true,
+  "useTabs": false
 }
