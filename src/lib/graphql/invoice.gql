@@ -1,0 +1,92 @@
+query GetInvoices {
+  invoices {
+    id
+    tag
+    paymentDue
+    clientName
+    status
+    total
+  }
+}
+
+query GetInvoice($where: ItemWhereUniqueInput!) {
+  invoice(where: $where) {
+    userId
+    createdAt
+    updatedAt
+    paymentDue
+    tag
+    description
+    paymentTerms
+    clientName
+    clientEmail
+    status
+    senderAddress {
+      street
+      city
+      postCode
+      country
+    }
+    clientAddress {
+      street
+      city
+      postCode
+      country
+    }
+    total
+    items {
+      id
+      name
+      price
+      quantity
+      total
+    }
+  }
+}
+
+mutation CreateInvoice($input: CreateInvoiceInput!) {
+  createInvoice(input: $input) {
+    id
+    tag
+    paymentDue
+    clientName
+    status
+    total
+  }
+}
+
+mutation UpdateInvoice(
+  $input: UpdateInvoiceInput!
+  $where: ItemWhereUniqueInput!
+) {
+  updateInvoice(input: $input, where: $where) {
+    updatedAt
+    paymentDue
+    tag
+    description
+    paymentTerms
+    clientName
+    clientEmail
+    status
+    senderAddress {
+      street
+      city
+      postCode
+      country
+    }
+    clientAddress {
+      street
+      city
+      postCode
+      country
+    }
+    total
+    items {
+      id
+      name
+      quantity
+      price
+      total
+    }
+  }
+}
