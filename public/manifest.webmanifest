@@ -1,0 +1,10 @@
+{
+  "name": "Invoice Note App",
+  "short_name": "Invoice Note",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "white",
+  "theme_color": "white",
+  "orientation": "portrait-primary",
+  "icons": []
+}
