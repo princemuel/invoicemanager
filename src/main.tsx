@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
@@ -14,14 +15,15 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <ThemeProvider>
-        <ModalProvider>
-          <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <ThemeProvider>
+          <ModalProvider>
+            <ReactQueryDevtools position='bottom-right' />
             <RouterProvider router={router} />
-          </QueryClientProvider>
-        </ModalProvider>
-      </ThemeProvider>
-    </HelmetProvider>
+          </ModalProvider>
+        </ThemeProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
