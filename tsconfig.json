@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES5",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowJs": false,
@@ -15,6 +15,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "incremental": true,
+    "noErrorTruncation": true,
     "baseUrl": ".",
     "paths": {
       "@src/*": ["./src/*"]
