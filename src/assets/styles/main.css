@@ -8,7 +8,7 @@ Repository: https://github.com/princemuel/invoice-web-app
 Description: A web app where you can send .This web application presents the products using the most user-friendly format with accessibility in mind.
 Author's Name: Samuel Chukwuzube
 Author's Moniker: princemuel
-Version: 01
+Version: 02
 
 */
 /**
@@ -48,7 +48,7 @@ Version: 01
     box-sizing: inherit;
   }
 
-  :where([hidden]:not([hidden="until-found"])) {
+  :where([hidden]:not([hidden='until-found'])) {
     display: none !important;
   }
 
@@ -84,7 +84,7 @@ Version: 01
     font: inherit;
     color: inherit;
   }
-  :where(button, label, select, summary, [role="button"], [role="option"]) {
+  :where(button, label, select, summary, [role='button'], [role='option']) {
     cursor: pointer;
   }
   :where(textarea) {
@@ -111,7 +111,7 @@ Version: 01
     block-size: auto;
   }
   @media not all and (min-resolution: 0.001dpcm) {
-    :where(img[loading="lazy"]) {
+    :where(img[loading='lazy']) {
       clip-path: inset(0.5px);
     }
   }
@@ -202,7 +202,7 @@ Version: 01
 */
 @layer components {
   /* ********** BUTTONS ********** */
-  :is(button, a, label, select, summary, [role="button"], [role="option"]) {
+  :is(button, a, label, select, summary, [role='button'], [role='option']) {
     @apply cursor-pointer;
   }
   .btn {
