@@ -1,7 +1,7 @@
 type Props = {};
 
-const Home = (props: Props) => {
-  return <div>Home</div>;
+const HomeTemplate = (props: Props) => {
+  return <div>HomeTemplate</div>;
 };
 
-export { Home };
+export { HomeTemplate };
