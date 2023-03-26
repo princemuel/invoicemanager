@@ -1,0 +1,12 @@
+{
+  "editor.formatOnSave": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.addMissingImports": true,
+    "source.fixAll": true,
+    "source.fixAll.stylelint": true,
+    "source.fixAll.eslint": true
+  },
+  "tailwindCSS.rootFontSize": 16
+}
