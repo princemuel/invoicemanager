@@ -1,7 +1,8 @@
-import { icons, Image, Link } from "common";
-import { StatusButton, Text } from "components/atoms";
-import { useInvoices } from "context";
-import { formatDate, formatPrice, hasValues } from "helpers";
+import { icons } from '@src/common';
+import { useInvoices } from '@src/context';
+import { formatDate, formatPrice, hasValues } from '@src/helpers';
+import { Link } from 'react-router-dom';
+import { StatusButton, Text } from '../atoms';
 
 type Props = {};
 
@@ -60,70 +61,70 @@ const InvoicesTemplate = (props: Props) => {
               key={invoice?.id}
               className='rounded-brand bg-neutral-100 p-10 shadow-100 dark:bg-brand-700 max-sx:pt-4'
             >
-              <Link href={`/invoices/${invoice.id}`} passHref>
-                <a className='grid grid-cols-2 grid-rows-3 items-end sx:flex sx:items-center sx:gap-8'>
-                  <Text as='p' className='body-100 font-bold'>
-                    <span className='text-brand-400'>#</span>
-                    <span className='uppercase text-brand-900 dark:text-neutral-100'>
-                      {invoice?.id}
-                      {/* {invoice?.tag} */}
-                    </span>
-                  </Text>
+              <Link
+                to={`/invoices/${invoice.id}`}
+                className='grid grid-cols-2 grid-rows-3 items-end sx:flex sx:items-center sx:gap-8'
+              >
+                <Text as='p' className='body-100 font-bold'>
+                  <span className='text-brand-400'>#</span>
+                  <span className='uppercase text-brand-900 dark:text-neutral-100'>
+                    {invoice?.id}
+                    {/* {invoice?.tag} */}
+                  </span>
+                </Text>
 
-                  <Text
-                    as='p'
-                    className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
-                  >
-                    <span>Due&nbsp;</span>
-                    <time>{formatDate(invoice?.paymentDue)}</time>
-                  </Text>
+                <Text
+                  as='p'
+                  className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
+                >
+                  <span>Due&nbsp;</span>
+                  <time>{formatDate(invoice?.paymentDue)}</time>
+                </Text>
 
-                  <Text
-                    as='p'
-                    className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sx:justify-self-auto'
-                  >
-                    {invoice?.clientName}
-                  </Text>
+                <Text
+                  as='p'
+                  className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sx:justify-self-auto'
+                >
+                  {invoice?.clientName}
+                </Text>
 
-                  <Text
-                    as='p'
-                    className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sx:text-right'
-                  >
-                    <output>{formatPrice(invoice?.total)}</output>
-                  </Text>
+                <Text
+                  as='p'
+                  className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sx:text-right'
+                >
+                  <output>{formatPrice(invoice?.total)}</output>
+                </Text>
 
-                  <StatusButton
-                    status={invoice?.status}
-                    className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end sx:justify-self-auto'
-                  />
+                <StatusButton
+                  status={invoice?.status}
+                  className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end sx:justify-self-auto'
+                />
 
-                  <Text
-                    as='p'
-                    className='hidden sx:col-start-6 sx:col-end-7 sx:block'
-                  >
-                    <icons.arrow.right />
-                  </Text>
-                </a>
+                <Text
+                  as='p'
+                  className='hidden sx:col-start-6 sx:col-end-7 sx:block'
+                >
+                  <icons.arrow.right />
+                </Text>
               </Link>
             </li>
           ))
         ) : (
           <li className='flex min-h-full items-center justify-center'>
             <article className='flex flex-col items-center gap-20 text-center'>
-              <Image
-                src={"/assets/svgs/illustration-empty.svg"}
+              <img
+                src={'/assets/svgs/illustration-empty.svg'}
                 width='242'
                 height='200'
                 className='w-full'
-                alt={"Invoices List Empty"}
-                priority={true}
+                alt={'Invoices List Empty'}
               />
 
               <div className='flex flex-col items-center gap-8 px-16'>
                 <Text as='h2'>There is nothing here</Text>
 
                 <Text as='p' className='max-w-[22rem]'>
-                  Create an invoice by clicking the{" "}
+                  Create an invoice by clicking the{' '}
                   <em className='font-bold'>New Invoice</em> button and get
                   started
                 </Text>
