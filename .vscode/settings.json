@@ -8,5 +8,5 @@
     "source.fixAll.stylelint": true,
     "source.fixAll.eslint": true
   },
-  "tailwindCSS.rootFontSize": 16
+  "tailwindCSS.rootFontSize": 10
 }
