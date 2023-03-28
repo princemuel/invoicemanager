@@ -26,18 +26,18 @@ const ThemeProvider = ({ children }: Props) => {
   );
 };
 
-function useTheme(this: any) {
+function useTheme() {
   const context = React.useContext(ThemeContext);
   if (context == null) {
-    throw new ReferenceError(`${this.name} must be used in a ThemeProvider`);
+    throw new ReferenceError(`useTheme must be used in a ThemeProvider`);
   }
   return context;
 }
 
-function useSetTheme(this: any) {
+function useSetTheme() {
   const context = React.useContext(SetThemeContext);
   if (context == null) {
-    throw new ReferenceError(`${this.name} must be used in a ThemeProvider`);
+    throw new ReferenceError(`useSetTheme must be used in a ThemeProvider`);
   }
   return context;
 }
@@ -80,8 +80,8 @@ function useThemeMode() {
   }, []);
 
   React.useEffect(() => {
-    window.localStorage.setItem('theme', mode);
-    document.documentElement.setAttribute('data-theme', mode);
+    window.localStorage.setItem('mode', mode);
+    document.documentElement.setAttribute('data-mode', mode);
   }, [mode]);
 
   // we're doing it this way instead of as an effect so we only
