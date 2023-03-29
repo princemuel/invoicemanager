@@ -8,7 +8,7 @@ type Props = {
   className?: string;
 };
 
-const StatusButton = ({ status, className }: Props) => {
+const StatusButton = ({ status = 'PENDING', className }: Props) => {
   let colors: string;
 
   switch (status) {
@@ -24,7 +24,7 @@ const StatusButton = ({ status, className }: Props) => {
       break;
     default:
       throw new Error(
-        "Invoice status must be one of 'DRAFT', 'PENDING' or 'PAID'"
+        `This invoice's status is ${typeof status}. It must be one of 'DRAFT', 'PENDING' or 'PAID'`
       );
   }
 
