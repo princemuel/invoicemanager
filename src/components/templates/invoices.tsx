@@ -1,13 +1,13 @@
 import { icons } from '@src/common';
-import { useInvoices } from '@src/context';
 import { formatDate, formatPrice, hasValues } from '@src/helpers';
+import { useInvoiceList } from '@src/hooks';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
 type Props = {};
 
 const InvoicesTemplate = (props: Props) => {
-  const data = useInvoices();
+  const { data } = useInvoiceList();
 
   return (
     <section aria-labelledby='invoices-heading' className='h-container'>
@@ -47,7 +47,7 @@ const InvoicesTemplate = (props: Props) => {
 
         <button type='button' className='btn-invoice btn'>
           <span className='grid place-content-center rounded-full bg-neutral-200 p-3'>
-            <icons.actions.add />
+            <img src={icons.actions.add} alt={''} />
           </span>
           <span className='hidden md:inline'>New Invoice</span>
           <span className='md:hidden'>New</span>
@@ -104,7 +104,7 @@ const InvoicesTemplate = (props: Props) => {
                   as='p'
                   className='hidden sx:col-start-6 sx:col-end-7 sx:block'
                 >
-                  <icons.arrow.right />
+                  <img src={icons.arrow.right} alt={''} />
                 </Text>
               </Link>
             </li>
