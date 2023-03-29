@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   IconAddSVG,
   IconArrowDownSVG,
@@ -8,21 +8,21 @@ import {
   IconCheckSVG,
   IconDeleteSVG,
   LogoSVG,
-} from "./svg-icons";
+} from './svg-icons';
 
-export interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {}
+export interface IconProps extends React.ComponentPropsWithoutRef<'svg'> {}
 
 export const icons = {
   arrow: {
-    right: (props: IconProps) => <IconArrowRightSVG {...props} />,
-    left: (props: IconProps) => <IconArrowLeftSVG {...props} />,
-    down: (props: IconProps) => <IconArrowDownSVG {...props} />,
+    right: IconArrowRightSVG,
+    left: IconArrowLeftSVG,
+    down: IconArrowDownSVG,
   },
   actions: {
-    add: (props: IconProps) => <IconAddSVG {...props} />,
-    delete: (props: IconProps) => <IconDeleteSVG {...props} />,
-    check: (props: IconProps) => <IconCheckSVG {...props} />,
+    add: IconAddSVG,
+    delete: IconDeleteSVG,
+    check: IconCheckSVG,
   },
-  logo: (props: IconProps) => <LogoSVG {...props} />,
-  calendar: (props: IconProps) => <IconCalendarSVG {...props} />,
+  logo: LogoSVG,
+  calendar: IconCalendarSVG,
 };
