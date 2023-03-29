@@ -9,7 +9,7 @@ query GetInvoices {
   }
 }
 
-query GetInvoice($where: ItemWhereUniqueInput!) {
+query GetInvoice($where: UniqueIdInput!) {
   invoice(where: $where) {
     userId
     createdAt
@@ -55,10 +55,7 @@ mutation CreateInvoice($input: CreateInvoiceInput!) {
   }
 }
 
-mutation UpdateInvoice(
-  $input: UpdateInvoiceInput!
-  $where: ItemWhereUniqueInput!
-) {
+mutation UpdateInvoice($input: UpdateInvoiceInput!, $where: UniqueIdInput!) {
   updateInvoice(input: $input, where: $where) {
     updatedAt
     paymentDue
@@ -88,5 +85,11 @@ mutation UpdateInvoice(
       price
       total
     }
+  }
+}
+
+mutation DeleteInvoice($where: UniqueIdInput!) {
+  deleteInvoice(where: $where) {
+    id
   }
 }

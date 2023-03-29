@@ -34,7 +34,7 @@ export async function getInvoicePaths() {
   }));
 }
 
-export async function getById(id: string) {
+export async function fetchSingleInvoice(id = '') {
   const invoices = await fetchInvoices();
-  return invoices?.find((invoice) => invoice.id === id);
+  return invoices?.filter((invoice) => invoice.id === id)[0];
 }

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
 type Props = {
-  invoice: Invoice;
+  invoice?: Invoice;
 };
 
 const InvoiceDetailsMobile = ({ invoice }: Props) => {
@@ -17,9 +17,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
           to='/invoices'
           className='body-100 mt-20 flex items-center gap-8 font-bold'
         >
-          <span>
-            <icons.arrow.left />
-          </span>
+          <img src={icons.arrow.left} alt={''} />
           <span>Go back</span>
         </Link>
 

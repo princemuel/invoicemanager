@@ -1,7 +1,9 @@
+import { InvoiceTemplate } from '@src/components';
+
 type Props = {};
 
 const InvoiceRoute = (props: Props) => {
-  return <div>Invoice</div>;
+  return <InvoiceTemplate />;
 };
 
 export { InvoiceRoute };

@@ -27,12 +27,6 @@ Version: 02
     text-rendering: optimizeSpeed;
     text-size-adjust: none;
   }
-
-  /* @media (min-width: 75em) {
-    html {
-      font-size: 62.5%;
-    }
-  } */
   @media (min-width: 112.5em) {
     html {
       font-size: 75%;
@@ -103,13 +97,6 @@ Version: 02
     list-style: none;
   }
 
-  :where(img, svg, video, canvas, audio, iframe, embed, object) {
-    display: block;
-  }
-  :where(img, picture, svg) {
-    max-inline-size: 100%;
-    block-size: auto;
-  }
   @media not all and (min-resolution: 0.001dpcm) {
     :where(img[loading='lazy']) {
       clip-path: inset(0.5px);

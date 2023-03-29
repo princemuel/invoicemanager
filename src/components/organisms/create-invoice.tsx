@@ -227,7 +227,7 @@ const CreateInvoice = (props: Props) => {
             <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-brand bg-neutral-100 pt-12 pb-8 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
               <div className='flex items-center justify-between px-12'>
                 <button type='button' className='grid place-content-center'>
-                  <icons.arrow.left />
+                  <img src={icons.arrow.left} alt={''} />
                   <span className='sr-only'>Previous Month</span>
                 </button>
 
@@ -238,7 +238,7 @@ const CreateInvoice = (props: Props) => {
                 </p>
 
                 <button type='button' className='grid place-content-center'>
-                  <icons.arrow.right />
+                  <img src={icons.arrow.right} alt={''} />
                   <span className='sr-only'>Next Month</span>
                 </button>
               </div>
