@@ -2000,6 +2000,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@lukemorales/query-key-factory@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@lukemorales/query-key-factory/-/query-key-factory-1.2.0.tgz#ad4b3ded9ed6e5fd8f972c84840fb0d393f7d77e"
+  integrity sha512-ilUedLpJdpOCMKgxoncRkYEFF7C+K//IK/QWXHs0G6HjmZunT9XcrpWHNc5RjrBBqPhdxYNa7aUoEhjonwl4eQ==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
