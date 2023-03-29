@@ -1,5 +1,5 @@
 import { createQueryKeyStore } from '@lukemorales/query-key-factory';
-import { fetchSingleInvoice } from '../static';
+import { fetchInvoices, fetchSingleInvoice } from '../static';
 
 // if you prefer to declare everything in one file
 export const queryKeys = createQueryKeyStore({
@@ -15,6 +15,7 @@ export const queryKeys = createQueryKeyStore({
       queryKey: [invoiceId],
       queryFn: () => fetchSingleInvoice(invoiceId),
     }),
+    list: () => ({ queryKey: ['invoices'], queryFn: fetchInvoices }),
     // list: (filters: InvoiceFilters) => ({
     //   queryKey: [{ filters }],
     //   queryFn: (ctx) => api.getInvoices({ filters, page: ctx.pageParam }),
