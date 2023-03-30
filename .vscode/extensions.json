@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "stivo.tailwind-fold",
     "bradlc.vscode-tailwindcss",
     "graphql.vscode-graphql-execution",
     "graphql.vscode-graphql",
