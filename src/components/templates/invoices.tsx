@@ -16,7 +16,7 @@ const InvoicesTemplate = (props: Props) => {
           <h1 id='invoices-heading'>Invoices</h1>
 
           {hasValues(data) ? (
-            <Text as='p'>
+            <Text variant='p'>
               <span className='hidden text-brand-300 dark:text-brand-100 md:inline'>
                 There are <output name='invoices'>{data.length}</output> total
                 invoices
@@ -28,7 +28,7 @@ const InvoicesTemplate = (props: Props) => {
               </span>
             </Text>
           ) : (
-            <Text as='p' className='text-brand-300 dark:text-brand-100'>
+            <Text variant='p' className='text-brand-300 dark:text-brand-100'>
               No Invoices
             </Text>
           )}
@@ -65,7 +65,7 @@ const InvoicesTemplate = (props: Props) => {
                 to={`/invoices/${invoice.id}`}
                 className='grid grid-cols-2 grid-rows-3 items-end sx:flex sx:items-center sx:gap-8'
               >
-                <Text as='p' className='body-100 font-bold'>
+                <Text variant='p' className='body-100 font-bold'>
                   <span className='text-brand-400'>#</span>
                   <span className='uppercase text-brand-900 dark:text-neutral-100'>
                     {invoice?.id}
@@ -74,7 +74,7 @@ const InvoicesTemplate = (props: Props) => {
                 </Text>
 
                 <Text
-                  as='p'
+                  variant='p'
                   className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
                 >
                   <span>Due&nbsp;</span>
@@ -82,14 +82,14 @@ const InvoicesTemplate = (props: Props) => {
                 </Text>
 
                 <Text
-                  as='p'
+                  variant='p'
                   className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sx:justify-self-auto'
                 >
                   {invoice?.clientName}
                 </Text>
 
                 <Text
-                  as='p'
+                  variant='p'
                   className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sx:text-right'
                 >
                   <output>{formatPrice(invoice?.total)}</output>
@@ -101,7 +101,7 @@ const InvoicesTemplate = (props: Props) => {
                 />
 
                 <Text
-                  as='p'
+                  variant='p'
                   className='hidden sx:col-start-6 sx:col-end-7 sx:block'
                 >
                   <img src={icons.arrow.right} alt={''} />
@@ -121,9 +121,9 @@ const InvoicesTemplate = (props: Props) => {
               />
 
               <div className='flex flex-col items-center gap-8 px-16'>
-                <Text as='h2'>There is nothing here</Text>
+                <Text variant='h2'>There is nothing here</Text>
 
-                <Text as='p' className='max-w-[22rem]'>
+                <Text variant='p' className='max-w-[22rem]'>
                   Create an invoice by clicking the{' '}
                   <em className='font-bold'>New Invoice</em> button and get
                   started
