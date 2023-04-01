@@ -23,10 +23,16 @@ Version: 02
 @layer base {
   html {
     box-sizing: border-box;
-    font-size: 62.5%;
+    font-size: 54%;
     text-rendering: optimizeSpeed;
     text-size-adjust: none;
   }
+  @media (min-width: 30em) {
+    html {
+      font-size: 62.5%;
+    }
+  }
+
   @media (min-width: 112.5em) {
     html {
       font-size: 75%;
@@ -211,7 +217,7 @@ Version: 02
     @apply h-[4.8rem] w-36 bg-accent-200 text-neutral-100 hover:bg-accent-100;
   }
   .btn-add {
-    @apply body-100 w-full bg-neutral-300 py-[1.6rem] px-32 text-brand-400 focus:bg-brand-100 hover:bg-brand-100 dark:bg-brand-600 dark:text-brand-300;
+    @apply body-100 w-full bg-neutral-300 px-32 py-[1.6rem] text-brand-400 focus:bg-brand-100 hover:bg-brand-100 dark:bg-brand-600 dark:text-brand-300;
   }
   /* ********** BUTTONS ********** */
 
@@ -245,7 +251,7 @@ Version: 02
   }
 
   .skip-to-content {
-    @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-300 py-[1em] px-[0.5em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
+    @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-300 px-[0.5em] py-[1em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
   }
 }
 

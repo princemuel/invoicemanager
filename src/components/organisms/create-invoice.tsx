@@ -1,5 +1,5 @@
 import { icons } from '@src/common';
-import { formatDate, getMonth, hasValues } from '@src/helpers';
+import { Calendar, getMonth, hasValues } from '@src/helpers';
 import clsx from 'clsx';
 import { useState } from 'react';
 
@@ -11,7 +11,7 @@ const dummyArray = Array(31)
 
 const CreateInvoice = (props: Props) => {
   const [showCalendar, setShowCalendar] = useState(true);
-  const today = formatDate(new Date(Date.now()).toISOString());
+  const today = Calendar.formatDate(new Date().toISOString());
 
   const cartIconClasses = clsx('btn');
 
@@ -43,7 +43,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-street'
               name='sender-street'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='19 Union Terrace'
             />
           </div>
@@ -59,7 +59,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-city'
               name='sender-city'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='London'
             />
           </div>
@@ -75,7 +75,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-postCode'
               name='sender-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='E1 3EZ'
             />
           </div>
@@ -92,7 +92,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='sender-country'
               name='sender-country'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='United Kingdom'
             />
           </div>
@@ -115,7 +115,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-name'
               name='client-name'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='Alex Grim'
             />
           </div>
@@ -131,7 +131,7 @@ const CreateInvoice = (props: Props) => {
               type='email'
               id='client-email'
               name='client-email'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='e.g. alexgrim@mail.com'
             />
           </div>
@@ -147,7 +147,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-street'
               name='client-street'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='84 Church Way'
             />
           </div>
@@ -163,7 +163,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-city'
               name='client-city'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='Bradford'
             />
           </div>
@@ -179,7 +179,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-postCode'
               name='client-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='BD1 9PB'
             />
           </div>
@@ -196,7 +196,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='client-country'
               name='client-country'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='United Kingdom'
             />
           </div>
@@ -218,13 +218,13 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='createdAt'
               name='createdAt'
-              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-calendar.svg)] bg-[center_right_1.6rem] bg-no-repeat px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder={today}
               aria-controls=''
             />
 
             {/* absolute bottom-0 left-0 z-10 w-full translate-y-full */}
-            <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-brand bg-neutral-100 pt-12 pb-8 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
+            <div className='absolute z-10 mt-8 w-full scale-y-0 rounded-brand bg-neutral-100 pb-8 pt-12 shadow-200 transition-all duration-500 peer-focus:scale-100 dark:bg-brand-700 dark:shadow-300'>
               <div className='flex items-center justify-between px-12'>
                 <button type='button' className='grid place-content-center'>
                   <img src={icons.arrow.left} alt={''} />
@@ -243,7 +243,7 @@ const CreateInvoice = (props: Props) => {
                 </button>
               </div>
 
-              <ul className='grid grid-cols-7 items-center justify-items-center gap-8 py-8 px-10'>
+              <ul className='grid grid-cols-7 items-center justify-items-center gap-8 px-10 py-8'>
                 {hasValues(dummyArray) &&
                   dummyArray.map((el) => {
                     return (
@@ -270,7 +270,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='paymentTerms'
               name='paymentTerms'
-              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 peer mt-6 w-full cursor-pointer rounded-lg border border-brand-100 bg-neutral-100 bg-[url(/assets/svgs/icon-arrow-down.svg)] bg-[center_right_1.6rem] bg-no-repeat px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='Net 30 Days'
             />
 
@@ -301,7 +301,7 @@ const CreateInvoice = (props: Props) => {
               type='text'
               id='description'
               name='description'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
               placeholder='e.g. Graphic Design Service'
             />
           </div>
@@ -309,7 +309,7 @@ const CreateInvoice = (props: Props) => {
         {/*<!--------- PAYMENT DETAILS END ---------!>*/}
 
         {/*<!--------- ITEM DETAILS START ---------!>*/}
-        <fieldset className='mt-16 mb-40'>
+        <fieldset className='mb-40 mt-16'>
           <legend className='block text-[1.8rem] font-bold leading-[3.2rem] tracking-[-0.32px] text-[#777F98]'>
             Item List
           </legend>
@@ -326,7 +326,7 @@ const CreateInvoice = (props: Props) => {
                 type='text'
                 id='name'
                 name='name'
-                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
                 placeholder='Banner Design'
               />
             </div>
@@ -357,7 +357,7 @@ const CreateInvoice = (props: Props) => {
                 type='number'
                 id='item-price'
                 name='item-price'
-                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 py-6 px-8 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
                 placeholder='200.00'
               />
             </div>
