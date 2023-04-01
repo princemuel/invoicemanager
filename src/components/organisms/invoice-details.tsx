@@ -1,6 +1,6 @@
 import { Invoice } from '@src/@types';
 import { icons } from '@src/common';
-import { formatDate, formatPrice, grandTotal } from '@src/helpers';
+import { Calendar, formatPrice, grandTotal } from '@src/helpers';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
@@ -22,7 +22,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
         </Link>
 
         <article className='mt-10 grid gap-12'>
-          <header className='flex items-center justify-between rounded-brand bg-neutral-100 py-8 px-10 shadow-100 dark:bg-brand-700'>
+          <header className='flex items-center justify-between rounded-brand bg-neutral-100 px-10 py-8 shadow-100 dark:bg-brand-700'>
             <div className='flex items-center justify-between gap-8'>
               <Text className='body-100 text-[#858BB2] dark:text-brand-100'>
                 Status
@@ -43,7 +43,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
             </div>
           </header>
 
-          <div className='flex flex-col gap-12 rounded-brand bg-neutral-100 py-12 px-20 shadow-100 dark:bg-brand-700'>
+          <div className='flex flex-col gap-12 rounded-brand bg-neutral-100 px-20 py-12 shadow-100 dark:bg-brand-700'>
             <div className='flex justify-between'>
               <div className='> * + * space-y-4'>
                 <Text className='text-600 font-bold leading-500 tracking-400'>
@@ -81,8 +81,8 @@ const InvoiceDetails = ({ invoice }: Props) => {
                     Invoice Date
                   </Text>
                   <Text className='body-300'>
-                    {/* @ts-expect-error */}
-                    {formatDate(invoice?.updatedAt)}
+                    {/* @ts-expect-error :this is just a placeholder to avoid errors until i'm getting data from the api*/}
+                    {Calendar.formatDate(invoice?.updatedAt)}
                   </Text>
                 </div>
 
@@ -91,7 +91,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
                     Payment Due
                   </Text>
                   <Text className='body-300'>
-                    {formatDate(invoice?.paymentDue)}
+                    {Calendar.formatDate(invoice?.paymentDue)}
                   </Text>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import { Invoice } from '@src/@types';
 import { icons } from '@src/common';
-import { formatDate, formatPrice, grandTotal } from '@src/helpers';
+import { Calendar, formatPrice, grandTotal } from '@src/helpers';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
@@ -64,8 +64,8 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                     Invoice Date
                   </Text>
                   <Text className='body-300'>
-                    {/* @ts-expect-error */}
-                    {formatDate(invoice?.updatedAt)}
+                    {/* @ts-expect-error :this is just a placeholder to avoid errors until i'm getting data from the api*/}
+                    {Calendar.formatDate(invoice?.updatedAt)}
                   </Text>
                 </div>
 
@@ -74,7 +74,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                     Payment Due
                   </Text>
                   <Text className='body-300'>
-                    {formatDate(invoice?.paymentDue)}
+                    {Calendar.formatDate(invoice?.paymentDue)}
                   </Text>
                 </div>
               </div>

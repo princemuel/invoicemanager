@@ -1,5 +1,5 @@
 import { icons } from '@src/common';
-import { formatDate, formatPrice, hasValues } from '@src/helpers';
+import { Calendar, formatPrice, hasValues } from '@src/helpers';
 import { useInvoiceList } from '@src/hooks';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
@@ -78,7 +78,7 @@ const InvoicesTemplate = (props: Props) => {
                   className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
                 >
                   <span>Due&nbsp;</span>
-                  <time>{formatDate(invoice?.paymentDue)}</time>
+                  <time>{Calendar.formatDate(invoice?.paymentDue)}</time>
                 </Text>
 
                 <Text
