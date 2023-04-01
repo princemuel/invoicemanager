@@ -1,12 +1,4 @@
-import * as React from 'react';
-
-type TextProps<E extends React.ElementType<any>> = {
-  children: React.ReactNode;
-  variant?: E;
-};
-
-type Props<E extends React.ElementType<any>> = TextProps<E> &
-  Omit<React.ComponentPropsWithoutRef<E>, keyof TextProps<E>>;
+import type { Props } from '@src/@types';
 
 const Text = <E extends React.ElementType = 'p'>({
   children,
