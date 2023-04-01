@@ -2,7 +2,7 @@ import {
   dehydrate,
   DehydrateOptions,
   QueryClient,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
 export function approximate(number: number, fractionDigits = 0) {
   return parseInt(number.toFixed(fractionDigits));
@@ -28,18 +28,18 @@ export function createDehydratedState(
   client: QueryClient,
   options: DehydrateOptions = {}
 ) {
-  if (!client) throw new ReferenceError("The query client must be defined");
+  if (!client) throw new ReferenceError('The query client must be defined');
   return serialize(dehydrate(client, options));
 }
 
 export function formatPrice(price = 0) {
-  if (typeof price !== "number")
+  if (typeof price !== 'number')
     throw new Error("The item's price must be of typeof 'number'");
 
-  return Intl.NumberFormat("en-GB", {
+  return Intl.NumberFormat('en-GB', {
     maximumFractionDigits: 2,
-    style: "currency",
-    currency: "GBP",
+    style: 'currency',
+    currency: 'GBP',
   }).format(price);
 }
 
@@ -51,12 +51,12 @@ type FormatDateFunction = (
 
 export const formatDate: FormatDateFunction = (
   date = new Date().toISOString(),
-  formatOptions = [{ day: "numeric" }, { month: "short" }, { year: "numeric" }],
-  separator = " "
+  formatOptions = [{ day: 'numeric' }, { month: 'short' }, { year: 'numeric' }],
+  separator = ' '
 ) => {
   return formatOptions
     .map((options) => {
-      const dateFormatter = new Intl.DateTimeFormat("en", options);
+      const dateFormatter = new Intl.DateTimeFormat('en', options);
       return dateFormatter.format(new Date(date));
     })
     .join(separator);
