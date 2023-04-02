@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import * as React from 'react';
 
 const FormInputInner = <E extends React.ElementType = 'input'>(
-  { variant, className, ...rest }: Props<E>,
+  { as, className, ...rest }: Props<E>,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
-  const RenderedElement = variant || 'input';
+  const RenderedElement = as || 'input';
   return (
     <RenderedElement
       className={clsx('w-full focus:outline-none', '', className)}

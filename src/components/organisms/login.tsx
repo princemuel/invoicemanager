@@ -34,7 +34,7 @@ const LoginForm = (props: Props) => {
       className='flex w-full max-w-[40rem] flex-col gap-6 rounded-3xl px-12 py-16 dark:bg-brand-700 max-md:mt-48'
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Text variant='h1' className='text-5xl font-normal tracking-300'>
+      <Text as='h1' className='text-5xl font-normal tracking-300'>
         Login
       </Text>
 

@@ -2,10 +2,10 @@ import type { Props } from '@src/@types';
 
 const Text = <E extends React.ElementType = 'p'>({
   children,
-  variant,
+  as,
   ...rest
 }: Props<E>) => {
-  const RenderedElement = variant || 'p';
+  const RenderedElement = as || 'p';
   return <RenderedElement {...rest}>{children}</RenderedElement>;
 };
 

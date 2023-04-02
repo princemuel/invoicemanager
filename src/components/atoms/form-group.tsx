@@ -4,11 +4,11 @@ import * as React from 'react';
 
 const FormGroup = <E extends React.ElementType = 'div'>({
   children,
-  variant,
+  as,
   className,
   ...rest
 }: Props<E>) => {
-  const RenderedElement = variant || 'div';
+  const RenderedElement = as || 'div';
   return (
     <RenderedElement className={clsx('', className)} {...rest}>
       {children}

@@ -116,17 +116,17 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                 return (
                   <article key={item.name} className='px-10 first:pt-10'>
                     <header className='flex items-center justify-between'>
-                      <Text variant='h4' className='font-bold'>
+                      <Text as='h4' className='font-bold'>
                         {item.name}
                       </Text>
 
-                      <Text variant='output' className='body-100 font-bold '>
+                      <Text as='output' className='body-100 font-bold '>
                         {formatPrice(item?.total)}
                       </Text>
                     </header>
 
                     <Text
-                      variant='p'
+                      as='p'
                       className='body-100 mt-3 font-bold dark:text-brand-300'
                     >
                       <span>{item.quantity}&nbsp;x</span>
@@ -137,10 +137,10 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
               })}
 
               <article className='flex items-center justify-between p-10 dark:bg-brand-900'>
-                <Text variant='h4'>Amount</Text>
+                <Text as='h4'>Amount</Text>
 
                 <Text
-                  variant='output'
+                  as='output'
                   className='text-700 font-bold leading-600 tracking-[-0.42px]'
                 >
                   {formatPrice(grandTotal(invoice?.items))}
