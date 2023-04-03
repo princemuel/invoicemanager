@@ -6,3 +6,4 @@ coverage
 *.local
 *.config.*
 *.cjs
+codegen.ts

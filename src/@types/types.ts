@@ -15,7 +15,7 @@ export type GlobalReducer<IState> = (
 
 type ElementProps<E extends React.ElementType<any>> = {
   children: React.ReactNode;
-  variant?: E;
+  as?: E;
 };
 
 export type Props<E extends React.ElementType<any>> = ElementProps<E> &
