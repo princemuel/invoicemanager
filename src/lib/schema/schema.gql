@@ -167,8 +167,6 @@ type RefreshPayload {
 }
 
 input RegisterInput {
-  """The reentered password to confirm that the passwords match"""
-  countersign: String
   email: String!
   firstName: String!
   lastName: String!
