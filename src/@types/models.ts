@@ -2,6 +2,15 @@
           DATA MODELS
  *===============================*
 */
+
+export interface IUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  photo: string;
+}
+
 export type Invoices = Array<Invoice>;
 
 export type Invoice = DraftInvoice | PendingInvoice | PaidInvoice;
