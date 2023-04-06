@@ -1,4 +1,4 @@
-export type { RequestInit } from 'graphql-request/build/esm/types.dom';
+// import type { RequestInit } from 'graphql-request/build/esm/types.dom';
 // This helps with type inference when using the component
 export declare module 'react' {
   function forwardRef<T, P = {}>(

@@ -1,3 +1,13 @@
+query GetUser {
+  user {
+    id
+    photo
+    email
+    firstName
+    lastName
+  }
+}
+
 mutation Register($input: RegisterInput!) {
   register(input: $input) {
     accessToken
@@ -22,7 +32,7 @@ mutation Login($input: LoginInput!) {
   }
 }
 
-mutation RefreshAuth {
+query RefreshAuth {
   refreshAuth {
     accessToken
   }

@@ -29,14 +29,14 @@ export const InvoiceProvider = ({ children, value }: InvoiceProps) => {
 
 export const useInvoices = () => {
   const context = useContext(InvoicesContext);
-  if (context == undefined) {
+  if (!context) {
     throw new Error('useInvoices must be used in a InvoiceProvider');
   }
   return context;
 };
 export const useInvoice = () => {
   const context = useContext(InvoiceContext);
-  if (context == undefined) {
+  if (!context) {
     throw new Error('useInvoice must be used in a InvoiceProvider');
   }
   return context;

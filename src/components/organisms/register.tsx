@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 // import clsx from 'clsx';
+import { useAuthDispatch } from '@src/context';
 import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
@@ -53,12 +54,26 @@ const RegisterForm = (props: Props) => {
     resolver: zodResolver(FormSchema),
   });
   const navigate = useNavigate();
+  const dispatchAuth = useAuthDispatch();
 
   const { data, mutate: createUser } = useRegisterMutation(client, {
     onSuccess(data) {
       console.log(data.register?.user);
       console.log(data.register?.accessToken);
-      // navigate('/login');
+      dispatchAuth({
+        type: 'SET_TOKEN',
+        payload: {
+          token: data.register?.accessToken!,
+        },
+      });
+
+      dispatchAuth({
+        type: 'SET_USER',
+        payload: {
+          user: data.register?.user!,
+        },
+      });
+      navigate('/');
     },
   });
 
