@@ -152,7 +152,6 @@ type Mutation {
   deleteInvoice(where: UniqueIdInput!): Invoice
   login(input: LoginInput!): AuthPayload
   logout: LogoutPayload!
-  refreshAuth: RefreshPayload
   register(input: RegisterInput!): AuthPayload
   updateInvoice(input: UpdateInvoiceInput!, where: UniqueIdInput!): Invoice
 }
