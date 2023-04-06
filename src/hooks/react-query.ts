@@ -155,7 +155,6 @@ export interface Mutation {
   deleteInvoice?: Maybe<Invoice>;
   login?: Maybe<AuthPayload>;
   logout: LogoutPayload;
-  refreshAuth?: Maybe<RefreshPayload>;
   register?: Maybe<AuthPayload>;
   updateInvoice?: Maybe<Invoice>;
 }
@@ -184,6 +183,8 @@ export interface MutationUpdateInvoiceArgs {
 export interface Query {
   invoice?: Maybe<Invoice>;
   invoices: Array<Maybe<Invoice>>;
+  refreshAuth?: Maybe<RefreshPayload>;
+  user?: Maybe<User>;
 }
 
 export interface QueryInvoiceArgs {
@@ -195,13 +196,13 @@ export interface RefreshPayload {
 }
 
 export interface RegisterInput {
-  /** The reentered password to confirm that the passwords match */
-  countersign?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   firstName: Scalars['String'];
   lastName: Scalars['String'];
   /** The password of the user. Must match the countersign i.e the reentered password */
   password: Scalars['String'];
+  /** The image url generated from the user's email address */
+  photo?: InputMaybe<Scalars['String']>;
 }
 
 /** The current role of the user */
@@ -219,6 +220,11 @@ export enum Status {
 
 export interface UniqueIdInput {
   id: Scalars['ID'];
+}
+
+export interface UniqueIdWithUserId {
+  id: Scalars['ID'];
+  userId: Scalars['ID'];
 }
 
 export interface UniqueUserId {
@@ -368,6 +374,18 @@ export type DeleteInvoiceMutationVariables = Exact<{
 
 export type DeleteInvoiceMutation = { deleteInvoice?: { id?: string } };
 
+export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserQuery = {
+  user?: {
+    id: string;
+    photo?: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+  };
+};
+
 export type RegisterMutationVariables = Exact<{
   input: RegisterInput;
 }>;
@@ -390,9 +408,9 @@ export type LoginMutation = {
   };
 };
 
-export type RefreshAuthMutationVariables = Exact<{ [key: string]: never }>;
+export type RefreshAuthQueryVariables = Exact<{ [key: string]: never }>;
 
-export type RefreshAuthMutation = { refreshAuth?: { accessToken: string } };
+export type RefreshAuthQuery = { refreshAuth?: { accessToken: string } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -672,6 +690,47 @@ useDeleteInvoiceMutation.fetcher = (
     variables,
     headers
   );
+export const GetUserDocument = /*#__PURE__*/ `
+    query GetUser {
+  user {
+    id
+    photo
+    email
+    firstName
+    lastName
+  }
+}
+    `;
+export const useGetUserQuery = <TData = GetUserQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetUserQueryVariables,
+  options?: UseQueryOptions<GetUserQuery, TError, TData>,
+  headers?: RequestInit['headers']
+) =>
+  useQuery<GetUserQuery, TError, TData>(
+    variables === undefined ? ['GetUser'] : ['GetUser', variables],
+    fetcher<GetUserQuery, GetUserQueryVariables>(
+      client,
+      GetUserDocument,
+      variables,
+      headers
+    ),
+    options
+  );
+
+useGetUserQuery.getKey = (variables?: GetUserQueryVariables) =>
+  variables === undefined ? ['GetUser'] : ['GetUser', variables];
+useGetUserQuery.fetcher = (
+  client: GraphQLClient,
+  variables?: GetUserQueryVariables,
+  headers?: RequestInit['headers']
+) =>
+  fetcher<GetUserQuery, GetUserQueryVariables>(
+    client,
+    GetUserDocument,
+    variables,
+    headers
+  );
 export const RegisterDocument = /*#__PURE__*/ `
     mutation Register($input: RegisterInput!) {
   register(input: $input) {
@@ -763,44 +822,37 @@ useLoginMutation.fetcher = (
     headers
   );
 export const RefreshAuthDocument = /*#__PURE__*/ `
-    mutation RefreshAuth {
+    query RefreshAuth {
   refreshAuth {
     accessToken
   }
 }
     `;
-export const useRefreshAuthMutation = <TError = unknown, TContext = unknown>(
+export const useRefreshAuthQuery = <TData = RefreshAuthQuery, TError = unknown>(
   client: GraphQLClient,
-  options?: UseMutationOptions<
-    RefreshAuthMutation,
-    TError,
-    RefreshAuthMutationVariables,
-    TContext
-  >,
+  variables?: RefreshAuthQueryVariables,
+  options?: UseQueryOptions<RefreshAuthQuery, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useMutation<
-    RefreshAuthMutation,
-    TError,
-    RefreshAuthMutationVariables,
-    TContext
-  >(
-    ['RefreshAuth'],
-    (variables?: RefreshAuthMutationVariables) =>
-      fetcher<RefreshAuthMutation, RefreshAuthMutationVariables>(
-        client,
-        RefreshAuthDocument,
-        variables,
-        headers
-      )(),
+  useQuery<RefreshAuthQuery, TError, TData>(
+    variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables],
+    fetcher<RefreshAuthQuery, RefreshAuthQueryVariables>(
+      client,
+      RefreshAuthDocument,
+      variables,
+      headers
+    ),
     options
   );
-useRefreshAuthMutation.fetcher = (
+
+useRefreshAuthQuery.getKey = (variables?: RefreshAuthQueryVariables) =>
+  variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables];
+useRefreshAuthQuery.fetcher = (
   client: GraphQLClient,
-  variables?: RefreshAuthMutationVariables,
+  variables?: RefreshAuthQueryVariables,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<RefreshAuthMutation, RefreshAuthMutationVariables>(
+  fetcher<RefreshAuthQuery, RefreshAuthQueryVariables>(
     client,
     RefreshAuthDocument,
     variables,
