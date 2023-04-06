@@ -1,12 +1,12 @@
 type Props = {
-  imgSrc: string;
+  src: string;
 };
 
-const ProfilePicture = ({ imgSrc }: Props) => {
+const ProfilePicture = ({ src }: Props) => {
   return (
     <figure className='w-12 overflow-hidden rounded-full'>
       <img
-        src={imgSrc}
+        src={src}
         alt={'Your Profile Picture'}
         width={80}
         height={80}
