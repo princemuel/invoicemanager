@@ -1,10 +1,11 @@
 import { disableReactDevTools } from '@fvilers/disable-react-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
 import { RouterProvider } from 'react-router-dom';
-import { ModalProvider, ThemeProvider } from './context';
+import { AuthProvider, ModalProvider, ThemeProvider } from './context';
 import './index.css';
 // import { queryOptions } from './lib/client';
 import { router } from './routes';
@@ -21,10 +22,15 @@ root.render(
     <QueryClientProvider client={client}>
       <HelmetProvider>
         <ThemeProvider>
-          <ModalProvider>
-            {/* <ReactQueryDevtools position='bottom-right' initialIsOpen={false} /> */}
-            <RouterProvider router={router} />
-          </ModalProvider>
+          <AuthProvider>
+            <ModalProvider>
+              <ReactQueryDevtools
+                position='bottom-right'
+                initialIsOpen={false}
+              />
+              <RouterProvider router={router} />
+            </ModalProvider>
+          </AuthProvider>
         </ThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>
