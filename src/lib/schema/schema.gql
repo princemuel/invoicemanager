@@ -160,7 +160,7 @@ type Mutation {
 type Query {
   invoice(where: UniqueIdInput!): Invoice
   invoices: [Invoice]!
-  user(where: UniqueIdInput!): User
+  user: User
 }
 
 type RefreshPayload {
