@@ -1,11 +1,10 @@
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
-import EnvironmentPlugin from 'vite-plugin-environment';
 
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
-  plugins: [react(), EnvironmentPlugin('all', { prefix: 'REACT_APP_' })],
+  plugins: [react()],
   resolve: {
     alias: [{ find: '@src', replacement: '/src/' }],
   },
