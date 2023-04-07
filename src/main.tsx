@@ -10,7 +10,7 @@ import './index.css';
 // import { queryOptions } from './lib/client';
 import { router } from './routes';
 
-if (process.env.NODE_ENV === 'production') disableReactDevTools();
+if (import.meta.env.MODE === 'production') disableReactDevTools();
 
 // const client = new QueryClient(queryOptions);
 const client = new QueryClient();
