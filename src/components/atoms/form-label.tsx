@@ -1,18 +1,17 @@
-import type { Props } from '@src/@types';
 import clsx from 'clsx';
-import * as React from 'react';
+import React from 'react';
 
-const FormLabel = <E extends React.ElementType = 'label'>({
-  children,
-  as,
-  className,
-  ...rest
-}: Props<E>) => {
-  const RenderedElement = as || 'label';
+interface Props
+  extends React.DetailedHTMLProps<
+    React.LabelHTMLAttributes<HTMLLabelElement>,
+    HTMLLabelElement
+  > {}
+
+const FormLabel = ({ className, children, ...rest }: Props) => {
   return (
-    <RenderedElement className={clsx('block', '', className)} {...rest}>
+    <label className={clsx('body-100', className)} {...rest}>
       {children}
-    </RenderedElement>
+    </label>
   );
 };
 
