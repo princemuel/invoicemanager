@@ -1,7 +1,13 @@
 import { icons } from '@src/common';
 import { Calendar, getMonth, hasValues } from '@src/helpers';
+import { useZodForm } from '@src/hooks';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
+import { Text } from '../atoms';
+import { FormInput } from '../molecules';
 
 type Props = {};
 
@@ -9,203 +15,204 @@ const dummyArray = Array(31)
   .fill(1)
   .map((_, i) => String(i + 1));
 
-const CreateInvoice = (props: Props) => {
+const GenericStringContraint = z
+  .string()
+  .min(1, { message: "Can't be empty" })
+  .min(2, { message: 'Must more than 2 characters' })
+  .toLowerCase()
+  .trim();
+
+const AddressSchema = z.object({
+  street: GenericStringContraint,
+  city: GenericStringContraint,
+  country: GenericStringContraint,
+  postCode: GenericStringContraint,
+});
+
+const GenericEmailContraint = z
+  .string()
+  .email({ message: 'Invalid email address' })
+  .min(1, { message: "Can't be empty" })
+  .min(6, { message: 'Must more than 6 characters' })
+  .toLowerCase()
+  .trim();
+
+const GenericItem = z.object({
+  id: z.string(),
+  name: z.string(),
+  quantity: z.number().int(),
+  price: z.number(),
+  total: z.number(),
+});
+
+const FormSchema = z.object({
+  senderAddress: AddressSchema,
+  clientName: z.string(),
+  clientEmail: GenericEmailContraint,
+  clientAddress: AddressSchema,
+
+  createdAt: z.string(),
+  paymentTerms: z.number().int(),
+  description: z.string(),
+  items: z.array(GenericItem),
+  total: z.number(),
+
+  paymentDue: z.string(),
+  status: z.enum(['DRAFT', 'PENDING', 'PAID']),
+});
+
+type FormData = z.infer<typeof FormSchema>;
+
+const CreateInvoiceForm = (props: Props) => {
   const [showCalendar, setShowCalendar] = useState(true);
   const today = Calendar.formatDate(new Date().toISOString());
 
   const cartIconClasses = clsx('btn');
 
-  return (
-    <section aria-labelledby='create-invoice' className='h-container'>
-      <header className='mt-10'>
-        <h1
-          id='create-invoice'
-          className='text-brand-900 dark:text-neutral-100'
-        >
-          New Invoice
-        </h1>
-      </header>
+  const methods = useZodForm({
+    schema: FormSchema,
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: 'items',
+    control: methods.control,
+  });
 
-      <form className='my-10'>
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const result = FormSchema.safeParse(data);
+
+    if (result.success) {
+      // login({ input: data });
+      console.log(data);
+      methods.reset();
+    } else {
+      // The data is invalid
+      console.error(result.error);
+    }
+  };
+
+  const isSubmittable =
+    !!methods.formState.isDirty && !!methods.formState.isValid;
+
+  return (
+    <FormProvider {...methods}>
+      <form className='my-10' onSubmit={methods.handleSubmit(onSubmit)}>
         {/*<!--------- SENDER DETAILS START ---------!>*/}
         <fieldset className='grid grid-cols-6 gap-6'>
-          <legend className='body-100 col-span-6 block font-bold text-brand-500'>
+          <Text
+            as='legend'
+            className='body-100 col-span-6 block font-bold text-brand-500'
+          >
             Bill From
-          </legend>
-          <div className='col-span-6 mt-10'>
-            <label
-              htmlFor='sender-street'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Street Address
-            </label>
-            <input
-              type='text'
-              id='sender-street'
-              name='sender-street'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='19 Union Terrace'
-            />
-          </div>
+          </Text>
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='sender-city'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              City
-            </label>
-            <input
-              type='text'
-              id='sender-city'
-              name='sender-city'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='London'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='senderAddress.street'
+            label={'Street Address'}
+            placeholder='19 Union Terrace'
+            className='col-span-6 mt-10'
+            autoComplete='street-address'
+          />
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='sender-postCode'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Post Code
-            </label>
-            <input
-              type='text'
-              id='sender-postCode'
-              name='sender-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='E1 3EZ'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='senderAddress.city'
+            label={'City'}
+            placeholder='London'
+            className='col-span-3 max-s:col-span-6 sx:col-span-2'
+            autoComplete='address-level2'
+          />
 
-          <div className='col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='sender-country'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Country
-            </label>
+          <FormInput
+            type='text'
+            name='senderAddress.postCode'
+            label={'Post Code'}
+            placeholder='E1 3EZ'
+            className='col-span-3 max-s:col-span-6 sx:col-span-2'
+            autoComplete='postal-code'
+          />
 
-            <input
-              type='text'
-              id='sender-country'
-              name='sender-country'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='United Kingdom'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='senderAddress.country'
+            label={'Country'}
+            placeholder='United Kingdom'
+            className='col-span-6 sx:col-span-2'
+            autoComplete='country-name'
+          />
         </fieldset>
         {/*<!--------- SENDER DETAILS END ---------!>*/}
 
         {/*<!--------- CLIENT DETAILS START ---------!>*/}
         <fieldset className='mt-20 grid grid-cols-6 gap-6'>
-          <legend className='body-100 col-span-6 block font-bold text-brand-500'>
+          <Text
+            as='legend'
+            className='body-100 col-span-6 block font-bold text-brand-500'
+          >
             Bill To
-          </legend>
-          <div className='col-span-6 mt-10'>
-            <label
-              htmlFor='client-name'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Client&#39;s Name
-            </label>
-            <input
-              type='text'
-              id='client-name'
-              name='client-name'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='Alex Grim'
-            />
-          </div>
+          </Text>
 
-          <div className='col-span-6'>
-            <label
-              htmlFor='client-email'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Client&#39;s Email
-            </label>
-            <input
-              type='email'
-              id='client-email'
-              name='client-email'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='e.g. alexgrim@mail.com'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='clientName'
+            label={"Client's Name"}
+            placeholder='Alex Grim'
+            className='col-span-6 mt-10'
+            autoComplete='name'
+          />
 
-          <div className='col-span-6'>
-            <label
-              htmlFor='client-street'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Street Address
-            </label>
-            <input
-              type='text'
-              id='client-street'
-              name='client-street'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='84 Church Way'
-            />
-          </div>
+          <FormInput
+            type='email'
+            name='email'
+            label={"Client's Email"}
+            placeholder='e.g. alexgrim@mail.com'
+            className='col-span-6'
+            autoComplete='email'
+          />
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='client-city'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              City
-            </label>
-            <input
-              type='text'
-              id='client-city'
-              name='client-city'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='Bradford'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='clientAddress.street'
+            label={'Street Address'}
+            placeholder='84 Church Way'
+            className='col-span-6'
+            autoComplete='street-address'
+          />
 
-          <div className='col-span-3 max-s:col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='client-postCode'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Post Code
-            </label>
-            <input
-              type='text'
-              id='client-postCode'
-              name='client-postCode'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='BD1 9PB'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='clientAddress.city'
+            label={'City'}
+            placeholder='Bradford'
+            className='col-span-3 max-s:col-span-6 sx:col-span-2'
+            autoComplete='address-level2'
+          />
 
-          <div className='col-span-6 sx:col-span-2'>
-            <label
-              htmlFor='client-country'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Country
-            </label>
+          <FormInput
+            type='text'
+            name='clientAddress.postCode'
+            label={'Post Code'}
+            placeholder='BD1 9PB'
+            className='col-span-3 max-s:col-span-6 sx:col-span-2'
+            autoComplete='postal-code'
+          />
 
-            <input
-              type='text'
-              id='client-country'
-              name='client-country'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='United Kingdom'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='clientAddress.country'
+            label={'Country'}
+            placeholder='United Kingdom'
+            className='col-span-6 sx:col-span-2'
+            autoComplete='country-name'
+          />
         </fieldset>
         {/*<!--------- CLIENT DETAILS END ---------!>*/}
 
         {/*<!--------- PAYMENT DETAILS START ---------!>*/}
         <fieldset className='mt-16 grid grid-cols-6 gap-6'>
-          <legend className='sr-only'>Payment Info</legend>
+          <Text as='legend' className='sr-only'>
+            Payment Info
+          </Text>
 
           <div className='relative col-span-6 sm:col-span-3'>
             <label
@@ -314,85 +321,113 @@ const CreateInvoice = (props: Props) => {
             Item List
           </legend>
 
-          <section className='mt-12 grid grid-cols-8 gap-x-6 gap-y-10 sx:grid-cols-12'>
-            <div className='col-span-8 sx:col-span-5'>
-              <label
-                htmlFor='name'
-                className='body-100 block text-brand-400 dark:text-brand-300'
-              >
-                Item Name
-              </label>
-              <input
-                type='text'
-                id='name'
-                name='name'
-                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-                placeholder='Banner Design'
-              />
-            </div>
-            <div className='col-span-2'>
-              <label
-                htmlFor='quantity'
-                className='body-100 block text-brand-400 dark:text-brand-300'
-              >
-                Qty.
-              </label>
-              <input
-                type='number'
-                id='quantity'
-                name='quantity'
-                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 p-6 font-bold  text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500 sm:px-8'
-                placeholder='1'
-                min='10'
-              />
-            </div>
-            <div className='col-span-3 sx:col-span-2'>
-              <label
-                htmlFor='item-price'
-                className='body-100 block text-brand-400 dark:text-brand-300'
-              >
-                Price
-              </label>
-              <input
-                type='number'
-                id='item-price'
-                name='item-price'
-                className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-                placeholder='200.00'
-              />
-            </div>
-            <div className='col-span-2'>
-              <label
-                htmlFor='item-total'
-                className='body-100 block text-brand-400 dark:text-brand-300'
-              >
-                Total
-              </label>
+          <ul className='flex flex-col gap-12'>
+            {fields.map((field, index) => {
+              // const errors =
+              //   methods.formState.errors?.items?.
+              const error = methods.formState.errors?.items?.[index];
 
-              <output className='body-100 mt-[3.1rem] block font-bold text-[#888EB0]'>
-                400.00
-              </output>
-            </div>
-            <div className='col-span-1 mt-[4.2rem]'>
-              <button
-                type='button'
-                className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
-              >
-                <span className='sr-only'>Delete Item</span>
-              </button>
-            </div>
-          </section>
+              return (
+                <li
+                  key={field.id}
+                  className='grid grid-cols-8 gap-x-6 gap-y-10 first:mt-10 sx:grid-cols-12'
+                >
+                  <div className='col-span-8 sx:col-span-5'>
+                    <label
+                      htmlFor={`items.${index}.name`}
+                      className='body-100 block text-brand-400 dark:text-brand-300'
+                    >
+                      Item Name
+                    </label>
+                    <input
+                      type='text'
+                      {...methods.register(`items.${index}.name`)}
+                      id={`items.${index}.name`}
+                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      placeholder='Banner Design'
+                    />
+                  </div>
+
+                  <div className='col-span-2'>
+                    <label
+                      htmlFor={`items.${index}.quantity`}
+                      className='body-100 block text-brand-400 dark:text-brand-300'
+                    >
+                      Qty.
+                    </label>
+                    <input
+                      type='number'
+                      {...methods.register(`items.${index}.quantity`)}
+                      id={`items.${index}.quantity`}
+                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 p-6 font-bold  text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500 sm:px-8'
+                      placeholder='1'
+                      min='10'
+                    />
+                  </div>
+
+                  <div className='col-span-3 sx:col-span-2'>
+                    <label
+                      htmlFor={`items.${index}.price`}
+                      className='body-100 block text-brand-400 dark:text-brand-300'
+                    >
+                      Price
+                    </label>
+                    <input
+                      type='number'
+                      {...methods.register(`items.${index}.price`)}
+                      id={`items.${index}.price`}
+                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      placeholder='200.00'
+                    />
+                  </div>
+                  <div className='col-span-2'>
+                    <label
+                      htmlFor='item-total'
+                      className='body-100 block text-brand-400 dark:text-brand-300'
+                    >
+                      Total
+                    </label>
+
+                    <output className='body-100 mt-[3.1rem] block font-bold text-[#888EB0]'>
+                      400.00
+                    </output>
+                  </div>
+                  <div className='col-span-1 mt-[4.2rem]'>
+                    <button
+                      type='button'
+                      className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
+                      onClick={() => remove(index)}
+                    >
+                      <span className='sr-only'>Delete Item</span>
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
 
           <div className='mt-16'>
-            <button type='button' className='btn btn-add'>
+            <button
+              type='button'
+              className='btn btn-add'
+              onClick={() =>
+                append({
+                  id: uuidv4(),
+                  name: '',
+                  quantity: 0,
+                  price: 0,
+                  total: 0,
+                })
+              }
+            >
               &#43; Add New Item
             </button>
           </div>
         </fieldset>
         {/*<!--------- ITEM DETAILS END ---------!>*/}
       </form>
-    </section>
+    </FormProvider>
   );
 };
 
-export { CreateInvoice };
+export { CreateInvoiceForm };
