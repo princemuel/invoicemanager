@@ -139,7 +139,10 @@ input InvoiceItemInput {
 }
 
 input LoginInput {
+  """The email of the user"""
   email: String!
+
+  """The password of the user"""
   password: String!
 }
 
@@ -168,9 +171,8 @@ type RefreshPayload {
 }
 
 input RegisterInput {
+  """The email of the user"""
   email: String!
-  firstName: String!
-  lastName: String!
 
   """
   The password of the user. Must match the countersign i.e the reentered password
@@ -224,17 +226,11 @@ type User {
   """The exact time the user was created"""
   createdAt: DateTime!
 
-  """The password of the user"""
+  """The email of the user"""
   email: String!
-
-  """The first name of the user"""
-  firstName: String
 
   """Id of the user"""
   id: ID!
-
-  """The last name of the user"""
-  lastName: String
 
   """The password of the user"""
   password: String
