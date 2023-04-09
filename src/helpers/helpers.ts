@@ -7,17 +7,22 @@ import {
 export function approximate(number: number, fractionDigits = 0) {
   return parseInt(number.toFixed(fractionDigits));
 }
+
+const validateNumber = (value: number) => (isNaN(value) ? 0 : value);
+
 export function totalPrice(quantity = 0, price = 0) {
-  return Number(price) * Number(quantity);
+  return Number(validateNumber(quantity)) * Number(validateNumber(price));
 }
 
 type Item = { quantity?: number; price?: number };
 export function grandTotal<T extends Item>(items?: T[]) {
   if (!items) return 0;
-  return items.reduce((total, item) => {
+
+  let total = 0;
+  for (const item of items) {
     total += totalPrice(item.quantity, item.price);
-    return total;
-  }, 0);
+  }
+  return total;
 }
 
 export function serialize<T>(data: T): NonNullable<T> {
