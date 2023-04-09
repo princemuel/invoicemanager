@@ -4,11 +4,9 @@ import {
   createRoutesFromElements,
   Route,
 } from 'react-router-dom';
-import { InvoiceRoute } from './invoice';
-import { InvoicesRoute } from './invoices';
-import { LoginRoute } from './login';
+import { LoginRoute, RegisterRoute } from './auth';
+import { CreateInvoiceRoute, InvoiceRoute, InvoicesRoute } from './invoices';
 import { PublicRoute } from './public';
-import { RegisterRoute } from './register';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +19,8 @@ export const router = createBrowserRouter(
       <Route path='invoices'>
         <Route index element={<InvoicesRoute />} />
         <Route path=':id' element={<InvoiceRoute />} />
+        <Route path='create' element={<CreateInvoiceRoute />} />
+        <Route path='edit' element={<InvoiceRoute />} />
       </Route>
 
       <Route path='*' element={<h1>Error Page</h1>} />

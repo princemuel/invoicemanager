@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { FormControl, FormErrorText, FormInput, FormLabel } from '../atoms';
+import { FormControl, FormErrorText, FormInputBase, FormLabel } from '../atoms';
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -8,15 +8,21 @@ interface Props
   > {
   name: string;
   label: string;
+  labelClassName?: string;
+  inputClassName?: string;
+  errorClassName?: string;
 }
 
-const TextInput = ({
+const FormInput = ({
   name,
   type,
   placeholder,
   label,
   autoComplete,
   className,
+  labelClassName,
+  inputClassName,
+  errorClassName,
 }: Props) => {
   const {
     formState: { errors },
@@ -24,26 +30,26 @@ const TextInput = ({
 
   return (
     <FormControl className={className}>
-      <FormInput
+      <FormInputBase
         type={type}
         name={name}
         id={name}
         placeholder={placeholder}
-        className=''
+        className={inputClassName}
         autoComplete={autoComplete}
       />
 
       <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
-        <FormLabel htmlFor={name} className=''>
+        <FormLabel htmlFor={name} className={labelClassName}>
           {label}
         </FormLabel>
 
-        <FormErrorText id={name} className=''>{`${
-          errors?.[name]?.message || ''
-        }`}</FormErrorText>
+        <FormErrorText id={name} className={errorClassName}>
+          {`${errors?.[name]?.message || ''}`}
+        </FormErrorText>
       </div>
     </FormControl>
   );
 };
 
-export { TextInput };
+export { FormInput };

@@ -3,8 +3,6 @@ query GetUser {
     id
     photo
     email
-    firstName
-    lastName
   }
 }
 
@@ -14,8 +12,6 @@ mutation Register($input: RegisterInput!) {
     user {
       id
       photo
-      firstName
-      lastName
     }
   }
 }
@@ -26,8 +22,6 @@ mutation Login($input: LoginInput!) {
     user {
       id
       photo
-      firstName
-      lastName
     }
   }
 }
