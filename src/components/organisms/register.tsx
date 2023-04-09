@@ -1,28 +1,17 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 // import clsx from 'clsx';
 import { useAuthDispatch } from '@src/context';
-import { useRegisterMutation } from '@src/hooks';
+import { useRegisterMutation, useZodForm } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
-import { TextInput } from '../molecules';
+import { FormInput } from '../molecules';
 
 type Props = {};
 
 const FormSchema = z
   .object({
-    firstName: z
-      .string()
-      .min(1, { message: "Can't be empty" })
-      .min(2, { message: 'Must be more than 2 characters' })
-      .trim(),
-    lastName: z
-      .string()
-      .min(1, { message: "Can't be empty" })
-      .min(2, { message: 'Must be more than 2 characters' })
-      .trim(),
     email: z
       .string()
       .email({ message: 'Invalid email address' })
@@ -40,20 +29,20 @@ const FormSchema = z
   })
   .refine((data) => data.password === data.countersign, {
     path: ['countersign'],
-    message: 'The passwords do not match',
+    message: "Oops! The entered passwords don't match",
   });
 
 type FormData = z.infer<typeof FormSchema>;
 
 const RegisterForm = (props: Props) => {
-  const methods = useForm<FormData>({
-    resolver: zodResolver(FormSchema),
+  const methods = useZodForm({
+    schema: FormSchema,
   });
 
   const navigate = useNavigate();
   const dispatchAuth = useAuthDispatch();
 
-  const { mutate: createUser } = useRegisterMutation(client, {
+  const { mutate: create } = useRegisterMutation(client, {
     onSuccess(data) {
       console.log(data.register?.user);
       console.log(data.register?.accessToken);
@@ -76,14 +65,16 @@ const RegisterForm = (props: Props) => {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     console.log(data);
+    const result = FormSchema.safeParse(data);
 
-    const { firstName, lastName, email, password } = data;
-
-    if (firstName && lastName && email && password) {
-      createUser({ input: { firstName, lastName, email, password } });
+    if (result.success) {
+      create({ input: { email: data.email, password: data.password } });
       methods.reset();
     }
   };
+
+  const isSubmittable =
+    !!methods.formState.isDirty && !!methods.formState.isValid;
 
   return (
     <FormProvider {...methods}>
@@ -96,31 +87,15 @@ const RegisterForm = (props: Props) => {
             Register
           </Text>
 
-          <TextInput
-            type='text'
-            name='firstName'
-            label={'First Name'}
-            className='col-span-6 mt-10'
-            autoComplete='given-name'
-          />
-
-          <TextInput
-            type='text'
-            name='lastName'
-            label={'Last Name'}
-            className='col-span-6'
-            autoComplete='family-name'
-          />
-
-          <TextInput
+          <FormInput
             type='email'
             name='email'
             label={'Email Address'}
-            className='col-span-6'
+            className='col-span-6 mt-10'
             autoComplete='username'
           />
 
-          <TextInput
+          <FormInput
             type='password'
             name='password'
             label={'Password'}
@@ -128,7 +103,7 @@ const RegisterForm = (props: Props) => {
             autoComplete='new-password'
           />
 
-          <TextInput
+          <FormInput
             type='password'
             name='countersign'
             label={'Confirm Password'}
@@ -139,7 +114,7 @@ const RegisterForm = (props: Props) => {
           <div className='col-span-6 mt-6'>
             <button
               type='submit'
-              // disabled={isSubmitting}
+              disabled={!isSubmittable}
               className='btn w-full border-none bg-accent-200 p-6 text-500 font-normal text-neutral-100 outline-none transition duration-500 focus:bg-neutral-100 focus:text-brand-500 hover:bg-neutral-100 hover:text-brand-500'
             >
               Create an account
