@@ -35,6 +35,7 @@ const PublicRoute = (props: Props) => {
               await fetcher();
               refetch();
             } catch (error) {
+              console.log(error);
               navigate('/login');
             }
           }
@@ -55,7 +56,7 @@ const PublicRoute = (props: Props) => {
 
   return (
     <div>
-      <h1>{`Welcome ${user?.firstName + ' ' + user?.lastName || 'User'}`}</h1>
+      <h1>{`Welcome ${user?.email || 'User'}`}</h1>
     </div>
   );
 };
