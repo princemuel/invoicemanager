@@ -1,8 +1,13 @@
 import { icons } from '@src/common';
-import { Calendar, getMonth, hasValues } from '@src/helpers';
+import {
+  Calendar,
+  formatPrice,
+  getMonth,
+  hasValues,
+  totalPrice,
+} from '@src/helpers';
 import { useZodForm } from '@src/hooks';
-import clsx from 'clsx';
-import { useState } from 'react';
+import * as React from 'react';
 import { FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
@@ -64,18 +69,29 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>;
 
 const CreateInvoiceForm = (props: Props) => {
-  const [showCalendar, setShowCalendar] = useState(true);
   const today = Calendar.formatDate(new Date().toISOString());
-
-  const cartIconClasses = clsx('btn');
 
   const methods = useZodForm({
     schema: FormSchema,
+    mode: 'onChange',
   });
   const { fields, append, remove } = useFieldArray({
     name: 'items',
     control: methods.control,
+    rules: {
+      required: 'Please add at least one item',
+    },
   });
+
+  React.useEffect(() => {
+    const subscription = methods.watch((value, { name, type }) =>
+      console.log(value, name, type)
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [methods.watch]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const result = FormSchema.safeParse(data);
@@ -357,7 +373,9 @@ const CreateInvoiceForm = (props: Props) => {
                     </label>
                     <input
                       type='number'
-                      {...methods.register(`items.${index}.quantity`)}
+                      {...methods.register(`items.${index}.quantity`, {
+                        valueAsNumber: true,
+                      })}
                       id={`items.${index}.quantity`}
                       className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 p-6 font-bold  text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500 sm:px-8'
                       placeholder='1'
@@ -374,24 +392,35 @@ const CreateInvoiceForm = (props: Props) => {
                     </label>
                     <input
                       type='number'
-                      {...methods.register(`items.${index}.price`)}
+                      {...methods.register(`items.${index}.price`, {
+                        valueAsNumber: true,
+                      })}
                       id={`items.${index}.price`}
                       className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
                       placeholder='200.00'
                     />
                   </div>
+
                   <div className='col-span-2'>
                     <label
-                      htmlFor='item-total'
+                      htmlFor={`items.${index}.total`}
                       className='body-100 block text-brand-400 dark:text-brand-300'
                     >
                       Total
                     </label>
 
-                    <output className='body-100 mt-[3.1rem] block font-bold text-[#888EB0]'>
-                      400.00
+                    <output
+                      {...methods.register(`items.${index}.total`, {
+                        valueAsNumber: true,
+                      })}
+                      htmlFor={`items.${index}.price items.${index}.quantity`}
+                      id={`items.${index}.total`}
+                      className='body-100 mt-[3.1rem] block font-bold text-[#888EB0]'
+                    >
+                      {formatPrice(totalPrice(field.quantity, field.price))}
                     </output>
                   </div>
+
                   <div className='col-span-1 mt-[4.2rem]'>
                     <button
                       type='button'
