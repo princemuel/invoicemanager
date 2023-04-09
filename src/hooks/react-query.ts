@@ -142,7 +142,9 @@ export interface InvoiceItemInput {
 }
 
 export interface LoginInput {
+  /** The email of the user */
   email: Scalars['String'];
+  /** The password of the user */
   password: Scalars['String'];
 }
 
@@ -196,9 +198,8 @@ export interface RefreshPayload {
 }
 
 export interface RegisterInput {
+  /** The email of the user */
   email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
   /** The password of the user. Must match the countersign i.e the reentered password */
   password: Scalars['String'];
   /** The image url generated from the user's email address */
@@ -247,14 +248,10 @@ export interface UpdateInvoiceInput {
 export interface User {
   /** The exact time the user was created */
   createdAt: Scalars['DateTime'];
-  /** The password of the user */
+  /** The email of the user */
   email: Scalars['String'];
-  /** The first name of the user */
-  firstName?: Maybe<Scalars['String']>;
   /** Id of the user */
   id: Scalars['ID'];
-  /** The last name of the user */
-  lastName?: Maybe<Scalars['String']>;
   /** The password of the user */
   password?: Maybe<Scalars['String']>;
   /** The avatar of the user */
@@ -377,13 +374,7 @@ export type DeleteInvoiceMutation = { deleteInvoice?: { id?: string } };
 export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserQuery = {
-  user?: {
-    id: string;
-    photo?: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-  };
+  user?: { id: string; photo?: string; email: string };
 };
 
 export type RegisterMutationVariables = Exact<{
@@ -391,10 +382,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 export type RegisterMutation = {
-  register?: {
-    accessToken: string;
-    user: { id: string; photo?: string; firstName?: string; lastName?: string };
-  };
+  register?: { accessToken: string; user: { id: string; photo?: string } };
 };
 
 export type LoginMutationVariables = Exact<{
@@ -402,10 +390,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 export type LoginMutation = {
-  login?: {
-    accessToken: string;
-    user: { id: string; photo?: string; firstName?: string; lastName?: string };
-  };
+  login?: { accessToken: string; user: { id: string; photo?: string } };
 };
 
 export type RefreshAuthQueryVariables = Exact<{ [key: string]: never }>;
@@ -696,8 +681,6 @@ export const GetUserDocument = /*#__PURE__*/ `
     id
     photo
     email
-    firstName
-    lastName
   }
 }
     `;
@@ -738,8 +721,6 @@ export const RegisterDocument = /*#__PURE__*/ `
     user {
       id
       photo
-      firstName
-      lastName
     }
   }
 }
@@ -783,8 +764,6 @@ export const LoginDocument = /*#__PURE__*/ `
     user {
       id
       photo
-      firstName
-      lastName
     }
   }
 }
