@@ -27,6 +27,7 @@
     "@lukemorales/query-key-factory": "^1.2.0",
     "@tanstack/react-query": "^4.28.0",
     "clsx": "^1.2.1",
+    "dayjs": "^1.11.7",
     "graphql": "^16.6.0",
     "graphql-request": "^5.2.0",
     "immer": "^9.0.21",

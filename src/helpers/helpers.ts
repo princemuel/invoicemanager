@@ -8,7 +8,37 @@ export function approximate(number: number, fractionDigits = 0) {
   return parseInt(number.toFixed(fractionDigits));
 }
 
-const validateNumber = (value: number) => (isNaN(value) ? 0 : value);
+export function range(start: number, stop: number, step: number) {
+  return Array.from(
+    { length: (stop - start) / step + 1 },
+    (_, i) => start + i * step
+  );
+}
+
+export function loggedMethod<This, Args extends any[], Return>(
+  target: (this: This, ...args: Args) => Return,
+  context: ClassMethodDecoratorContext<
+    This,
+    (this: This, ...args: Args) => Return
+  >
+) {
+  const methodName = String(context.name);
+
+  return function (this: This, ...args: Args): Return {
+    console.log(`LOG: Entering method '${methodName}'.`);
+    const result = target.call(this, ...args);
+    console.log(`LOG: Exiting method '${methodName}'.`);
+    return result;
+  };
+}
+
+export function validateNumber(value: number) {
+  return isNaN(value) ? 0 : value;
+}
+
+export function pluralize(value: number, word: string) {
+  return value === 1 ? `${word}` : `${word}s`;
+}
 
 export function totalPrice(quantity = 0, price = 0) {
   return Number(validateNumber(quantity)) * Number(validateNumber(price));

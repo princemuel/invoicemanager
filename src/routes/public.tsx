@@ -1,7 +1,6 @@
-// import { formatDate } from '@src/helpers';
 import { IUser } from '@src/@types';
 import { useAuthDispatch } from '@src/context';
-import { Calendar, getErrorMessage } from '@src/helpers';
+import { getErrorMessage } from '@src/helpers';
 import { useGetUserQuery, useRefreshAuthQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,6 @@ type Props = {};
 const PublicRoute = (props: Props) => {
   const datetime = new Date('2023-03-31T02:54:50.051Z');
 
-  console.log(Calendar.formatDate());
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
 
