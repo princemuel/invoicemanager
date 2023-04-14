@@ -1,20 +1,11 @@
-import { Listbox, Transition } from '@headlessui/react';
-import { icons } from '@src/common';
-import {
-  DateTime,
-  datetime,
-  formatPrice,
-  pluralize,
-  totalPrice,
-} from '@src/helpers';
+import { DateTime, formatPrice, totalPrice } from '@src/helpers';
 import { useZodForm } from '@src/hooks';
-import clsx from 'clsx';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 import { Text } from '../atoms';
-import { FormInput } from '../molecules';
+import { Calendar, Dropdown, FormInput } from '../molecules';
 
 type Props = {};
 
@@ -77,7 +68,7 @@ const FormSchema = z.object({
 
 type FormData = z.infer<typeof FormSchema>;
 
-const CreateInvoiceForm = (props: Props) => {
+const NewInvoiceForm = (props: Props) => {
   const [selected, setSelected] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
   const [isShowing, setIsShowing] = useState(false);
@@ -249,120 +240,12 @@ const CreateInvoiceForm = (props: Props) => {
               Issue Date
             </label>
 
-            <div className='relative mt-1'>
-              <button
-                className={`body-100 peer relative mt-6 flex w-full cursor-pointer items-center justify-between rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 text-left font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500`}
-                type='button'
-                id='updatedAt'
-                aria-controls='datedatetime'
-                onClick={() => setIsShowing((value) => !value)}
-              >
-                <span className='block truncate'>
-                  {datetime.toDateString(selectedDate)}
-                </span>
-
-                <span className='pointer-events-none'>
-                  <img
-                    src={icons.calendar}
-                    alt='select an invoice issue date'
-                    className=''
-                  />
-                </span>
-              </button>
-
-              <Transition
-                as={Fragment}
-                show={isShowing}
-                enter='transition-opacity duration-75'
-                enterFrom='opacity-0'
-                enterTo='opacity-100'
-                leave='transition-opacity duration-150'
-                leaveFrom='opacity-100'
-                leaveTo='opacity-0'
-              >
-                <div
-                  id='datedatetime'
-                  className='mt-8 flex w-full flex-col gap-8 rounded-brand bg-neutral-100 p-8 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300'
-                >
-                  <div className='flex items-center justify-around'>
-                    <button
-                      type='button'
-                      onClick={() => {
-                        setSelectedDate(datetime.prevMonth(selectedDate));
-                      }}
-                      className='grid place-content-center'
-                    >
-                      <img src={icons.arrow.left} alt={''} />
-                      <span className='sr-only'>Previous Month</span>
-                    </button>
-
-                    <time
-                      dateTime={selectedDate.toISOString()}
-                      className='body-100 flex items-center gap-2 font-bold text-brand-900 dark:text-neutral-100'
-                    >
-                      <span className=''>
-                        {DateTime.MONTHS[selectedDate.month()]}
-                      </span>
-                      <span className=''>{selectedDate.year()}</span>
-                    </time>
-
-                    <button
-                      type='button'
-                      onClick={() => {
-                        setSelectedDate(datetime.nextMonth(selectedDate));
-                      }}
-                      className='grid place-content-center'
-                    >
-                      <img src={icons.arrow.right} alt={''} />
-                      <span className='sr-only'>Next Month</span>
-                    </button>
-                  </div>
-
-                  <ul className='grid grid-cols-7'>
-                    {DateTime.DAYS.map((day) => {
-                      return (
-                        <li
-                          key={day}
-                          className='body-100 grid place-content-center p-2 font-bold'
-                        >
-                          <span className='text-brand-900 dark:text-neutral-100'>
-                            {day}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-
-                  <ul className={'grid grid-cols-7'} role='listbox'>
-                    {datetime
-                      .generate(selectedDate.month(), selectedDate.year())
-                      .map(({ id, date, isCurrentMonth, isToday }) => {
-                        return (
-                          <li
-                            key={id}
-                            className={clsx(
-                              'body-100 grid place-content-center p-2',
-                              isToday &&
-                                'rounded-full bg-accent-200 !text-neutral-100',
-                              !isCurrentMonth &&
-                                'text-brand-900/30 dark:text-brand-100/30',
-
-                              DateTime.isEqual(selectedDate, date) &&
-                                'text-brand-500'
-                            )}
-                            role='option'
-                            onClick={() => {
-                              setSelectedDate(date);
-                            }}
-                          >
-                            <span className={clsx()}>{date.date()}</span>
-                          </li>
-                        );
-                      })}
-                  </ul>
-                </div>
-              </Transition>
-            </div>
+            <Calendar
+              selectedDate={selectedDate}
+              shouldOpen={isShowing}
+              setSelectedDate={setSelectedDate}
+              setShouldOpen={setIsShowing}
+            />
           </div>
 
           <div className='relative col-span-6 sm:col-span-3'>
@@ -373,52 +256,11 @@ const CreateInvoiceForm = (props: Props) => {
               Payment Terms
             </label>
 
-            <Listbox value={selected} onChange={setSelected}>
-              <div className='relative mt-1'>
-                <Listbox.Button
-                  className={`body-100 peer relative mt-6 flex w-full cursor-pointer items-center justify-between rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 text-left font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500`}
-                  type='button'
-                  id='paymentTerms'
-                >
-                  <span className='block truncate'>
-                    Net {selected} {pluralize(selected, 'Day')}
-                  </span>
-
-                  <span className='pointer-events-none'>
-                    <img
-                      src={icons.arrow.down}
-                      alt='select a payment term'
-                      className='transform-gpu ui-open:-rotate-180'
-                    />
-                  </span>
-                </Listbox.Button>
-
-                <Transition
-                  as={Fragment}
-                  leave='transition ease-in duration-100'
-                  leaveFrom='opacity-100'
-                  leaveTo='opacity-0'
-                >
-                  <Listbox.Options
-                    className={`absolute z-10 mt-8 w-full rounded-brand bg-neutral-100 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300`}
-                  >
-                    {terms.map((term) => {
-                      return (
-                        <Listbox.Option
-                          key={term.id}
-                          className='body-100 border-t border-brand-100 p-8 font-bold text-brand-900 first:border-none focus:text-brand-500 hover:text-brand-500 dark:border-brand-600 dark:text-brand-100'
-                          value={term.value}
-                        >
-                          <span className='block truncate'>
-                            Net {term.value} {pluralize(term.value, 'Day')}
-                          </span>
-                        </Listbox.Option>
-                      );
-                    })}
-                  </Listbox.Options>
-                </Transition>
-              </div>
-            </Listbox>
+            <Dropdown
+              terms={terms}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </div>
 
           <div className='col-span-6'>
@@ -567,4 +409,4 @@ const CreateInvoiceForm = (props: Props) => {
   );
 };
 
-export { CreateInvoiceForm };
+export { NewInvoiceForm };
