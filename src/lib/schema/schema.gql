@@ -171,6 +171,9 @@ type RefreshPayload {
 }
 
 input RegisterInput {
+  """The user's verification code"""
+  code: String
+
   """The email of the user"""
   email: String!
 
@@ -210,6 +213,9 @@ input UpdateInvoiceInput {
 }
 
 type User {
+  """The user's verification code"""
+  code: String
+
   """The exact time the user was created"""
   createdAt: DateTime!
 
@@ -227,4 +233,7 @@ type User {
 
   """The exact time the user was updated"""
   updatedAt: DateTime
+
+  """Defines whether the user is verifed or not"""
+  verified: Boolean
 }
