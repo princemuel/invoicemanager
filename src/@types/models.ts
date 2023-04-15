@@ -20,9 +20,10 @@ export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PAID';
 export type PaidInvoice = {
   id: string;
   createdAt: string;
+  updatedAt?: string;
   paymentDue: string;
   description: string;
-  paymentTerms: 1 | 7 | 14 | 30;
+  paymentTerms: number;
   clientName: string;
   clientEmail: string;
   status: Extract<InvoiceStatus, 'PAID'>;
@@ -34,9 +35,10 @@ export type PaidInvoice = {
 export type PendingInvoice = {
   id: string;
   createdAt: string;
+  updatedAt?: string;
   paymentDue: string;
   description: string;
-  paymentTerms: 1 | 7 | 14 | 30;
+  paymentTerms: number;
   clientName: string;
   clientEmail: string;
   status: Extract<InvoiceStatus, 'PENDING'>;
@@ -47,10 +49,11 @@ export type PendingInvoice = {
 };
 export type DraftInvoice = {
   id: string;
-  createdAt?: string;
+  createdAt: string;
+  updatedAt?: string;
   paymentDue?: string;
   description?: string;
-  paymentTerms?: 1 | 7 | 14 | 30;
+  paymentTerms: number;
   clientName?: string;
   clientEmail?: string;
   status: Extract<InvoiceStatus, 'DRAFT'>;
