@@ -18,6 +18,7 @@ const FormInput = ({
   type,
   placeholder,
   label,
+  defaultValue,
   autoComplete,
   className,
   labelClassName,
@@ -37,13 +38,13 @@ const FormInput = ({
         placeholder={placeholder}
         className={inputClassName}
         autoComplete={autoComplete}
+        defaultValue={defaultValue}
       />
 
       <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
         <FormLabel htmlFor={name} className={labelClassName}>
           {label}
         </FormLabel>
-
         <FormErrorText id={name} className={errorClassName}>
           {`${errors?.[name]?.message || ''}`}
         </FormErrorText>
