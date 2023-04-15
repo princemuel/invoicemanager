@@ -5,7 +5,12 @@ import {
   Route,
 } from 'react-router-dom';
 import { LoginRoute, RegisterRoute } from './auth';
-import { InvoiceRoute, InvoicesRoute, NewInvoiceRoute } from './invoices';
+import {
+  EditInvoiceRoute,
+  InvoiceRoute,
+  InvoicesRoute,
+  NewInvoiceRoute,
+} from './invoices';
 import { PublicRoute } from './public';
 
 export const router = createBrowserRouter(
@@ -18,9 +23,9 @@ export const router = createBrowserRouter(
 
       <Route path='invoices'>
         <Route index element={<InvoicesRoute />} />
-        <Route path=':id' element={<InvoiceRoute />}>
-          <Route path='edit' element={<InvoiceRoute />} />
-        </Route>
+        <Route path=':invoiceId' element={<InvoiceRoute />} />
+
+        <Route path=':invoiceId/edit' element={<EditInvoiceRoute />} />
         <Route path='new' element={<NewInvoiceRoute />} />
       </Route>
 
