@@ -2,7 +2,7 @@ import { Invoice } from '@src/@types';
 import { icons } from '@src/common';
 import { formatDate, formatPrice, grandTotal } from '@src/helpers';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 };
 
 const InvoiceDetails = ({ invoice }: Props) => {
+  const navigate = useNavigate();
   return (
     <React.Fragment>
       <section className='h-container max-md:hidden'>
@@ -31,9 +32,9 @@ const InvoiceDetails = ({ invoice }: Props) => {
             </div>
 
             <div className='flex items-center justify-between gap-4'>
-              <button type='button' className='btn btn-edit font-bold'>
+              <Link className='btn btn-edit font-bold' to={`edit`}>
                 Edit
-              </button>
+              </Link>
               <button type='button' className='btn btn-delete font-bold'>
                 Delete
               </button>
@@ -81,7 +82,6 @@ const InvoiceDetails = ({ invoice }: Props) => {
                     Invoice Date
                   </Text>
                   <Text className='body-300'>
-                    {/* @ts-expect-error :this is just a placeholder to avoid errors until i'm getting data from the api*/}
                     {formatDate(invoice?.updatedAt)}
                   </Text>
                 </div>
