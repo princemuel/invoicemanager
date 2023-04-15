@@ -6,8 +6,8 @@ import { InvoiceDetails, InvoiceDetailsMobile } from '../organisms';
 type Props = {};
 
 const InvoiceTemplate = (props: Props) => {
-  const { id } = useParams();
-  const { data: invoice } = useInvoiceDetail(id!);
+  const { invoiceId } = useParams();
+  const { data: invoice } = useInvoiceDetail(invoiceId!);
 
   return (
     <React.Fragment>
