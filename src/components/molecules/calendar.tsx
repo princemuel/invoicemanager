@@ -6,6 +6,7 @@ import { Dayjs } from 'dayjs';
 import { Dispatch, Fragment, SetStateAction } from 'react';
 
 interface Props {
+  disabled?: boolean;
   selectedDate: Dayjs;
   setSelectedDate: Dispatch<SetStateAction<Dayjs>>;
   shouldOpen: boolean;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const Calendar = ({
+  disabled,
   shouldOpen,
   setShouldOpen,
   selectedDate,

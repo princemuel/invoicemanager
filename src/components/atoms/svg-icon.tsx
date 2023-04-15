@@ -76,7 +76,7 @@ function useDynamicSVGImport(
     (async function () {
       try {
         ImportedIconRef.current = (
-          await import(`${options.iconPath}/${fileName}.svg`)
+          await import(`./${options.iconPath}/${fileName}.svg`)
         ).ReactComponent;
         // const { default: namedImport } = await import(`../assets/icons/${name}.svg`);
         // ImportedIconRef.current = namedImport;

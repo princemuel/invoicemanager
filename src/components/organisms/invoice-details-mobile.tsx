@@ -64,7 +64,6 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                     Invoice Date
                   </Text>
                   <Text className='body-300'>
-                    {/* @ts-expect-error :this is just a placeholder to avoid errors until i'm getting data from the api*/}
                     {datetime.toDateString(invoice?.updatedAt)}
                   </Text>
                 </div>
@@ -153,9 +152,9 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
 
       <div className='px-[2.4rem] py-9 dark:bg-brand-700 md:hidden'>
         <section className='flex items-center justify-between gap-4'>
-          <button type='button' className='btn btn-edit font-bold'>
+          <Link className='btn btn-edit font-bold' to={`edit`}>
             Edit
-          </button>
+          </Link>
           <button type='button' className='btn btn-delete font-bold'>
             Delete
           </button>

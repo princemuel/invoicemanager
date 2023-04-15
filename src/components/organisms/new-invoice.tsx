@@ -1,5 +1,15 @@
-import { DateTime, formatPrice, totalPrice } from '@src/helpers';
-import { useZodForm } from '@src/hooks';
+import { DevTool } from '@hookform/devtools';
+import { useAuthState } from '@src/context';
+import {
+  DateTime,
+  constants,
+  formatPrice,
+  grandTotal,
+  totalPrice,
+} from '@src/helpers';
+import { useCreateInvoiceMutation, useZodForm } from '@src/hooks';
+import { client } from '@src/lib';
+import produce from 'immer';
 import { useEffect, useState } from 'react';
 import { FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
@@ -15,10 +25,6 @@ const terms = [
   { value: 14, id: uuid() },
   { value: 30, id: uuid() },
 ];
-
-const dummyArray = Array(31)
-  .fill(1)
-  .map((_, i) => String(i + 1));
 
 const GenericStringContraint = z
   .string()
@@ -45,22 +51,25 @@ const GenericEmailContraint = z
 const GenericItem = z.object({
   id: z.string(),
   name: z.string(),
-  quantity: z.number().int(),
-  price: z.number(),
-  total: z.number(),
+  quantity: z.number().nonnegative().int(),
+  price: z.number().nonnegative(),
+  total: z.number().nonnegative(),
 });
 
 const FormSchema = z.object({
+  tag: z.string(),
+  userId: z.string(),
+
   senderAddress: AddressSchema,
   clientName: z.string(),
   clientEmail: GenericEmailContraint,
   clientAddress: AddressSchema,
 
-  createdAt: z.string(),
-  paymentTerms: z.number().int(),
+  updatedAt: z.string().datetime(),
+  paymentTerms: z.number().nonnegative().int(),
   description: z.string(),
   items: z.array(GenericItem),
-  total: z.number(),
+  total: z.number().nonnegative(),
 
   paymentDue: z.string(),
   status: z.enum(['DRAFT', 'PENDING', 'PAID']),
@@ -69,9 +78,11 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>;
 
 const NewInvoiceForm = (props: Props) => {
-  const [selected, setSelected] = useState(terms[0].value);
+  const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
   const [isShowing, setIsShowing] = useState(false);
+
+  const { user } = useAuthState();
 
   const methods = useZodForm({
     schema: FormSchema,
@@ -85,9 +96,11 @@ const NewInvoiceForm = (props: Props) => {
     },
   });
 
+  const { mutate: createInvoice } = useCreateInvoiceMutation(client, {});
+
   useEffect(() => {
     const subscription = methods.watch((value, { name, type }) =>
-      console.log(value, name, type)
+      console.log(name, value)
     );
 
     return () => {
@@ -98,9 +111,23 @@ const NewInvoiceForm = (props: Props) => {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     const result = FormSchema.safeParse(data);
 
+    const draft = produce(data, (draft) => {
+      const duration = constants.ONE_DAY * (Number(draft.paymentTerms) || 1);
+      const dueTime = selectedDate.unix() + duration;
+
+      draft.status = 'PENDING';
+      draft.paymentTerms = selectedTerm;
+      draft.updatedAt = selectedDate.toISOString();
+      draft.paymentDue = new Date(dueTime).toISOString();
+
+      draft.total = Number(formatPrice(grandTotal(data.items)));
+      draft.userId = user?.id as string;
+    });
+
+    console.table(draft);
+
     if (result.success) {
-      // login({ input: data });
-      console.log(data);
+      // createInvoice({ input: draft });
       methods.reset();
     } else {
       // The data is invalid
@@ -258,26 +285,18 @@ const NewInvoiceForm = (props: Props) => {
 
             <Dropdown
               terms={terms}
-              selected={selected}
-              setSelected={setSelected}
+              selected={selectedTerm}
+              setSelected={setSelectedTerm}
             />
           </div>
 
-          <div className='col-span-6'>
-            <label
-              htmlFor='description'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Project Description
-            </label>
-            <input
-              type='text'
-              id='description'
-              name='description'
-              className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
-              placeholder='e.g. Graphic Design Service'
-            />
-          </div>
+          <FormInput
+            type='text'
+            name='description'
+            label={'  Project Description'}
+            placeholder='e.g. Graphic Design Service'
+            className='col-span-6'
+          />
         </fieldset>
         {/*<!--------- PAYMENT DETAILS END ---------!>*/}
 
@@ -405,6 +424,8 @@ const NewInvoiceForm = (props: Props) => {
         </fieldset>
         {/*<!--------- ITEM DETAILS END ---------!>*/}
       </form>
+
+      <DevTool control={methods.control} />
     </FormProvider>
   );
 };
