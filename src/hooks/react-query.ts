@@ -79,7 +79,7 @@ export interface CreateInvoiceInput {
   paymentDue: Scalars['String'];
   paymentTerms: Scalars['Int'];
   senderAddress: AddressInput;
-  status: Status;
+  status: Scalars['String'];
   tag: Scalars['String'];
   total: Scalars['Float'];
   userId?: InputMaybe<Scalars['ID']>;
@@ -97,7 +97,7 @@ export interface Invoice {
   createdAt?: Maybe<Scalars['DateTime']>;
   /** A high level description of the items listed in the invoice */
   description?: Maybe<Scalars['String']>;
-  /** Id of the invoice */
+  /** The GUID for the Invoice */
   id?: Maybe<Scalars['ID']>;
   /** The items listed in the invoice */
   items: Array<InvoiceItem>;
@@ -107,15 +107,15 @@ export interface Invoice {
   paymentTerms?: Maybe<Scalars['Int']>;
   /** The address of the person sending the invoice */
   senderAddress?: Maybe<Address>;
-  /** Current payment status of the items listed in the invoice */
-  status?: Maybe<Status>;
+  /** The current status of the invoice */
+  status?: Maybe<Scalars['String']>;
   /** Unique id sequence used to tag the invoice */
   tag?: Maybe<Scalars['String']>;
   /** The grand total of the price of the items listed in the invoice */
   total?: Maybe<Scalars['Float']>;
   /** The exact time the invoice was updated */
   updatedAt?: Maybe<Scalars['DateTime']>;
-  /** The id of the invoice's owner */
+  /** The GUID of the invoice's issuer */
   userId?: Maybe<Scalars['ID']>;
 }
 
@@ -206,19 +206,6 @@ export interface RegisterInput {
   photo?: InputMaybe<Scalars['String']>;
 }
 
-/** The current role of the user */
-export enum Role {
-  Admin = 'ADMIN',
-  User = 'USER',
-}
-
-/** The current status of the invoice */
-export enum Status {
-  Draft = 'DRAFT',
-  Paid = 'PAID',
-  Pending = 'PENDING',
-}
-
 export interface UniqueIdInput {
   id: Scalars['ID'];
 }
@@ -241,7 +228,7 @@ export interface UpdateInvoiceInput {
   paymentDue: Scalars['String'];
   paymentTerms: Scalars['Int'];
   senderAddress: AddressInput;
-  status: Status;
+  status: Scalars['String'];
   total: Scalars['Float'];
 }
 
@@ -250,7 +237,7 @@ export interface User {
   createdAt: Scalars['DateTime'];
   /** The email of the user */
   email: Scalars['String'];
-  /** Id of the user */
+  /** The GUID for the User */
   id: Scalars['ID'];
   /** The password of the user */
   password?: Maybe<Scalars['String']>;
@@ -268,7 +255,7 @@ export type GetInvoicesQuery = {
     tag?: string;
     paymentDue?: string;
     clientName?: string;
-    status?: Status;
+    status?: string;
     total?: number;
   }>;
 };
@@ -288,7 +275,7 @@ export type GetInvoiceQuery = {
     paymentTerms?: number;
     clientName?: string;
     clientEmail?: string;
-    status?: Status;
+    status?: string;
     total?: number;
     senderAddress?: {
       street: string;
@@ -322,7 +309,7 @@ export type CreateInvoiceMutation = {
     tag?: string;
     paymentDue?: string;
     clientName?: string;
-    status?: Status;
+    status?: string;
     total?: number;
   };
 };
@@ -341,7 +328,7 @@ export type UpdateInvoiceMutation = {
     paymentTerms?: number;
     clientName?: string;
     clientEmail?: string;
-    status?: Status;
+    status?: string;
     total?: number;
     senderAddress?: {
       street: string;
