@@ -183,12 +183,6 @@ input RegisterInput {
   photo: String
 }
 
-"""The current role of the user"""
-enum Role {
-  ADMIN
-  USER
-}
-
 input UniqueIdInput {
   id: ID!
 }
