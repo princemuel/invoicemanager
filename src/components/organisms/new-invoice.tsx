@@ -2,80 +2,25 @@ import { DevTool } from '@hookform/devtools';
 import { useAuthState } from '@src/context';
 import {
   DateTime,
+  FormSchema,
+  RHFSubmitHandler,
   constants,
   formatPrice,
   grandTotal,
+  terms,
   totalPrice,
+  useZodForm,
 } from '@src/helpers';
-import { useCreateInvoiceMutation, useZodForm } from '@src/hooks';
+import { useCreateInvoiceMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import produce from 'immer';
 import { useEffect, useState } from 'react';
-import { FormProvider, SubmitHandler, useFieldArray } from 'react-hook-form';
+import { FormProvider, useFieldArray } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
 import { Text } from '../atoms';
 import { Calendar, Dropdown, FormInput } from '../molecules';
 
-type Props = {};
-
-const terms = [
-  { value: 1, id: uuid() },
-  { value: 7, id: uuid() },
-  { value: 14, id: uuid() },
-  { value: 30, id: uuid() },
-];
-
-const GenericStringContraint = z
-  .string()
-  .min(1, { message: "Can't be empty" })
-  .min(2, { message: 'Must more than 2 characters' })
-  .toLowerCase()
-  .trim();
-
-const AddressSchema = z.object({
-  street: GenericStringContraint,
-  city: GenericStringContraint,
-  country: GenericStringContraint,
-  postCode: GenericStringContraint,
-});
-
-const GenericEmailContraint = z
-  .string()
-  .email({ message: 'Invalid email address' })
-  .min(1, { message: "Can't be empty" })
-  .min(6, { message: 'Must more than 6 characters' })
-  .toLowerCase()
-  .trim();
-
-const GenericItem = z.object({
-  id: z.string(),
-  name: z.string(),
-  quantity: z.number().nonnegative().int(),
-  price: z.number().nonnegative(),
-  total: z.number().nonnegative(),
-});
-
-const FormSchema = z.object({
-  tag: z.string(),
-  userId: z.string(),
-
-  senderAddress: AddressSchema,
-  clientName: z.string(),
-  clientEmail: GenericEmailContraint,
-  clientAddress: AddressSchema,
-
-  updatedAt: z.string().datetime(),
-  paymentTerms: z.number().nonnegative().int(),
-  description: z.string(),
-  items: z.array(GenericItem),
-  total: z.number().nonnegative(),
-
-  paymentDue: z.string(),
-  status: z.enum(['DRAFT', 'PENDING', 'PAID']),
-});
-
-type FormData = z.infer<typeof FormSchema>;
+interface Props {}
 
 const NewInvoiceForm = (props: Props) => {
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
@@ -108,7 +53,7 @@ const NewInvoiceForm = (props: Props) => {
     };
   }, [methods.watch]);
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const onSubmit: RHFSubmitHandler = async (data) => {
     const result = FormSchema.safeParse(data);
 
     const draft = produce(data, (draft) => {
@@ -120,7 +65,11 @@ const NewInvoiceForm = (props: Props) => {
       draft.updatedAt = selectedDate.toISOString();
       draft.paymentDue = new Date(dueTime).toISOString();
 
-      draft.total = Number(formatPrice(grandTotal(data.items)));
+      for (const item of draft.items) {
+        item.total = totalPrice(item.quantity, item.price);
+      }
+
+      draft.total = grandTotal(draft.items);
       draft.userId = user?.id as string;
     });
 
@@ -260,14 +209,8 @@ const NewInvoiceForm = (props: Props) => {
           </Text>
 
           <div className='relative col-span-6 sm:col-span-3'>
-            <label
-              htmlFor='updatedAt'
-              className='body-100 block text-brand-400 dark:text-brand-300'
-            >
-              Issue Date
-            </label>
-
             <Calendar
+              title='Issue Date'
               selectedDate={selectedDate}
               shouldOpen={isShowing}
               setSelectedDate={setSelectedDate}
@@ -293,7 +236,7 @@ const NewInvoiceForm = (props: Props) => {
           <FormInput
             type='text'
             name='description'
-            label={'  Project Description'}
+            label={'Project Description'}
             placeholder='e.g. Graphic Design Service'
             className='col-span-6'
           />
