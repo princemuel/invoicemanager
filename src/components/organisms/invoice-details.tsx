@@ -1,6 +1,6 @@
 import { Invoice } from '@src/@types';
 import { icons } from '@src/common';
-import { formatDate, formatPrice, grandTotal } from '@src/helpers';
+import { calculateTotal, formatDate, formatPrice } from '@src/helpers';
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
@@ -166,7 +166,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
                 <tr className='flex items-center justify-between '>
                   <th className='body-200 text-neutral-100'>Amount Due</th>
                   <td className='text-700 font-bold leading-[3.2rem] tracking-[-0.63px] text-neutral-100 '>
-                    {formatPrice(grandTotal(invoice?.items))}
+                    {formatPrice(calculateTotal(invoice?.items))}
                   </td>
                 </tr>
               </tfoot>
