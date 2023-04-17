@@ -1,13 +1,13 @@
 import { DevTool } from '@hookform/devtools';
+import type { InvoiceStatus } from '@src/@types';
 import {
   DateTime,
-  FormSchema,
+  InvoiceFormSchema,
   RHFSubmitHandler,
+  calculateTotal,
   constants,
   formatPrice,
-  grandTotal,
   terms,
-  totalPrice,
   useZodForm,
 } from '@src/helpers';
 import { useInvoiceDetail, useUpdateInvoiceMutation } from '@src/hooks';
@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
-import { Text } from '../atoms';
+import { FormErrorText, Text } from '../atoms';
 import { Calendar, Dropdown, FormInput } from '../molecules';
 
 interface Props {}
@@ -27,14 +27,18 @@ const EditInvoiceForm = (props: Props) => {
   const { invoiceId } = useParams();
   const { data: invoice } = useInvoiceDetail(invoiceId!);
 
+  const [status, setStatus] = useState<InvoiceStatus>(
+    invoice?.status || 'PENDING'
+  );
   const [selectedTerm, setSelectedTerm] = useState(invoice?.paymentTerms || 1);
   const [selectedDate, setSelectedDate] = useState(
+    //!NOTE: change this to invoice?.updatedAt later
     DateTime.parse(invoice?.createdAt || dayjs())
   );
   const [isShowing, setIsShowing] = useState(false);
 
   const methods = useZodForm({
-    schema: FormSchema,
+    schema: InvoiceFormSchema,
     mode: 'onChange',
   });
 
@@ -45,7 +49,6 @@ const EditInvoiceForm = (props: Props) => {
       required: 'Please add at least one item',
     },
   });
-  const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {});
 
   useEffect(() => {
     invoice?.items?.forEach((field: { [key: string]: any }, idx) => {
@@ -55,19 +58,31 @@ const EditInvoiceForm = (props: Props) => {
     });
   }, [invoice?.items, update]);
 
-  const onSubmit: RHFSubmitHandler = async (data) => {
-    const result = FormSchema.safeParse(data);
+  const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {});
+
+  const onSubmit: RHFSubmitHandler<typeof InvoiceFormSchema> = async (data) => {
+    const result = InvoiceFormSchema.safeParse(data);
 
     const draft = produce(data, (draft) => {
       const duration = constants.ONE_DAY * (Number(draft.paymentTerms) || 1);
+      const dueTime = selectedDate.unix() + duration;
 
-      draft.total = Number(formatPrice(grandTotal(data.items)));
+      draft.status = status;
+      draft.paymentTerms = selectedTerm;
+      draft.updatedAt = selectedDate.toISOString();
+      draft.paymentDue = new Date(dueTime).toISOString();
+
+      for (const item of draft?.items) {
+        item.total = calculateTotal(item?.quantity, item?.price);
+      }
+
+      draft.total = calculateTotal(draft?.items);
     });
 
     console.table(draft);
 
     if (result.success) {
-      // createInvoice({ input: draft });
+      // updateInvoice({ input: draft });
       methods.reset();
     } else {
       // The data is invalid
@@ -259,23 +274,30 @@ const EditInvoiceForm = (props: Props) => {
 
           <ul className='mt-6 flex flex-col gap-8'>
             {fields.map((field, index) => {
-              // const errors =
-              //   methods.formState.errors?.items?.
-              const error = methods.formState.errors?.items?.[index];
+              const errors = methods.formState.errors?.items?.[index];
 
               return (
                 <li
                   key={field.id}
-                  className='grid grid-cols-8 items-center gap-x-6 gap-y-10 sx:grid-cols-12'
+                  className='grid grid-cols-8 items-end gap-x-6 gap-y-10 sx:grid-cols-12'
                 >
-                  <label className='col-span-8 sx:col-span-5'>
+                  <label className='col-span-8 flex flex-col-reverse gap-2 sx:col-span-5'>
                     <input
                       type='text'
                       {...methods.register(`items.${index}.name`)}
                       id={`items.${index}.name`}
-                      className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 text-center font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      aria-invalid={errors?.name ? 'true' : 'false'}
+                      aria-errormessage={`errors-items.${index}.name`}
                       defaultValue={invoice?.items?.[index]?.name || ''}
                     />
+
+                    <FormErrorText
+                      id={`items.${index}.name`}
+                      className='text-right peer-aria-[invalid="true"]:!text-accent-200'
+                    >
+                      {errors?.name?.message || ''}
+                    </FormErrorText>
                   </label>
 
                   <label className='col-span-2'>
@@ -287,11 +309,12 @@ const EditInvoiceForm = (props: Props) => {
                       id={`items.${index}.quantity`}
                       className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                       placeholder='1'
+                      aria-invalid={errors?.quantity ? 'true' : 'false'}
                       defaultValue={invoice?.items?.[index]?.quantity || 0}
                     />
                   </label>
 
-                  <label className='col-span-3 text-center sx:col-span-2'>
+                  <label className='col-span-3 sx:col-span-2'>
                     <input
                       type='number'
                       {...methods.register(`items.${index}.price`, {
@@ -299,25 +322,22 @@ const EditInvoiceForm = (props: Props) => {
                       })}
                       id={`items.${index}.price`}
                       className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      aria-invalid={errors?.price ? 'true' : 'false'}
                       defaultValue={invoice?.items?.[index]?.price || 0}
                     />
                   </label>
 
-                  <label className='col-span-2'>
+                  <div className='col-span-2 self-center'>
                     <output
-                      {...methods.register(`items.${index}.total`, {
-                        valueAsNumber: true,
-                      })}
                       htmlFor={`items.${index}.price items.${index}.quantity`}
                       id={`items.${index}.total`}
                       className='body-100 block font-bold text-[#888EB0]'
-                      defaultValue={invoice?.items?.[index]?.total || 0}
                     >
-                      {formatPrice(totalPrice(field.quantity, field.price))}
+                      {formatPrice(calculateTotal(field.quantity, field.price))}
                     </output>
-                  </label>
+                  </div>
 
-                  <div className='col-span-1'>
+                  <div className='col-span-1 self-center'>
                     <button
                       type='button'
                       className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'

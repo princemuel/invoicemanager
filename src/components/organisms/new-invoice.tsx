@@ -1,28 +1,30 @@
 import { DevTool } from '@hookform/devtools';
+import type { InvoiceStatus } from '@src/@types';
 import { useAuthState } from '@src/context';
 import {
   DateTime,
-  FormSchema,
+  InvoiceFormSchema,
   RHFSubmitHandler,
+  calculateTotal,
   constants,
   formatPrice,
-  grandTotal,
   terms,
-  totalPrice,
   useZodForm,
 } from '@src/helpers';
 import { useCreateInvoiceMutation } from '@src/hooks';
 import { client } from '@src/lib';
+import clsx from 'clsx';
 import produce from 'immer';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
-import { Text } from '../atoms';
+import { FormErrorText, Text } from '../atoms';
 import { Calendar, Dropdown, FormInput } from '../molecules';
 
 interface Props {}
 
 const NewInvoiceForm = (props: Props) => {
+  const [status, setStatus] = useState<InvoiceStatus>('PENDING');
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
   const [isShowing, setIsShowing] = useState(false);
@@ -30,7 +32,7 @@ const NewInvoiceForm = (props: Props) => {
   const { user } = useAuthState();
 
   const methods = useZodForm({
-    schema: FormSchema,
+    schema: InvoiceFormSchema,
     mode: 'onChange',
   });
   const { fields, append, remove } = useFieldArray({
@@ -43,33 +45,23 @@ const NewInvoiceForm = (props: Props) => {
 
   const { mutate: createInvoice } = useCreateInvoiceMutation(client, {});
 
-  useEffect(() => {
-    const subscription = methods.watch((value, { name, type }) =>
-      console.log(name, value)
-    );
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [methods.watch]);
-
-  const onSubmit: RHFSubmitHandler = async (data) => {
-    const result = FormSchema.safeParse(data);
+  const onSubmit: RHFSubmitHandler<typeof InvoiceFormSchema> = async (data) => {
+    const result = InvoiceFormSchema.safeParse(data);
 
     const draft = produce(data, (draft) => {
       const duration = constants.ONE_DAY * (Number(draft.paymentTerms) || 1);
       const dueTime = selectedDate.unix() + duration;
 
-      draft.status = 'PENDING';
+      draft.status = status;
       draft.paymentTerms = selectedTerm;
       draft.updatedAt = selectedDate.toISOString();
       draft.paymentDue = new Date(dueTime).toISOString();
 
-      for (const item of draft.items) {
-        item.total = totalPrice(item.quantity, item.price);
+      for (const item of draft?.items) {
+        item.total = calculateTotal(item?.quantity, item?.price);
       }
 
-      draft.total = grandTotal(draft.items);
+      draft.total = calculateTotal(draft?.items);
       draft.userId = user?.id as string;
     });
 
@@ -249,91 +241,89 @@ const NewInvoiceForm = (props: Props) => {
             Item List
           </legend>
 
-          <ul className='flex flex-col gap-12'>
+          <ul className='mt-6 grid grid-cols-8 gap-x-6 gap-y-10 sx:grid-cols-12'>
+            <li className='body-100 col-span-8 text-brand-400 dark:text-brand-100 sx:col-span-5'>
+              Item Name
+            </li>
+            <li className='body-100 col-span-2 text-brand-400 dark:text-brand-100'>
+              Qty.
+            </li>
+            <li className='body-100 col-span-3 text-brand-400 dark:text-brand-100 sx:col-span-2'>
+              Price
+            </li>
+            <li className='body-100 col-span-2 text-brand-400 dark:text-brand-100'>
+              Total
+            </li>
+          </ul>
+
+          <ul className='mt-6 flex flex-col gap-8'>
             {fields.map((field, index) => {
-              // const errors =
-              //   methods.formState.errors?.items?.
-              const error = methods.formState.errors?.items?.[index];
+              const errors = methods.formState.errors?.items?.[index];
 
               return (
                 <li
                   key={field.id}
-                  className='grid grid-cols-8 gap-x-6 gap-y-10 first:mt-10 sx:grid-cols-12'
+                  className='grid grid-cols-8 items-center gap-x-6 gap-y-10 sx:grid-cols-12'
                 >
-                  <div className='col-span-8 sx:col-span-5'>
-                    <label
-                      htmlFor={`items.${index}.name`}
-                      className='body-100 block text-brand-400 dark:text-brand-300'
-                    >
-                      Item Name
-                    </label>
+                  <label className='col-span-8 flex flex-col-reverse gap-2 sx:col-span-5'>
                     <input
                       type='text'
                       {...methods.register(`items.${index}.name`)}
                       id={`items.${index}.name`}
-                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      aria-invalid={errors?.name ? 'true' : 'false'}
+                      aria-errormessage={`errors-items.${index}.name`}
                       placeholder='Banner Design'
                     />
-                  </div>
 
-                  <div className='col-span-2'>
-                    <label
-                      htmlFor={`items.${index}.quantity`}
-                      className='body-100 block text-brand-400 dark:text-brand-300'
+                    <FormErrorText
+                      id={`items.${index}.name`}
+                      className='text-right peer-aria-[invalid="true"]:!text-accent-200'
                     >
-                      Qty.
-                    </label>
+                      {errors?.name?.message || ''}
+                    </FormErrorText>
+                  </label>
+
+                  <label className='col-span-2'>
                     <input
                       type='number'
                       {...methods.register(`items.${index}.quantity`, {
                         valueAsNumber: true,
                       })}
                       id={`items.${index}.quantity`}
-                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 p-6 font-bold  text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500 sm:px-8'
+                      className={clsx(
+                        'body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      )}
+                      aria-invalid={errors?.quantity ? 'true' : 'false'}
                       placeholder='1'
                       min='10'
                     />
-                  </div>
+                  </label>
 
-                  <div className='col-span-3 sx:col-span-2'>
-                    <label
-                      htmlFor={`items.${index}.price`}
-                      className='body-100 block text-brand-400 dark:text-brand-300'
-                    >
-                      Price
-                    </label>
+                  <label className='col-span-3 sx:col-span-2'>
                     <input
                       type='number'
                       {...methods.register(`items.${index}.price`, {
                         valueAsNumber: true,
                       })}
                       id={`items.${index}.price`}
-                      className='body-100 mt-6 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
+                      aria-invalid={errors?.price ? 'true' : 'false'}
                       placeholder='200.00'
                     />
-                  </div>
+                  </label>
 
-                  <div className='col-span-2'>
-                    <label
-                      htmlFor={`items.${index}.total`}
-                      className='body-100 block text-brand-400 dark:text-brand-300'
-                    >
-                      Total
-                    </label>
-
+                  <div className='col-span-2 self-center'>
                     <output
-                      {...methods.register(`items.${index}.total`, {
-                        valueAsNumber: true,
-                      })}
                       htmlFor={`items.${index}.price items.${index}.quantity`}
                       id={`items.${index}.total`}
-                      className='body-100 mt-[3.1rem] block font-bold text-[#888EB0]'
+                      className='body-100 block font-bold text-[#888EB0]'
                     >
-                      {formatPrice(totalPrice(field.quantity, field.price))}
+                      {formatPrice(calculateTotal(field.quantity, field.price))}
                     </output>
                   </div>
 
-                  <div className='col-span-1 mt-[4.2rem]'>
+                  <div className='col-span-1 self-center'>
                     <button
                       type='button'
                       className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
