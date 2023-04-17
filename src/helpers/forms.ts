@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, UseFormProps, useForm } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
+import { ZodType, z } from 'zod';
 
 export function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -57,7 +57,38 @@ const GenericItemSchema = z.object({
   total: z.number().nonnegative(),
 });
 
-export const FormSchema = z.object({
+const AuthFormSchema = z.object({
+  email: z
+    .string()
+    .email({ message: 'Invalid email address' })
+    .min(1, { message: "Can't be empty" })
+    .min(6, { message: 'Must more than 6 characters' })
+    .toLowerCase()
+    .trim(),
+  password: z
+    .string()
+    .min(1, "Can't be empty")
+    .min(8, 'Must be more than 8 characters')
+    .max(32, 'Must be less than 32 characters')
+    .trim(),
+  countersign: z.string().min(1, "Can't be empty").trim(),
+});
+
+export const RegisterFormSchema = AuthFormSchema.pick({
+  email: true,
+  password: true,
+  countersign: true,
+}).refine((data) => data.password === data.countersign, {
+  path: ['countersign'],
+  message: "Oops! The entered passwords don't match",
+});
+
+export const LoginFormSchema = AuthFormSchema.pick({
+  email: true,
+  password: true,
+});
+
+export const InvoiceFormSchema = z.object({
   tag: z.string(),
   userId: z.string(),
 
@@ -74,8 +105,10 @@ export const FormSchema = z.object({
   senderAddress: AddressSchema,
   clientAddress: AddressSchema,
 
-  items: z.array(GenericItemSchema),
+  items: GenericItemSchema.array().nonempty(),
   total: z.number().nonnegative(),
 });
 
-export type RHFSubmitHandler = SubmitHandler<z.infer<typeof FormSchema>>;
+export type RHFSubmitHandler<T extends ZodType<any, any, any>> = SubmitHandler<
+  z.infer<T>
+>;
