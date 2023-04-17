@@ -1,6 +1,6 @@
 import { Invoice } from '@src/@types';
 import { icons } from '@src/common';
-import { datetime, formatPrice, grandTotal } from '@src/helpers';
+import { calculateTotal, datetime, formatPrice } from '@src/helpers';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
@@ -142,7 +142,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                   as='output'
                   className='text-700 font-bold leading-600 tracking-[-0.42px]'
                 >
-                  {formatPrice(grandTotal(invoice?.items))}
+                  {formatPrice(calculateTotal(invoice?.items))}
                 </Text>
               </article>
             </div>

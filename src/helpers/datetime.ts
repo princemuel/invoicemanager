@@ -1,6 +1,7 @@
 import { uuid } from '@src/common';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
+
 dayjs.extend(localeData);
 
 interface IDay {
@@ -21,6 +22,7 @@ export class DateTime {
     return uuid();
   }
 
+  /** generate days in month for calendar*/
   public generate(
     month = this.datetime().month(),
     year = this.datetime().year()
@@ -84,6 +86,10 @@ export class DateTime {
     template = 'DD MMM YYYY'
   ) {
     return this.datetime(datetime).format(template);
+  }
+
+  public static parse(datetime?: string | number | Date | dayjs.Dayjs | null) {
+    return dayjs(datetime);
   }
 
   public static isEqual(a: dayjs.Dayjs, b: dayjs.Dayjs) {
