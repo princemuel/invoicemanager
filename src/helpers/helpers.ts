@@ -32,27 +32,30 @@ export function loggedMethod<This, Args extends any[], Return>(
   };
 }
 
-export function validateNumber(value: number) {
-  return isNaN(value) ? 0 : value;
+export function parseNumSafe(value: number) {
+  return !value || typeof 'value' !== 'number' || isNaN(value) ? 0 : value;
 }
 
 export function pluralize(value: number, word: string) {
   return value === 1 ? `${word}` : `${word}s`;
 }
 
-export function totalPrice(quantity = 0, price = 0) {
-  return Number(validateNumber(quantity)) * Number(validateNumber(price));
-}
-
 type Item = { quantity?: number; price?: number };
-export function grandTotal<T extends Item>(items?: T[]) {
-  if (!items) return 0;
+export function calculateTotal<T extends Item>(items?: T[]): number;
+export function calculateTotal<T extends number>(quantity: T, price: T): number;
+export function calculateTotal(a?: unknown, b?: unknown) {
+  if (!a) return 0;
 
-  let total = 0;
-  for (const item of items) {
-    total += totalPrice(item.quantity, item.price);
+  if (Array.isArray(a)) {
+    let total = 0;
+    for (const item of a) {
+      total +=
+        parseNumSafe(Number(item.quantity)) * parseNumSafe(Number(item.price));
+    }
+    return total;
   }
-  return total;
+
+  return parseNumSafe(Number(a)) * parseNumSafe(Number(a));
 }
 
 export function serialize<T>(data: T): NonNullable<T> {
