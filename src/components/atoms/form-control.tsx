@@ -1,16 +1,21 @@
+import type { Props } from '@src/@types';
 import clsx from 'clsx';
 
-interface Props
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  > {}
+const FormControl = <E extends React.ElementType = 'div'>({
+  as,
+  className,
+  children,
+  ...rest
+}: Props<E>) => {
+  const RenderedElement = as || 'div';
 
-const FormControl = ({ className, children, ...rest }: Props) => {
   return (
-    <div className={clsx('flex flex-col-reverse gap-4', className)} {...rest}>
+    <RenderedElement
+      className={clsx('flex flex-col-reverse gap-4', className)}
+      {...rest}
+    >
       {children}
-    </div>
+    </RenderedElement>
   );
 };
 

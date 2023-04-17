@@ -30,7 +30,7 @@ const FormInput = ({
   } = useFormContext();
 
   return (
-    <FormControl className={className}>
+    <FormControl as='div' className={className}>
       <FormInputBase
         type={type}
         name={name}
