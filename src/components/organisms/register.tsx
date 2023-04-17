@@ -1,48 +1,24 @@
-import { FormProvider, SubmitHandler } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 // import clsx from 'clsx';
 import { useAuthDispatch } from '@src/context';
-import { useRegisterMutation, useZodForm } from '@src/hooks';
+import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@src/helpers';
+import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
 import { FormInput } from '../molecules';
 
 type Props = {};
 
-const FormSchema = z
-  .object({
-    email: z
-      .string()
-      .email({ message: 'Invalid email address' })
-      .min(1, { message: "Can't be empty" })
-      .min(6, { message: 'Must more than 6 characters' })
-      .toLowerCase()
-      .trim(),
-    password: z
-      .string()
-      .min(1, "Can't be empty")
-      .min(8, 'Must be more than 8 characters')
-      .max(32, 'Must be less than 32 characters')
-      .trim(),
-    countersign: z.string().min(1, "Can't be empty").trim(),
-  })
-  .refine((data) => data.password === data.countersign, {
-    path: ['countersign'],
-    message: "Oops! The entered passwords don't match",
-  });
-
-type FormData = z.infer<typeof FormSchema>;
-
 const RegisterForm = (props: Props) => {
   const methods = useZodForm({
-    schema: FormSchema,
+    schema: RegisterFormSchema,
   });
 
   const navigate = useNavigate();
   const dispatchAuth = useAuthDispatch();
 
-  const { mutate: create } = useRegisterMutation(client, {
+  const { mutate: register } = useRegisterMutation(client, {
     onSuccess(data) {
       console.log(data.register?.user);
       console.log(data.register?.accessToken);
@@ -63,12 +39,14 @@ const RegisterForm = (props: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
+  const onSubmit: RHFSubmitHandler<typeof RegisterFormSchema> = async (
+    data
+  ) => {
     console.log(data);
-    const result = FormSchema.safeParse(data);
+    const result = RegisterFormSchema.safeParse(data);
 
     if (result.success) {
-      create({ input: { email: data.email, password: data.password } });
+      register({ input: { email: data.email, password: data.password } });
       methods.reset();
     }
   };
