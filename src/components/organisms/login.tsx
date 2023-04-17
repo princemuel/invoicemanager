@@ -1,37 +1,19 @@
-import { FormProvider, SubmitHandler } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { z } from 'zod';
 // import clsx from 'clsx';
 import { IUser } from '@src/@types';
 import { useAuthDispatch } from '@src/context';
-import { useGetUserQuery, useLoginMutation, useZodForm } from '@src/hooks';
+import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
+import { useGetUserQuery, useLoginMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
 import { FormInput } from '../molecules';
 
 type Props = {};
 
-const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: 'Invalid email address' })
-    .min(1, { message: "Can't be empty" })
-    .min(6, { message: 'Must more than 6 characters' })
-    .toLowerCase()
-    .trim(),
-  password: z
-    .string()
-    .min(1, "Can't be empty")
-    .min(8, 'Must be more than 8 characters')
-    .max(32, 'Must be less than 32 characters')
-    .trim(),
-});
-
-type FormData = z.infer<typeof FormSchema>;
-
 const LoginForm = (props: Props) => {
   const methods = useZodForm({
-    schema: FormSchema,
+    schema: LoginFormSchema,
   });
 
   const dispatch = useAuthDispatch();
@@ -69,8 +51,8 @@ const LoginForm = (props: Props) => {
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const result = FormSchema.safeParse(data);
+  const onSubmit: RHFSubmitHandler<typeof LoginFormSchema> = async (data) => {
+    const result = LoginFormSchema.safeParse(data);
 
     if (result.success) {
       console.log(data);
