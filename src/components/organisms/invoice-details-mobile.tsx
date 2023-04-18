@@ -1,9 +1,8 @@
 import { Invoice } from '@src/@types';
-import { icons } from '@src/common';
 import { calculateTotal, datetime, formatPrice } from '@src/helpers';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { StatusButton, Text } from '../atoms';
+import { BackLink, StatusButton, Text } from '../atoms';
 
 type Props = {
   invoice?: Invoice;
@@ -13,13 +12,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
   return (
     <React.Fragment>
       <section className='h-container md:hidden'>
-        <Link
-          to='/invoices'
-          className='body-100 mt-20 flex items-center gap-8 font-bold'
-        >
-          <img src={icons.arrow.left} alt={''} />
-          <span>Go back</span>
-        </Link>
+        <BackLink url='/invoices' className='mt-20' />
 
         <article className='mb-20 mt-10 grid gap-12'>
           <header className='flex items-center justify-between rounded-brand bg-neutral-100 px-10 py-8 shadow-100 dark:bg-brand-700'>
@@ -110,7 +103,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
               <Text className='body-300'>{invoice?.clientEmail}</Text>
             </div>
 
-            <div className='flex flex-col gap-10 overflow-clip rounded-brand dark:bg-brand-600'>
+            <section className='flex flex-col gap-10 overflow-clip rounded-brand bg-neutral-300 dark:bg-brand-600'>
               {invoice?.items?.map((item) => {
                 return (
                   <article key={item.name} className='px-10 first:pt-10'>
@@ -126,7 +119,7 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
 
                     <Text
                       as='p'
-                      className='body-100 mt-3 font-bold dark:text-brand-300'
+                      className='body-100 mt-3 font-bold text-brand-400 dark:text-brand-300'
                     >
                       <span>{item.quantity}&nbsp;x</span>
                       <span>&nbsp;{formatPrice(item?.price)}</span>
@@ -135,17 +128,19 @@ const InvoiceDetailsMobile = ({ invoice }: Props) => {
                 );
               })}
 
-              <article className='flex items-center justify-between p-10 dark:bg-brand-900'>
-                <Text as='h4'>Amount</Text>
+              <footer className='flex items-center justify-between bg-[#373B53] p-10 dark:bg-brand-900'>
+                <Text as='h4' className='text-neutral-100'>
+                  Grand Total
+                </Text>
 
                 <Text
                   as='output'
-                  className='text-700 font-bold leading-600 tracking-[-0.42px]'
+                  className='text-700 font-bold leading-600 tracking-[-0.42px] text-neutral-100'
                 >
                   {formatPrice(calculateTotal(invoice?.items))}
                 </Text>
-              </article>
-            </div>
+              </footer>
+            </section>
           </div>
         </article>
       </section>

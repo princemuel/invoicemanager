@@ -1,9 +1,8 @@
 import { Invoice } from '@src/@types';
-import { icons } from '@src/common';
 import { calculateTotal, formatDate, formatPrice } from '@src/helpers';
 import * as React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { StatusButton, Text } from '../atoms';
+import { BackLink, StatusButton, Text } from '../atoms';
 
 type Props = {
   invoice?: Invoice;
@@ -14,13 +13,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
   return (
     <React.Fragment>
       <section className='h-container max-md:hidden'>
-        <Link
-          to='/invoices'
-          className='body-100 mt-20 flex items-center gap-8 font-bold'
-        >
-          <img src={icons.arrow.left} alt={'Go back'} />
-          <span>Go back</span>
-        </Link>
+        <BackLink url='/invoices' className='mt-20' />
 
         <article className='mt-10 grid gap-12'>
           <header className='flex items-center justify-between rounded-brand bg-neutral-100 px-10 py-8 shadow-100 dark:bg-brand-700'>
@@ -75,7 +68,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
               </div>
             </div>
 
-            <div className='flex justify-between'>
+            <div className='flex justify-between gap-20'>
               <div className='flex flex-1 flex-col gap-12'>
                 <div className='> * + * space-y-4'>
                   <Text className='body-100 text-brand-400 dark:text-brand-100'>
@@ -128,9 +121,9 @@ const InvoiceDetails = ({ invoice }: Props) => {
               </div>
             </div>
 
-            <table className='grid auto-cols-min grid-cols-1 gap-8 overflow-clip rounded-brand px-12 pt-10 shadow-100 dark:bg-brand-600'>
-              <thead>
-                <tr className='grid grid-cols-4 justify-items-end'>
+            <table className='grid auto-cols-min grid-cols-1 gap-8 overflow-clip rounded-brand pt-10 shadow-100 dark:bg-brand-600'>
+              <thead className='px-14'>
+                <tr className='grid grid-cols-4 justify-items-end text-brand-400 dark:text-brand-100'>
                   <th className='body-200 justify-self-start'>Item Name</th>
                   <th className='body-200 '>QTY.</th>
                   <th className='body-200 '>Price</th>
@@ -138,14 +131,15 @@ const InvoiceDetails = ({ invoice }: Props) => {
                 </tr>
               </thead>
 
-              <tbody className='flex flex-col gap-10 py-4'>
+              <tbody className='flex flex-col gap-10 px-14 py-4'>
                 {invoice?.items?.map((item) => {
                   return (
                     <tr
+                      //!NOTE: change this to item id later
                       key={item.name}
                       className='grid grid-cols-4 justify-items-end gap-4'
                     >
-                      <td className='body-100 justify-self-start font-bold text-brand-400 dark:text-neutral-100'>
+                      <td className='body-100 justify-self-start font-bold text-brand-900 dark:text-neutral-100'>
                         {item?.name}
                       </td>
                       <td className='body-100 font-bold text-brand-400 dark:text-neutral-100'>
@@ -154,7 +148,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
                       <td className='body-100 font-bold text-brand-400 dark:text-neutral-100'>
                         {formatPrice(item?.price)}
                       </td>
-                      <td className='body-100 font-bold text-brand-400 dark:text-neutral-100'>
+                      <td className='body-100 font-bold text-brand-900 dark:text-neutral-100'>
                         {formatPrice(item?.total)}
                       </td>
                     </tr>
@@ -162,7 +156,7 @@ const InvoiceDetails = ({ invoice }: Props) => {
                 })}
               </tbody>
 
-              <tfoot className='w-full-shadow bg-[#373B53] py-10 text-brand-900 dark:bg-brand-900'>
+              <tfoot className='w-full-shadow bg-[#373B53] px-14 py-10 text-brand-900 dark:bg-brand-900'>
                 <tr className='flex items-center justify-between '>
                   <th className='body-200 text-neutral-100'>Amount Due</th>
                   <td className='text-700 font-bold leading-[3.2rem] tracking-[-0.63px] text-neutral-100 '>
