@@ -39,10 +39,9 @@ const EditInvoiceForm = (props: Props) => {
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
-    mode: 'onChange',
   });
 
-  const { fields, append, remove, prepend, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: 'items',
     control: methods.control,
     rules: {
@@ -51,12 +50,9 @@ const EditInvoiceForm = (props: Props) => {
   });
 
   useEffect(() => {
-    invoice?.items?.forEach((field: { [key: string]: any }, idx) => {
-      Object.keys(field).forEach((key) => {
-        update(idx, field[key]);
-      });
-    });
-  }, [invoice?.items, update]);
+    // @ts-expect-error
+    methods.setValue('items', invoice?.items);
+  }, [invoice?.items]);
 
   const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {});
 
@@ -372,6 +368,16 @@ const EditInvoiceForm = (props: Props) => {
         {/*<!--------- ITEM DETAILS END ---------!>*/}
       </form>
 
+      <div className='sticky bottom-0 px-[2.4rem] py-9 dark:bg-brand-700'>
+        <section className='flex flex-row-reverse items-center gap-4'>
+          <button type='button' className='btn font-bold'>
+            Cancel
+          </button>
+          <button type='button' className='btn font-bold'>
+            Save Changes
+          </button>
+        </section>
+      </div>
       <DevTool control={methods.control} />
     </FormProvider>
   );
