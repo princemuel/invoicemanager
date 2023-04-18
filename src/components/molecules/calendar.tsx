@@ -147,6 +147,13 @@ const Calendar = ({
                         onClick={() => {
                           setSelectedDate(date);
                         }}
+                        aria-current={
+                          isToday
+                            ? 'date'
+                            : DateTime.isEqual(selectedDate, date)
+                            ? 'true'
+                            : 'false'
+                        }
                       >
                         <span className={clsx()}>{date.date()}</span>
                       </li>
