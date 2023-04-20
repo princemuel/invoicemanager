@@ -19,7 +19,7 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
     <Listbox value={selected} onChange={setSelected}>
       <div className='relative mt-1'>
         <Listbox.Button
-          className={`body-100 peer relative mt-6 flex w-full cursor-pointer items-center justify-between rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 text-left font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500`}
+          className={`body-100 peer relative mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 text-left font-bold text-brand-900 outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:focus:border-brand-500 dark:hover:border-brand-500`}
           type='button'
           id='paymentTerms'
         >
