@@ -1,5 +1,4 @@
-import { useFormContext } from 'react-hook-form';
-import { FormControl, FormErrorText, FormInputBase, FormLabel } from '../atoms';
+import { FormControl, FormErrorText, FormInput, FormLabel } from '../atoms';
 
 interface Props
   extends React.DetailedHTMLProps<
@@ -13,7 +12,7 @@ interface Props
   errorClassName?: string;
 }
 
-const FormInput = ({
+const FormField = ({
   name,
   type,
   placeholder,
@@ -25,13 +24,9 @@ const FormInput = ({
   inputClassName,
   errorClassName,
 }: Props) => {
-  const {
-    formState: { errors },
-  } = useFormContext();
-
   return (
     <FormControl as='div' className={className}>
-      <FormInputBase
+      <FormInput
         type={type}
         name={name}
         id={name}
@@ -42,15 +37,11 @@ const FormInput = ({
       />
 
       <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
-        <FormLabel htmlFor={name} className={labelClassName}>
-          {label}
-        </FormLabel>
-        <FormErrorText id={name} className={errorClassName}>
-          {`${errors?.[name]?.message || ''}`}
-        </FormErrorText>
+        <FormLabel htmlFor={name} className={labelClassName} children={label} />
+        <FormErrorText id={name} className={errorClassName} />
       </div>
     </FormControl>
   );
 };
 
-export { FormInput };
+export { FormField };
