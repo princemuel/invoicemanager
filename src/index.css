@@ -246,7 +246,8 @@ Version: 02
   }
 
   .w-full-shadow {
-    box-shadow: 0 0 0 100vmax currentColor, 0 0 2rem currentColor;
+    box-shadow: 0 0 0 100vmax currentColor;
+    /* box-shadow: 0 0 0 100vmax currentColor, 0 0 2rem currentColor; */
     clip-path: inset(0 -100vmax);
   }
 
