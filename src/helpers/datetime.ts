@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 
 dayjs.extend(localeData);
-
 interface IDay {
   id: ReturnType<typeof uuid>;
   date: dayjs.Dayjs;
@@ -16,25 +15,16 @@ export class DateTime {
   static MONTHS = dayjs.monthsShort();
   static TODAY = dayjs();
 
-  constructor(private datetime = dayjs) {}
+  constructor() {}
 
   private uuid() {
     return uuid();
   }
 
   /** generate days in month for calendar*/
-  public generate(
-    month = this.datetime().month(),
-    year = this.datetime().year()
-  ) {
-    const firstDayInMonth = this.datetime()
-      .year(year)
-      .month(month)
-      .startOf('month');
-    const lastDayInMonth = this.datetime()
-      .year(year)
-      .month(month)
-      .endOf('month');
+  public generate(month = dayjs().month(), year = dayjs().year()) {
+    const firstDayInMonth = dayjs().year(year).month(month).startOf('month');
+    const lastDayInMonth = dayjs().year(year).month(month).endOf('month');
 
     const days: Array<IDay> = [];
 
@@ -62,7 +52,7 @@ export class DateTime {
       });
     }
 
-    const remaining = 35 - days.length;
+    const remaining = 42 - days.length;
 
     // generate suffix dates (next month's)
     for (
@@ -82,13 +72,15 @@ export class DateTime {
   }
 
   public toDateString(
-    datetime?: string | IDay['date'],
+    datetime: string | IDay['date'] = dayjs(),
     template = 'DD MMM YYYY'
   ) {
-    return this.datetime(datetime).format(template);
+    return dayjs(datetime).format(template);
   }
 
-  public static parse(datetime?: string | number | Date | dayjs.Dayjs | null) {
+  public static parse(
+    datetime: string | number | Date | dayjs.Dayjs | null = dayjs()
+  ) {
     return dayjs(datetime);
   }
 
@@ -96,13 +88,13 @@ export class DateTime {
     return a.toDate().toDateString() === b.toDate().toDateString();
   }
 
-  public prevMonth(datetime = this.datetime()) {
+  public prevMonth(datetime = dayjs()) {
     return datetime.month(datetime.month() - 1);
   }
 
-  public nextMonth(datetime = this.datetime()) {
+  public nextMonth(datetime = dayjs()) {
     return datetime.month(datetime.month() + 1);
   }
 }
 
-export const datetime = new DateTime(dayjs);
+export const datetime = new DateTime();
