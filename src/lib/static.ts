@@ -3,7 +3,6 @@ import { hasValues, pluck } from '@src/helpers';
 
 export async function fetchInvoices() {
   const response = await fetch('/assets/data.json');
-  console.log(response);
 
   const data = (await response.json()) as Invoice[];
 
