@@ -39,7 +39,7 @@ const Calendar = ({
       <div className='relative mt-1'>
         <button
           className={clsx(
-            `body-100 peer relative mt-6 flex w-full cursor-pointer items-center justify-between rounded-lg border bg-neutral-100 px-8 py-6 text-left font-bold outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500`,
+            `body-100 peer relative mt-4 flex w-full cursor-pointer items-center justify-between rounded-lg border bg-neutral-100 px-8 py-6 text-left font-bold outline-none focus:border-brand-500 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500`,
             disabled
               ? 'border-brand-100/50 text-brand-900/50 dark:text-brand-100/50'
               : 'border-brand-100 text-brand-900 dark:text-neutral-100'
@@ -126,7 +126,7 @@ const Calendar = ({
                 })}
               </ul>
 
-              <ul className={'grid grid-cols-7'} role='listbox'>
+              <ul className={'grid grid-cols-7 gap-2'} role='listbox'>
                 {datetime
                   .generate(selectedDate.month(), selectedDate.year())
                   .map(({ id, date, isCurrentMonth, isToday }) => {
