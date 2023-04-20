@@ -101,6 +101,9 @@ module.exports = {
         200: '0px 10px 20px rgba(72, 84, 159, 0.25);',
         300: '0px 10px 20px rgba(0, 0, 0, 0.25)',
       },
+      backgroundImage: {
+        100: 'linear-gradient(180deg, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.1) 100%);',
+      },
     },
   },
   plugins: [
