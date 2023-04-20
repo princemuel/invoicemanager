@@ -7,13 +7,14 @@ import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
 import { useGetUserQuery, useLoginMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
-import { FormInput } from '../molecules';
+import { FormField } from '../molecules';
 
 type Props = {};
 
 const LoginForm = (props: Props) => {
   const methods = useZodForm({
     schema: LoginFormSchema,
+    mode: 'onChange',
   });
 
   const dispatch = useAuthDispatch();
@@ -52,15 +53,19 @@ const LoginForm = (props: Props) => {
   });
 
   const onSubmit: RHFSubmitHandler<typeof LoginFormSchema> = async (data) => {
-    const result = LoginFormSchema.safeParse(data);
+    try {
+      const result = LoginFormSchema.safeParse(data);
 
-    if (result.success) {
-      console.log(data);
-      login({ input: data });
-      methods.reset();
-    } else {
       // The data is invalid
-      console.error(result.error);
+      if (!result.success) {
+        console.error(result.error);
+      }
+
+      console.log(data);
+      // login({ input: data });
+      // methods.reset();
+    } catch (error) {
+      console.error('SUBMIT_ERROR', error);
     }
   };
 
@@ -78,7 +83,7 @@ const LoginForm = (props: Props) => {
             Login
           </Text>
 
-          <FormInput
+          <FormField
             type='email'
             name='email'
             label={'Email Address'}
@@ -86,7 +91,7 @@ const LoginForm = (props: Props) => {
             autoComplete='username'
           />
 
-          <FormInput
+          <FormField
             type='password'
             name='password'
             label={'Password'}

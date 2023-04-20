@@ -33,29 +33,38 @@ export function loggedMethod<This, Args extends any[], Return>(
 }
 
 export function parseNumSafe(value: number) {
-  return !value || typeof 'value' !== 'number' || isNaN(value) ? 0 : value;
+  return Number.isNaN(value) || isNaN(value) ? 0 : value;
 }
 
 export function pluralize(value: number, word: string) {
   return value === 1 ? `${word}` : `${word}s`;
 }
 
-type Item = { quantity?: number; price?: number };
+interface Item {
+  quantity?: number;
+  price?: number;
+}
+
 export function calculateTotal<T extends Item>(items?: T[]): number;
 export function calculateTotal<T extends number>(quantity: T, price: T): number;
 export function calculateTotal(a?: unknown, b?: unknown) {
-  if (!a) return 0;
+  try {
+    if (!a) throw new TypeError('The item or value is not defined');
 
-  if (Array.isArray(a)) {
-    let total = 0;
-    for (const item of a) {
-      total +=
-        parseNumSafe(Number(item.quantity)) * parseNumSafe(Number(item.price));
+    if (typeof a === 'number' && typeof b === 'number') {
+      return a * b;
     }
-    return total;
-  }
 
-  return parseNumSafe(Number(a)) * parseNumSafe(Number(a));
+    return (a as Item[])?.reduce((total, current) => {
+      total +=
+        parseNumSafe(Number(current.quantity)) *
+        parseNumSafe(Number(current.price));
+
+      return total;
+    }, 0);
+  } catch (e) {
+    return 0;
+  }
 }
 
 export function serialize<T>(data: T): NonNullable<T> {

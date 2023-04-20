@@ -1,6 +1,14 @@
+import { Listbox, Transition } from '@headlessui/react';
 import { icons } from '@src/common';
-import { datetime, formatPrice, hasValues } from '@src/helpers';
+import {
+  capitalize,
+  datetime,
+  formatPrice,
+  hasValues,
+  statuses,
+} from '@src/helpers';
 import { useInvoiceList } from '@src/hooks';
+import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
@@ -33,25 +41,78 @@ const InvoicesTemplate = (props: Props) => {
             </Text>
           )}
         </div>
+        <div className='flex items-center gap-6'>
+          <Listbox value={status} by='id' onChange={setStatus} multiple>
+            <div className='relative mt-1 flex w-64 max-w-xs flex-col'>
+              <Listbox.Button className='body-100 flex items-center gap-6 self-center font-bold'>
+                <p className='block truncate'>
+                  <span className='hidden md:inline'>Filter by status</span>
+                  <span className='md:hidden'>Filter</span>
+                </p>
 
-        <div>
-          <div>
-            <button type='button' className=''>
-              <span className='hidden md:inline'>Filter all Invoices</span>
-              <span className='md:hidden'>Filter</span>
-            </button>
+                <span className='pointer-events-none'>
+                  <img
+                    src={icons.arrow.down}
+                    alt='filter invoices by status'
+                    className='transform-gpu ui-open:-rotate-180'
+                  />
+                </span>
+              </Listbox.Button>
 
-            <div></div>
-          </div>
+              <Transition
+                as={Fragment}
+                enter='transition duration-100 ease-out'
+                enterFrom='transform scale-95 opacity-0'
+                enterTo='transform scale-100 opacity-100'
+                leave='transition duration-75 ease-out'
+                leaveFrom='transform scale-100 opacity-100'
+                leaveTo='transform scale-95 opacity-0'
+              >
+                <div className='absolute z-10 mt-16 w-full rounded-brand bg-neutral-100 p-[2.4rem] pr-12 shadow-200 dark:bg-brand-600 dark:shadow-300'>
+                  <Listbox.Options className={'flex flex-col gap-8'}>
+                    {statuses.map((stat) => {
+                      return (
+                        <Listbox.Option
+                          key={stat.id}
+                          value={stat.value}
+                          className={
+                            'grid grid-flow-row-dense grid-cols-3 gap-4'
+                          }
+                        >
+                          <input
+                            type='checkbox'
+                            name={stat.value}
+                            id={stat.value}
+                            value={stat.value}
+                            className='accent-brand-500'
+                          />
+                          <label
+                            htmlFor={stat.value}
+                            className='body-100 col-span-2 font-bold'
+                          >
+                            {capitalize(stat.value)}
+                          </label>
+                        </Listbox.Option>
+                      );
+                    })}
+                  </Listbox.Options>
+                </div>
+              </Transition>
+            </div>
+          </Listbox>
+
+          <Link
+            className='body-100 flex items-center gap-2 rounded-pill bg-brand-500 p-2 pr-4 font-bold'
+            to={'new'}
+          >
+            <span className='grid aspect-square place-content-center rounded-full bg-neutral-100 p-4'>
+              <img src={icons.actions.add} alt={''} />
+            </span>
+
+            <span className='hidden md:inline'>New Invoice</span>
+            <span className='md:hidden'>New</span>
+          </Link>
         </div>
-
-        <button type='button' className='btn-invoice btn'>
-          <span className='grid place-content-center rounded-full bg-neutral-200 p-3'>
-            <img src={icons.actions.add} alt={''} />
-          </span>
-          <span className='hidden md:inline'>New Invoice</span>
-          <span className='md:hidden'>New</span>
-        </button>
       </header>
 
       <ul aria-label='List of Invoices' className='mt-20 flex flex-col gap-6'>
