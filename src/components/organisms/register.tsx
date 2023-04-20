@@ -6,13 +6,14 @@ import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@src/helpers';
 import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { Text } from '../atoms';
-import { FormInput } from '../molecules';
+import { FormField } from '../molecules';
 
 type Props = {};
 
 const RegisterForm = (props: Props) => {
   const methods = useZodForm({
     schema: RegisterFormSchema,
+    mode: 'onChange',
   });
 
   const navigate = useNavigate();
@@ -42,12 +43,17 @@ const RegisterForm = (props: Props) => {
   const onSubmit: RHFSubmitHandler<typeof RegisterFormSchema> = async (
     data
   ) => {
-    console.log(data);
-    const result = RegisterFormSchema.safeParse(data);
-
-    if (result.success) {
-      register({ input: { email: data.email, password: data.password } });
-      methods.reset();
+    try {
+      const result = RegisterFormSchema.safeParse(data);
+      // The data is invalid
+      if (!result.success) {
+        throw new Error(JSON.stringify(result.error));
+      }
+      console.log(data);
+      // register({ input: { email: data.email, password: data.password } });
+      // methods.reset();
+    } catch (error) {
+      console.error('SUBMIT_ERROR', error);
     }
   };
 
@@ -65,7 +71,7 @@ const RegisterForm = (props: Props) => {
             Register
           </Text>
 
-          <FormInput
+          <FormField
             type='email'
             name='email'
             label={'Email Address'}
@@ -73,7 +79,7 @@ const RegisterForm = (props: Props) => {
             autoComplete='username'
           />
 
-          <FormInput
+          <FormField
             type='password'
             name='password'
             label={'Password'}
@@ -81,7 +87,7 @@ const RegisterForm = (props: Props) => {
             autoComplete='new-password'
           />
 
-          <FormInput
+          <FormField
             type='password'
             name='countersign'
             label={'Confirm Password'}
