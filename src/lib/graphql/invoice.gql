@@ -13,7 +13,7 @@ query GetInvoice($where: UniqueIdInput!) {
   invoice(where: $where) {
     userId
     createdAt
-    updatedAt
+    issueDate
     paymentDue
     tag
     description
@@ -57,7 +57,7 @@ mutation CreateInvoice($input: CreateInvoiceInput!) {
 
 mutation UpdateInvoice($input: UpdateInvoiceInput!, $where: UniqueIdInput!) {
   updateInvoice(input: $input, where: $where) {
-    updatedAt
+    issueDate
     paymentDue
     tag
     description
