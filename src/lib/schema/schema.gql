@@ -43,6 +43,9 @@ input CreateInvoiceInput {
   clientEmail: String!
   clientName: String!
   description: String!
+
+  """The exact date and time the invoice was issued in ISO8601"""
+  issueDate: DateTime!
   items: [InvoiceItemInput!]!
   paymentDue: String!
   paymentTerms: Int!
@@ -79,6 +82,9 @@ type Invoice {
 
   """The GUID for the Invoice"""
   id: ID
+
+  """The exact date and time the invoice was issued in ISO8601"""
+  issueDate: DateTime
 
   """The items listed in the invoice"""
   items: [InvoiceItem!]!

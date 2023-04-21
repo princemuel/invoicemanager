@@ -1,4 +1,5 @@
 import { Layout } from '@src/components';
+import { RequireAuth } from '@src/middleware';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -16,17 +17,19 @@ import { PublicRoute } from './public';
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
-      <Route index element={<PublicRoute />} />
       {/* public routes */}
       <Route path='login' element={<LoginRoute />} />
       <Route path='register' element={<RegisterRoute />} />
 
-      <Route path='invoices'>
-        <Route index element={<InvoicesRoute />} />
-        <Route path=':invoiceId' element={<InvoiceRoute />} />
+      <Route element={<RequireAuth />}>
+        <Route index element={<PublicRoute />} />
+        <Route path='invoices'>
+          <Route index element={<InvoicesRoute />} />
+          <Route path=':invoiceId' element={<InvoiceRoute />} />
 
-        <Route path=':invoiceId/edit' element={<EditInvoiceRoute />} />
-        <Route path='new' element={<NewInvoiceRoute />} />
+          <Route path=':invoiceId/edit' element={<EditInvoiceRoute />} />
+          <Route path='new' element={<NewInvoiceRoute />} />
+        </Route>
       </Route>
 
       <Route path='*' element={<h1>Error Page</h1>} />

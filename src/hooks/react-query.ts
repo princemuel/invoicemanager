@@ -43,7 +43,7 @@ export interface Scalars {
 }
 
 /** The address object used for both the client and sender's address information. It contains the person's street, city, post code and country data */
-export interface Address {
+export interface AddressType {
   /** The city where the person lives in */
   city: Scalars['String'];
   /** The country where the person is located */
@@ -54,7 +54,7 @@ export interface Address {
   street: Scalars['String'];
 }
 
-export interface AddressInput {
+export interface AddressInputType {
   /** The city where the person lives in */
   city: Scalars['String'];
   /** The country where the person is located */
@@ -65,20 +65,22 @@ export interface AddressInput {
   street: Scalars['String'];
 }
 
-export interface AuthPayload {
+export interface AuthPayloadType {
   accessToken: Scalars['String'];
-  user: User;
+  user: UserType;
 }
 
-export interface CreateInvoiceInput {
-  clientAddress: AddressInput;
+export interface CreateInvoiceInputType {
+  clientAddress: AddressInputType;
   clientEmail: Scalars['String'];
   clientName: Scalars['String'];
   description: Scalars['String'];
-  items: Array<InvoiceItemInput>;
+  /** The exact date and time the invoice was issued in ISO8601 */
+  issueDate: Scalars['DateTime'];
+  items: Array<InvoiceItemInputType>;
   paymentDue: Scalars['String'];
   paymentTerms: Scalars['Int'];
-  senderAddress: AddressInput;
+  senderAddress: AddressInputType;
   status: Scalars['String'];
   tag: Scalars['String'];
   total: Scalars['Float'];
@@ -86,9 +88,9 @@ export interface CreateInvoiceInput {
 }
 
 /** The object containing metadata about the invoice e.g. items purchased, when the payment is due, client address information, the current status, et cetera */
-export interface Invoice {
+export interface InvoiceType {
   /** The address of the person receiving the invoice */
-  clientAddress?: Maybe<Address>;
+  clientAddress?: Maybe<AddressType>;
   /** The email of the person receiving the invoice */
   clientEmail?: Maybe<Scalars['String']>;
   /** The name of the person receiving the invoice */
@@ -99,14 +101,16 @@ export interface Invoice {
   description?: Maybe<Scalars['String']>;
   /** The GUID for the Invoice */
   id?: Maybe<Scalars['ID']>;
+  /** The exact date and time the invoice was issued in ISO8601 */
+  issueDate?: Maybe<Scalars['DateTime']>;
   /** The items listed in the invoice */
-  items: Array<InvoiceItem>;
+  items: Array<InvoiceItemType>;
   /** When the payment of the items listed in the invoice is due */
   paymentDue?: Maybe<Scalars['String']>;
   /** The number of days before an invoice's payment grace period expires. Can be 1, 7, 14 or 30 days */
   paymentTerms?: Maybe<Scalars['Int']>;
   /** The address of the person sending the invoice */
-  senderAddress?: Maybe<Address>;
+  senderAddress?: Maybe<AddressType>;
   /** The current status of the invoice */
   status?: Maybe<Scalars['String']>;
   /** Unique id sequence used to tag the invoice */
@@ -120,7 +124,7 @@ export interface Invoice {
 }
 
 /** An item listed in the invoice */
-export interface InvoiceItem {
+export interface InvoiceItemType {
   /** The id of this item */
   id?: Maybe<Scalars['ID']>;
   /** The name of this item */
@@ -133,7 +137,7 @@ export interface InvoiceItem {
   total?: Maybe<Scalars['Float']>;
 }
 
-export interface InvoiceItemInput {
+export interface InvoiceItemInputType {
   id: Scalars['ID'];
   name: Scalars['String'];
   price: Scalars['Float'];
@@ -141,63 +145,65 @@ export interface InvoiceItemInput {
   total: Scalars['Float'];
 }
 
-export interface LoginInput {
+export interface LoginInputType {
   /** The email of the user */
   email: Scalars['String'];
   /** The password of the user */
   password: Scalars['String'];
 }
 
-export interface LogoutPayload {
+export interface LogoutPayloadType {
   message: Scalars['String'];
 }
 
-export interface Mutation {
-  createInvoice?: Maybe<Invoice>;
-  deleteInvoice?: Maybe<Invoice>;
-  login?: Maybe<AuthPayload>;
-  logout: LogoutPayload;
-  register?: Maybe<AuthPayload>;
-  updateInvoice?: Maybe<Invoice>;
+export interface MutationType {
+  createInvoice?: Maybe<InvoiceType>;
+  deleteInvoice?: Maybe<InvoiceType>;
+  login?: Maybe<AuthPayloadType>;
+  logout: LogoutPayloadType;
+  register?: Maybe<AuthPayloadType>;
+  updateInvoice?: Maybe<InvoiceType>;
 }
 
-export interface MutationCreateInvoiceArgs {
-  input: CreateInvoiceInput;
+export interface MutationCreateInvoiceArgsType {
+  input: CreateInvoiceInputType;
 }
 
-export interface MutationDeleteInvoiceArgs {
-  where: UniqueIdInput;
+export interface MutationDeleteInvoiceArgsType {
+  where: UniqueIdInputType;
 }
 
-export interface MutationLoginArgs {
-  input: LoginInput;
+export interface MutationLoginArgsType {
+  input: LoginInputType;
 }
 
-export interface MutationRegisterArgs {
-  input: RegisterInput;
+export interface MutationRegisterArgsType {
+  input: RegisterInputType;
 }
 
-export interface MutationUpdateInvoiceArgs {
-  input: UpdateInvoiceInput;
-  where: UniqueIdInput;
+export interface MutationUpdateInvoiceArgsType {
+  input: UpdateInvoiceInputType;
+  where: UniqueIdInputType;
 }
 
-export interface Query {
-  invoice?: Maybe<Invoice>;
-  invoices: Array<Maybe<Invoice>>;
-  refreshAuth?: Maybe<RefreshPayload>;
-  user?: Maybe<User>;
+export interface QueryType {
+  invoice?: Maybe<InvoiceType>;
+  invoices: Array<Maybe<InvoiceType>>;
+  refreshAuth?: Maybe<RefreshPayloadType>;
+  user?: Maybe<UserType>;
 }
 
-export interface QueryInvoiceArgs {
-  where: UniqueIdInput;
+export interface QueryInvoiceArgsType {
+  where: UniqueIdInputType;
 }
 
-export interface RefreshPayload {
+export interface RefreshPayloadType {
   accessToken: Scalars['String'];
 }
 
-export interface RegisterInput {
+export interface RegisterInputType {
+  /** The user's verification code */
+  code?: InputMaybe<Scalars['String']>;
   /** The email of the user */
   email: Scalars['String'];
   /** The password of the user. Must match the countersign i.e the reentered password */
@@ -206,33 +212,35 @@ export interface RegisterInput {
   photo?: InputMaybe<Scalars['String']>;
 }
 
-export interface UniqueIdInput {
+export interface UniqueIdInputType {
   id: Scalars['ID'];
 }
 
-export interface UniqueIdWithUserId {
+export interface UniqueIdWithUserIdType {
   id: Scalars['ID'];
   userId: Scalars['ID'];
 }
 
-export interface UniqueUserId {
+export interface UniqueUserIdType {
   userId: Scalars['ID'];
 }
 
-export interface UpdateInvoiceInput {
-  clientAddress: AddressInput;
+export interface UpdateInvoiceInputType {
+  clientAddress: AddressInputType;
   clientEmail: Scalars['String'];
   clientName: Scalars['String'];
   description: Scalars['String'];
-  items: Array<InvoiceItemInput>;
+  items: Array<InvoiceItemInputType>;
   paymentDue: Scalars['String'];
   paymentTerms: Scalars['Int'];
-  senderAddress: AddressInput;
+  senderAddress: AddressInputType;
   status: Scalars['String'];
   total: Scalars['Float'];
 }
 
-export interface User {
+export interface UserType {
+  /** The user's verification code */
+  code?: Maybe<Scalars['String']>;
   /** The exact time the user was created */
   createdAt: Scalars['DateTime'];
   /** The email of the user */
@@ -245,11 +253,13 @@ export interface User {
   photo?: Maybe<Scalars['String']>;
   /** The exact time the user was updated */
   updatedAt?: Maybe<Scalars['DateTime']>;
+  /** Defines whether the user is verifed or not */
+  verified?: Maybe<Scalars['Boolean']>;
 }
 
-export type GetInvoicesQueryVariables = Exact<{ [key: string]: never }>;
+export type GetInvoicesQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type GetInvoicesQuery = {
+export type GetInvoicesQueryType = {
   invoices: Array<{
     id?: string;
     tag?: string;
@@ -260,15 +270,15 @@ export type GetInvoicesQuery = {
   }>;
 };
 
-export type GetInvoiceQueryVariables = Exact<{
-  where: UniqueIdInput;
+export type GetInvoiceQueryVariablesType = Exact<{
+  where: UniqueIdInputType;
 }>;
 
-export type GetInvoiceQuery = {
+export type GetInvoiceQueryType = {
   invoice?: {
     userId?: string;
     createdAt?: any;
-    updatedAt?: any;
+    issueDate?: any;
     paymentDue?: string;
     tag?: string;
     description?: string;
@@ -299,11 +309,11 @@ export type GetInvoiceQuery = {
   };
 };
 
-export type CreateInvoiceMutationVariables = Exact<{
-  input: CreateInvoiceInput;
+export type CreateInvoiceMutationVariablesType = Exact<{
+  input: CreateInvoiceInputType;
 }>;
 
-export type CreateInvoiceMutation = {
+export type CreateInvoiceMutationType = {
   createInvoice?: {
     id?: string;
     tag?: string;
@@ -314,14 +324,14 @@ export type CreateInvoiceMutation = {
   };
 };
 
-export type UpdateInvoiceMutationVariables = Exact<{
-  input: UpdateInvoiceInput;
-  where: UniqueIdInput;
+export type UpdateInvoiceMutationVariablesType = Exact<{
+  input: UpdateInvoiceInputType;
+  where: UniqueIdInputType;
 }>;
 
-export type UpdateInvoiceMutation = {
+export type UpdateInvoiceMutationType = {
   updateInvoice?: {
-    updatedAt?: any;
+    issueDate?: any;
     paymentDue?: string;
     tag?: string;
     description?: string;
@@ -352,43 +362,43 @@ export type UpdateInvoiceMutation = {
   };
 };
 
-export type DeleteInvoiceMutationVariables = Exact<{
-  where: UniqueIdInput;
+export type DeleteInvoiceMutationVariablesType = Exact<{
+  where: UniqueIdInputType;
 }>;
 
-export type DeleteInvoiceMutation = { deleteInvoice?: { id?: string } };
+export type DeleteInvoiceMutationType = { deleteInvoice?: { id?: string } };
 
-export type GetUserQueryVariables = Exact<{ [key: string]: never }>;
+export type GetUserQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type GetUserQuery = {
+export type GetUserQueryType = {
   user?: { id: string; photo?: string; email: string };
 };
 
-export type RegisterMutationVariables = Exact<{
-  input: RegisterInput;
+export type RegisterMutationVariablesType = Exact<{
+  input: RegisterInputType;
 }>;
 
-export type RegisterMutation = {
+export type RegisterMutationType = {
   register?: { accessToken: string; user: { id: string; photo?: string } };
 };
 
-export type LoginMutationVariables = Exact<{
-  input: LoginInput;
+export type LoginMutationVariablesType = Exact<{
+  input: LoginInputType;
 }>;
 
-export type LoginMutation = {
+export type LoginMutationType = {
   login?: { accessToken: string; user: { id: string; photo?: string } };
 };
 
-export type RefreshAuthQueryVariables = Exact<{ [key: string]: never }>;
+export type RefreshAuthQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type RefreshAuthQuery = { refreshAuth?: { accessToken: string } };
+export type RefreshAuthQueryType = { refreshAuth?: { accessToken: string } };
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type LogoutMutationVariablesType = Exact<{ [key: string]: never }>;
 
-export type LogoutMutation = { logout: { message: string } };
+export type LogoutMutationType = { logout: { message: string } };
 
-export const GetInvoicesDocument = /*#__PURE__*/ `
+export const GetInvoicesDocumentType = /*#__PURE__*/ `
     query GetInvoices {
   invoices {
     id
@@ -400,42 +410,45 @@ export const GetInvoicesDocument = /*#__PURE__*/ `
   }
 }
     `;
-export const useGetInvoicesQuery = <TData = GetInvoicesQuery, TError = unknown>(
+export const useGetInvoicesQuery = <
+  TData = GetInvoicesQueryType,
+  TError = unknown
+>(
   client: GraphQLClient,
-  variables?: GetInvoicesQueryVariables,
-  options?: UseQueryOptions<GetInvoicesQuery, TError, TData>,
+  variables?: GetInvoicesQueryVariablesType,
+  options?: UseQueryOptions<GetInvoicesQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useQuery<GetInvoicesQuery, TError, TData>(
+  useQuery<GetInvoicesQueryType, TError, TData>(
     variables === undefined ? ['GetInvoices'] : ['GetInvoices', variables],
-    fetcher<GetInvoicesQuery, GetInvoicesQueryVariables>(
+    fetcher<GetInvoicesQueryType, GetInvoicesQueryVariablesType>(
       client,
-      GetInvoicesDocument,
+      GetInvoicesDocumentType,
       variables,
       headers
     ),
     options
   );
 
-useGetInvoicesQuery.getKey = (variables?: GetInvoicesQueryVariables) =>
+useGetInvoicesQuery.getKey = (variables?: GetInvoicesQueryVariablesType) =>
   variables === undefined ? ['GetInvoices'] : ['GetInvoices', variables];
 useGetInvoicesQuery.fetcher = (
   client: GraphQLClient,
-  variables?: GetInvoicesQueryVariables,
+  variables?: GetInvoicesQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<GetInvoicesQuery, GetInvoicesQueryVariables>(
+  fetcher<GetInvoicesQueryType, GetInvoicesQueryVariablesType>(
     client,
-    GetInvoicesDocument,
+    GetInvoicesDocumentType,
     variables,
     headers
   );
-export const GetInvoiceDocument = /*#__PURE__*/ `
+export const GetInvoiceDocumentType = /*#__PURE__*/ `
     query GetInvoice($where: UniqueIdInput!) {
   invoice(where: $where) {
     userId
     createdAt
-    updatedAt
+    issueDate
     paymentDue
     tag
     description
@@ -466,39 +479,42 @@ export const GetInvoiceDocument = /*#__PURE__*/ `
   }
 }
     `;
-export const useGetInvoiceQuery = <TData = GetInvoiceQuery, TError = unknown>(
+export const useGetInvoiceQuery = <
+  TData = GetInvoiceQueryType,
+  TError = unknown
+>(
   client: GraphQLClient,
-  variables: GetInvoiceQueryVariables,
-  options?: UseQueryOptions<GetInvoiceQuery, TError, TData>,
+  variables: GetInvoiceQueryVariablesType,
+  options?: UseQueryOptions<GetInvoiceQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useQuery<GetInvoiceQuery, TError, TData>(
+  useQuery<GetInvoiceQueryType, TError, TData>(
     ['GetInvoice', variables],
-    fetcher<GetInvoiceQuery, GetInvoiceQueryVariables>(
+    fetcher<GetInvoiceQueryType, GetInvoiceQueryVariablesType>(
       client,
-      GetInvoiceDocument,
+      GetInvoiceDocumentType,
       variables,
       headers
     ),
     options
   );
 
-useGetInvoiceQuery.getKey = (variables: GetInvoiceQueryVariables) => [
+useGetInvoiceQuery.getKey = (variables: GetInvoiceQueryVariablesType) => [
   'GetInvoice',
   variables,
 ];
 useGetInvoiceQuery.fetcher = (
   client: GraphQLClient,
-  variables: GetInvoiceQueryVariables,
+  variables: GetInvoiceQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<GetInvoiceQuery, GetInvoiceQueryVariables>(
+  fetcher<GetInvoiceQueryType, GetInvoiceQueryVariablesType>(
     client,
-    GetInvoiceDocument,
+    GetInvoiceDocumentType,
     variables,
     headers
   );
-export const CreateInvoiceDocument = /*#__PURE__*/ `
+export const CreateInvoiceDocumentType = /*#__PURE__*/ `
     mutation CreateInvoice($input: CreateInvoiceInput!) {
   createInvoice(input: $input) {
     id
@@ -513,44 +529,46 @@ export const CreateInvoiceDocument = /*#__PURE__*/ `
 export const useCreateInvoiceMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    CreateInvoiceMutation,
+    CreateInvoiceMutationType,
     TError,
-    CreateInvoiceMutationVariables,
+    CreateInvoiceMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
   useMutation<
-    CreateInvoiceMutation,
+    CreateInvoiceMutationType,
     TError,
-    CreateInvoiceMutationVariables,
+    CreateInvoiceMutationVariablesType,
     TContext
   >(
     ['CreateInvoice'],
-    (variables?: CreateInvoiceMutationVariables) =>
-      fetcher<CreateInvoiceMutation, CreateInvoiceMutationVariables>(
+    (variables?: CreateInvoiceMutationVariablesType) =>
+      fetcher<CreateInvoiceMutationType, CreateInvoiceMutationVariablesType>(
         client,
-        CreateInvoiceDocument,
+        CreateInvoiceDocumentType,
         variables,
         headers
       )(),
     options
   );
+useCreateInvoiceMutation.getKey = () => ['CreateInvoice'];
+
 useCreateInvoiceMutation.fetcher = (
   client: GraphQLClient,
-  variables: CreateInvoiceMutationVariables,
+  variables: CreateInvoiceMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<CreateInvoiceMutation, CreateInvoiceMutationVariables>(
+  fetcher<CreateInvoiceMutationType, CreateInvoiceMutationVariablesType>(
     client,
-    CreateInvoiceDocument,
+    CreateInvoiceDocumentType,
     variables,
     headers
   );
-export const UpdateInvoiceDocument = /*#__PURE__*/ `
+export const UpdateInvoiceDocumentType = /*#__PURE__*/ `
     mutation UpdateInvoice($input: UpdateInvoiceInput!, $where: UniqueIdInput!) {
   updateInvoice(input: $input, where: $where) {
-    updatedAt
+    issueDate
     paymentDue
     tag
     description
@@ -584,41 +602,43 @@ export const UpdateInvoiceDocument = /*#__PURE__*/ `
 export const useUpdateInvoiceMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    UpdateInvoiceMutation,
+    UpdateInvoiceMutationType,
     TError,
-    UpdateInvoiceMutationVariables,
+    UpdateInvoiceMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
   useMutation<
-    UpdateInvoiceMutation,
+    UpdateInvoiceMutationType,
     TError,
-    UpdateInvoiceMutationVariables,
+    UpdateInvoiceMutationVariablesType,
     TContext
   >(
     ['UpdateInvoice'],
-    (variables?: UpdateInvoiceMutationVariables) =>
-      fetcher<UpdateInvoiceMutation, UpdateInvoiceMutationVariables>(
+    (variables?: UpdateInvoiceMutationVariablesType) =>
+      fetcher<UpdateInvoiceMutationType, UpdateInvoiceMutationVariablesType>(
         client,
-        UpdateInvoiceDocument,
+        UpdateInvoiceDocumentType,
         variables,
         headers
       )(),
     options
   );
+useUpdateInvoiceMutation.getKey = () => ['UpdateInvoice'];
+
 useUpdateInvoiceMutation.fetcher = (
   client: GraphQLClient,
-  variables: UpdateInvoiceMutationVariables,
+  variables: UpdateInvoiceMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<UpdateInvoiceMutation, UpdateInvoiceMutationVariables>(
+  fetcher<UpdateInvoiceMutationType, UpdateInvoiceMutationVariablesType>(
     client,
-    UpdateInvoiceDocument,
+    UpdateInvoiceDocumentType,
     variables,
     headers
   );
-export const DeleteInvoiceDocument = /*#__PURE__*/ `
+export const DeleteInvoiceDocumentType = /*#__PURE__*/ `
     mutation DeleteInvoice($where: UniqueIdInput!) {
   deleteInvoice(where: $where) {
     id
@@ -628,41 +648,43 @@ export const DeleteInvoiceDocument = /*#__PURE__*/ `
 export const useDeleteInvoiceMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    DeleteInvoiceMutation,
+    DeleteInvoiceMutationType,
     TError,
-    DeleteInvoiceMutationVariables,
+    DeleteInvoiceMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
   useMutation<
-    DeleteInvoiceMutation,
+    DeleteInvoiceMutationType,
     TError,
-    DeleteInvoiceMutationVariables,
+    DeleteInvoiceMutationVariablesType,
     TContext
   >(
     ['DeleteInvoice'],
-    (variables?: DeleteInvoiceMutationVariables) =>
-      fetcher<DeleteInvoiceMutation, DeleteInvoiceMutationVariables>(
+    (variables?: DeleteInvoiceMutationVariablesType) =>
+      fetcher<DeleteInvoiceMutationType, DeleteInvoiceMutationVariablesType>(
         client,
-        DeleteInvoiceDocument,
+        DeleteInvoiceDocumentType,
         variables,
         headers
       )(),
     options
   );
+useDeleteInvoiceMutation.getKey = () => ['DeleteInvoice'];
+
 useDeleteInvoiceMutation.fetcher = (
   client: GraphQLClient,
-  variables: DeleteInvoiceMutationVariables,
+  variables: DeleteInvoiceMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<DeleteInvoiceMutation, DeleteInvoiceMutationVariables>(
+  fetcher<DeleteInvoiceMutationType, DeleteInvoiceMutationVariablesType>(
     client,
-    DeleteInvoiceDocument,
+    DeleteInvoiceDocumentType,
     variables,
     headers
   );
-export const GetUserDocument = /*#__PURE__*/ `
+export const GetUserDocumentType = /*#__PURE__*/ `
     query GetUser {
   user {
     id
@@ -671,37 +693,37 @@ export const GetUserDocument = /*#__PURE__*/ `
   }
 }
     `;
-export const useGetUserQuery = <TData = GetUserQuery, TError = unknown>(
+export const useGetUserQuery = <TData = GetUserQueryType, TError = unknown>(
   client: GraphQLClient,
-  variables?: GetUserQueryVariables,
-  options?: UseQueryOptions<GetUserQuery, TError, TData>,
+  variables?: GetUserQueryVariablesType,
+  options?: UseQueryOptions<GetUserQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useQuery<GetUserQuery, TError, TData>(
+  useQuery<GetUserQueryType, TError, TData>(
     variables === undefined ? ['GetUser'] : ['GetUser', variables],
-    fetcher<GetUserQuery, GetUserQueryVariables>(
+    fetcher<GetUserQueryType, GetUserQueryVariablesType>(
       client,
-      GetUserDocument,
+      GetUserDocumentType,
       variables,
       headers
     ),
     options
   );
 
-useGetUserQuery.getKey = (variables?: GetUserQueryVariables) =>
+useGetUserQuery.getKey = (variables?: GetUserQueryVariablesType) =>
   variables === undefined ? ['GetUser'] : ['GetUser', variables];
 useGetUserQuery.fetcher = (
   client: GraphQLClient,
-  variables?: GetUserQueryVariables,
+  variables?: GetUserQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<GetUserQuery, GetUserQueryVariables>(
+  fetcher<GetUserQueryType, GetUserQueryVariablesType>(
     client,
-    GetUserDocument,
+    GetUserDocumentType,
     variables,
     headers
   );
-export const RegisterDocument = /*#__PURE__*/ `
+export const RegisterDocumentType = /*#__PURE__*/ `
     mutation Register($input: RegisterInput!) {
   register(input: $input) {
     accessToken
@@ -715,36 +737,43 @@ export const RegisterDocument = /*#__PURE__*/ `
 export const useRegisterMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    RegisterMutation,
+    RegisterMutationType,
     TError,
-    RegisterMutationVariables,
+    RegisterMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
-  useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
+  useMutation<
+    RegisterMutationType,
+    TError,
+    RegisterMutationVariablesType,
+    TContext
+  >(
     ['Register'],
-    (variables?: RegisterMutationVariables) =>
-      fetcher<RegisterMutation, RegisterMutationVariables>(
+    (variables?: RegisterMutationVariablesType) =>
+      fetcher<RegisterMutationType, RegisterMutationVariablesType>(
         client,
-        RegisterDocument,
+        RegisterDocumentType,
         variables,
         headers
       )(),
     options
   );
+useRegisterMutation.getKey = () => ['Register'];
+
 useRegisterMutation.fetcher = (
   client: GraphQLClient,
-  variables: RegisterMutationVariables,
+  variables: RegisterMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<RegisterMutation, RegisterMutationVariables>(
+  fetcher<RegisterMutationType, RegisterMutationVariablesType>(
     client,
-    RegisterDocument,
+    RegisterDocumentType,
     variables,
     headers
   );
-export const LoginDocument = /*#__PURE__*/ `
+export const LoginDocumentType = /*#__PURE__*/ `
     mutation Login($input: LoginInput!) {
   login(input: $input) {
     accessToken
@@ -758,73 +787,78 @@ export const LoginDocument = /*#__PURE__*/ `
 export const useLoginMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    LoginMutation,
+    LoginMutationType,
     TError,
-    LoginMutationVariables,
+    LoginMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
-  useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
+  useMutation<LoginMutationType, TError, LoginMutationVariablesType, TContext>(
     ['Login'],
-    (variables?: LoginMutationVariables) =>
-      fetcher<LoginMutation, LoginMutationVariables>(
+    (variables?: LoginMutationVariablesType) =>
+      fetcher<LoginMutationType, LoginMutationVariablesType>(
         client,
-        LoginDocument,
+        LoginDocumentType,
         variables,
         headers
       )(),
     options
   );
+useLoginMutation.getKey = () => ['Login'];
+
 useLoginMutation.fetcher = (
   client: GraphQLClient,
-  variables: LoginMutationVariables,
+  variables: LoginMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<LoginMutation, LoginMutationVariables>(
+  fetcher<LoginMutationType, LoginMutationVariablesType>(
     client,
-    LoginDocument,
+    LoginDocumentType,
     variables,
     headers
   );
-export const RefreshAuthDocument = /*#__PURE__*/ `
+export const RefreshAuthDocumentType = /*#__PURE__*/ `
     query RefreshAuth {
   refreshAuth {
     accessToken
   }
 }
     `;
-export const useRefreshAuthQuery = <TData = RefreshAuthQuery, TError = unknown>(
+export const useRefreshAuthQuery = <
+  TData = RefreshAuthQueryType,
+  TError = unknown
+>(
   client: GraphQLClient,
-  variables?: RefreshAuthQueryVariables,
-  options?: UseQueryOptions<RefreshAuthQuery, TError, TData>,
+  variables?: RefreshAuthQueryVariablesType,
+  options?: UseQueryOptions<RefreshAuthQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useQuery<RefreshAuthQuery, TError, TData>(
+  useQuery<RefreshAuthQueryType, TError, TData>(
     variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables],
-    fetcher<RefreshAuthQuery, RefreshAuthQueryVariables>(
+    fetcher<RefreshAuthQueryType, RefreshAuthQueryVariablesType>(
       client,
-      RefreshAuthDocument,
+      RefreshAuthDocumentType,
       variables,
       headers
     ),
     options
   );
 
-useRefreshAuthQuery.getKey = (variables?: RefreshAuthQueryVariables) =>
+useRefreshAuthQuery.getKey = (variables?: RefreshAuthQueryVariablesType) =>
   variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables];
 useRefreshAuthQuery.fetcher = (
   client: GraphQLClient,
-  variables?: RefreshAuthQueryVariables,
+  variables?: RefreshAuthQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<RefreshAuthQuery, RefreshAuthQueryVariables>(
+  fetcher<RefreshAuthQueryType, RefreshAuthQueryVariablesType>(
     client,
-    RefreshAuthDocument,
+    RefreshAuthDocumentType,
     variables,
     headers
   );
-export const LogoutDocument = /*#__PURE__*/ `
+export const LogoutDocumentType = /*#__PURE__*/ `
     mutation Logout {
   logout {
     message
@@ -834,32 +868,39 @@ export const LogoutDocument = /*#__PURE__*/ `
 export const useLogoutMutation = <TError = unknown, TContext = unknown>(
   client: GraphQLClient,
   options?: UseMutationOptions<
-    LogoutMutation,
+    LogoutMutationType,
     TError,
-    LogoutMutationVariables,
+    LogoutMutationVariablesType,
     TContext
   >,
   headers?: RequestInit['headers']
 ) =>
-  useMutation<LogoutMutation, TError, LogoutMutationVariables, TContext>(
+  useMutation<
+    LogoutMutationType,
+    TError,
+    LogoutMutationVariablesType,
+    TContext
+  >(
     ['Logout'],
-    (variables?: LogoutMutationVariables) =>
-      fetcher<LogoutMutation, LogoutMutationVariables>(
+    (variables?: LogoutMutationVariablesType) =>
+      fetcher<LogoutMutationType, LogoutMutationVariablesType>(
         client,
-        LogoutDocument,
+        LogoutDocumentType,
         variables,
         headers
       )(),
     options
   );
+useLogoutMutation.getKey = () => ['Logout'];
+
 useLogoutMutation.fetcher = (
   client: GraphQLClient,
-  variables?: LogoutMutationVariables,
+  variables?: LogoutMutationVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<LogoutMutation, LogoutMutationVariables>(
+  fetcher<LogoutMutationType, LogoutMutationVariablesType>(
     client,
-    LogoutDocument,
+    LogoutDocumentType,
     variables,
     headers
   );
