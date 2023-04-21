@@ -1,4 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
+import { toast } from 'react-toastify';
+import { LoadingSpinner } from '../atoms';
 
 type Props = {
   loading: boolean;
@@ -13,21 +15,25 @@ type Props = {
  */
 const QueryResult = ({ loading, error, data, children }: Props) => {
   if (error) {
-    return <p>ERROR: {error.message}</p>;
+    toast.error(error.message);
+    return <></>;
   }
-  if (loading) {
+  if (loading)
     return (
+      // <section className='flex min-h-screen w-full items-center justify-center'>
+      //   {/* <LoadingSpinner data-testid='spinner' size='large' theme='grayscale' /> */}
+      // </section>
+
       <section className='flex min-h-screen w-full items-center justify-center'>
-        {/* <LoadingSpinner data-testid='spinner' size='large' theme='grayscale' /> */}
+        <div className=''>
+          <LoadingSpinner width={40} height={40} />
+        </div>
       </section>
     );
-  }
-  if (!data) {
-    return <p>Nothing to show...</p>;
-  }
-  if (data) {
-    return children;
-  }
+
+  if (data) return <>{children}</>;
+
+  return <></>;
 };
 
 export { QueryResult };
