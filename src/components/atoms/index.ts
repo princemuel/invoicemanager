@@ -5,6 +5,7 @@ export * from './form-input';
 export * from './form-label';
 export * from './logo';
 export * from './profile-avatar';
+export * from './spinner';
 export * from './status-button';
 export * from './svg-icon';
 export * from './text';

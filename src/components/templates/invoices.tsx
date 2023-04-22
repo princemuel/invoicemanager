@@ -1,21 +1,16 @@
-import { Listbox, Transition } from '@headlessui/react';
 import { icons } from '@src/common';
-import {
-  capitalize,
-  datetime,
-  formatPrice,
-  hasValues,
-  statuses,
-} from '@src/helpers';
-import { useInvoiceList } from '@src/hooks';
-import { Fragment } from 'react';
+import { datetime, formatPrice, hasValues } from '@src/helpers';
+import { useGetInvoicesQuery } from '@src/hooks';
+import { client } from '@src/lib';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
 type Props = {};
 
 const InvoicesTemplate = (props: Props) => {
-  const { data } = useInvoiceList();
+  const { data } = useGetInvoicesQuery(client, {});
+
+  const invoices = data?.invoices;
 
   return (
     <section aria-labelledby='invoices-heading' className='h-container'>
@@ -23,15 +18,15 @@ const InvoicesTemplate = (props: Props) => {
         <div className='flex-1'>
           <h1 id='invoices-heading'>Invoices</h1>
 
-          {hasValues(data) ? (
+          {hasValues(invoices) ? (
             <Text as='p'>
               <span className='hidden text-brand-300 dark:text-brand-100 md:inline'>
-                There are <output name='invoices'>{data.length}</output> total
-                invoices
+                There are <output name='invoices'>{invoices.length}</output>{' '}
+                total invoices
               </span>
 
               <span className='text-brand-300 dark:text-brand-100 md:hidden'>
-                <output name='invoices'>{data?.length}</output>
+                <output name='invoices'>{invoices.length}</output>
                 &nbsp;Invoices
               </span>
             </Text>
@@ -42,7 +37,7 @@ const InvoicesTemplate = (props: Props) => {
           )}
         </div>
         <div className='flex items-center gap-6'>
-          <Listbox value={status} by='id' onChange={setStatus} multiple>
+          {/* <Listbox value={status} by='id' onChange={setStatus} multiple>
             <div className='relative mt-1 flex w-64 max-w-xs flex-col'>
               <Listbox.Button className='body-100 flex items-center gap-6 self-center font-bold'>
                 <p className='block truncate'>
@@ -99,7 +94,7 @@ const InvoicesTemplate = (props: Props) => {
                 </div>
               </Transition>
             </div>
-          </Listbox>
+          </Listbox> */}
 
           <Link
             className='body-100 flex items-center gap-2 rounded-pill bg-brand-500 p-2 pr-4 font-bold'
@@ -116,8 +111,8 @@ const InvoicesTemplate = (props: Props) => {
       </header>
 
       <ul aria-label='List of Invoices' className='mt-20 flex flex-col gap-6'>
-        {hasValues(data) ? (
-          data.map((invoice) => (
+        {hasValues(invoices) ? (
+          invoices.map((invoice) => (
             <li
               key={invoice?.id}
               className='rounded-brand bg-neutral-100 p-10 shadow-100 dark:bg-brand-700 max-sx:pt-4'
@@ -129,8 +124,8 @@ const InvoicesTemplate = (props: Props) => {
                 <Text as='p' className='body-100 font-bold'>
                   <span className='text-brand-400'>#</span>
                   <span className='uppercase text-brand-900 dark:text-neutral-100'>
-                    {invoice?.id}
-                    {/* {invoice?.tag} */}
+                    {/* {invoice?.id} */}
+                    {invoice?.tag}
                   </span>
                 </Text>
 
@@ -157,6 +152,7 @@ const InvoicesTemplate = (props: Props) => {
                 </Text>
 
                 <StatusButton
+                  //@ts-expect-error
                   status={invoice?.status}
                   className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end sx:justify-self-auto'
                 />
