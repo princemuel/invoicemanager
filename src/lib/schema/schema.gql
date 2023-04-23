@@ -34,7 +34,7 @@ input AddressInput {
 }
 
 type AuthPayload {
-  accessToken: String!
+  token: String!
   user: User!
 }
 
@@ -173,7 +173,7 @@ type Query {
 }
 
 type RefreshPayload {
-  accessToken: String!
+  token: String!
 }
 
 input RegisterInput {
