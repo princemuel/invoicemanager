@@ -5,7 +5,7 @@ type Props = {
   name?: string;
 };
 
-const ProfilePicture = ({ src, name }: Props) => {
+const Avatar = ({ src, name }: Props) => {
   return (
     <figure className='w-12 cursor-pointer overflow-hidden rounded-full'>
       <img
@@ -23,4 +23,4 @@ const ProfilePicture = ({ src, name }: Props) => {
   );
 };
 
-export { ProfilePicture };
+export { Avatar };
