@@ -1,26 +1,30 @@
-import { Invoice } from '@src/@types';
 import { calculateTotal, formatDate, formatPrice } from '@src/helpers';
+import { InvoiceType, useMedia } from '@src/hooks';
 import * as React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { BackLink, StatusButton, Text } from '../atoms';
 
-type Props = {
-  invoice?: Invoice;
-};
+interface Props {
+  invoice?: InvoiceType;
+  updateStatus: (data?: InvoiceType) => void;
+  deleteInvoice: (data?: InvoiceType) => void;
+}
 
-const InvoiceDetails = ({ invoice }: Props) => {
-  const navigate = useNavigate();
+const InvoiceDetails = ({ invoice, updateStatus, deleteInvoice }: Props) => {
+  const isWide = useMedia(`(min-width: 50em)`);
+
   return (
     <React.Fragment>
       <section className='h-container max-md:hidden'>
         <BackLink url='/invoices' className='mt-20' />
 
-        <article className='mt-10 grid gap-12'>
+        <article className='mb-20 mt-10 grid gap-12'>
           <header className='flex items-center justify-between rounded-brand bg-neutral-100 px-10 py-8 shadow-100 dark:bg-brand-700'>
             <div className='flex items-center justify-between gap-8'>
               <Text className='body-100 text-[#858BB2] dark:text-brand-100'>
                 Status
               </Text>
+              {/* @ts-expect-error */}
               <StatusButton status={invoice?.status} className='px-14 py-6' />
             </div>
 
@@ -28,10 +32,22 @@ const InvoiceDetails = ({ invoice }: Props) => {
               <Link className='btn btn-edit font-bold' to={`edit`}>
                 Edit
               </Link>
-              <button type='button' className='btn btn-delete font-bold'>
+              <button
+                type='button'
+                className='btn btn-delete font-bold'
+                onClick={() => {
+                  deleteInvoice(invoice);
+                }}
+              >
                 Delete
               </button>
-              <button type='button' className='btn btn-invoice font-bold'>
+              <button
+                type='button'
+                className='btn btn-invoice font-bold'
+                onClick={() => {
+                  updateStatus(invoice);
+                }}
+              >
                 Mark as Paid
               </button>
             </div>
@@ -42,8 +58,8 @@ const InvoiceDetails = ({ invoice }: Props) => {
               <div className='> * + * space-y-4'>
                 <Text className='text-600 font-bold leading-500 tracking-400'>
                   <span className='text-brand-400'>#</span>
-                  <span className='text-brand-900 dark:text-neutral-100'>
-                    {invoice?.id}
+                  <span className='uppercase text-brand-900 dark:text-neutral-100'>
+                    {invoice?.tag}
                   </span>
                 </Text>
 
