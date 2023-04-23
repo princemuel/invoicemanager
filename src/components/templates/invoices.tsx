@@ -1,34 +1,66 @@
+import type { IStatus } from '@src/@types';
 import { icons } from '@src/common';
-import { datetime, formatPrice, hasValues } from '@src/helpers';
-import { useGetInvoicesQuery } from '@src/hooks';
+import { datetime, formatPrice, hasValues, trim } from '@src/helpers';
+import { useGetInvoicesQuery, useMedia } from '@src/hooks';
 import { client } from '@src/lib';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
 type Props = {};
 
+const sortOrder: IStatus = ['DRAFT', 'PENDING', 'PAID'];
+
+const STATUS_ENUM: Record<IStatus[number], IStatus[number]> = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  PAID: 'PAID',
+};
+
+const statuses = ['ALL', 'DRAFT', 'PENDING', 'PAID'] as const;
+
 const InvoicesTemplate = (props: Props) => {
   const { data } = useGetInvoicesQuery(client, {});
 
-  const invoices = data?.invoices;
+  let invoices = data?.invoices;
+  invoices = hasValues(invoices)
+    ? invoices?.sort((a, b) => {
+        //@ts-expect-error
+        return sortOrder.indexOf(a.status) - sortOrder.indexOf(b.status);
+      })
+    : [];
+
+  const [items, setItems] = useState(invoices);
+  const [category, setCategory] = useState([statuses[0]]);
+
+  const filterItems = useCallback((status: (typeof statuses)[number]) => {
+    if (status === 'ALL') {
+      setItems(items);
+      return;
+    }
+    const filtered = items.filter((invoice) => invoice.status === status);
+    setItems(filtered);
+  }, []);
+
+  const isWide = useMedia('(min-width: 50em)');
 
   return (
-    <section aria-labelledby='invoices-heading' className='h-container'>
+    <section aria-label='Invoices Page' className='h-container'>
       <header className='mt-20 flex items-center'>
         <div className='flex-1'>
-          <h1 id='invoices-heading'>Invoices</h1>
+          <h1>Invoices</h1>
 
           {hasValues(invoices) ? (
-            <Text as='p'>
-              <span className='hidden text-brand-300 dark:text-brand-100 md:inline'>
-                There are <output name='invoices'>{invoices.length}</output>{' '}
-                total invoices
-              </span>
-
-              <span className='text-brand-300 dark:text-brand-100 md:hidden'>
-                <output name='invoices'>{invoices.length}</output>
-                &nbsp;Invoices
-              </span>
+            <Text
+              as='p'
+              aria-live='polite'
+              className='text-brand-300 dark:text-brand-100'
+            >
+              <output name='invoices'>
+                {isWide
+                  ? `There are ${invoices.length} total invoices`
+                  : `${invoices.length} Invoices`}
+              </output>
             </Text>
           ) : (
             <Text as='p' className='text-brand-300 dark:text-brand-100'>
@@ -36,13 +68,13 @@ const InvoicesTemplate = (props: Props) => {
             </Text>
           )}
         </div>
+
         <div className='flex items-center gap-6'>
-          {/* <Listbox value={status} by='id' onChange={setStatus} multiple>
+          {/* <Listbox value={category} by='id' onChange={} multiple>
             <div className='relative mt-1 flex w-64 max-w-xs flex-col'>
               <Listbox.Button className='body-100 flex items-center gap-6 self-center font-bold'>
                 <p className='block truncate'>
-                  <span className='hidden md:inline'>Filter by status</span>
-                  <span className='md:hidden'>Filter</span>
+                  {isWide ? `Filter by status` : `Filter`}
                 </p>
 
                 <span className='pointer-events-none'>
@@ -68,24 +100,24 @@ const InvoicesTemplate = (props: Props) => {
                     {statuses.map((stat) => {
                       return (
                         <Listbox.Option
-                          key={stat.id}
-                          value={stat.value}
+                          key={stat}
+                          value={stat}
                           className={
                             'grid grid-flow-row-dense grid-cols-3 gap-4'
                           }
                         >
                           <input
                             type='checkbox'
-                            name={stat.value}
-                            id={stat.value}
-                            value={stat.value}
+                            name={stat}
+                            id={stat}
+                            value={stat}
                             className='accent-brand-500'
                           />
                           <label
-                            htmlFor={stat.value}
+                            htmlFor={stat}
                             className='body-100 col-span-2 font-bold'
                           >
-                            {capitalize(stat.value)}
+                            {capitalize(stat)}
                           </label>
                         </Listbox.Option>
                       );
@@ -104,8 +136,7 @@ const InvoicesTemplate = (props: Props) => {
               <img src={icons.actions.add} alt={''} />
             </span>
 
-            <span className='hidden md:inline'>New Invoice</span>
-            <span className='md:hidden'>New</span>
+            <span>{trim(`New ${isWide ? 'Invoice' : ''}`)}</span>
           </Link>
         </div>
       </header>
@@ -124,7 +155,6 @@ const InvoicesTemplate = (props: Props) => {
                 <Text as='p' className='body-100 font-bold'>
                   <span className='text-brand-400'>#</span>
                   <span className='uppercase text-brand-900 dark:text-neutral-100'>
-                    {/* {invoice?.id} */}
                     {invoice?.tag}
                   </span>
                 </Text>
@@ -132,9 +162,12 @@ const InvoicesTemplate = (props: Props) => {
                 <Text
                   as='p'
                   className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
+                  aria-live='polite'
                 >
-                  <span>Due&nbsp;</span>
-                  <time>{datetime.toDateString(invoice?.paymentDue)}</time>
+                  <span>Due </span>
+                  <time dateTime={invoice?.paymentDue}>
+                    {datetime.toDateString(invoice?.paymentDue)}
+                  </time>
                 </Text>
 
                 <Text
