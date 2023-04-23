@@ -1,8 +1,10 @@
 import { uuid } from '@src/common';
 import dayjs from 'dayjs';
-import localeData from 'dayjs/plugin/localeData';
+import LocaleData from 'dayjs/plugin/localeData';
+import UTC from 'dayjs/plugin/utc';
 
-dayjs.extend(localeData);
+dayjs.extend(LocaleData);
+dayjs.extend(UTC);
 interface IDay {
   id: ReturnType<typeof uuid>;
   date: dayjs.Dayjs;
@@ -13,7 +15,7 @@ interface IDay {
 export class DateTime {
   static DAYS = dayjs.weekdaysMin();
   static MONTHS = dayjs.monthsShort();
-  static TODAY = dayjs();
+  static TODAY = dayjs.utc();
 
   constructor() {}
 
@@ -22,9 +24,13 @@ export class DateTime {
   }
 
   /** generate days in month for calendar*/
-  public generate(month = dayjs().month(), year = dayjs().year()) {
-    const firstDayInMonth = dayjs().year(year).month(month).startOf('month');
-    const lastDayInMonth = dayjs().year(year).month(month).endOf('month');
+  public generate(month = dayjs.utc().month(), year = dayjs.utc().year()) {
+    const firstDayInMonth = dayjs
+      .utc()
+      .year(year)
+      .month(month)
+      .startOf('month');
+    const lastDayInMonth = dayjs.utc().year(year).month(month).endOf('month');
 
     const days: Array<IDay> = [];
 
@@ -48,7 +54,7 @@ export class DateTime {
         id: this.uuid(),
         date: firstDayInMonth.date(idx),
         isCurrentMonth: true,
-        isToday: DateTime.isEqual(firstDayInMonth.date(idx), dayjs()),
+        isToday: DateTime.isEqual(firstDayInMonth.date(idx), dayjs.utc()),
       });
     }
 
@@ -72,27 +78,30 @@ export class DateTime {
   }
 
   public toDateString(
-    datetime: string | IDay['date'] = dayjs(),
+    datetime: string | IDay['date'] = dayjs.utc(),
     template = 'DD MMM YYYY'
   ) {
-    return dayjs(datetime).format(template);
+    return dayjs.utc(datetime).utc(true).format(template);
   }
 
   public static parse(
-    datetime: string | number | Date | dayjs.Dayjs | null = dayjs()
+    datetime: string | number | Date | dayjs.Dayjs | null = dayjs.utc()
   ) {
-    return dayjs(datetime);
+    return dayjs.utc(datetime).utc(true);
   }
 
   public static isEqual(a: dayjs.Dayjs, b: dayjs.Dayjs) {
-    return a.toDate().toDateString() === b.toDate().toDateString();
+    return (
+      a.utc(true).toDate().toDateString() ===
+      b.utc(true).toDate().toDateString()
+    );
   }
 
-  public prevMonth(datetime = dayjs()) {
+  public prevMonth(datetime = dayjs.utc()) {
     return datetime.month(datetime.month() - 1);
   }
 
-  public nextMonth(datetime = dayjs()) {
+  public nextMonth(datetime = dayjs.utc()) {
     return datetime.month(datetime.month() + 1);
   }
 }
