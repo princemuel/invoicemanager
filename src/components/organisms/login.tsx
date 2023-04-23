@@ -1,11 +1,9 @@
-import { FormProvider } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-// import clsx from 'clsx';
-import { IUser } from '@src/@types';
 import { useAuthDispatch } from '@src/context';
 import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
-import { useGetUserQuery, useLoginMutation } from '@src/hooks';
+import { useLoginMutation } from '@src/hooks';
 import { client } from '@src/lib';
+import { FormProvider } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { Text } from '../atoms';
 import { FormField } from '../molecules';
 
@@ -20,34 +18,20 @@ const LoginForm = (props: Props) => {
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
 
-  const { refetch } = useGetUserQuery(
-    client,
-    {},
-    {
-      onSuccess(data) {
-        dispatch({
-          type: 'SET_USER',
-          payload: {
-            user: data.user as IUser,
-          },
-        });
-      },
-    }
-  );
-
   const { mutate: login } = useLoginMutation(client, {
     onSuccess(data) {
-      console.log(data.login?.user);
-      console.log(data.login?.accessToken);
+      dispatch({
+        type: 'SET_TOKEN',
+        payload: { token: data?.login?.token },
+      });
 
       dispatch({
         type: 'SET_USER',
         payload: {
-          user: data.login?.user!,
+          user: data?.login?.user!,
         },
       });
 
-      refetch();
       navigate('/');
     },
   });
@@ -61,16 +45,15 @@ const LoginForm = (props: Props) => {
         console.error(result.error);
       }
 
-      console.log(data);
-      // login({ input: data });
-      // methods.reset();
+      login({ input: data });
+      methods.reset();
     } catch (error) {
-      console.error('SUBMIT_ERROR', error);
+      console.error('LOGIN_ERROR', error);
     }
   };
 
   const isSubmittable =
-    !!methods.formState.isDirty && !!methods.formState.isValid;
+    Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
 
   return (
     <FormProvider {...methods}>
