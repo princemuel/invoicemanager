@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, UseFormProps, useForm } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 import { ZodType, z } from 'zod';
 
 export function useZodForm<T extends z.ZodType>(
@@ -18,16 +17,16 @@ export function useZodForm<T extends z.ZodType>(
 }
 
 export const terms = [
-  { value: 1, id: uuid() },
-  { value: 7, id: uuid() },
-  { value: 14, id: uuid() },
-  { value: 30, id: uuid() },
+  { value: 1, id: 1 },
+  { value: 7, id: 7 },
+  { value: 14, id: 14 },
+  { value: 30, id: 30 },
 ];
 
 export const statuses = [
-  { value: 'DRAFT', id: uuid() },
-  { value: 'PENDING', id: uuid() },
-  { value: 'PAID', id: uuid() },
+  { value: 'DRAFT', id: 'DRAFT' },
+  { value: 'PENDING', id: 'PENDING' },
+  { value: 'PAID', id: 'PAID' },
 ];
 
 // Zod Constraints
