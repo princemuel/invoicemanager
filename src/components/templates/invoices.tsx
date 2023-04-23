@@ -6,6 +6,7 @@ import {
   datetime,
   formatPrice,
   hasValues,
+  reverse,
   statuses,
   trim,
 } from '@src/helpers';
@@ -25,22 +26,19 @@ const InvoicesTemplate = (props: Props) => {
     (typeof statuses)[0] | null
   >(null);
 
-  let invoices = data?.invoices;
-  // invoices = hasValues(invoices)
-  //   ? invoices?.sort((a, b) => {
-  //       //@ts-expect-error
-  //       return status.indexOf(a.status) - status.indexOf(b.status);
-  //     })
-  //   : [];
+  const invoices = data?.invoices || [];
+
   const filtered =
     selectedStatus != null
-      ? invoices?.filter((invoice) => invoice.status === selectedStatus.value)
-      : invoices;
+      ? invoices.filter((invoice) => invoice?.status === selectedStatus.value)
+      : invoices.sort((a, b) => {
+          return (
+            status.indexOf(a.status as IStatus[number]) -
+            status.indexOf(b.status as IStatus[number])
+          );
+        });
 
   const isWide = useMedia('(min-width: 50em)');
-
-  console.log(selectedStatus);
-  console.table(filtered);
 
   return (
     <section aria-label='Invoices Page' className='h-container'>
@@ -99,7 +97,7 @@ const InvoicesTemplate = (props: Props) => {
               >
                 <div className='absolute z-10 mt-16 w-full rounded-brand bg-neutral-100 p-[2.4rem] pr-12 shadow-200 dark:bg-brand-600 dark:shadow-300'>
                   <Listbox.Options className={'flex flex-col gap-8'}>
-                    {statuses.map((stat) => {
+                    {[...reverse(statuses)].map((stat) => {
                       return (
                         <Listbox.Option
                           key={stat.id}
