@@ -1,4 +1,3 @@
-import type { InvoiceStatus } from '@src/@types';
 import {
   DateTime,
   InvoiceFormSchema,
@@ -10,13 +9,22 @@ import {
   terms,
   useZodForm,
 } from '@src/helpers';
-import { useInvoiceDetail, useUpdateInvoiceMutation } from '@src/hooks';
+import {
+  useGetInvoiceQuery,
+  useGetInvoicesQuery,
+  useUpdateInvoiceMutation,
+} from '@src/hooks';
 import { client } from '@src/lib';
-import dayjs from 'dayjs';
+import { useQueryClient } from '@tanstack/react-query';
 import produce from 'immer';
 import { useEffect, useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, Text } from '../atoms';
 import { Calendar, Dropdown, FormField } from '../molecules';
@@ -25,19 +33,43 @@ interface Props {}
 
 const EditInvoiceForm = (props: Props) => {
   const { invoiceId } = useParams();
-  const { data: invoice } = useInvoiceDetail(invoiceId!);
+  const location = useLocation();
 
-  const [status, setStatus] = useState<InvoiceStatus>(
-    invoice?.status || 'PENDING'
-  );
+  if (!invoiceId) {
+    return <Navigate to='/' state={{ from: location }} replace />;
+  }
+
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const { data } = useGetInvoiceQuery(client, {
+    where: { id: invoiceId! },
+  });
+
+  const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: useGetInvoicesQuery.getKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: useGetInvoiceQuery.getKey({
+          where: { id: invoiceId },
+        }),
+      });
+      navigate(-1);
+    },
+  });
+
+  const invoice = data?.invoice;
+
+  const [isShowing, setIsShowing] = useState(false);
+  const [status, setStatus] = useState(invoice?.status);
   const [selectedTerm, setSelectedTerm] = useState(
     invoice?.paymentTerms || terms[0].value
   );
   const [selectedDate, setSelectedDate] = useState(
-    //!NOTE: change this to invoice?.updatedAt later
-    DateTime.parse(invoice?.createdAt || dayjs())
+    DateTime.parse(invoice?.issueDate)
   );
-  const [isShowing, setIsShowing] = useState(false);
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
@@ -61,6 +93,7 @@ const EditInvoiceForm = (props: Props) => {
         country: invoice?.senderAddress?.country || '',
         postCode: invoice?.senderAddress?.postCode || '',
       },
+      //@ts-expect-error
       status: invoice?.status || 'PENDING',
       total: invoice?.total || 0,
     },
@@ -85,19 +118,18 @@ const EditInvoiceForm = (props: Props) => {
     methods.setValue('items', invoice?.items);
   }, [invoice?.items]);
 
-  const navigate = useNavigate();
-  const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {});
-
   const onSubmit: RHFSubmitHandler<typeof InvoiceFormSchema> = async (data) => {
+    if (!invoiceId) throw new ReferenceError('The invoice id is not defined');
+
     try {
       const draft = produce(data, (draft) => {
         draft.paymentTerms = selectedTerm;
-        draft.updatedAt = selectedDate.toISOString();
 
         const duration = constants.ONE_DAY * (Number(selectedTerm) || 1);
         const dueTime = selectedDate.valueOf() + duration;
 
         draft.paymentDue = new Date(dueTime).toISOString();
+        //@ts-expect-error
         draft.status = status;
 
         for (const item of draft?.items) {
@@ -115,9 +147,9 @@ const EditInvoiceForm = (props: Props) => {
       }
 
       console.table(draft);
-      //@ts-expect-error
-      // updateInvoice({ input: draft });
-      // methods.reset();
+      // @ts-expect-error
+      updateInvoice({ input: draft, where: { id: invoiceId } });
+      methods.reset();
     } catch (error) {
       console.error('SUBMIT_ERROR', error);
     }
