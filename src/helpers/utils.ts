@@ -185,12 +185,6 @@ export const objectKeys = <O extends {}>(object: O): (keyof O)[] => {
   return Object.keys(object) as (keyof O)[];
 };
 
-export const hasValues = <T>(
-  array: T[] | null | undefined
-): array is NonNullable<T[]> => {
-  return (array || []).length > 0;
-};
-
 export function deepFreeze<T extends { [key: keyof any]: any }>(object: T) {
   if (object == null) throw new Error('data must be an object');
   // Retrieve the property names defined on object
@@ -208,23 +202,93 @@ export function deepFreeze<T extends { [key: keyof any]: any }>(object: T) {
   return Object.freeze(object);
 }
 
-export const pipe = <T extends any[], R>(
-  first: (...args: T) => R,
-  ...fns: ((a: R) => R)[]
-) => {
-  const piped = fns.reduce(
-    (prev, next) => (value: R) => next(prev(value)),
-    (value) => value
-  );
-  return (...args: T) => piped(first(...args));
-};
+export function hasValues<T>(array: T[] | null | undefined) {
+  return (array || []).length > 0;
+}
 
-export const compose = <R, F extends (a: R, ...b: any[]) => R>(
-  first: F,
-  ...fns: ((a: R) => R)[]
-) => {
-  return fns.reduce((prev, next) => (value) => prev(next(value)), first) as F;
-};
+export function map<T>(
+  iterable: Iterable<T>,
+  cb: (...args: any) => T
+): IterableIterator<T> {
+  let iterator = iterable[Symbol.iterator]();
+  return {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next(): IteratorResult<T> {
+      let next = iterator.next();
+      return next.done ? next : { value: cb(next.value) };
+    },
+  };
+}
+
+export function filter<T>(
+  iterable: Iterable<T>,
+  predicate: (...args: any) => boolean
+) {
+  let iterator = iterable[Symbol.iterator]();
+  return {
+    [Symbol.iterator]() {
+      return this;
+    },
+    next(): IteratorResult<T, boolean> {
+      for (;;) {
+        let next = iterator.next();
+        if (next.done || predicate(next.value)) {
+          return next;
+        }
+      }
+    },
+  };
+}
+
+// reverse array function using iterators
+export function reverse<T>(data: ArrayLike<T>): Iterable<T> {
+  return {
+    [Symbol.iterator](): Iterator<T> {
+      let len = data.length;
+      return {
+        next(): IteratorResult<T> {
+          return len
+            ? { value: data[--len], done: false }
+            : { value: undefined, done: true };
+        },
+      };
+    },
+  };
+}
+
+export function* take<T>(n: number, iterable: Iterable<T>) {
+  let iterator = iterable[Symbol.iterator]();
+  while (n-- > 0) {
+    let next = iterator.next();
+    if (next.done) return;
+    else yield next.value;
+  }
+}
+
+export function* zip<T>(...iterables: Array<Iterable<T>>) {
+  let iterators = iterables.map((iterator) => iterator[Symbol.iterator]());
+  let idx = 0;
+  while (iterators.length > 0) {
+    if (idx >= iterators.length) {
+      idx = 0;
+    }
+    let next = iterators[idx].next();
+    if (next.done) {
+      iterators.splice(idx, 1);
+    } else {
+      yield next.value;
+      idx++;
+    }
+  }
+}
+
+export function* sequence<T>(...iterables: Array<Iterable<T>>) {
+  for (let iterable of iterables) {
+    yield* iterable;
+  }
+}
 
 export function pluck<I, K extends keyof I>(items: I[], key: K): I[K][] {
   return items.map((item) => item[key]);
@@ -250,3 +314,30 @@ export const rank = <T>(
     .sort((a, b) => (order === 'asc' ? a.rank - b.rank : b.rank - a.rank))
     .map((ranked) => ranked.item);
 };
+
+export const compose = <R, F extends (a: R, ...b: any[]) => R>(
+  first: F,
+  ...fns: ((a: R) => R)[]
+) => {
+  return fns.reduce((prev, next) => (value) => prev(next(value)), first) as F;
+};
+
+function* fibonacciSequence() {
+  let x = 0;
+  let y = 1;
+  for (;;) {
+    yield y;
+    [x, y] = [y, x + y]; // Note: destructuring assignment
+  }
+}
+// Return the nth Fibonacci number
+function fibonacci(num: number) {
+  for (let sequence of fibonacciSequence()) {
+    if (num-- <= 0) return sequence;
+  }
+}
+
+// const t0 = performance.now();
+// console.log(fibonacci(38));
+// const t1 = performance.now();
+// console.log(`Call to fibonacci took ${t1 - t0} milliseconds.`);
