@@ -25,7 +25,7 @@ const Providers = (props: Props) => {
       defaultOptions: {
         queries: {
           cacheTime: 1000 * 60 * 60 * 24, // 24 hours
-          staleTime: 1000 * 60 * 1, // 1 min
+          staleTime: 1000 * 60 * 5, // 5 min
           retry: 1,
           refetchOnMount: true,
           refetchOnReconnect: true,
