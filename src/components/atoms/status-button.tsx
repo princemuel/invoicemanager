@@ -1,7 +1,6 @@
+import type { IStatus } from '@src/@types';
 import { capitalize } from '@src/helpers';
 import clsx from 'clsx';
-
-type IStatus = ['PENDING', 'DRAFT', 'PAID'];
 
 type Props = {
   status?: IStatus[number];
