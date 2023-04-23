@@ -66,7 +66,7 @@ export interface AddressInputType {
 }
 
 export interface AuthPayloadType {
-  accessToken: Scalars['String'];
+  token: Scalars['String'];
   user: UserType;
 }
 
@@ -198,7 +198,7 @@ export interface QueryInvoiceArgsType {
 }
 
 export interface RefreshPayloadType {
-  accessToken: Scalars['String'];
+  token: Scalars['String'];
 }
 
 export interface RegisterInputType {
@@ -379,7 +379,7 @@ export type RegisterMutationVariablesType = Exact<{
 }>;
 
 export type RegisterMutationType = {
-  register?: { accessToken: string; user: { id: string; photo?: string } };
+  register?: { token: string; user: { id: string; photo?: string } };
 };
 
 export type LoginMutationVariablesType = Exact<{
@@ -387,12 +387,12 @@ export type LoginMutationVariablesType = Exact<{
 }>;
 
 export type LoginMutationType = {
-  login?: { accessToken: string; user: { id: string; photo?: string } };
+  login?: { token: string; user: { id: string; photo?: string } };
 };
 
 export type RefreshAuthQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type RefreshAuthQueryType = { refreshAuth?: { accessToken: string } };
+export type RefreshAuthQueryType = { refreshAuth?: { token: string } };
 
 export type LogoutMutationVariablesType = Exact<{ [key: string]: never }>;
 
@@ -726,7 +726,7 @@ useGetUserQuery.fetcher = (
 export const RegisterDocumentType = /*#__PURE__*/ `
     mutation Register($input: RegisterInput!) {
   register(input: $input) {
-    accessToken
+    token
     user {
       id
       photo
@@ -776,7 +776,7 @@ useRegisterMutation.fetcher = (
 export const LoginDocumentType = /*#__PURE__*/ `
     mutation Login($input: LoginInput!) {
   login(input: $input) {
-    accessToken
+    token
     user {
       id
       photo
@@ -821,7 +821,7 @@ useLoginMutation.fetcher = (
 export const RefreshAuthDocumentType = /*#__PURE__*/ `
     query RefreshAuth {
   refreshAuth {
-    accessToken
+    token
   }
 }
     `;
