@@ -8,7 +8,7 @@ query GetUser {
 
 mutation Register($input: RegisterInput!) {
   register(input: $input) {
-    accessToken
+    token
     user {
       id
       photo
@@ -18,7 +18,7 @@ mutation Register($input: RegisterInput!) {
 
 mutation Login($input: LoginInput!) {
   login(input: $input) {
-    accessToken
+    token
     user {
       id
       photo
@@ -28,7 +28,7 @@ mutation Login($input: LoginInput!) {
 
 query RefreshAuth {
   refreshAuth {
-    accessToken
+    token
   }
 }
 
