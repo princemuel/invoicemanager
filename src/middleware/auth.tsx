@@ -1,11 +1,10 @@
-import { IUser } from '@src/@types';
+import { IErrorResponse } from '@src/@types';
 import { QueryResult } from '@src/components';
 import { useAuthDispatch } from '@src/context';
 import { useGetUserQuery, useRefreshAuthQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useCookies } from 'react-cookie';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 type Props = {};
 
@@ -16,44 +15,42 @@ const RequireAuth = (props: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { isLoading, isFetching, data, error, refetch } = useGetUserQuery(
+  const { isLoading, data, error, refetch } = useGetUserQuery(
     client,
     {},
     {
-      // retry: 1,
+      retry: 3,
       onSuccess: async (data) => {
         dispatch({
           type: 'SET_USER',
           payload: {
-            user: data.user as IUser,
+            user: data.user,
           },
         });
 
-        const fetcher = useRefreshAuthQuery.fetcher(client, {}, {});
-        const fetched = await fetcher();
+        const refreshAuth = useRefreshAuthQuery.fetcher(client, {}, {});
+        const response = await refreshAuth();
         dispatch({
           type: 'SET_TOKEN',
           payload: {
-            token: fetched.refreshAuth?.accessToken as string,
+            token: response.refreshAuth?.token,
           },
         });
       },
-      onError(error: any) {
-        error.response.errors.forEach(async (err: any) => {
-          toast.error(err.message);
-          if ((err.message as string).includes('Not Authorised')) {
+      onError(err: IErrorResponse) {
+        err.response.errors.forEach(async (error) => {
+          if ((error.message as string).includes('Not Authorised')) {
             try {
-              const fetcher = useRefreshAuthQuery.fetcher(client, {});
-              const data = await fetcher();
+              const refreshAuth = useRefreshAuthQuery.fetcher(client, {}, {});
+              const response = await refreshAuth();
               dispatch({
                 type: 'SET_TOKEN',
                 payload: {
-                  token: data.refreshAuth?.accessToken as string,
+                  token: response.refreshAuth?.token,
                 },
               });
               refetch();
             } catch (error) {
-              console.log(error);
               navigate('/login');
             }
           }
@@ -62,11 +59,11 @@ const RequireAuth = (props: Props) => {
     }
   );
 
-  const loading = isFetching || isLoading;
+  // const loading = isFetching || isLoading;
 
   return (
-    <QueryResult loading={loading} error={error} data={data?.user}>
-      {cookies.token || data?.user ? (
+    <QueryResult loading={isLoading} error={error} data={data?.user}>
+      {cookies?.token || data?.user ? (
         <Outlet />
       ) : (
         <Navigate to='/login' state={{ from: location }} replace />
