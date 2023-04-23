@@ -94,15 +94,11 @@ export const LoginFormSchema = AuthFormSchema.pick({
 });
 
 export const InvoiceFormSchema = z.object({
-  clientAddress: z.object({
-    street: GenericStringContraint.nonempty(),
-    city: GenericStringContraint.nonempty(),
-    country: GenericStringContraint.nonempty(),
-    postCode: GenericStringContraint.nonempty().toUpperCase(),
-  }),
+  clientAddress: AddressSchema,
   clientEmail: GenericEmailContraint,
   clientName: GenericStringContraint.nonempty(),
   description: GenericStringContraint.nonempty(),
+  issueDate: z.string().datetime().optional(),
   items: GenericItemSchema.array().nonempty(),
   paymentDue: z.string().datetime().optional(),
   paymentTerms: z.number().nonnegative().int().optional(),
@@ -110,7 +106,6 @@ export const InvoiceFormSchema = z.object({
   status: z.enum(['DRAFT', 'PENDING', 'PAID']).optional(),
   tag: z.string().optional(),
   total: z.number().nonnegative().optional(),
-  updatedAt: z.string().datetime().optional(),
   userId: z.string().optional(),
 });
 
