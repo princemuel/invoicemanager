@@ -21,19 +21,17 @@ const RegisterForm = (props: Props) => {
 
   const { mutate: register } = useRegisterMutation(client, {
     onSuccess(data) {
-      console.log(data.register?.user);
-      console.log(data.register?.accessToken);
       dispatchAuth({
         type: 'SET_TOKEN',
         payload: {
-          token: data.register?.accessToken!,
+          token: data.register?.token,
         },
       });
 
       dispatchAuth({
         type: 'SET_USER',
         payload: {
-          user: data.register?.user!,
+          user: data.register?.user,
         },
       });
       navigate('/');
@@ -50,15 +48,15 @@ const RegisterForm = (props: Props) => {
         throw new Error(JSON.stringify(result.error));
       }
       console.log(data);
-      // register({ input: { email: data.email, password: data.password } });
-      // methods.reset();
+      register({ input: { email: data.email, password: data.password } });
+      methods.reset();
     } catch (error) {
-      console.error('SUBMIT_ERROR', error);
+      console.error('REGISTER_ERROR', error);
     }
   };
 
   const isSubmittable =
-    !!methods.formState.isDirty && !!methods.formState.isValid;
+    Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
 
   return (
     <FormProvider {...methods}>
