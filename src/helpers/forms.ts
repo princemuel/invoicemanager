@@ -17,10 +17,10 @@ export function useZodForm<T extends z.ZodType>(
 }
 
 export const terms = [
-  { value: 1, id: 1 },
-  { value: 7, id: 7 },
-  { value: 14, id: 14 },
-  { value: 30, id: 30 },
+  { value: 1, id: '1' },
+  { value: 7, id: '7' },
+  { value: 14, id: '14' },
+  { value: 30, id: '30' },
 ];
 
 export const statuses = [
