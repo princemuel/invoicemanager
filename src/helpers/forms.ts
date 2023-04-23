@@ -24,9 +24,9 @@ export const terms = [
 ];
 
 export const statuses = [
-  { value: 'DRAFT', id: 'DRAFT' },
-  { value: 'PENDING', id: 'PENDING' },
   { value: 'PAID', id: 'PAID' },
+  { value: 'PENDING', id: 'PENDING' },
+  { value: 'DRAFT', id: 'DRAFT' },
 ];
 
 // Zod Constraints
