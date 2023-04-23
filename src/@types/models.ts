@@ -15,10 +15,9 @@ export type Invoices = Array<Invoice>;
 
 export type Invoice = DraftInvoice | PendingInvoice | PaidInvoice;
 
-export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PAID';
+export type IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
-export type IStatus = ['DRAFT', 'PENDING', 'PAID'];
-
+export type InvoiceStatus = IStatus[number];
 export type PaidInvoice = {
   id: string;
   createdAt: string;
