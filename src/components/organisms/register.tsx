@@ -5,6 +5,7 @@ import { useAuthDispatch } from '@src/context';
 import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@src/helpers';
 import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
+import { toast } from 'react-toastify';
 import { Text } from '../atoms';
 import { FormField } from '../molecules';
 
@@ -27,12 +28,15 @@ const RegisterForm = (props: Props) => {
           token: data.register?.token,
         },
       });
-
       dispatchAuth({
         type: 'SET_USER',
         payload: {
           user: data.register?.user,
         },
+      });
+      toast('User Registration Successfull', {
+        type: 'success',
+        position: 'top-right',
       });
       navigate('/');
     },
