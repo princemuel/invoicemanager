@@ -4,21 +4,21 @@ import type { Dispatch, ReactNode } from 'react';
 import * as React from 'react';
 
 interface IAuthState {
-  token: string | null;
-  user: Partial<IUser> | null;
+  token?: string;
+  user?: Partial<IUser>;
 }
 
 type IAuthAction =
   | {
       type: 'SET_USER';
-      payload: { user: Partial<IUser> };
+      payload: { user?: Partial<IUser> };
     }
-  | { type: 'SET_TOKEN'; payload: { token: string } }
+  | { type: 'SET_TOKEN'; payload: { token?: string } }
   | { type: 'LOGOUT_USER' };
 
 const initialState: IAuthState = {
-  token: null,
-  user: null,
+  token: undefined,
+  user: undefined,
 };
 
 const reducer = produce((draft: IAuthState, action: IAuthAction) => {
@@ -30,8 +30,8 @@ const reducer = produce((draft: IAuthState, action: IAuthAction) => {
       draft.token = action.payload.token;
       break;
     case 'LOGOUT_USER':
-      draft.token = null;
-      draft.user = null;
+      draft.token = undefined;
+      draft.user = undefined;
       break;
     default: {
       //@ts-expect-error disable typescript error due to type "never"
@@ -40,8 +40,10 @@ const reducer = produce((draft: IAuthState, action: IAuthAction) => {
   }
 });
 
-const Store = React.createContext<IAuthState | null>(null);
-const StoreDispatch = React.createContext<Dispatch<IAuthAction> | null>(null);
+const Store = React.createContext<IAuthState | undefined>(undefined);
+const StoreDispatch = React.createContext<Dispatch<IAuthAction> | undefined>(
+  undefined
+);
 
 type ProviderProps = {
   children: ReactNode;
@@ -64,7 +66,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
 
 export const useAuthState = () => {
   const context = React.useContext(Store);
-  if (!context)
+  if (context == undefined)
     throw new Error('useAuthState must be used within a AuthProvider');
 
   React.useDebugValue(context.user, (user) =>
@@ -76,7 +78,7 @@ export const useAuthState = () => {
 
 export const useAuthDispatch = () => {
   const context = React.useContext(StoreDispatch);
-  if (!context)
+  if (context == undefined)
     throw new Error('useAuthDispatch must be used within a AuthProvider');
   return context;
 };
