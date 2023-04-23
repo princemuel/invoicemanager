@@ -10,8 +10,9 @@ import {
   terms,
   useZodForm,
 } from '@src/helpers';
-import { useCreateInvoiceMutation } from '@src/hooks';
+import { useCreateInvoiceMutation, useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import produce from 'immer';
 import { useEffect, useState } from 'react';
@@ -50,13 +51,21 @@ const NewInvoiceForm = (props: Props) => {
 
   const { user } = useAuthState();
   const navigate = useNavigate();
-  const { mutate: createInvoice } = useCreateInvoiceMutation(client, {});
+  const queryClient = useQueryClient();
+  const { mutate: createInvoice } = useCreateInvoiceMutation(client, {
+    onSuccess: (data, variables, context) => {
+      queryClient.invalidateQueries({
+        queryKey: useGetInvoicesQuery.getKey(),
+      });
+      navigate('/invoices');
+    },
+  });
 
   const onSubmit: RHFSubmitHandler<typeof InvoiceFormSchema> = async (data) => {
     try {
       const draft = produce(data, (draft) => {
         draft.paymentTerms = selectedTerm;
-        draft.updatedAt = selectedDate.toISOString();
+        draft.issueDate = selectedDate.toISOString();
 
         const duration = constants.ONE_DAY * (Number(selectedTerm) || 1);
         const dueTime = selectedDate.valueOf() + duration;
@@ -82,8 +91,8 @@ const NewInvoiceForm = (props: Props) => {
 
       console.table(draft);
       //@ts-expect-error
-      // createInvoice({ input: draft });
-      // methods.reset();
+      createInvoice({ input: draft });
+      methods.reset();
     } catch (error) {
       console.error('SUBMIT_ERROR', error);
     }
@@ -91,8 +100,6 @@ const NewInvoiceForm = (props: Props) => {
 
   const isSubmittable =
     Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
-  // formstate has the errors
-  console.log(methods.formState.errors);
 
   return (
     <FormProvider {...methods}>
@@ -284,7 +291,7 @@ const NewInvoiceForm = (props: Props) => {
             <ul className='mt-6 flex flex-col gap-8'>
               {fields.map((field, index) => {
                 const errors = methods.formState.errors?.items?.[index];
-                console.log(errors?.name);
+
                 return (
                   <li
                     key={field.id}

@@ -17,6 +17,8 @@ export type Invoice = DraftInvoice | PendingInvoice | PaidInvoice;
 
 export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'PAID';
 
+export type IStatus = ['DRAFT', 'PENDING', 'PAID'];
+
 export type PaidInvoice = {
   id: string;
   createdAt: string;
@@ -74,4 +76,26 @@ interface ILineItem {
   quantity: number;
   price: number;
   total: number;
+}
+
+export interface IErrorResponse {
+  response: { errors: IError[]; data: IErrorData };
+}
+
+interface IError {
+  message: string;
+  locations: IErrorLocation[];
+  path: string[];
+  extensions: IErrorExtensions;
+}
+interface IErrorLocation {
+  line: number;
+  column: number;
+}
+interface IErrorExtensions {
+  code: string;
+  stacktrace: string[];
+}
+interface IErrorData {
+  refreshAuth: any;
 }

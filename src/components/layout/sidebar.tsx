@@ -1,5 +1,5 @@
 import { useAuthState } from '@src/context';
-import { Logo, ProfilePicture, ThemeButton } from '../atoms';
+import { Avatar, Logo, ThemeButton } from '../atoms';
 
 type Props = {};
 
@@ -15,9 +15,7 @@ const Sidebar = (props: Props) => {
       </div>
 
       <div className='grid h-full w-32 place-content-center border-l border-[#494E6E] md:h-32 md:w-full md:border-0 md:border-t'>
-        <ProfilePicture
-          src={user?.photo || '/assets/images/image-avatar.jpg'}
-        />
+        <Avatar src={user?.photo || '/assets/images/image-avatar.jpg'} />
       </div>
     </aside>
   );

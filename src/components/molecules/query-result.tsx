@@ -1,39 +1,44 @@
+import type { IErrorResponse, Immutable } from '@src/@types';
 import * as React from 'react';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '../atoms';
 
-type Props = {
+interface Props<T> {
   loading: boolean;
-  error: any;
-  data: any;
+  error: unknown;
+  data: T;
   children: React.ReactNode;
-};
+}
 
 /**
  * The QueryResult component conditionally renders useQuery hook states:
  * loading, error or its children when data is ready
  */
-const QueryResult = ({ loading, error, data, children }: Props) => {
+const QueryResult = <T extends Immutable<any>>({
+  loading,
+  error,
+  data,
+  children,
+}: Props<T>) => {
   if (error) {
-    toast.error(error.message);
+    (error as IErrorResponse).response.errors.forEach((err) =>
+      toast.error(err.message)
+    );
     return <></>;
   }
   if (loading)
     return (
-      // <section className='flex min-h-screen w-full items-center justify-center'>
-      //   {/* <LoadingSpinner data-testid='spinner' size='large' theme='grayscale' /> */}
-      // </section>
-
       <section className='flex min-h-screen w-full items-center justify-center'>
         <div className=''>
-          <LoadingSpinner width={40} height={40} />
+          <LoadingSpinner data-testid='spinner' width={40} height={40} />
+          {/* <LoadingSpinner data-testid='spinner' size='large' theme='grayscale' /> */}
         </div>
       </section>
     );
 
-  if (data) return <>{children}</>;
+  if (!data) return <></>;
 
-  return <></>;
+  return <>{children}</>;
 };
 
 export { QueryResult };
