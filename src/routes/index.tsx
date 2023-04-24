@@ -6,23 +6,22 @@ import {
   Route,
 } from 'react-router-dom';
 import { LoginRoute, RegisterRoute } from './auth';
+import { HomeRoute } from './home';
 import {
   EditInvoiceRoute,
   InvoiceRoute,
   InvoicesRoute,
   NewInvoiceRoute,
 } from './invoices';
-import { PublicRoute } from './public';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
-      {/* public routes */}
       <Route path='login' element={<LoginRoute />} />
       <Route path='register' element={<RegisterRoute />} />
 
       <Route element={<RequireAuth />}>
-        <Route index element={<PublicRoute />} />
+        <Route index element={<HomeRoute />} />
         <Route path='invoices'>
           <Route index element={<InvoicesRoute />} />
           <Route path=':invoiceId' element={<InvoiceRoute />} />

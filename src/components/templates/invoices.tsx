@@ -16,27 +16,32 @@ import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 
-type Props = {};
-
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
+
+interface Props {}
 
 const InvoicesTemplate = (props: Props) => {
   const { data } = useGetInvoicesQuery(client, {});
-  const [selectedStatus, setSelectedStatus] = useState<
-    (typeof statuses)[0] | null
-  >(null);
+  const [selectedStatus, setSelectedStatus] = useState([
+    statuses[0],
+    statuses[1],
+    statuses[2],
+  ]);
 
   const invoices = data?.invoices || [];
 
-  const filtered =
-    selectedStatus != null
-      ? invoices.filter((invoice) => invoice?.status === selectedStatus.value)
-      : invoices.sort((a, b) => {
-          return (
-            status.indexOf(a.status as IStatus[number]) -
-            status.indexOf(b.status as IStatus[number])
-          );
-        });
+  const filtered = hasValues(selectedStatus)
+    ? invoices.filter((invoice) => {
+        return selectedStatus.some(
+          (status) => invoice?.status === status.value
+        );
+      })
+    : invoices.sort((a, b) => {
+        return (
+          status.indexOf(a.status as IStatus[number]) -
+          status.indexOf(b.status as IStatus[number])
+        );
+      });
 
   const isWide = useMedia('(min-width: 50em)');
 
@@ -53,11 +58,7 @@ const InvoicesTemplate = (props: Props) => {
             >
               <output name='invoices'>
                 {isWide
-                  ? `There are ${filtered?.length} ${
-                      selectedStatus !== null
-                        ? selectedStatus.value.toLowerCase()
-                        : 'total'
-                    } invoices`
+                  ? `There are ${filtered?.length} total invoices`
                   : `${filtered?.length} Invoices`}
               </output>
             </Text>
@@ -69,7 +70,12 @@ const InvoicesTemplate = (props: Props) => {
         </div>
 
         <div className='flex items-center gap-6'>
-          <Listbox value={selectedStatus} by='id' onChange={setSelectedStatus}>
+          <Listbox
+            value={selectedStatus}
+            by='id'
+            onChange={setSelectedStatus}
+            multiple
+          >
             <div className='relative mt-1 flex w-64 max-w-xs flex-col'>
               <Listbox.Button className='body-100 flex items-center gap-6 self-center font-bold'>
                 <p className='block truncate'>
