@@ -4,6 +4,7 @@ import { useLoginMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Text } from '../atoms';
 import { FormField } from '../molecules';
 
@@ -20,6 +21,10 @@ const LoginForm = (props: Props) => {
 
   const { mutate: login } = useLoginMutation(client, {
     onSuccess(data) {
+      toast('Login Successfull', {
+        type: 'success',
+      });
+
       dispatch({
         type: 'SET_TOKEN',
         payload: { token: data?.login?.token },
