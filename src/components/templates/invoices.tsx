@@ -44,11 +44,10 @@ const InvoicesTemplate = (props: Props) => {
     <section aria-label='Invoices Page' className='h-container'>
       <header className='mt-20 flex items-center'>
         <div className='flex-1'>
-          <h1>Invoices</h1>
+          <Text as='h1'>Invoices</Text>
 
           {hasValues(filtered) ? (
             <Text
-              as='p'
               aria-live='polite'
               className='text-brand-300 dark:text-brand-100'
             >
@@ -63,7 +62,7 @@ const InvoicesTemplate = (props: Props) => {
               </output>
             </Text>
           ) : (
-            <Text as='p' className='text-brand-300 dark:text-brand-100'>
+            <Text className='text-brand-300 dark:text-brand-100'>
               No Invoices
             </Text>
           )}

@@ -23,7 +23,7 @@ Version: 02
 @layer base {
   html {
     box-sizing: border-box;
-    font-size: 54%;
+    font-size: 55%;
     text-rendering: optimizeSpeed;
     text-size-adjust: none;
   }
