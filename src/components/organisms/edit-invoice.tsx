@@ -107,13 +107,6 @@ const EditInvoiceForm = (props: Props) => {
   });
 
   useEffect(() => {
-    const subscription = methods.watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
-    return () => subscription.unsubscribe();
-  }, [methods.watch]);
-
-  useEffect(() => {
     // @ts-expect-error
     methods.setValue('items', invoice?.items);
   }, [invoice?.items]);

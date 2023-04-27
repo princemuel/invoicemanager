@@ -46,7 +46,10 @@ const NewInvoiceForm = (props: Props) => {
     const subscription = methods.watch((value, { name, type }) =>
       console.log(value, name, type)
     );
-    return () => subscription.unsubscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [methods.watch]);
 
   const { user } = useAuthState();
