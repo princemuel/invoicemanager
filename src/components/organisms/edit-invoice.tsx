@@ -17,7 +17,7 @@ import {
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import produce from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import {
   Navigate,
@@ -62,7 +62,7 @@ const EditInvoiceForm = (props: Props) => {
 
   const invoice = data?.invoice;
 
-  const [isShowing, setIsShowing] = useState(false);
+  const [isShowing, setIsShowing] = useReducer((prev) => !prev, false);
   const [status, setStatus] = useState(invoice?.status);
   const [selectedTerm, setSelectedTerm] = useState(
     invoice?.paymentTerms || terms[0].value
