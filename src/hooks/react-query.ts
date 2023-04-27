@@ -160,7 +160,6 @@ export interface MutationType {
   createInvoice?: Maybe<InvoiceType>;
   deleteInvoice?: Maybe<InvoiceType>;
   login?: Maybe<AuthPayloadType>;
-  logout: LogoutPayloadType;
   register?: Maybe<AuthPayloadType>;
   updateInvoice?: Maybe<InvoiceType>;
 }
@@ -189,6 +188,7 @@ export interface MutationUpdateInvoiceArgsType {
 export interface QueryType {
   invoice?: Maybe<InvoiceType>;
   invoices: Array<Maybe<InvoiceType>>;
+  logout: LogoutPayloadType;
   refreshAuth?: Maybe<RefreshPayloadType>;
   user?: Maybe<UserType>;
 }
@@ -394,9 +394,9 @@ export type RefreshAuthQueryVariablesType = Exact<{ [key: string]: never }>;
 
 export type RefreshAuthQueryType = { refreshAuth?: { token: string } };
 
-export type LogoutMutationVariablesType = Exact<{ [key: string]: never }>;
+export type LogoutQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type LogoutMutationType = { logout: { message: string } };
+export type LogoutQueryType = { logout: { message: string } };
 
 export const GetInvoicesDocumentType = /*#__PURE__*/ `
     query GetInvoices {
@@ -859,46 +859,37 @@ useRefreshAuthQuery.fetcher = (
     headers
   );
 export const LogoutDocumentType = /*#__PURE__*/ `
-    mutation Logout {
+    query Logout {
   logout {
     message
   }
 }
     `;
-export const useLogoutMutation = <TError = unknown, TContext = unknown>(
+export const useLogoutQuery = <TData = LogoutQueryType, TError = unknown>(
   client: GraphQLClient,
-  options?: UseMutationOptions<
-    LogoutMutationType,
-    TError,
-    LogoutMutationVariablesType,
-    TContext
-  >,
+  variables?: LogoutQueryVariablesType,
+  options?: UseQueryOptions<LogoutQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useMutation<
-    LogoutMutationType,
-    TError,
-    LogoutMutationVariablesType,
-    TContext
-  >(
-    ['Logout'],
-    (variables?: LogoutMutationVariablesType) =>
-      fetcher<LogoutMutationType, LogoutMutationVariablesType>(
-        client,
-        LogoutDocumentType,
-        variables,
-        headers
-      )(),
+  useQuery<LogoutQueryType, TError, TData>(
+    variables === undefined ? ['Logout'] : ['Logout', variables],
+    fetcher<LogoutQueryType, LogoutQueryVariablesType>(
+      client,
+      LogoutDocumentType,
+      variables,
+      headers
+    ),
     options
   );
-useLogoutMutation.getKey = () => ['Logout'];
 
-useLogoutMutation.fetcher = (
+useLogoutQuery.getKey = (variables?: LogoutQueryVariablesType) =>
+  variables === undefined ? ['Logout'] : ['Logout', variables];
+useLogoutQuery.fetcher = (
   client: GraphQLClient,
-  variables?: LogoutMutationVariablesType,
+  variables?: LogoutQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<LogoutMutationType, LogoutMutationVariablesType>(
+  fetcher<LogoutQueryType, LogoutQueryVariablesType>(
     client,
     LogoutDocumentType,
     variables,

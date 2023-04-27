@@ -160,7 +160,6 @@ type Mutation {
   createInvoice(input: CreateInvoiceInput!): Invoice
   deleteInvoice(where: UniqueIdInput!): Invoice
   login(input: LoginInput!): AuthPayload
-  logout: LogoutPayload!
   register(input: RegisterInput!): AuthPayload
   updateInvoice(input: UpdateInvoiceInput!, where: UniqueIdInput!): Invoice
 }
@@ -168,6 +167,7 @@ type Mutation {
 type Query {
   invoice(where: UniqueIdInput!): Invoice
   invoices: [Invoice]!
+  logout: LogoutPayload!
   refreshAuth: RefreshPayload
   user: User
 }

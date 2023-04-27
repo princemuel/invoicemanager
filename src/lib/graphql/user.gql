@@ -32,7 +32,7 @@ query RefreshAuth {
   }
 }
 
-mutation Logout {
+query Logout {
   logout {
     message
   }
