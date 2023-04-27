@@ -19,7 +19,7 @@ const persister = createSyncStoragePersister({
 
 interface Props {}
 
-const Provider = (props: Props) => {
+const Providers = (props: Props) => {
   const [client] = React.useState(
     () =>
       new QueryClient({
@@ -44,6 +44,11 @@ const Provider = (props: Props) => {
             // toast.error(getErrorMessage(error));
           },
         }),
+        logger: {
+          log: console.log,
+          warn: console.warn,
+          error: () => {},
+        },
       })
   );
 
@@ -67,4 +72,4 @@ const Provider = (props: Props) => {
   );
 };
 
-export { Provider };
+export { Providers };
