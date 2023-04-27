@@ -420,7 +420,7 @@ const EditInvoiceForm = (props: Props) => {
                       <button
                         type='button'
                         className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
-                        onClick={() => remove(index)}
+                        onClick={() => void remove(index)}
                       >
                         <span className='sr-only'>Delete Item</span>
                       </button>
@@ -435,7 +435,7 @@ const EditInvoiceForm = (props: Props) => {
                 type='button'
                 className='btn btn-add'
                 onClick={() =>
-                  append({
+                  void append({
                     id: uuid(),
                     name: '',
                     quantity: 0,
@@ -456,14 +456,14 @@ const EditInvoiceForm = (props: Props) => {
             <button
               type='button'
               className='btn body-100 bg-neutral-300 px-8 py-6 font-bold text-brand-300 first:ml-auto dark:bg-[#373B53]'
-              onClick={() => navigate(-1)}
+              onClick={() => void navigate(-1)}
             >
               Cancel
             </button>
             <button
               type='submit'
               className='btn body-100 bg-brand-500 px-8 py-6 font-bold text-neutral-100'
-              onClick={() => setStatus('PENDING')}
+              onClick={() => void setStatus('PENDING')}
             >
               Save Changes
             </button>
