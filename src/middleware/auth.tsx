@@ -1,6 +1,6 @@
 import { IErrorResponse } from '@src/@types';
 import { QueryResult } from '@src/components';
-import { useAuthDispatch } from '@src/context';
+import { useAuthDispatch, useAuthState } from '@src/context';
 import { useGetUserQuery, useRefreshAuthQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useCookies } from 'react-cookie';
@@ -9,8 +9,9 @@ import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 type Props = {};
 
 const RequireAuth = (props: Props) => {
-  const [cookies] = useCookies(['jwt']);
+  const [cookies] = useCookies(['jwt', 'token']);
 
+  const auth = useAuthState();
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,12 +26,11 @@ const RequireAuth = (props: Props) => {
     }
   );
 
-  const { isLoading, data, error, refetch } = useGetUserQuery(
+  const userQuery = useGetUserQuery(
     client,
     {},
     {
       enabled: refreshAuth.isSuccess,
-      retry: 1,
       onSuccess: async (data) => {
         dispatch('auth/addUser');
       },
@@ -41,10 +41,8 @@ const RequireAuth = (props: Props) => {
               refreshAuth.refetch();
               dispatch('auth/addToken');
 
-              refetch();
+              userQuery?.refetch();
             } catch (error) {
-              console.log('REQUIRE_AUTH_ERROR', error);
-
               navigate('/login');
             }
           }
@@ -56,12 +54,15 @@ const RequireAuth = (props: Props) => {
   // const loading = isFetching || isLoading;
 
   return (
-    <QueryResult loading={isLoading} error={error} data={data?.user}>
-      {cookies?.jwt || data?.user ? (
-        <Outlet />
-      ) : (
+    <QueryResult
+      loading={refreshAuth.isLoading}
+      data={userQuery?.data}
+      error={userQuery?.error}
+      renderError={() => (
         <Navigate to='/login' state={{ from: location }} replace />
       )}
+    >
+      {(cookies?.token || cookies?.jwt || auth?.user) && <Outlet />}
     </QueryResult>
   );
 };
