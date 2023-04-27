@@ -9,48 +9,42 @@ import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 type Props = {};
 
 const RequireAuth = (props: Props) => {
-  const [cookies] = useCookies(['token']);
+  const [cookies] = useCookies(['jwt']);
 
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const refreshAuth = useRefreshAuthQuery(
+    client,
+    {},
+    {
+      onSuccess() {
+        dispatch('auth/addToken');
+      },
+    }
+  );
+
   const { isLoading, data, error, refetch } = useGetUserQuery(
     client,
     {},
     {
-      retry: 3,
+      enabled: refreshAuth.isSuccess,
+      retry: 1,
       onSuccess: async (data) => {
-        dispatch({
-          type: 'SET_USER',
-          payload: {
-            user: data.user,
-          },
-        });
-
-        const refreshAuth = useRefreshAuthQuery.fetcher(client, {}, {});
-        const response = await refreshAuth();
-        dispatch({
-          type: 'SET_TOKEN',
-          payload: {
-            token: response.refreshAuth?.token,
-          },
-        });
+        dispatch('auth/addUser');
       },
       onError(err: IErrorResponse) {
         err.response.errors.forEach(async (error) => {
           if ((error.message as string).includes('Not Authorised')) {
             try {
-              const refreshAuth = useRefreshAuthQuery.fetcher(client, {}, {});
-              const response = await refreshAuth();
-              dispatch({
-                type: 'SET_TOKEN',
-                payload: {
-                  token: response.refreshAuth?.token,
-                },
-              });
+              refreshAuth.refetch();
+              dispatch('auth/addToken');
+
               refetch();
             } catch (error) {
+              console.log('REQUIRE_AUTH_ERROR', error);
+
               navigate('/login');
             }
           }
@@ -63,7 +57,7 @@ const RequireAuth = (props: Props) => {
 
   return (
     <QueryResult loading={isLoading} error={error} data={data?.user}>
-      {cookies?.token || data?.user ? (
+      {cookies?.jwt || data?.user ? (
         <Outlet />
       ) : (
         <Navigate to='/login' state={{ from: location }} replace />
