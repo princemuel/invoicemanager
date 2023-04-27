@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 const usePersist = () => {
-  const [persist, setPersist] = useState<boolean>(
-    JSON.parse(localStorage.getItem('persist') || '') || false
+  const [persist, setPersist] = useReducer(
+    (previous: boolean) => !previous,
+    JSON.parse(localStorage.getItem('persist') || 'false') || false
   );
 
   useEffect(() => {
