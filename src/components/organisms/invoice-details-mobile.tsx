@@ -1,19 +1,19 @@
 import { calculateTotal, datetime, formatPrice } from '@src/helpers';
 import { InvoiceType } from '@src/hooks';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { BackLink, StatusButton, Text } from '../atoms';
+import { InvoiceActions } from '../molecules';
 
 interface Props {
   invoice?: InvoiceType;
   updateStatus: (data?: InvoiceType) => void;
-  deleteInvoice: (data?: InvoiceType) => void;
+  openDeleteModal: () => void;
 }
 
 const InvoiceDetailsMobile = ({
   invoice,
   updateStatus,
-  deleteInvoice,
+  openDeleteModal,
 }: Props) => {
   return (
     <React.Fragment>
@@ -153,29 +153,10 @@ const InvoiceDetailsMobile = ({
       </section>
 
       <div className='px-[2.4rem] py-9 dark:bg-brand-700 md:hidden'>
-        <section className='flex items-center justify-between gap-4'>
-          <Link className='btn btn-edit font-bold' to={`edit`}>
-            Edit
-          </Link>
-          <button
-            type='button'
-            className='btn btn-delete font-bold'
-            onClick={() => {
-              deleteInvoice(invoice);
-            }}
-          >
-            Delete
-          </button>
-          <button
-            type='button'
-            className='btn btn-invoice font-bold'
-            onClick={() => {
-              updateStatus(invoice);
-            }}
-          >
-            Mark as Paid
-          </button>
-        </section>
+        <InvoiceActions
+          updateStatus={updateStatus}
+          openDeleteModal={openDeleteModal}
+        />
       </div>
     </React.Fragment>
   );

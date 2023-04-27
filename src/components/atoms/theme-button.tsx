@@ -16,7 +16,7 @@ const ThemeButton = () => {
           ? 'bg-[url(/assets/svgs/icon-moon.svg)]'
           : 'bg-[url(/assets/svgs/icon-sun.svg)]'
       )}
-      onClick={() => setTheme(isdarkTheme ? 'light' : 'dark')}
+      onClick={() => void setTheme(isdarkTheme ? 'light' : 'dark')}
     >
       <span className='sr-only'>Toggle Theme</span>
     </button>

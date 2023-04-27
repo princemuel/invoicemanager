@@ -3,15 +3,15 @@ import { icons } from '@src/common';
 import { DateTime, datetime } from '@src/helpers';
 import clsx from 'clsx';
 import { Dayjs } from 'dayjs';
-import { Dispatch, Fragment, SetStateAction } from 'react';
+import * as React from 'react';
 
 interface Props {
   title: string;
   disabled?: boolean;
   selectedDate: Dayjs;
-  setSelectedDate: Dispatch<SetStateAction<Dayjs>>;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Dayjs>>;
   shouldOpen: boolean;
-  setShouldOpen: Dispatch<SetStateAction<boolean>>;
+  setShouldOpen: React.DispatchWithoutAction;
 }
 
 const Calendar = ({
@@ -23,7 +23,7 @@ const Calendar = ({
   setSelectedDate,
 }: Props) => {
   return (
-    <Fragment>
+    <React.Fragment>
       <label
         htmlFor='updatedAt'
         className={clsx(
@@ -47,7 +47,7 @@ const Calendar = ({
           type='button'
           id='updatedAt'
           aria-controls='datetime'
-          onClick={() => !disabled && setShouldOpen((value) => !value)}
+          onClick={() => void (!disabled && setShouldOpen())}
         >
           <span className='block truncate'>
             {datetime.toDateString(selectedDate)}
@@ -64,7 +64,7 @@ const Calendar = ({
 
         {!disabled && (
           <Transition
-            as={Fragment}
+            as={React.Fragment}
             show={shouldOpen}
             enter='transition-opacity duration-75'
             enterFrom='opacity-0'
@@ -164,7 +164,7 @@ const Calendar = ({
           </Transition>
         )}
       </div>
-    </Fragment>
+    </React.Fragment>
   );
 };
 

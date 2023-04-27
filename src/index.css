@@ -199,16 +199,16 @@ Version: 02
     @apply cursor-pointer;
   }
   .btn {
-    @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200;
+    @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200 transition-all;
   }
   .btn-invoice {
-    @apply h-[4.8rem] w-60 bg-brand-500 p-4 text-400  text-neutral-100 hover:bg-brand-200;
+    @apply h-[4.8rem] w-60 bg-brand-500 p-4 text-400  text-neutral-100 focus:bg-brand-200 hover:bg-brand-200;
   }
   .btn-paid {
     @apply bg-brand-500 px-11 text-neutral-100 hover:bg-brand-200;
   }
   .btn-edit {
-    @apply h-[4.8rem] w-28 bg-neutral-300 text-brand-400  hover:bg-brand-100 hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-brand-100 dark:hover:text-neutral-100;
+    @apply h-[4.8rem] w-28 bg-neutral-300 text-brand-400  focus:bg-brand-100 focus:text-brand-400 hover:bg-brand-100 hover:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:focus:bg-neutral-100 dark:focus:text-brand-400 dark:hover:bg-neutral-100 dark:hover:text-brand-400;
   }
   .btn-draft {
     @apply bg-[#373B53] text-brand-300 hover:bg-brand-900 dark:text-brand-100 dark:hover:bg-[#373B53];

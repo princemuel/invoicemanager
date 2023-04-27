@@ -1,16 +1,16 @@
 import { calculateTotal, formatDate, formatPrice } from '@src/helpers';
 import { InvoiceType, useMedia } from '@src/hooks';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { BackLink, StatusButton, Text } from '../atoms';
+import { InvoiceActions } from '../molecules';
 
 interface Props {
   invoice?: InvoiceType;
   updateStatus: (data?: InvoiceType) => void;
-  deleteInvoice: (data?: InvoiceType) => void;
+  openDeleteModal: () => void;
 }
 
-const InvoiceDetails = ({ invoice, updateStatus, deleteInvoice }: Props) => {
+const InvoiceDetails = ({ invoice, updateStatus, openDeleteModal }: Props) => {
   const isWide = useMedia(`(min-width: 50em)`);
 
   return (
@@ -28,29 +28,10 @@ const InvoiceDetails = ({ invoice, updateStatus, deleteInvoice }: Props) => {
               <StatusButton status={invoice?.status} className='px-14 py-6' />
             </div>
 
-            <div className='flex items-center justify-between gap-4'>
-              <Link className='btn btn-edit font-bold' to={`edit`}>
-                Edit
-              </Link>
-              <button
-                type='button'
-                className='btn btn-delete font-bold'
-                onClick={() => {
-                  deleteInvoice(invoice);
-                }}
-              >
-                Delete
-              </button>
-              <button
-                type='button'
-                className='btn btn-invoice font-bold'
-                onClick={() => {
-                  updateStatus(invoice);
-                }}
-              >
-                Mark as Paid
-              </button>
-            </div>
+            <InvoiceActions
+              updateStatus={updateStatus}
+              openDeleteModal={openDeleteModal}
+            />
           </header>
 
           <div className='flex flex-col gap-12 rounded-brand bg-neutral-100 px-20 py-12 shadow-100 dark:bg-brand-700'>

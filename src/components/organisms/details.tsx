@@ -7,10 +7,10 @@ import { InvoiceActions, InvoiceItemDetails } from '../molecules';
 interface Props {
   invoice?: InvoiceType;
   updateStatus: (data?: InvoiceType) => void;
-  deleteInvoice: (data?: InvoiceType) => void;
+  openDeleteModal: () => void;
 }
 
-const Details = ({ invoice, updateStatus, deleteInvoice }: Props) => {
+const Details = ({ invoice, updateStatus, openDeleteModal }: Props) => {
   const isMobile = useMedia(`(max-width: 50em)`);
   return (
     <React.Fragment>
@@ -36,7 +36,7 @@ const Details = ({ invoice, updateStatus, deleteInvoice }: Props) => {
                   <React.Fragment>
                     <InvoiceActions
                       updateStatus={updateStatus}
-                      deleteInvoice={deleteInvoice}
+                      openDeleteModal={openDeleteModal}
                     />
                   </React.Fragment>
                 ) : (
@@ -138,7 +138,7 @@ const Details = ({ invoice, updateStatus, deleteInvoice }: Props) => {
           <div className='px-[2.4rem] py-9 dark:bg-brand-700'>
             <InvoiceActions
               updateStatus={updateStatus}
-              deleteInvoice={deleteInvoice}
+              openDeleteModal={openDeleteModal}
             />
           </div>
         ) : (

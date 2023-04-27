@@ -20,39 +20,40 @@ const persister = createSyncStoragePersister({
 interface Props {}
 
 const Providers = (props: Props) => {
-  const client = React.useRef(
-    new QueryClient({
-      defaultOptions: {
-        queries: {
-          cacheTime: 1000 * 60 * 60 * 24, // 24 hours
-          staleTime: 1000 * 60 * 5, // 5 min
-          retry: 1,
-          refetchOnMount: true,
-          refetchOnReconnect: true,
-          refetchOnWindowFocus: false,
+  const [client] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+            staleTime: 1000 * 60 * 3, // 2 min
+            retry: 1,
+            refetchOnMount: true,
+            refetchOnReconnect: true,
+            refetchOnWindowFocus: true,
+          },
         },
-      },
 
-      // configure global cache callbacks to show toast notifications
-      mutationCache: new MutationCache({
-        onSuccess: (data) => {
-          //@ts-expect-error
-          toast.success(data.message);
+        // configure global cache callbacks to show toast notifications
+        mutationCache: new MutationCache({
+          onSuccess: (data) => {
+            //@ts-expect-error
+            toast.success(data.message);
+          },
+          onError: (error) => {
+            // toast.error(getErrorMessage(error));
+          },
+        }),
+        logger: {
+          log: console.log,
+          warn: console.warn,
+          error: () => {},
         },
-        onError: (error) => {
-          console.error('GLOBAL_ERROR', error);
-
-          //  for (const err of error.response.errors) {
-          //    toast.error(getErrorMessage(err));
-
-          //  }
-        },
-      }),
-    })
+      })
   );
 
   return (
-    <QueryClientProvider client={client.current}>
+    <QueryClientProvider client={client}>
       <HelmetProvider>
         <ThemeProvider>
           <AuthProvider>

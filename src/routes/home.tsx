@@ -1,18 +1,16 @@
-import { IStatus } from '@src/@types';
-import { QueryResult } from '@src/components';
-import { useAuthState } from '@src/context';
-import { useGetInvoicesQuery } from '@src/hooks';
-import { client } from '@src/lib';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import type { IStatus } from '../@types';
+import { QueryResult } from '../components';
+import { useAuthState } from '../context';
+import { useGetInvoicesQuery } from '../hooks';
+import { client } from '../lib';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
 interface Props {}
 
 const HomeRoute = (props: Props) => {
-  const navigate = useNavigate();
   const auth = useAuthState();
-
   const user = auth?.user;
 
   const { data, isLoading, error } = useGetInvoicesQuery(client, {});

@@ -18,26 +18,14 @@ const RegisterForm = (props: Props) => {
   });
 
   const navigate = useNavigate();
-  const dispatchAuth = useAuthDispatch();
+  const dispatch = useAuthDispatch();
 
   const { mutate: register } = useRegisterMutation(client, {
     onSuccess(data) {
-      dispatchAuth({
-        type: 'SET_TOKEN',
-        payload: {
-          token: data.register?.token,
-        },
-      });
-      dispatchAuth({
-        type: 'SET_USER',
-        payload: {
-          user: data.register?.user,
-        },
-      });
-      toast('User Registration Successfull', {
-        type: 'success',
-        position: 'top-right',
-      });
+      dispatch('auth/addToken');
+      dispatch('auth/addUser');
+
+      toast.success('Register User Success');
       navigate('/');
     },
   });
