@@ -1,56 +1,33 @@
 import type { IUser } from '@src/@types';
+import { useGetUserQuery, useRefreshAuthQuery } from '@src/hooks';
 import produce from 'immer';
-import type { Dispatch, ReactNode } from 'react';
+import type { Dispatch } from 'react';
 import * as React from 'react';
+import { client } from '../lib';
 
 interface IAuthState {
   token?: string;
   user?: Partial<IUser>;
 }
 
-type IAuthAction =
-  | {
-      type: 'SET_USER';
-      payload: { user?: Partial<IUser> };
-    }
-  | { type: 'SET_TOKEN'; payload: { token?: string } }
-  | { type: 'LOGOUT_USER' };
+type IAuthAction = 'auth/addUser' | 'auth/addToken' | 'auth/logout';
 
 const initialState: IAuthState = {
   token: undefined,
   user: undefined,
 };
 
-const reducer = produce((draft: IAuthState, action: IAuthAction) => {
-  switch (action.type) {
-    case 'SET_USER':
-      draft.user = action.payload.user;
-      break;
-    case 'SET_TOKEN':
-      draft.token = action.payload.token;
-      break;
-    case 'LOGOUT_USER':
-      draft.token = undefined;
-      draft.user = undefined;
-      break;
-    default: {
-      //@ts-expect-error disable typescript error due to type "never"
-      throw new Error(`Unhandled action type: ${action.type}`);
-    }
-  }
-});
-
 const Store = React.createContext<IAuthState | undefined>(undefined);
 const StoreDispatch = React.createContext<Dispatch<IAuthAction> | undefined>(
   undefined
 );
 
-type ProviderProps = {
-  children: ReactNode;
-};
+interface ProviderProps {
+  children: React.ReactNode;
+}
 
 export const AuthProvider = ({ children }: ProviderProps) => {
-  let [state, dispatch] = React.useReducer(reducer, initialState);
+  let [state, dispatch] = useAuth();
 
   state = React.useMemo(() => state, [state]);
   dispatch = React.useMemo(() => dispatch, [dispatch]);
@@ -82,3 +59,39 @@ export const useAuthDispatch = () => {
     throw new Error('useAuthDispatch must be used within a AuthProvider');
   return context;
 };
+
+function useAuth() {
+  const refreshAuthQuery = useRefreshAuthQuery(client, {});
+  const userQuery = useGetUserQuery(
+    client,
+    {},
+    { enabled: refreshAuthQuery.isSuccess }
+  );
+
+  const reducer = authReducer(
+    userQuery?.data?.user,
+    refreshAuthQuery?.data?.refreshAuth?.token
+  );
+
+  return React.useReducer(reducer, initialState);
+}
+
+function authReducer(user?: Partial<IUser>, token?: string) {
+  return produce((draft: IAuthState, action: IAuthAction) => {
+    switch (action) {
+      case 'auth/addUser':
+        draft.user = user;
+        break;
+      case 'auth/addToken':
+        draft.token = token;
+        break;
+      case 'auth/logout':
+        draft.token = undefined;
+        draft.user = undefined;
+        break;
+      default: {
+        throw new Error(`Unhandled action type: ${action}`);
+      }
+    }
+  });
+}
