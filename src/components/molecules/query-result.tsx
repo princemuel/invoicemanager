@@ -1,4 +1,4 @@
-import type { IErrorResponse, Immutable } from '@src/@types';
+import type { IErrorResponse } from '@src/@types';
 import * as React from 'react';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '../atoms';
@@ -6,7 +6,9 @@ import { LoadingSpinner } from '../atoms';
 interface Props<T> {
   loading: boolean;
   error: unknown;
+  renderError?: () => React.ReactNode;
   data: T;
+  renderData?: () => React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -14,10 +16,12 @@ interface Props<T> {
  * The QueryResult component conditionally renders useQuery hook states:
  * loading, error or its children when data is ready
  */
-const QueryResult = <T extends Immutable<any>>({
+const QueryResult = <T,>({
   loading,
   error,
   data,
+  renderError,
+  renderData,
   children,
 }: Props<T>) => {
   if (error) {
@@ -26,7 +30,7 @@ const QueryResult = <T extends Immutable<any>>({
         toast.error('Something unexpected happened. Please try again.');
       else toast.error(err.message);
     });
-    return <React.Fragment />;
+    return <React.Fragment>{renderError?.()}</React.Fragment>;
   }
 
   if (loading)
