@@ -15,7 +15,7 @@ import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import produce from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -28,7 +28,7 @@ const NewInvoiceForm = (props: Props) => {
   const [status, setStatus] = useState<InvoiceStatus>('PENDING');
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
-  const [isShowing, setIsShowing] = useState(false);
+  const [isShowing, setIsShowing] = useReducer((previous) => !previous, false);
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
@@ -365,7 +365,7 @@ const NewInvoiceForm = (props: Props) => {
                       <button
                         type='button'
                         className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
-                        onClick={() => remove(index)}
+                        onClick={() => void remove(index)}
                       >
                         <span className='sr-only'>Delete Item</span>
                       </button>
@@ -380,7 +380,7 @@ const NewInvoiceForm = (props: Props) => {
                 type='button'
                 className='btn btn-add'
                 onClick={() =>
-                  append({
+                  void append({
                     id: uuid(),
                     name: '',
                     quantity: 0,
@@ -401,14 +401,14 @@ const NewInvoiceForm = (props: Props) => {
             <button
               type='button'
               className='btn body-100 bg-neutral-300 px-8 py-6 font-bold text-brand-400 first:mr-auto'
-              onClick={() => navigate(-1)}
+              onClick={() => void navigate(-1)}
             >
               Discard
             </button>
             <button
               type='submit'
               className='btn body-100 bg-[#373B53] px-8 py-6 font-bold text-brand-300 hover:bg-brand-900'
-              onClick={() => setStatus('DRAFT')}
+              onClick={() => void setStatus('DRAFT')}
             >
               Save as draft
             </button>
@@ -416,7 +416,7 @@ const NewInvoiceForm = (props: Props) => {
               type='submit'
               // disabled={!isSubmittable}
               className='btn body-100 bg-brand-500 px-8 py-6 font-bold text-neutral-100 hover:bg-brand-200'
-              onClick={() => setStatus('PENDING')}
+              onClick={() => void setStatus('PENDING')}
             >
               Save & Send
             </button>
