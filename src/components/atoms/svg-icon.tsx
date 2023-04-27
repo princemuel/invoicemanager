@@ -66,12 +66,15 @@ function useDynamicSVGImport(
 ): DynamicSVGImportReturn {
   const ImportedIconRef =
     React.useRef<React.FC<React.SVGProps<SVGSVGElement>>>();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, updateLoadingState] = React.useReducer(
+    (previous) => !previous,
+    false
+  );
   const [error, setError] = React.useState<Error>();
 
   const { onCompleted, onException } = options;
   React.useEffect(() => {
-    setIsLoading(true);
+    updateLoadingState();
 
     (async function () {
       try {
@@ -85,7 +88,7 @@ function useDynamicSVGImport(
         onException?.(err);
         setError(err);
       } finally {
-        setIsLoading(false);
+        updateLoadingState();
       }
     })();
   }, [fileName, onCompleted, onException]);
