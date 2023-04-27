@@ -43,9 +43,9 @@ const NewInvoiceForm = (props: Props) => {
   });
 
   useEffect(() => {
-    const subscription = methods.watch((value, { name, type }) =>
-      console.log(value, name, type)
-    );
+    const subscription = methods.watch((value, { name, type }) => {
+      console.log(value, name, type);
+    });
 
     return () => {
       subscription.unsubscribe();
