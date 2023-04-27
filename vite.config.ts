@@ -6,7 +6,7 @@ import svgr from 'vite-plugin-svgr';
 // https://vitejs.dev/config/
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
-  plugins: [react(), svgr(), removeConsole()],
+  plugins: [react(), removeConsole(), svgr()],
   resolve: {
     alias: [{ find: '@src', replacement: '/src/' }],
   },
