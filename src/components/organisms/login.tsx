@@ -1,6 +1,7 @@
+import { icons } from '@src/common';
 import { useAuthDispatch } from '@src/context';
 import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
-import { useLoginMutation } from '@src/hooks';
+import { useLoginMutation, usePersist } from '@src/hooks';
 import { client } from '@src/lib';
 import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { FormField } from '../molecules';
 type Props = {};
 
 const LoginForm = (props: Props) => {
+  const { persist, setPersist } = usePersist();
   const methods = useZodForm({
     schema: LoginFormSchema,
     mode: 'onChange',
@@ -21,21 +23,12 @@ const LoginForm = (props: Props) => {
 
   const { mutate: login } = useLoginMutation(client, {
     onSuccess(data) {
-      toast('Login Successfull', {
+      toast('Login Success', {
         type: 'success',
       });
 
-      dispatch({
-        type: 'SET_TOKEN',
-        payload: { token: data?.login?.token },
-      });
-
-      dispatch({
-        type: 'SET_USER',
-        payload: {
-          user: data?.login?.user!,
-        },
-      });
+      dispatch('auth/addToken');
+      dispatch('auth/addUser');
 
       navigate('/');
     },
@@ -86,6 +79,24 @@ const LoginForm = (props: Props) => {
             className='col-span-6'
             autoComplete='new-password'
           />
+
+          <button
+            type='button'
+            className='group col-span-6 flex items-center gap-6'
+            aria-pressed={persist}
+            onClick={() => void setPersist()}
+          >
+            <span className='inline-grid aspect-square w-[1.6rem] place-items-center rounded-[0.2rem] border  border-brand-400/25 bg-brand-100 group-hover:border-brand-500 group-aria-pressed:bg-brand-500 dark:bg-brand-700 dark:group-aria-pressed:bg-brand-500'>
+              <img
+                src={icons.actions.check}
+                className='hidden group-aria-pressed:block'
+              />
+            </span>
+
+            <span className='body-100'>
+              Recognize this device in the future
+            </span>
+          </button>
 
           <div className='col-span-6 mt-6'>
             <button
