@@ -1,3 +1,4 @@
+import { off, on } from '@src/helpers';
 import * as React from 'react';
 
 type ThemeMode = 'dark' | 'light';
@@ -57,25 +58,27 @@ const preferDarkQuery = '(prefers-color-scheme: dark)';
  */
 function useThemeMode() {
   const [mode, setMode] = React.useState<ThemeMode>(() => {
-    const value = window.localStorage.getItem('theme-mode');
+    const value = window.localStorage.getItem('mode');
     if (value) {
       return value === 'dark' ? 'dark' : 'light';
-    } else {
-      return window.matchMedia(preferDarkQuery).matches ? 'dark' : 'light';
     }
+
+    return window.matchMedia(preferDarkQuery).matches ? 'dark' : 'light';
   });
 
   React.useEffect(() => {
-    const mediaQuery = window.matchMedia(preferDarkQuery);
+    let isMounted = true;
 
-    const handleChange = () => {
-      setMode(mediaQuery.matches ? 'dark' : 'light');
+    const handler = () => {
+      if (!isMounted) return;
+      setMode(window.matchMedia(preferDarkQuery).matches ? 'dark' : 'light');
     };
 
-    mediaQuery.addEventListener('change', handleChange);
+    on(window, 'change', handler);
 
     return () => {
-      mediaQuery.removeEventListener('change', handleChange);
+      isMounted = false;
+      off(window, 'change', handler);
     };
   }, []);
 
