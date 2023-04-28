@@ -48,6 +48,7 @@ const EditInvoiceForm = (props: Props) => {
 
   const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {
     onSuccess: (data, variables, context) => {
+      //!NOTE: Test this scenario
       queryClient.invalidateQueries({
         queryKey: useGetInvoicesQuery.getKey(),
       });
@@ -139,7 +140,6 @@ const EditInvoiceForm = (props: Props) => {
         throw new Error(JSON.stringify(result.error));
       }
 
-      console.table(draft);
       // @ts-expect-error
       updateInvoice({ input: draft, where: { id: invoiceId } });
       methods.reset();
@@ -150,9 +150,6 @@ const EditInvoiceForm = (props: Props) => {
 
   const isSubmittable =
     Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
-  // formstate has the errors
-  console.log('FORM_ERRORS', methods.formState.errors);
-  // console.log(invoice);
 
   return (
     <FormProvider {...methods}>

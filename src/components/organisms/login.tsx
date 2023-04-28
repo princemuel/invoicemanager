@@ -12,7 +12,7 @@ import { FormField } from '../molecules';
 type Props = {};
 
 const LoginForm = (props: Props) => {
-  const { persist, setPersist } = usePersist();
+  const [persist, setPersist] = usePersist();
   const methods = useZodForm({
     schema: LoginFormSchema,
     mode: 'onChange',
@@ -84,7 +84,7 @@ const LoginForm = (props: Props) => {
             type='button'
             className='group col-span-6 flex items-center gap-6'
             aria-pressed={persist}
-            onClick={() => void setPersist()}
+            onClick={setPersist}
           >
             <span className='inline-grid aspect-square w-[1.6rem] place-items-center rounded-[0.2rem] border  border-brand-400/25 bg-brand-100 group-hover:border-brand-500 group-aria-pressed:bg-brand-500 dark:bg-brand-700 dark:group-aria-pressed:bg-brand-500'>
               <img
