@@ -10,6 +10,6 @@ const usePersist = () => {
     localStorage.setItem('persist', JSON.stringify(persist));
   }, [persist]);
 
-  return { persist, setPersist };
+  return [persist, setPersist] as const;
 };
 export { usePersist };
