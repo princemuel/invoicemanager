@@ -1,6 +1,7 @@
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import {
   MutationCache,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
@@ -10,6 +11,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { RouterProvider } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthProvider, ModalProvider, ThemeProvider } from '../context';
+import { getErrorMessage } from '../helpers';
 import { router } from '../routes';
 import { ToastProvider } from './toast';
 
@@ -34,14 +36,28 @@ const Providers = (props: Props) => {
           },
         },
 
+        queryCache: new QueryCache({
+          // onSuccess: (data) => {
+          //   //@ts-expect-error
+          //   toast.success(data.message);
+          // },
+          onError: (error, query) => {
+            if (query.state.data !== undefined) {
+              toast.error(`Something went wrong: ${getErrorMessage(error)}`);
+            }
+          },
+        }),
+
         // configure global cache callbacks to show toast notifications
         mutationCache: new MutationCache({
-          onSuccess: (data) => {
-            //@ts-expect-error
-            toast.success(data.message);
-          },
-          onError: (error) => {
-            // toast.error(getErrorMessage(error));
+          // onSuccess: (data) => {
+          //   //@ts-expect-error
+          //   toast.success(data.message);
+          // },
+          onError: (error, variables, context, mutation) => {
+            if (mutation.state.data !== undefined) {
+              toast.error(`Something went wrong: ${getErrorMessage(error)}`);
+            }
           },
         }),
         logger: {
