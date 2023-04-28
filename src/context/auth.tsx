@@ -1,8 +1,15 @@
-import type { IUser } from '@src/@types';
-import { useGetUserQuery, useRefreshAuthQuery } from '@src/hooks';
 import produce from 'immer';
-import type { Dispatch } from 'react';
-import * as React from 'react';
+import {
+  Dispatch,
+  ReactNode,
+  createContext,
+  useContext,
+  useDebugValue,
+  useMemo,
+  useReducer,
+} from 'react';
+import type { IUser } from '../@types';
+import { useGetUserQuery, useRefreshAuthQuery } from '../hooks';
 import { client } from '../lib';
 
 interface IAuthState {
@@ -17,44 +24,42 @@ const initialState: IAuthState = {
   user: undefined,
 };
 
-const Store = React.createContext<IAuthState | undefined>(undefined);
-const StoreDispatch = React.createContext<Dispatch<IAuthAction> | undefined>(
+const AuthStore = createContext<IAuthState | undefined>(undefined);
+const AuthStoreDispatch = createContext<Dispatch<IAuthAction> | undefined>(
   undefined
 );
 
 interface ProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const AuthProvider = ({ children }: ProviderProps) => {
-  let [state, dispatch] = useAuth();
+  const [state, dispatch] = useAuth();
 
-  state = React.useMemo(() => state, [state]);
-  dispatch = React.useMemo(() => dispatch, [dispatch]);
+  const stateValue = useMemo(() => state, [state]);
+  const dispatchValue = useMemo(() => dispatch, [dispatch]);
 
   return (
-    <Store.Provider value={state}>
-      <StoreDispatch.Provider value={dispatch}>
+    <AuthStore.Provider value={stateValue}>
+      <AuthStoreDispatch.Provider value={dispatchValue}>
         {children}
-      </StoreDispatch.Provider>
-    </Store.Provider>
+      </AuthStoreDispatch.Provider>
+    </AuthStore.Provider>
   );
 };
 
 export const useAuthState = () => {
-  const context = React.useContext(Store);
+  const context = useContext(AuthStore);
   if (context == undefined)
     throw new Error('useAuthState must be used within a AuthProvider');
 
-  React.useDebugValue(context.user, (user) =>
-    user ? 'Logged In' : 'Logged Out'
-  );
+  useDebugValue(context.token ? 'Online' : 'Offline');
 
   return context;
 };
 
 export const useAuthDispatch = () => {
-  const context = React.useContext(StoreDispatch);
+  const context = useContext(AuthStoreDispatch);
   if (context == undefined)
     throw new Error('useAuthDispatch must be used within a AuthProvider');
   return context;
@@ -73,7 +78,7 @@ function useAuth() {
     refreshAuthQuery?.data?.refreshAuth?.token
   );
 
-  return React.useReducer(reducer, initialState);
+  return useReducer(reducer, initialState);
 }
 
 function authReducer(user?: Partial<IUser>, token?: string) {
