@@ -5,7 +5,7 @@
 /*!Theme Name:
 Theme URI: https://pm-invoice.vercel.app/
 Repository: https://github.com/princemuel/invoice-web-app
-Description: A web app where you can send .This web application presents the products using the most user-friendly format with accessibility in mind.
+Description: A web app where you can send invoices as pdf to your clients' emails.This web application presents the products using the most user-friendly format with accessibility in mind.
 Author's Name: Samuel Chukwuzube
 Author's Moniker: princemuel
 Version: 02
@@ -50,6 +50,15 @@ Version: 02
 
   :where([hidden]:not([hidden='until-found'])) {
     display: none !important;
+  }
+
+  #root {
+    /*
+    Create a stacking context, without a z-index.
+    This ensures that all portal content (modals and tooltips) will
+    float above the app.
+  */
+    isolation: isolate;
   }
 
   /* Set core body defaults */
@@ -253,6 +262,13 @@ Version: 02
 
   .skip-to-content {
     @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-300 px-[0.5em] py-[1em] text-neutral-100 transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
+  }
+  .prism {
+    border: 1px solid hsla(0, 0%, 100%, 0.26);
+    border-radius: 1.6rem;
+    background: hsla(0, 0%, 100%, 0.22);
+    box-shadow: 0 0.4rem 3rem rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.3px);
   }
 }
 
