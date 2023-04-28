@@ -1,3 +1,4 @@
+export * from './404';
 export * from './details';
 export * from './edit-invoice';
 export * from './invoice-details';
