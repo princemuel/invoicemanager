@@ -32,8 +32,7 @@ const InvoiceActions = ({
         type='button'
         className='btn btn-invoice font-bold'
         onClick={() => {
-          if (invoice?.status === 'PAID') return void 0;
-          updateStatus(invoice);
+          if (invoice?.status !== 'PAID') updateStatus(invoice);
         }}
       >
         Mark as Paid
