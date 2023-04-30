@@ -6,21 +6,18 @@ import {
   RHFSubmitHandler,
   calculateTotal,
   constants,
-  formatPrice,
   terms,
   useZodForm,
 } from '@src/helpers';
 import { useCreateInvoiceMutation, useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
-import clsx from 'clsx';
 import produce from 'immer';
 import { useEffect, useReducer, useState } from 'react';
 import { FormProvider, useFieldArray } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuid } from 'uuid';
-import { FormErrorText, Text } from '../atoms';
-import { Calendar, Dropdown, FormField } from '../molecules';
+import { Text } from '../atoms';
+import { Calendar, Dropdown, FormField, NewItemList } from '../molecules';
 
 interface Props {}
 
@@ -44,7 +41,7 @@ const NewInvoiceForm = (props: Props) => {
 
   useEffect(() => {
     const subscription = methods.watch((value, { name, type }) => {
-      console.log(value, name, type);
+      console.log('VALUE', value, 'NAME', name, 'TYPE', type);
     });
 
     return () => {
@@ -276,125 +273,7 @@ const NewInvoiceForm = (props: Props) => {
               Item List
             </legend>
 
-            <ul className='mt-6 grid grid-cols-8 gap-x-6 gap-y-10 sx:grid-cols-12'>
-              <li className='body-100 col-span-8 text-brand-400 dark:text-brand-100 sx:col-span-5'>
-                Item Name
-              </li>
-              <li className='body-100 col-span-2 text-brand-400 dark:text-brand-100'>
-                Qty.
-              </li>
-              <li className='body-100 col-span-3 text-brand-400 dark:text-brand-100 sx:col-span-2'>
-                Price
-              </li>
-              <li className='body-100 col-span-2 text-brand-400 dark:text-brand-100'>
-                Total
-              </li>
-            </ul>
-
-            <ul className='mt-6 flex flex-col gap-8'>
-              {fields.map((field, index) => {
-                const errors = methods.formState.errors?.items?.[index];
-
-                return (
-                  <li
-                    key={field.id}
-                    className='grid grid-cols-8 items-end gap-x-6 gap-y-10 sx:grid-cols-12'
-                  >
-                    <label className='col-span-8 flex flex-col-reverse gap-2 sx:col-span-5'>
-                      <input
-                        type='text'
-                        {...methods.register(`items.${index}.name`)}
-                        id={`items.${index}.name`}
-                        className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
-                        aria-invalid={errors?.name ? 'true' : 'false'}
-                        aria-errormessage={`errors-items.${index}.name`}
-                        placeholder='Banner Design'
-                      />
-
-                      <FormErrorText
-                        id={`items.${index}.name`}
-                        className='text-right peer-aria-[invalid="true"]:!text-accent-200'
-                      >
-                        {`${errors?.name?.message || ''}`}
-                      </FormErrorText>
-                    </label>
-
-                    <label className='col-span-2'>
-                      <input
-                        type='number'
-                        {...methods.register(`items.${index}.quantity`, {
-                          valueAsNumber: true,
-                        })}
-                        id={`items.${index}.quantity`}
-                        className={clsx(
-                          'body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
-                        )}
-                        aria-invalid={errors?.quantity ? 'true' : 'false'}
-                        step={1}
-                        placeholder='1'
-                      />
-                    </label>
-
-                    <label className='col-span-3 sx:col-span-2'>
-                      <input
-                        type='number'
-                        {...methods.register(`items.${index}.price`, {
-                          valueAsNumber: true,
-                        })}
-                        id={`items.${index}.price`}
-                        className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
-                        aria-invalid={errors?.price ? 'true' : 'false'}
-                        placeholder='200.00'
-                        step={0.01}
-                      />
-                    </label>
-
-                    <div className='col-span-2 self-center'>
-                      <output
-                        htmlFor={`items.${index}.price items.${index}.quantity`}
-                        id={`items.${index}.total`}
-                        className='body-100 block font-bold text-[#888EB0]'
-                      >
-                        {formatPrice(
-                          calculateTotal(
-                            field?.quantity || 0,
-                            field?.price || 0
-                          )
-                        )}
-                      </output>
-                    </div>
-
-                    <div className='col-span-1 self-center'>
-                      <button
-                        type='button'
-                        className='inline-block h-[1.6rem] w-[1.3rem] bg-[url(/assets/svgs/icon-delete.svg)] bg-cover bg-no-repeat focus:bg-[url(/assets/svgs/icon-delete-red.svg)] hover:bg-[url(/assets/svgs/icon-delete-red.svg)]'
-                        onClick={() => void remove(index)}
-                      >
-                        <span className='sr-only'>Delete Item</span>
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-
-            <div className='mt-16'>
-              <button
-                type='button'
-                className='btn btn-add'
-                onClick={() =>
-                  void append({
-                    id: uuid(),
-                    name: '',
-                    quantity: 0,
-                    price: 0,
-                    total: 0,
-                  })
-                }
-              >
-                &#43; Add New Item
-              </button>
-            </div>
+            <NewItemList methods={methods} />
           </fieldset>
           {/*<!--------- ITEM DETAILS END ---------!>*/}
         </div>
