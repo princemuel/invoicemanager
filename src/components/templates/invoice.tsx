@@ -15,7 +15,7 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { InvoiceDetails, InvoiceDetailsMobile } from '../organisms';
+import { Details } from '../organisms';
 
 interface Props {}
 
@@ -47,7 +47,6 @@ const InvoiceTemplate = (props: Props) => {
           where: { id: invoiceId },
         }),
       });
-      navigate(-1);
     },
   });
 
@@ -95,7 +94,7 @@ const InvoiceTemplate = (props: Props) => {
 
   return (
     <Fragment>
-      <InvoiceDetailsMobile
+      {/* <InvoiceDetailsMobile
         invoice={invoice}
         updateStatus={updateStatus}
         openDeleteModal={openModal}
@@ -104,12 +103,12 @@ const InvoiceTemplate = (props: Props) => {
         invoice={invoice}
         updateStatus={updateStatus}
         openDeleteModal={openModal}
-      />
-      {/* <Details
+      /> */}
+      <Details
         invoice={invoice}
         updateStatus={updateStatus}
         openDeleteModal={openModal}
-      /> */}
+      />
 
       <Transition show={isOpen} as={Fragment}>
         <Dialog
