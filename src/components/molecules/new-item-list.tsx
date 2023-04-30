@@ -1,10 +1,17 @@
-import { calculateTotal, formatPrice } from '@src/helpers';
+import { calculateTotal, endsWith } from '@src/helpers';
 import { useMedia } from '@src/hooks';
 import clsx from 'clsx';
 import * as React from 'react';
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import {
+  FieldPathValue,
+  UseFormReturn,
+  get,
+  useFieldArray,
+} from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
+import { InvoiceFormType } from './@types';
+import { PriceOutput } from './price-output';
 
 interface Props {
   methods: UseFormReturn<InvoiceFormType, any>;
@@ -19,17 +26,53 @@ const NewItemList = ({ methods }: Props) => {
     },
   });
 
-  const dime = useFieldArray({
-    name: 'items',
-    control: methods.control,
-    rules: {
-      required: 'Please add at least one item',
-    },
-  });
-
   const isMobile = useMedia(`(max-width: 40em)`);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    const subscription = methods.watch((_, { name, type }) => {
+      // first get all values
+      const value = methods.getValues();
+      // check if the update was a change not a delete
+      if (type === 'change' && name) {
+        // check if a subproperty has changed and not the array or some of its elements themself
+        if (
+          endsWith(name, 'quantity') ||
+          // endsWith(name, 'total') ||
+          endsWith(name, 'price')
+        ) {
+          const { items } = value;
+          // get the index and the name of field that has been changed
+          const [, indexString, fieldName] = name.split('.');
+
+          // Get the new value from the field
+          const fieldValue = get(value, name) as FieldPathValue<
+            typeof value,
+            typeof name
+          >;
+
+          const index = parseInt(indexString);
+
+          if (fieldValue) {
+            if (fieldName === 'quantity')
+              methods.setValue(
+                `items.${index}.total`,
+                calculateTotal(fieldValue, items[index].price)
+              );
+            else if (fieldName === 'price')
+              methods.setValue(
+                `items.${index}.total`,
+
+                calculateTotal(items[index].quantity, fieldValue)
+              );
+          }
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [methods.watch]);
 
   return (
     <React.Fragment>
@@ -194,18 +237,7 @@ const NewItemList = ({ methods }: Props) => {
                   <React.Fragment />
                 )}
 
-                <output
-                  htmlFor={`items.${index}.price items.${index}.quantity`}
-                  id={`items.${index}.total`}
-                  className={clsx(
-                    'body-100 block font-bold text-[#888EB0]',
-                    errors ? 'mt-10 sx:mt-[2.3rem]' : 'mt-9 sx:mt-3'
-                  )}
-                >
-                  {formatPrice(
-                    calculateTotal(field?.quantity || 0, field?.price || 0)
-                  )}
-                </output>
+                <PriceOutput index={index} errors={errors} />
               </div>
 
               <div
@@ -249,44 +281,3 @@ const NewItemList = ({ methods }: Props) => {
 };
 
 export { NewItemList };
-
-interface InvoiceFormType {
-  clientAddress: {
-    street: string;
-    city: string;
-    country: string;
-    postCode: string;
-  };
-  clientEmail: string;
-  clientName: string;
-  description: string;
-  items: [
-    {
-      name: string;
-      quantity: number;
-      price: number;
-      id?: string | undefined;
-      total?: number | undefined;
-    },
-    ...{
-      name: string;
-      quantity: number;
-      price: number;
-      id?: string | undefined;
-      total?: number | undefined;
-    }[]
-  ];
-  senderAddress: {
-    street: string;
-    city: string;
-    country: string;
-    postCode: string;
-  };
-  issueDate?: string | undefined;
-  paymentDue?: string | undefined;
-  paymentTerms?: number | undefined;
-  status?: 'PAID' | 'PENDING' | 'DRAFT' | undefined;
-  tag?: string | undefined;
-  total?: number | undefined;
-  userId?: string | undefined;
-}
