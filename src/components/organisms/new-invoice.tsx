@@ -14,7 +14,7 @@ import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import produce from 'immer';
 import { useEffect, useReducer, useState } from 'react';
-import { FormProvider, useFieldArray } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '../atoms';
 import { Calendar, Dropdown, FormField, NewItemList } from '../molecules';
@@ -29,14 +29,7 @@ const NewInvoiceForm = (props: Props) => {
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
-    mode: 'onTouched',
-  });
-  const { fields, append, remove } = useFieldArray({
-    name: 'items',
-    control: methods.control,
-    rules: {
-      required: 'Please add at least one item',
-    },
+    mode: 'onChange',
   });
 
   useEffect(() => {
@@ -72,11 +65,7 @@ const NewInvoiceForm = (props: Props) => {
 
         draft.paymentDue = new Date(dueTime).toISOString();
         draft.status = status;
-
-        for (const item of draft?.items) {
-          item.total = calculateTotal(item?.quantity || 0, item?.price || 0);
-        }
-        draft.total = calculateTotal(draft?.items || 0);
+        draft.total = calculateTotal(draft?.items, 'total');
 
         draft.tag = '';
         draft.userId = user?.id as string;

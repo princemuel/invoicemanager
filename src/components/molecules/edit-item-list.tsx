@@ -15,10 +15,11 @@ import { PriceOutput } from './price-output';
 
 interface Props {
   methods: UseFormReturn<InvoiceFormType, any>;
+  invoice: InvoiceFormType;
 }
 
-const NewItemList = ({ methods }: Props) => {
-  const { fields, append, remove } = useFieldArray({
+const EditItemList = ({ methods, invoice }: Props) => {
+  const { fields, append, remove, update } = useFieldArray({
     name: 'items',
     control: methods.control,
     rules: {
@@ -27,6 +28,10 @@ const NewItemList = ({ methods }: Props) => {
   });
 
   const isMobile = useMedia(`(max-width: 40em)`);
+
+  React.useEffect(() => {
+    methods.setValue('items', invoice?.items);
+  }, [invoice?.items]);
 
   React.useEffect(() => {
     const subscription = methods.watch((_, { name, type }) => {
@@ -98,6 +103,7 @@ const NewItemList = ({ methods }: Props) => {
       <ul className='mt-6 flex flex-col gap-8'>
         {fields.map((field, index) => {
           const errors = methods?.formState?.errors?.items?.[index];
+
           return (
             <li
               key={field.id}
@@ -112,6 +118,7 @@ const NewItemList = ({ methods }: Props) => {
                     className='body-100 peer mt-4 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     aria-invalid={errors?.name ? 'true' : 'false'}
                     aria-errormessage={`errors-items.${index}.name`}
+                    defaultValue={invoice?.items?.[index]?.name || ''}
                   />
 
                   <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
@@ -125,7 +132,7 @@ const NewItemList = ({ methods }: Props) => {
                       id={`items.${index}.name`}
                       className='text-right peer-aria-[invalid="true"]:!text-accent-200'
                     >
-                      {`${errors?.name?.message || ''}`}
+                      {errors?.name?.message || ''}
                     </FormErrorText>
                   </div>
                 </div>
@@ -138,7 +145,7 @@ const NewItemList = ({ methods }: Props) => {
                     className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     aria-invalid={errors?.name ? 'true' : 'false'}
                     aria-errormessage={`errors-items.${index}.name`}
-                    placeholder='Banner Design'
+                    defaultValue={invoice?.items?.[index]?.name || ''}
                   />
                   <FormErrorText
                     id={`items.${index}.name`}
@@ -167,9 +174,9 @@ const NewItemList = ({ methods }: Props) => {
                     className={clsx(
                       'body-100 peer mt-4 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     )}
-                    aria-invalid={errors?.quantity ? 'true' : 'false'}
                     step={1}
-                    placeholder='1'
+                    aria-invalid={errors?.quantity ? 'true' : 'false'}
+                    defaultValue={invoice?.items?.[index]?.quantity || 0}
                   />
                 </div>
               ) : (
@@ -183,9 +190,9 @@ const NewItemList = ({ methods }: Props) => {
                     className={clsx(
                       'body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     )}
-                    aria-invalid={errors?.quantity ? 'true' : 'false'}
                     step={1}
-                    placeholder='1'
+                    aria-invalid={errors?.quantity ? 'true' : 'false'}
+                    defaultValue={invoice?.items?.[index]?.quantity || 0}
                   />
                 </label>
               )}
@@ -205,7 +212,7 @@ const NewItemList = ({ methods }: Props) => {
                     id={`items.${index}.price`}
                     className='body-100 peer mt-4 w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     aria-invalid={errors?.price ? 'true' : 'false'}
-                    placeholder='200.00'
+                    defaultValue={invoice?.items?.[index]?.price || 0}
                     step={0.01}
                   />
                 </div>
@@ -219,7 +226,7 @@ const NewItemList = ({ methods }: Props) => {
                     id={`items.${index}.price`}
                     className='body-100 peer w-full rounded-lg border border-brand-100 bg-neutral-100 px-8 py-6 font-bold text-brand-900 caret-brand-500 outline-none autofill:bg-neutral-100 focus:border-brand-500 aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 hover:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-neutral-100 dark:autofill:bg-brand-700 dark:focus:border-brand-500 dark:hover:border-brand-500'
                     aria-invalid={errors?.price ? 'true' : 'false'}
-                    placeholder='200.00'
+                    defaultValue={invoice?.items?.[index]?.price || 0}
                     step={0.01}
                   />
                 </label>
@@ -263,15 +270,15 @@ const NewItemList = ({ methods }: Props) => {
         <button
           type='button'
           className='btn btn-add'
-          onClick={() =>
-            void append({
+          onClick={() => {
+            append({
               id: uuid(),
               name: '',
               quantity: 0,
               price: 0,
               total: 0,
-            })
-          }
+            });
+          }}
         >
           &#43; Add New Item
         </button>
@@ -280,4 +287,4 @@ const NewItemList = ({ methods }: Props) => {
   );
 };
 
-export { NewItemList };
+export { EditItemList };
