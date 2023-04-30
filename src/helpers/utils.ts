@@ -15,16 +15,22 @@ import {
   ---------------------------------*
  */
 
-export const capitalize = (string: string) => {
+export function capitalize(string = '') {
   return string?.[0]?.toUpperCase() + string?.slice(1).toLowerCase();
-};
-export const trim = (string: string) => string?.trim();
+}
+export function trim(string = '') {
+  return string?.trim();
+}
 
-export const removeFirstChar = (string: string) => {
+export function removeFirstChar(string = '') {
   return string?.slice(1);
-};
-export function pluralize(value: number, word: string) {
+}
+export function pluralize(word: string, value: number) {
   return value === 1 ? `${word}` : `${word}s`;
+}
+
+export function truncate(str = '', length = str.length) {
+  return str.length > length ? `${str.substring(0, length)}...` : str;
 }
 
 /*---------------------------------*
