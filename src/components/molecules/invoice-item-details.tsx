@@ -53,7 +53,7 @@ const InvoiceItemDetails = ({ items = [], className = '' }: Props) => {
               as='output'
               className='text-700 font-bold leading-600 tracking-[-0.42px] text-neutral-100'
             >
-              {formatPrice(calculateTotal(items))}
+              {formatPrice(calculateTotal(items, 'total'))}
             </Text>
           </footer>
         </section>
@@ -102,7 +102,7 @@ const InvoiceItemDetails = ({ items = [], className = '' }: Props) => {
             <tr className='flex items-center justify-between '>
               <th className='body-200 text-neutral-100'>Amount Due</th>
               <td className='text-700 font-bold leading-[3.2rem] tracking-[-0.63px] text-neutral-100 '>
-                {formatPrice(calculateTotal(items))}
+                {formatPrice(calculateTotal(items, 'total'))}
               </td>
             </tr>
           </tfoot>
