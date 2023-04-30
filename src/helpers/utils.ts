@@ -33,13 +33,22 @@ export function truncate(str = '', length = str.length) {
   return str.length > length ? `${str.substring(0, length)}...` : str;
 }
 
+type EndsWith<W, S extends string> = W extends `${infer R}${S}` ? W : never;
+
+export const endsWith = <W extends string, S extends string>(
+  str: W,
+  suffix: S
+): str is EndsWith<W, S> => {
+  return str.endsWith(suffix);
+};
+
 /*---------------------------------*
             NUMBER UTILS           *
   ---------------------------------*
  */
 
-export function approximate(number: number, fractionDigits = 0) {
-  return parseInt(number.toFixed(fractionDigits));
+export function approximate(num = 0, fractionDigits = 0) {
+  return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
 export const isDraftInvoice = (invoice: Invoice): invoice is DraftInvoice => {
@@ -63,23 +72,6 @@ export function range(start: number, stop: number, step: number) {
   );
 }
 
-export function loggedMethod<This, Args extends any[], Return>(
-  target: (this: This, ...args: Args) => Return,
-  context: ClassMethodDecoratorContext<
-    This,
-    (this: This, ...args: Args) => Return
-  >
-) {
-  const methodName = String(context.name);
-
-  return function (this: This, ...args: Args): Return {
-    console.log(`LOG: Entering method '${methodName}'.`);
-    const result = target.call(this, ...args);
-    console.log(`LOG: Exiting method '${methodName}'.`);
-    return result;
-  };
-}
-
 export function parseNumSafe(value: number) {
   return Number.isNaN(value) || isNaN(value) ? 0 : value;
 }
@@ -87,40 +79,35 @@ export function parseNumSafe(value: number) {
 interface Item {
   quantity?: number;
   price?: number;
+  total?: number;
 }
 
-export function calculateTotal<T extends Item>(items?: T[]): number;
+export function calculateTotal<T extends Item>(
+  items?: T[],
+  params?: 'total'
+): number;
 export function calculateTotal<T extends number>(quantity: T, price: T): number;
 export function calculateTotal(a?: unknown, b?: unknown) {
   try {
     if (!a) throw new TypeError('The item or value is not defined');
 
     if (typeof a === 'number' && typeof b === 'number') {
-      return a * b;
+      return approximate(a * b, 2);
     }
 
     return (a as Item[])?.reduce((total, current) => {
-      total +=
-        parseNumSafe(Number(current.quantity)) *
-        parseNumSafe(Number(current.price));
-
-      return total;
+      if (b === 'total') {
+        total += parseNumSafe(Number(current.total));
+      } else {
+        total +=
+          parseNumSafe(Number(current.quantity)) *
+          parseNumSafe(Number(current.price));
+      }
+      return approximate(total, 2);
     }, 0);
   } catch (e) {
     return 0;
   }
-}
-
-export function serialize<T>(data: T): NonNullable<T> {
-  return JSON.parse(JSON.stringify(data));
-}
-
-export function createDehydratedState(
-  client: QueryClient,
-  options: DehydrateOptions = {}
-) {
-  if (!client) throw new ReferenceError('The query client must be defined');
-  return serialize(dehydrate(client, options));
 }
 
 export function formatPrice(price = 0) {
@@ -157,35 +144,24 @@ export function getMonth(string: string) {
   return string?.split(/(?<=^\S+)\s/)[1];
 }
 
+/*---------------------------------*
+            OBJECT UTILS           *
+  ---------------------------------*
+ */
+
 export const noop = () => {};
 
-export function on<T extends Window | Document | HTMLElement | EventTarget>(
-  obj: T | null,
-  ...args: Parameters<T['addEventListener']> | [string, Function | null, ...any]
-): void {
-  if (obj && obj.addEventListener) {
-    obj.addEventListener(
-      ...(args as Parameters<HTMLElement['addEventListener']>)
-    );
-  }
+export function serialize<T>(data: T): NonNullable<T> {
+  return JSON.parse(JSON.stringify(data));
 }
 
-export function off<T extends Window | Document | HTMLElement | EventTarget>(
-  obj: T | null,
-  ...args:
-    | Parameters<T['removeEventListener']>
-    | [string, Function | null, ...any]
-): void {
-  if (obj && obj.removeEventListener) {
-    obj.removeEventListener(
-      ...(args as Parameters<HTMLElement['removeEventListener']>)
-    );
-  }
+export function createDehydratedState(
+  client: QueryClient,
+  options: DehydrateOptions = {}
+) {
+  if (!client) throw new ReferenceError('The query client is undefined');
+  return serialize(dehydrate(client, options));
 }
-
-export const isBrowser = typeof window !== 'undefined';
-
-export const isNavigator = typeof navigator !== 'undefined';
 
 export const objectKeys = <O extends {}>(object: O): (keyof O)[] => {
   return Object.keys(object) as (keyof O)[];
@@ -207,6 +183,28 @@ export function deepFreeze<T extends { [key: keyof any]: any }>(object: T) {
 
   return Object.freeze(object);
 }
+
+export function loggedMethod<This, Args extends any[], Return>(
+  target: (this: This, ...args: Args) => Return,
+  context: ClassMethodDecoratorContext<
+    This,
+    (this: This, ...args: Args) => Return
+  >
+) {
+  const methodName = String(context.name);
+
+  return function (this: This, ...args: Args): Return {
+    console.log(`LOG: Entering method '${methodName}'.`);
+    const result = target.call(this, ...args);
+    console.log(`LOG: Exiting method '${methodName}'.`);
+    return result;
+  };
+}
+
+/*---------------------------------*
+            ARRAY UTILS           *
+  ---------------------------------*
+ */
 
 export function hasValues<T>(array: T[] | null | undefined) {
   return (array || []).length > 0;
@@ -320,6 +318,38 @@ export const rank = <T>(
     .sort((a, b) => (order === 'asc' ? a.rank - b.rank : b.rank - a.rank))
     .map((ranked) => ranked.item);
 };
+
+/*---------------------------------*
+            DOM UTILS              *
+  ---------------------------------*
+ */
+
+export const isBrowser = typeof window !== 'undefined';
+export const isNavigator = typeof navigator !== 'undefined';
+
+export function on<T extends Window | Document | HTMLElement | EventTarget>(
+  obj: T | null,
+  ...args: Parameters<T['addEventListener']> | [string, Function | null, ...any]
+): void {
+  if (obj && obj.addEventListener) {
+    obj.addEventListener(
+      ...(args as Parameters<HTMLElement['addEventListener']>)
+    );
+  }
+}
+
+export function off<T extends Window | Document | HTMLElement | EventTarget>(
+  obj: T | null,
+  ...args:
+    | Parameters<T['removeEventListener']>
+    | [string, Function | null, ...any]
+): void {
+  if (obj && obj.removeEventListener) {
+    obj.removeEventListener(
+      ...(args as Parameters<HTMLElement['removeEventListener']>)
+    );
+  }
+}
 
 export const compose = <R, F extends (a: R, ...b: any[]) => R>(
   first: F,
