@@ -24,7 +24,7 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
           id='paymentTerms'
         >
           <span className='block truncate'>
-            Net {selected} {pluralize(selected, 'Day')}
+            Net {selected} {pluralize('Day', selected)}
           </span>
 
           <span className='pointer-events-none'>
@@ -53,7 +53,7 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
                   value={term.value}
                 >
                   <span className='block truncate'>
-                    Net {term.value} {pluralize(term.value, 'Day')}
+                    Net {term.value} {pluralize('Day', term.value)}
                   </span>
                 </Listbox.Option>
               );
