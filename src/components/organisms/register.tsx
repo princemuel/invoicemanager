@@ -7,7 +7,7 @@ import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
-import { FormField } from '../molecules';
+import { FormField, FormFieldPassword } from '../molecules';
 
 type Props = {};
 
@@ -22,11 +22,12 @@ const RegisterForm = (props: Props) => {
 
   const { mutate: register } = useRegisterMutation(client, {
     onSuccess(data) {
-      dispatch('auth/addToken');
-      dispatch('auth/addUser');
-
       toast.success('Register User Success');
-      navigate('/');
+      dispatch('auth/logout');
+      navigate('/login');
+    },
+    onError(e) {
+      console.log(e);
     },
   });
 
@@ -39,7 +40,6 @@ const RegisterForm = (props: Props) => {
       if (!result.success) {
         throw new Error(JSON.stringify(result.error));
       }
-      console.log(data);
       register({ input: { email: data.email, password: data.password } });
       methods.reset();
     } catch (error) {
@@ -69,16 +69,14 @@ const RegisterForm = (props: Props) => {
             autoComplete='username'
           />
 
-          <FormField
-            type='password'
+          <FormFieldPassword
             name='password'
             label={'Password'}
             className='col-span-6'
             autoComplete='new-password'
           />
 
-          <FormField
-            type='password'
+          <FormFieldPassword
             name='countersign'
             label={'Confirm Password'}
             className='col-span-6'
