@@ -15,7 +15,7 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-import { Details } from '../organisms';
+import { InvoiceDetails } from '../organisms';
 
 interface Props {}
 
@@ -24,8 +24,9 @@ const InvoiceTemplate = (props: Props) => {
   const location = useLocation();
 
   if (!invoiceId) {
-    return <Navigate to='/' state={{ from: location }} replace />;
+    return <Navigate to='/invoices' state={{ from: location }} replace />;
   }
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -94,17 +95,7 @@ const InvoiceTemplate = (props: Props) => {
 
   return (
     <Fragment>
-      {/* <InvoiceDetailsMobile
-        invoice={invoice}
-        updateStatus={updateStatus}
-        openDeleteModal={openModal}
-      />
       <InvoiceDetails
-        invoice={invoice}
-        updateStatus={updateStatus}
-        openDeleteModal={openModal}
-      /> */}
-      <Details
         invoice={invoice}
         updateStatus={updateStatus}
         openDeleteModal={openModal}
