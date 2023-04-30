@@ -75,7 +75,7 @@ const Calendar = ({
           >
             <div
               id='datetime'
-              className='mt-8 flex w-full flex-col gap-8 rounded-brand bg-neutral-100 p-8 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300'
+              className='absolute z-[5] mt-8 flex w-full flex-col gap-8 rounded-brand bg-neutral-100 p-8 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300'
             >
               <div className='flex items-center justify-around'>
                 <button
