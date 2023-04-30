@@ -1,20 +1,17 @@
 import { calculateTotal, formatPrice } from '@src/helpers';
-import { InvoiceItemType } from '@src/hooks';
+import { InvoiceItemType, useMedia } from '@src/hooks';
 import clsx from 'clsx';
 import * as React from 'react';
 import { Text } from '../atoms';
 
 interface Props {
   items?: InvoiceItemType[];
-  isMobile: boolean;
   className?: string;
 }
 
-const InvoiceItemDetails = ({
-  items = [],
-  isMobile,
-  className = '',
-}: Props) => {
+const InvoiceItemDetails = ({ items = [], className = '' }: Props) => {
+  const isMobile = useMedia(`(max-width: 50em)`);
+
   return (
     <React.Fragment>
       {isMobile ? (
