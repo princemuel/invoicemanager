@@ -27,6 +27,7 @@ const InvoicesTemplate = (props: Props) => {
     statuses[1],
     statuses[2],
   ]);
+  const isWide = useMedia('(min-width: 50em)');
 
   const invoices = data?.invoices || [];
 
@@ -42,8 +43,6 @@ const InvoicesTemplate = (props: Props) => {
           status.indexOf(b.status as IStatus[number])
         );
       });
-
-  const isWide = useMedia('(min-width: 50em)');
 
   return (
     <section aria-label='Invoices Page' className='h-container'>
@@ -144,12 +143,12 @@ const InvoicesTemplate = (props: Props) => {
         </div>
       </header>
 
-      <ul aria-label='List of Invoices' className='mt-20 flex flex-col gap-6'>
+      <ul aria-label='Invoices List' className='mt-20 flex flex-col gap-6'>
         {hasValues(filtered) ? (
           filtered?.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-brand bg-neutral-100 p-[1.6rem] shadow-100 hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-700 max-sx:pt-4'
+              className='rounded-brand bg-neutral-100 p-[1.6rem] shadow-100 transition-[background,border] delay-0 duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-700 max-sx:pt-4'
             >
               <Link
                 to={`/invoices/${invoice.id}`}
