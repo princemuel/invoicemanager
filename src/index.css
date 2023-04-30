@@ -162,6 +162,7 @@ Version: 02
   /* *********** TYPOGRAPHY  ************* */
   :where(body) {
     @apply bg-neutral-200 font-sans font-medium text-brand-900 dark:bg-brand-800 dark:text-neutral-100;
+    transition: background 300ms ease 0ms;
   }
 
   :is(h1, h2, h3, button) {
