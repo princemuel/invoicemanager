@@ -16,7 +16,7 @@ import {
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
@@ -52,9 +52,6 @@ const EditInvoiceForm = (props: Props) => {
 
   const invoice = data?.invoice;
 
-  console.table(invoice);
-
-  const [isShowing, setIsShowing] = useReducer((prev) => !prev, false);
   const [status, setStatus] = useState(invoice?.status);
   const [selectedTerm, setSelectedTerm] = useState(
     invoice?.paymentTerms || terms[0].value
@@ -259,9 +256,7 @@ const EditInvoiceForm = (props: Props) => {
               <Calendar
                 title='Invoice Date'
                 selectedDate={selectedDate}
-                shouldOpen={isShowing}
                 setSelectedDate={setSelectedDate}
-                setShouldOpen={setIsShowing}
                 disabled
               />
             </div>

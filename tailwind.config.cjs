@@ -13,7 +13,7 @@ module.exports = {
     },
 
     fontFamily: {
-      sans: ['Spartan', ...defaultTheme.fontFamily.sans],
+      sans: ['Nunito Sans', ...defaultTheme.fontFamily.sans],
     },
 
     fontSize: {

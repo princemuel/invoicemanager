@@ -27,7 +27,6 @@ const InvoiceDetails = ({ invoice, updateStatus, openDeleteModal }: Props) => {
                   Status
                 </Text>
                 <StatusButton
-                  // @ts-expect-error
                   status={invoice?.status}
                   className='ml-auto px-14 py-6 md:ml-0 md:mr-auto'
                 />

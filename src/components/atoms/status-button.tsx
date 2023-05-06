@@ -1,11 +1,10 @@
-import type { IStatus } from '@src/@types';
 import { capitalize } from '@src/helpers';
 import clsx from 'clsx';
 
-type Props = {
-  status?: IStatus[number];
+interface Props {
+  status?: string;
   className?: string;
-};
+}
 
 const StatusButton = ({ status = 'PENDING', className }: Props) => {
   let colors: string;

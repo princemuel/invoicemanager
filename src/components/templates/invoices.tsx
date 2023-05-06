@@ -188,7 +188,6 @@ const InvoicesTemplate = (props: Props) => {
                 </Text>
 
                 <StatusButton
-                  //@ts-expect-error
                   status={invoice?.status}
                   className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end sx:justify-self-auto'
                 />
