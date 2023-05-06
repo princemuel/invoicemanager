@@ -4,7 +4,7 @@ import {
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
 import { IStatus } from '@src/@types';
-import { datetime, formatPrice, hasValues } from '@src/helpers';
+import { datetime, formatPrice, hasValues, pluralize } from '@src/helpers';
 import { useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import * as React from 'react';
@@ -20,20 +20,34 @@ const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 interface Props {}
 
 const HomeTemplate = (props: Props) => {
-  const { data, isLoading, error } = useGetInvoicesQuery(client, {});
+  const { data } = useGetInvoicesQuery(client, {});
 
-  const invoices = (data?.invoices || []).sort((a, b) => {
-    return (
-      status.indexOf(a.status as IStatus[number]) -
-      status.indexOf(b.status as IStatus[number])
-    );
-  });
+  const invoices = React.useMemo(() => {
+    return (data?.invoices || []).sort((a, b) => {
+      return (
+        status.indexOf(a.status as IStatus[number]) -
+        status.indexOf(b.status as IStatus[number])
+      );
+    });
+  }, [data?.invoices]);
+
+  const draftInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'DRAFT');
+  }, [invoices]);
+
+  const pendingInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'PENDING');
+  }, [invoices]);
+
+  const paidInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'PAID');
+  }, [invoices]);
 
   return (
     <React.Fragment>
       <PageSEO title='Home' isArticle={false} />
 
-      <section className='flex flex-col gap-12'>
+      <section className='mb-20 flex flex-col gap-12'>
         <section className='h-container'>
           <header className='mt-12'>
             <Text
@@ -58,8 +72,8 @@ const HomeTemplate = (props: Props) => {
           <div className={styles['invoice__cards']}>
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h3' className='text-blue-950'>
-                  Total Invoices
+                <Text as='h4' className='font-bold text-blue-950'>
+                  Total {pluralize('Invoice', invoices.length)}
                 </Text>
                 <div className='rounded-brand bg-green-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
@@ -73,8 +87,8 @@ const HomeTemplate = (props: Props) => {
 
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h3' className='text-blue-950'>
-                  Pending Invoices
+                <Text as='h4' className='font-bold text-blue-950'>
+                  Pending {pluralize('Invoice', pendingInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-violet-100 p-4'>
                   <EnvelopeOpenIcon className='aspect-square w-4 text-violet-500' />
@@ -82,17 +96,14 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {
-                  invoices.filter((invoice) => invoice.status === 'PENDING')
-                    .length
-                }
+                {pendingInvoices.length}
               </Text>
             </div>
 
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h3' className='text-blue-950'>
-                  Draft Invoices
+                <Text as='h4' className='font-bold text-blue-950'>
+                  Draft {pluralize('Invoice', draftInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-blue-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-blue-500' />
@@ -100,17 +111,14 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {
-                  invoices.filter((invoice) => invoice.status === 'DRAFT')
-                    .length
-                }
+                {draftInvoices.length}
               </Text>
             </div>
 
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h3' className='text-blue-950'>
-                  Paid Invoices
+                <Text as='h4' className='font-bold text-blue-950'>
+                  Paid {pluralize('Invoice', paidInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-amber-100 p-4'>
                   <EnvelopeIcon className='aspect-square w-4 text-amber-500' />
@@ -118,7 +126,7 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {invoices.filter((invoice) => invoice.status === 'PAID').length}
+                {paidInvoices.length}
               </Text>
             </div>
           </div>
@@ -139,7 +147,7 @@ const HomeTemplate = (props: Props) => {
           </div>
 
           <table className='w-full'>
-            <thead className='bg-brand-200/50 p-4'>
+            <thead className='bg-brand-500 p-4'>
               <tr className='grid grid-cols-5 items-center justify-items-start p-4'>
                 {HeaderCells.map((cell) => (
                   <th
@@ -170,10 +178,10 @@ const HomeTemplate = (props: Props) => {
                     </td>
                     <td className=''>{formatPrice(invoice?.total)}</td>
                     <td className=''>{invoice?.clientName}</td>
-                    <td className='justify-self-center'>
+                    <td className='justify-self-stretch'>
                       <StatusButton
                         status={invoice?.status}
-                        className='px-6 py-4'
+                        className='w-full px-6 py-4'
                       />
                     </td>
                   </tr>
