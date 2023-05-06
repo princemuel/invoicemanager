@@ -19,7 +19,7 @@ interface Props {
 }
 
 const EditItemList = ({ methods, invoice }: Props) => {
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     name: 'items',
     control: methods.control,
     rules: {
@@ -35,27 +35,17 @@ const EditItemList = ({ methods, invoice }: Props) => {
 
   React.useEffect(() => {
     const subscription = methods.watch((_, { name, type }) => {
-      // first get all values
       const value = methods.getValues();
-      // check if the update was a change not a delete
-      if (type === 'change' && name) {
-        // check if a subproperty has changed and not the array or some of its elements themself
-        if (
-          endsWith(name, 'quantity') ||
-          // endsWith(name, 'total') ||
-          endsWith(name, 'price')
-        ) {
-          const { items } = value;
-          // get the index and the name of field that has been changed
-          const [, indexString, fieldName] = name.split('.');
 
-          // Get the new value from the field
+      if (type === 'change' && name) {
+        if (endsWith(name, 'quantity') || endsWith(name, 'price')) {
+          const { items } = value;
+          const [, indexString, fieldName] = name.split('.');
+          const index = parseInt(indexString);
           const fieldValue = get(value, name) as FieldPathValue<
             typeof value,
             typeof name
           >;
-
-          const index = parseInt(indexString);
 
           if (fieldValue) {
             if (fieldName === 'quantity')
@@ -66,7 +56,6 @@ const EditItemList = ({ methods, invoice }: Props) => {
             else if (fieldName === 'price')
               methods.setValue(
                 `items.${index}.total`,
-
                 calculateTotal(items[index].quantity, fieldValue)
               );
           }
@@ -77,7 +66,7 @@ const EditItemList = ({ methods, invoice }: Props) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [methods.watch]);
+  }, [methods]);
 
   return (
     <React.Fragment>
