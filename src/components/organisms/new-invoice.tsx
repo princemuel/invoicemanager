@@ -243,7 +243,7 @@ const NewInvoiceForm = (props: Props) => {
             <FormField
               type='text'
               name='description'
-              label={'Project Description'}
+              label={'Product Description'}
               placeholder='e.g. Graphic Design Service'
               className='col-span-6'
             />

@@ -15,6 +15,7 @@ import { client } from '@src/lib';
 import { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
+import { PageSEO } from './seo';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
@@ -46,6 +47,11 @@ const InvoicesTemplate = (props: Props) => {
 
   return (
     <section aria-label='Invoices Page' className='h-container'>
+      <PageSEO
+        title={`Invoices`}
+        description={`The list of all the current user's invoices`}
+        isArticle={false}
+      />
       <header className='mt-20 flex items-center'>
         <div className='flex-1'>
           <Text as='h1'>Invoices</Text>

@@ -279,7 +279,7 @@ const EditInvoiceForm = (props: Props) => {
             <FormField
               type='text'
               name='description'
-              label={'Project Description'}
+              label={'Product Description'}
               defaultValue={invoice?.description}
               className='col-span-6'
             />
