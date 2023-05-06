@@ -1,7 +1,6 @@
-import { MainContent } from './content';
-import { Sidebar } from './sidebar';
+import { MainContent, Sidebar } from '../organisms';
 
-type Props = {};
+interface Props {}
 
 const Layout = (props: Props) => {
   return (
