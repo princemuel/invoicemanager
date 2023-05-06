@@ -13,7 +13,7 @@ import { useCreateInvoiceMutation, useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '../atoms';
@@ -24,7 +24,6 @@ const NewInvoiceForm = (props: Props) => {
   const [status, setStatus] = useState<InvoiceStatus>('PENDING');
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
-  const [isShowing, setIsShowing] = useReducer((previous) => !previous, false);
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
@@ -222,9 +221,7 @@ const NewInvoiceForm = (props: Props) => {
               <Calendar
                 title='Issue Date'
                 selectedDate={selectedDate}
-                shouldOpen={isShowing}
                 setSelectedDate={setSelectedDate}
-                setShouldOpen={setIsShowing}
               />
             </div>
 
