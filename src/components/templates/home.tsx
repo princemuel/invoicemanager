@@ -50,9 +50,9 @@ const HomeTemplate = (props: Props) => {
           </div>
         </section>
 
-        <section className='h-container rounded-brand bg-brand-100 px-10 py-12 shadow-100 dark:bg-neutral-100'>
+        <section className='h-container rounded-brand bg-brand-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
           <div className='flex items-center justify-between gap-6'>
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
                   Total Invoices
@@ -67,7 +67,7 @@ const HomeTemplate = (props: Props) => {
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
                   Pending Invoices
@@ -85,13 +85,13 @@ const HomeTemplate = (props: Props) => {
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
                   Draft Invoices
                 </Text>
-                <div className='rounded-brand bg-green-100 p-4'>
-                  <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
+                <div className='rounded-brand bg-blue-100 p-4'>
+                  <InboxArrowDownIcon className='aspect-square w-4 text-blue-500' />
                 </div>
               </div>
 
@@ -103,13 +103,13 @@ const HomeTemplate = (props: Props) => {
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
                   Paid Invoices
                 </Text>
-                <div className='rounded-brand bg-green-100 p-4'>
-                  <EnvelopeIcon className='aspect-square w-4 text-green-500' />
+                <div className='rounded-brand bg-amber-100 p-4'>
+                  <EnvelopeIcon className='aspect-square w-4 text-amber-500' />
                 </div>
               </div>
 
