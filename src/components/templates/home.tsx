@@ -11,6 +11,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 import { PageSEO } from './seo';
+import styles from './templates.module.css';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
@@ -54,7 +55,7 @@ const HomeTemplate = (props: Props) => {
         </section>
 
         <section className='h-container rounded-brand bg-brand-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
-          <div className='flex items-center justify-between gap-6'>
+          <div className={styles['invoice__cards']}>
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
