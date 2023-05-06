@@ -7,8 +7,8 @@ import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
-import { Loader } from '../layout/loader';
 import { FormField, FormFieldPassword } from '../molecules';
+import { Loader } from './loader';
 
 type Props = {};
 
