@@ -169,16 +169,20 @@ Version: 02
     @apply font-bold;
   }
 
-  h1 {
+  h1,
+  .heading-1 {
     @apply text-900 leading-700 tracking-500;
   }
-  h2 {
+  h2,
+  .heading-2 {
     @apply text-700 leading-400 tracking-300;
   }
-  h3 {
+  h3,
+  .heading-3 {
     @apply text-600 leading-500 tracking-400;
   }
-  h4 {
+  h4,
+  .heading-4 {
     @apply text-400 leading-200 tracking-200;
   }
 
@@ -205,7 +209,16 @@ Version: 02
 */
 @layer components {
   /* ********** BUTTONS ********** */
-  :is(button, a, label, select, summary, [role='button'], [role='option']) {
+  :is(
+      button,
+      a,
+      label,
+      select,
+      summary,
+      [role='button'],
+      [role='option'],
+      [role='menuitem']
+    ) {
     @apply cursor-pointer;
   }
   .btn {
