@@ -38,7 +38,10 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
 
         <Transition
           as={Fragment}
-          leave='transition ease-in duration-100'
+          enter='transition-opacity ease-in duration-75'
+          enterFrom='opacity-0'
+          enterTo='opacity-100'
+          leave='transition-opacity ease-in duration-150'
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
         >
