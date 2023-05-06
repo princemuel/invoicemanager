@@ -4,7 +4,7 @@ import {
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
 import { IStatus } from '@src/@types';
-import { datetime, formatPrice, hasValues } from '@src/helpers';
+import { datetime, formatPrice, hasValues, pluralize } from '@src/helpers';
 import { useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import * as React from 'react';
@@ -28,6 +28,16 @@ const HomeTemplate = (props: Props) => {
       status.indexOf(b.status as IStatus[number])
     );
   });
+
+  const draftInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'DRAFT');
+  }, [invoices]);
+  const pendingInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'PENDING');
+  }, [invoices]);
+  const paidInvoices = React.useMemo(() => {
+    return invoices.filter((invoice) => invoice.status === 'PAID');
+  }, [invoices]);
 
   return (
     <React.Fragment>
@@ -59,7 +69,7 @@ const HomeTemplate = (props: Props) => {
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
-                  Total Invoices
+                  Total {pluralize('Invoice', invoices.length)}
                 </Text>
                 <div className='rounded-brand bg-green-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
@@ -74,7 +84,7 @@ const HomeTemplate = (props: Props) => {
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
-                  Pending Invoices
+                  Pending {pluralize('Invoice', pendingInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-violet-100 p-4'>
                   <EnvelopeOpenIcon className='aspect-square w-4 text-violet-500' />
@@ -82,17 +92,14 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {
-                  invoices.filter((invoice) => invoice.status === 'PENDING')
-                    .length
-                }
+                {pendingInvoices.length}
               </Text>
             </div>
 
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
-                  Draft Invoices
+                  Draft {pluralize('Invoice', draftInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-blue-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-blue-500' />
@@ -100,17 +107,14 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {
-                  invoices.filter((invoice) => invoice.status === 'DRAFT')
-                    .length
-                }
+                {draftInvoices.length}
               </Text>
             </div>
 
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h3' className='text-blue-950'>
-                  Paid Invoices
+                  Paid {pluralize('Invoice', paidInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-amber-100 p-4'>
                   <EnvelopeIcon className='aspect-square w-4 text-amber-500' />
@@ -118,7 +122,7 @@ const HomeTemplate = (props: Props) => {
               </div>
 
               <Text className='heading-3 font-bold text-brand-800'>
-                {invoices.filter((invoice) => invoice.status === 'PAID').length}
+                {paidInvoices.length}
               </Text>
             </div>
           </div>
