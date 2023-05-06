@@ -1,13 +1,13 @@
-import { FormProvider } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
-// import clsx from 'clsx';
-import { useAuthDispatch } from '@src/context';
+import type { IErrorResponse } from '@src/@types';
 import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@src/helpers';
 import { useRegisterMutation } from '@src/hooks';
 import { client } from '@src/lib';
+import { FormProvider } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
 import { FormField, FormFieldPassword } from '../molecules';
+import { Loader } from './loader';
 
 type Props = {};
 
@@ -18,16 +18,16 @@ const RegisterForm = (props: Props) => {
   });
 
   const navigate = useNavigate();
-  const dispatch = useAuthDispatch();
 
-  const { mutate: register } = useRegisterMutation(client, {
+  const { mutate: register, isLoading } = useRegisterMutation(client, {
     onSuccess(data) {
-      toast.success('Register User Success');
-      dispatch('auth/logout');
+      toast.success(data.register?.message);
       navigate('/login');
     },
-    onError(e) {
-      console.log(e);
+    onError(e: IErrorResponse) {
+      e.response.errors.forEach(async (error) => {
+        toast.error(error.message);
+      });
     },
   });
 
@@ -49,6 +49,8 @@ const RegisterForm = (props: Props) => {
 
   const isSubmittable =
     Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
+
+  if (isLoading) return <Loader />;
 
   return (
     <FormProvider {...methods}>
