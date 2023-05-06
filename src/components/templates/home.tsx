@@ -14,7 +14,6 @@ import { PageSEO } from './seo';
 import styles from './templates.module.css';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
-
 const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 
 interface Props {}
