@@ -1,13 +1,13 @@
-import { useSession } from '@src/hooks';
+import { useAuthState } from '@src/context';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 type Props = {};
 
 const RequireAuth = (props: Props) => {
-  const session = useSession();
+  const session = useAuthState();
   const location = useLocation(); // // const loading = isFetching || isLoading;
 
-  return session ? (
+  return session.token ? (
     <Outlet />
   ) : (
     <Navigate to='/login' state={{ from: location }} replace />

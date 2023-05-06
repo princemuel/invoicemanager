@@ -93,8 +93,9 @@ interface IErrorLocation {
 }
 interface IErrorExtensions {
   code: string;
+  http: { status: number };
   stacktrace: string[];
 }
 interface IErrorData {
-  refreshAuth: any;
+  [x: string]: any;
 }

@@ -15,34 +15,24 @@ import {
 } from '@src/hooks';
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useReducer, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Text } from '../atoms';
 import { Calendar, Dropdown, EditItemList, FormField } from '../molecules';
-
 interface Props {}
 
 const EditInvoiceForm = (props: Props) => {
   const { invoiceId } = useParams();
   const location = useLocation();
 
-  if (!invoiceId) {
-    return <Navigate to='/' state={{ from: location }} replace />;
-  }
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data } = useGetInvoiceQuery(client, {
-    where: { id: invoiceId! },
+    where: { id: invoiceId as string },
   });
 
   const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {
@@ -53,7 +43,7 @@ const EditInvoiceForm = (props: Props) => {
       });
       queryClient.invalidateQueries({
         queryKey: useGetInvoiceQuery.getKey({
-          where: { id: invoiceId },
+          where: { id: invoiceId as string },
         }),
       });
       navigate(-1);

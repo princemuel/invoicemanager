@@ -1,10 +1,18 @@
-type Props = {
-  children: React.ReactNode;
-};
+import clsx from 'clsx';
 
-const AuthTemplate = ({ children }: Props) => {
+interface Props {
+  className?: string;
+  children: React.ReactNode;
+}
+
+const AuthTemplate = ({ children, className }: Props) => {
   return (
-    <section className='flex h-full items-center justify-center px-8'>
+    <section
+      className={clsx(
+        'flex h-full items-center justify-center px-8',
+        className
+      )}
+    >
       {children}
     </section>
   );

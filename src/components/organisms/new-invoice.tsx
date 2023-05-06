@@ -12,13 +12,12 @@ import {
 import { useCreateInvoiceMutation, useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useEffect, useReducer, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { Text } from '../atoms';
 import { Calendar, Dropdown, FormField, NewItemList } from '../molecules';
-
 interface Props {}
 
 const NewInvoiceForm = (props: Props) => {

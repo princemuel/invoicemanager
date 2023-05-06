@@ -1,5 +1,4 @@
 import { IStatus } from '@src/@types';
-import { useAuthState } from '@src/context';
 import { datetime } from '@src/helpers';
 import { useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
@@ -12,9 +11,6 @@ const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 interface Props {}
 
 const HomeTemplate = (props: Props) => {
-  const auth = useAuthState();
-  const user = auth?.user;
-
   const { data, isLoading, error } = useGetInvoicesQuery(client, {});
 
   const invoices = (data?.invoices || []).sort((a, b) => {

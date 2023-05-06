@@ -115,6 +115,7 @@ const InvoicesTemplate = (props: Props) => {
                             <img
                               src={icons.actions.check}
                               className='hidden group-aria-selected:block'
+                              alt=''
                             />
                           </button>
 

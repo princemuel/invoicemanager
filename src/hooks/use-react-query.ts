@@ -5,7 +5,6 @@ import {
   type UseQueryOptions,
 } from '@tanstack/react-query';
 import type { GraphQLClient } from 'graphql-request';
-import type { RequestInit } from 'graphql-request/build/esm/types.dom';
 export type Maybe<T> = T;
 export type InputMaybe<T> = T;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -67,7 +66,6 @@ export interface AddressInputType {
 
 export interface AuthPayloadType {
   token: Scalars['String'];
-  user: UserType;
 }
 
 export interface CreateInvoiceInputType {
@@ -152,7 +150,7 @@ export interface LoginInputType {
   password: Scalars['String'];
 }
 
-export interface LogoutPayloadType {
+export interface MessagePayloadType {
   message: Scalars['String'];
 }
 
@@ -160,7 +158,7 @@ export interface MutationType {
   createInvoice?: Maybe<InvoiceType>;
   deleteInvoice?: Maybe<InvoiceType>;
   login?: Maybe<AuthPayloadType>;
-  register?: Maybe<AuthPayloadType>;
+  register?: Maybe<MessagePayloadType>;
   updateInvoice?: Maybe<InvoiceType>;
 }
 
@@ -188,17 +186,13 @@ export interface MutationUpdateInvoiceArgsType {
 export interface QueryType {
   invoice?: Maybe<InvoiceType>;
   invoices: Array<Maybe<InvoiceType>>;
-  logout: LogoutPayloadType;
-  refreshAuth?: Maybe<RefreshPayloadType>;
+  logout: MessagePayloadType;
+  refreshAuth?: Maybe<AuthPayloadType>;
   user?: Maybe<UserType>;
 }
 
 export interface QueryInvoiceArgsType {
   where: UniqueIdInputType;
-}
-
-export interface RefreshPayloadType {
-  token: Scalars['String'];
 }
 
 export interface RegisterInputType {
@@ -378,17 +372,13 @@ export type RegisterMutationVariablesType = Exact<{
   input: RegisterInputType;
 }>;
 
-export type RegisterMutationType = {
-  register?: { token: string; user: { id: string; photo?: string } };
-};
+export type RegisterMutationType = { register?: { message: string } };
 
 export type LoginMutationVariablesType = Exact<{
   input: LoginInputType;
 }>;
 
-export type LoginMutationType = {
-  login?: { token: string; user: { id: string; photo?: string } };
-};
+export type LoginMutationType = { login?: { token: string } };
 
 export type RefreshAuthQueryVariablesType = Exact<{ [key: string]: never }>;
 
@@ -726,11 +716,7 @@ useGetUserQuery.fetcher = (
 export const RegisterDocumentType = /*#__PURE__*/ `
     mutation Register($input: RegisterInput!) {
   register(input: $input) {
-    token
-    user {
-      id
-      photo
-    }
+    message
   }
 }
     `;
@@ -777,10 +763,6 @@ export const LoginDocumentType = /*#__PURE__*/ `
     mutation Login($input: LoginInput!) {
   login(input: $input) {
     token
-    user {
-      id
-      photo
-    }
   }
 }
     `;

@@ -9,32 +9,22 @@ import {
 import { client } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { Fragment, useCallback, useRef, useState } from 'react';
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { InvoiceDetails } from '../organisms';
 
 interface Props {}
 
 const InvoiceTemplate = (props: Props) => {
   const { invoiceId } = useParams();
-  const location = useLocation();
-
-  if (!invoiceId) {
-    return <Navigate to='/invoices' state={{ from: location }} replace />;
-  }
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const [isOpen, setIsOpen] = useState(false);
-  let deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
 
   const { data } = useGetInvoiceQuery(client, {
-    where: { id: invoiceId },
+    where: { id: invoiceId as string },
   });
   const invoice = data?.invoice;
 
@@ -45,7 +35,7 @@ const InvoiceTemplate = (props: Props) => {
       });
       queryClient.invalidateQueries({
         queryKey: useGetInvoiceQuery.getKey({
-          where: { id: invoiceId },
+          where: { id: invoiceId as string },
         }),
       });
     },
@@ -60,30 +50,36 @@ const InvoiceTemplate = (props: Props) => {
     },
   });
 
-  const updateStatus = useCallback((data?: InvoiceType) => {
-    if (!data) throw new Error('Invalid data');
+  const updateStatus = useCallback(
+    (data?: InvoiceType) => {
+      if (!data) throw new Error('Invalid data');
 
-    const draft = {
-      clientAddress: invoice?.clientAddress,
-      clientEmail: invoice?.clientEmail,
-      clientName: invoice?.clientName,
-      description: invoice?.description,
-      items: invoice?.items,
-      paymentDue: invoice?.paymentDue,
-      paymentTerms: invoice?.paymentTerms,
-      senderAddress: invoice?.senderAddress,
-      status: 'PAID',
-      total: invoice?.total,
-    };
+      const draft = {
+        clientAddress: data?.clientAddress,
+        clientEmail: data?.clientEmail,
+        clientName: data?.clientName,
+        description: data?.description,
+        items: data?.items,
+        paymentDue: data?.paymentDue,
+        paymentTerms: data?.paymentTerms,
+        senderAddress: data?.senderAddress,
+        status: 'PAID',
+        total: data?.total,
+      };
 
-    //@ts-expect-error
-    updateInvoice({ input: draft, where: { id: invoiceId } });
-  }, []);
+      //@ts-expect-error placed here to remove error
+      updateInvoice({ input: draft, where: { id: invoiceId } });
+    },
+    [invoiceId, updateInvoice]
+  );
 
-  const deleteInvoice = useCallback((data?: InvoiceType) => {
-    if (!data) throw new Error('Invalid data');
-    removeInvoice({ where: { id: invoiceId } });
-  }, []);
+  const deleteInvoice = useCallback(
+    (data?: InvoiceType) => {
+      if (!data) throw new Error('Invalid data');
+      removeInvoice({ where: { id: invoiceId as string } });
+    },
+    [invoiceId, removeInvoice]
+  );
 
   const openModal = useCallback(() => {
     setIsOpen(true);

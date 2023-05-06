@@ -1,8 +1,8 @@
 import { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  // schema: process.env.SCHEMA_PATH,
   schema: './src/lib/schema/schema.gql',
+  // schema: 'https://invoicemailer.onrender.com/api/graphql',
   documents: './src/lib/graphql/**/*.{graphql,gql}',
   watch: true,
   ignoreNoDocuments: true, // for better experience with the watcher
@@ -20,6 +20,7 @@ const config: CodegenConfig = {
         exposeMutationKeys: true,
         maybeValue: 'T',
         exposeFetcher: true,
+        legacyMode: false,
         fetcher: 'graphql-request',
       },
       plugins: [

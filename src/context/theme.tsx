@@ -29,7 +29,7 @@ const ThemeProvider = ({ children }: Props) => {
 
 function useTheme() {
   const context = React.useContext(ThemeContext);
-  if (context == null) {
+  if (!context) {
     throw new ReferenceError(`useTheme must be used in a ThemeProvider`);
   }
   return context;
@@ -37,7 +37,7 @@ function useTheme() {
 
 function useSetTheme() {
   const context = React.useContext(SetThemeContext);
-  if (context == null) {
+  if (!context) {
     throw new ReferenceError(`useSetTheme must be used in a ThemeProvider`);
   }
   return context;
