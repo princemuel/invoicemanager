@@ -1,12 +1,19 @@
+import {
+  EnvelopeIcon,
+  EnvelopeOpenIcon,
+  InboxArrowDownIcon,
+} from '@heroicons/react/24/solid';
 import { IStatus } from '@src/@types';
-import { datetime } from '@src/helpers';
+import { datetime, formatPrice, hasValues } from '@src/helpers';
 import { useGetInvoicesQuery } from '@src/hooks';
 import { client } from '@src/lib';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Text } from '../atoms';
+import { StatusButton, Text } from '../atoms';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
+
+const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 
 interface Props {}
 
@@ -22,59 +29,157 @@ const HomeTemplate = (props: Props) => {
 
   return (
     <React.Fragment>
-      <section className=''>
-        <header className='mt-10'>
-          <Text as='h1' className='text-brand-900 dark:text-neutral-100'>
-            Invoices
-          </Text>
-        </header>
-
+      <section className='flex flex-col gap-12'>
         <section className='h-container'>
-          <Text as='h2' className='text-brand-900 dark:text-neutral-100'>
-            Invoices
-          </Text>
+          <header className='mt-12'>
+            <Text
+              as='h1'
+              className='text-700 text-brand-900/75 dark:text-neutral-100'
+            >
+              Dashboard
+            </Text>
+          </header>
         </section>
 
-        <section className='h-container'>
-          <table>
-            <thead className='bg-brand-200 p-4'>
+        <section className='h-container rounded-brand bg-neutral-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
+          <div className='flex flex-col gap-4'>
+            <Text as='h2'>Hi there! (Username)</Text>
+            <Text className='body-100 text-brand-900/70 dark:text-neutral-100'>
+              Here is the latest report on your invoices
+            </Text>
+          </div>
+        </section>
+
+        <section className='h-container rounded-brand bg-brand-100 px-10 py-12 shadow-100 dark:bg-neutral-100'>
+          <div className='flex items-center justify-between gap-6'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+              <div className='flex items-center justify-between gap-4'>
+                <Text as='h3' className='text-blue-950'>
+                  Total Invoices
+                </Text>
+                <div className='rounded-brand bg-green-100 p-4'>
+                  <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
+                </div>
+              </div>
+
+              <Text className='heading-3 font-bold text-brand-800'>
+                {invoices.length}
+              </Text>
+            </div>
+
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+              <div className='flex items-center justify-between gap-4'>
+                <Text as='h3' className='text-blue-950'>
+                  Pending Invoices
+                </Text>
+                <div className='rounded-brand bg-violet-100 p-4'>
+                  <EnvelopeOpenIcon className='aspect-square w-4 text-violet-500' />
+                </div>
+              </div>
+
+              <Text className='heading-3 font-bold text-brand-800'>
+                {
+                  invoices.filter((invoice) => invoice.status === 'PENDING')
+                    .length
+                }
+              </Text>
+            </div>
+
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+              <div className='flex items-center justify-between gap-4'>
+                <Text as='h3' className='text-blue-950'>
+                  Draft Invoices
+                </Text>
+                <div className='rounded-brand bg-green-100 p-4'>
+                  <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
+                </div>
+              </div>
+
+              <Text className='heading-3 font-bold text-brand-800'>
+                {
+                  invoices.filter((invoice) => invoice.status === 'DRAFT')
+                    .length
+                }
+              </Text>
+            </div>
+
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-100'>
+              <div className='flex items-center justify-between gap-4'>
+                <Text as='h3' className='text-blue-950'>
+                  Paid Invoices
+                </Text>
+                <div className='rounded-brand bg-green-100 p-4'>
+                  <EnvelopeIcon className='aspect-square w-4 text-green-500' />
+                </div>
+              </div>
+
+              <Text className='heading-3 font-bold text-brand-800'>
+                {invoices.filter((invoice) => invoice.status === 'PAID').length}
+              </Text>
+            </div>
+          </div>
+        </section>
+
+        <section className='h-container flex flex-col gap-12 rounded-brand bg-neutral-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
+          <div className='flex items-center justify-between'>
+            <Text as='h2' className='text-brand-900 dark:text-neutral-100'>
+              Invoices
+            </Text>
+
+            <Link
+              to='/invoices'
+              className='body-100 rounded-lg bg-brand-500 px-6 py-4 font-bold !text-neutral-100'
+            >
+              View All
+            </Link>
+          </div>
+
+          <table className='w-full'>
+            <thead className='bg-brand-200/50 p-4'>
               <tr className='grid grid-cols-5 items-center justify-items-start p-4'>
-                <th>S/N</th>
-                <th>Due Date</th>
-                <th>Amount</th>
-                <th>Customer</th>
-                <th>Status</th>
+                {HeaderCells.map((cell) => (
+                  <th
+                    key={cell}
+                    className='body-100 p-2 font-bold !text-neutral-100 last:justify-self-center'
+                  >
+                    {cell}
+                  </th>
+                ))}
               </tr>
             </thead>
 
             <tbody className='p-4'>
-              {invoices?.slice(0, 5).map((invoice) => {
-                return (
+              {hasValues(invoices) ? (
+                invoices.slice(0, 7).map((invoice) => (
                   <tr
                     key={invoice.id}
-                    className='body-100 grid grid-cols-5 items-center justify-items-start p-4'
+                    className='body-100 grid grid-cols-5 items-center justify-items-start p-4 text-brand-900/90 dark:text-neutral-100'
                   >
-                    <td className='uppercase'>#{invoice.tag}</td>
-                    <td>
+                    <td className=''>
+                      <span className='font-bold text-brand-400'>#</span>
+                      <span className='uppercase'>{invoice?.tag}</span>
+                    </td>
+                    <td className=''>
                       <time dateTime={invoice?.paymentDue}>
                         {datetime.toDateString(invoice?.paymentDue)}
                       </time>
                     </td>
-                    <td>{invoice?.total}</td>
-                    <td>{invoice?.clientName}</td>
-                    <td>{invoice?.status}</td>
+                    <td className=''>{formatPrice(invoice?.total)}</td>
+                    <td className=''>{invoice?.clientName}</td>
+                    <td className='justify-self-center'>
+                      <StatusButton
+                        status={invoice?.status}
+                        className='px-6 py-4'
+                      />
+                    </td>
                   </tr>
-                );
-              })}
+                ))
+              ) : (
+                <tr className='body-100 grid place-content-center p-8 text-brand-900/90 dark:text-neutral-100'>
+                  You have no invoices at this moment
+                </tr>
+              )}
             </tbody>
-
-            <tfoot>
-              <tr>
-                <td>
-                  <Link to='/invoices'>View All Invoices</Link>
-                </td>
-              </tr>
-            </tfoot>
           </table>
         </section>
       </section>
