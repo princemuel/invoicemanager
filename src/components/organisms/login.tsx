@@ -1,5 +1,5 @@
+import { IErrorResponse } from '@src/@types';
 import { icons } from '@src/common';
-import { useAuthDispatch } from '@src/context';
 import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
 import { useLoginMutation, usePersist } from '@src/hooks';
 import { client } from '@src/lib';
@@ -7,6 +7,7 @@ import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
+import { Loader } from '../layout/loader';
 import { FormField, FormFieldPassword } from '../molecules';
 
 type Props = {};
@@ -18,19 +19,17 @@ const LoginForm = (props: Props) => {
     mode: 'onChange',
   });
 
-  const dispatch = useAuthDispatch();
   const navigate = useNavigate();
 
-  const { mutate: login } = useLoginMutation(client, {
+  const { mutate: login, isLoading } = useLoginMutation(client, {
     onSuccess(data) {
-      toast('Login Success', {
-        type: 'success',
-      });
-
-      dispatch('auth/addToken');
-      dispatch('auth/addUser');
-
+      toast.success('Login Successful');
       navigate('/');
+    },
+    onError(e: IErrorResponse) {
+      e.response.errors.forEach(async (error) => {
+        toast.error(error.message);
+      });
     },
   });
 
@@ -52,6 +51,8 @@ const LoginForm = (props: Props) => {
 
   const isSubmittable =
     Boolean(methods.formState.isDirty) && Boolean(methods.formState.isValid);
+
+  if (isLoading) return <Loader />;
 
   return (
     <FormProvider {...methods}>
@@ -89,12 +90,11 @@ const LoginForm = (props: Props) => {
               <img
                 src={icons.actions.check}
                 className='hidden group-aria-pressed:block'
+                alt=''
               />
             </span>
 
-            <span className='body-100'>
-              Recognize this device in the future
-            </span>
+            <span className='body-100'>Keep me logged in</span>
           </button>
 
           <div className='col-span-6 mt-6'>
