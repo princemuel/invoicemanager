@@ -10,6 +10,7 @@ import { client } from '@src/lib';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
+import { PageSEO } from './seo';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
@@ -29,6 +30,8 @@ const HomeTemplate = (props: Props) => {
 
   return (
     <React.Fragment>
+      <PageSEO title='Home' isArticle={false} />
+
       <section className='flex flex-col gap-12'>
         <section className='h-container'>
           <header className='mt-12'>
@@ -175,8 +178,10 @@ const HomeTemplate = (props: Props) => {
                   </tr>
                 ))
               ) : (
-                <tr className='body-100 grid place-content-center p-8 text-brand-900/90 dark:text-neutral-100'>
-                  You have no invoices at this moment
+                <tr className='body-100 grid place-content-center p-8'>
+                  <td className='text-brand-900/90 dark:text-neutral-100'>
+                    You have no invoices at this moment
+                  </td>
                 </tr>
               )}
             </tbody>

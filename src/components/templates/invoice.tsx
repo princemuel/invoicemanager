@@ -11,6 +11,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Fragment, useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InvoiceDetails } from '../organisms';
+import { PageSEO } from './seo';
 
 interface Props {}
 
@@ -91,6 +92,16 @@ const InvoiceTemplate = (props: Props) => {
 
   return (
     <Fragment>
+      <PageSEO
+        title={`Invoice ${invoice?.tag}`}
+        description={invoice?.description}
+        isArticle={true}
+        publishedTime={invoice?.createdAt}
+        modifiedTime={invoice?.issueDate}
+        userName={''}
+        tag={invoice?.tag}
+      />
+
       <InvoiceDetails
         invoice={invoice}
         updateStatus={updateStatus}
