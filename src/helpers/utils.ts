@@ -35,10 +35,10 @@ export function truncate(str = '', length = str.length) {
 
 type EndsWith<W, S extends string> = W extends `${infer R}${S}` ? W : never;
 
-export const endsWith = <W extends string, S extends string>(
-  str: W,
-  suffix: S
-): str is EndsWith<W, S> => {
+export const endsWith = <Word extends string, Suffix extends string>(
+  str: Word,
+  suffix: Suffix
+): str is EndsWith<Word, Suffix> => {
   return str.endsWith(suffix);
 };
 
@@ -214,13 +214,13 @@ export function map<T>(
   iterable: Iterable<T>,
   cb: (...args: any) => T
 ): IterableIterator<T> {
-  let iterator = iterable[Symbol.iterator]();
+  const iterator = iterable[Symbol.iterator]();
   return {
     [Symbol.iterator]() {
       return this;
     },
     next(): IteratorResult<T> {
-      let next = iterator.next();
+      const next = iterator.next();
       return next.done ? next : { value: cb(next.value) };
     },
   };
@@ -230,14 +230,14 @@ export function filter<T>(
   iterable: Iterable<T>,
   predicate: (...args: any) => boolean
 ) {
-  let iterator = iterable[Symbol.iterator]();
+  const iterator = iterable[Symbol.iterator]();
   return {
     [Symbol.iterator]() {
       return this;
     },
     next(): IteratorResult<T, boolean> {
       for (;;) {
-        let next = iterator.next();
+        const next = iterator.next();
         if (next.done || predicate(next.value)) {
           return next;
         }
@@ -263,22 +263,22 @@ export function reverse<T>(data: ArrayLike<T>): Iterable<T> {
 }
 
 export function* take<T>(n: number, iterable: Iterable<T>) {
-  let iterator = iterable[Symbol.iterator]();
+  const iterator = iterable[Symbol.iterator]();
   while (n-- > 0) {
-    let next = iterator.next();
+    const next = iterator.next();
     if (next.done) return;
     else yield next.value;
   }
 }
 
 export function* zip<T>(...iterables: Array<Iterable<T>>) {
-  let iterators = iterables.map((iterator) => iterator[Symbol.iterator]());
+  const iterators = iterables.map((iterator) => iterator[Symbol.iterator]());
   let idx = 0;
   while (iterators.length > 0) {
     if (idx >= iterators.length) {
       idx = 0;
     }
-    let next = iterators[idx].next();
+    const next = iterators[idx].next();
     if (next.done) {
       iterators.splice(idx, 1);
     } else {
@@ -289,7 +289,7 @@ export function* zip<T>(...iterables: Array<Iterable<T>>) {
 }
 
 export function* sequence<T>(...iterables: Array<Iterable<T>>) {
-  for (let iterable of iterables) {
+  for (const iterable of iterables) {
     yield* iterable;
   }
 }
@@ -368,7 +368,7 @@ function* fibonacciSequence() {
 }
 // Return the nth Fibonacci number
 function fibonacci(num: number) {
-  for (let sequence of fibonacciSequence()) {
+  for (const sequence of fibonacciSequence()) {
     if (num-- <= 0) return sequence;
   }
 }
