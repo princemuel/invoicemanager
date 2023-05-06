@@ -46,14 +46,14 @@ export const ModalProvider = ({ children }: ProviderProps) => {
 
 export const useModalState = () => {
   const context = useContext(Store);
-  if (context == undefined)
+  if (!context)
     throw new Error('useModalState must be used within a ModalProvider');
   return context;
 };
 
 export const useModalDispatch = () => {
   const context = useContext(StoreDispatch);
-  if (context == undefined)
+  if (!context)
     throw new Error('useModalDispatch must be used within a ModalProvider');
   return context;
 };
