@@ -10,14 +10,14 @@
     - [Screenshot](#screenshot)
     - [Project Links](#project-links)
   - [My process](#my-process)
-    - [Building with](#building-with)
+    - [Built with](#built-with)
     - [The challenge (Situation)](#the-challenge-situation)
     - [Expected Behaviour (Tasks)](#expected-behaviour-tasks)
   - [Author](#author)
 
 ## Overview
 
-This project uses the STAR approach.
+This project was bootstrapped using Vite and uses the STAR approach.
 
 ### Screenshot
 
@@ -33,20 +33,26 @@ Press `.` on the keyboard to view this project's code just like in Visual Studio
 
 ## My process
 
-### Building with
+### Built with
 
 - Semantic HTML5 markup
 - CSS custom properties
 - Flexbox
 - CSS Grid
 - Mobile-first workflow
-- [React](https://reactjs.org/) - JS library
-- [Next.js](https://nextjs.org/) - React framework
-- [Tailwind CSS](https://tailwindcss.com/docs) - For component composition and styles
+- [Vite](https://vitejs.dev/guide/) - A next-gen frontend build tool for JavaScript that aims to provide a faster and leaner development experience for modern web projects
+- [React](https://react.dev/learn) - A Javascript library for web and native user interfaces
+- [Next.js](https://nextjs.org/docs) - A React framework for building web applications
+- [Typescript](https://www.typescriptlang.org/docs/) - A strongly typed programming language that builds on JavaScript, giving you better tooling at any scale
+- [Graphql](https://graphql.org/learn/) - A server-side runtime for executing queries using a type system you define for your data
+- [TanStack Query for React](https://tanstack.com/query/latest/docs/react/overview) - A powerful asynchronous state management library for React which makes fetching, caching, synchronizing and updating server state in your web applications a breeze
+- [Immer](https://immerjs.github.io/immer/) - A javascript package which helps you interact with your data by simply modifying it while keeping all the benefits of immutable data
+- [Tailwind CSS](https://tailwindcss.com/docs/installation) - A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup
+- [Headless UI](https://headlessui.com/) - Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS
 
 ### The challenge (Situation)
 
-View the User Stories at the [User Stories Markdown File](./stories.md)
+View the User Stories in the [User Stories Markdown File](./docs/stories.md)
 
 ### Expected Behaviour (Tasks)
 
