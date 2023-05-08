@@ -30,9 +30,10 @@ This project was bootstrapped using Vite and uses the STAR approach.
 
 Press `.` on the keyboard to view this project's code just like in Visual Studio Code
 
-- Solution URL: [Frontend Repository](https://github.com/princemuel/invoice-web-app)
-- APi Endpoint: [Backend Repository](https://invoicemailer.onrender.com/)
-- Live Site: [Live Site](https://invoicemail.vercel.app/)
+- [Frontend Repository](https://github.com/princemuel/invoice-web-app)
+- [Live Site](https://invoicemail.vercel.app/)
+- [Backend Repository](https://github.com/princemuel/invoice-api)
+- [Api Endpoint](https://invoicemailer.onrender.com/)
 
 ## My process
 
