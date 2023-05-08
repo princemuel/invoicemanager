@@ -1,4 +1,5 @@
 import { IUser } from '@src/@types';
+import { GraphQLClient } from 'graphql-request';
 import { produce } from 'immer';
 import {
   Dispatch,
@@ -32,7 +33,7 @@ interface ProviderProps {
 }
 
 export const AuthProvider = ({ children }: ProviderProps) => {
-  let [state, dispatch] = useAuth();
+  let [state, dispatch] = useAuth(client);
 
   state = useMemo(() => state, [state]);
   dispatch = useMemo(() => dispatch, [dispatch]);
@@ -60,7 +61,7 @@ export const useAuthDispatch = () => {
   return context;
 };
 
-function useAuth() {
+function useAuth(client: GraphQLClient) {
   const refreshAuthQuery = useRefreshAuthQuery(client, {});
   const userQuery = useGetUserQuery(client, {});
 
