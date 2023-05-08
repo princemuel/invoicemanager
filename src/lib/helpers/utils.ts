@@ -33,7 +33,7 @@ export function truncate(str = '', length = str.length) {
   return str.length > length ? `${str.substring(0, length)}...` : str;
 }
 
-type EndsWith<W, S extends string> = W extends `${infer R}${S}` ? W : never;
+type EndsWith<W, S extends string> = W extends `${infer _R}${S}` ? W : never;
 
 export const endsWith = <Word extends string, Suffix extends string>(
   str: Word,
@@ -148,8 +148,6 @@ export function getMonth(string: string) {
             OBJECT UTILS           *
   ---------------------------------*
  */
-
-export const noop = () => {};
 
 export function serialize<T>(data: T): NonNullable<T> {
   return JSON.parse(JSON.stringify(data));

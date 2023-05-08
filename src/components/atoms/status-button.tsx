@@ -1,4 +1,4 @@
-import { capitalize } from '@src/helpers';
+import { capitalize } from '@src/lib';
 import clsx from 'clsx';
 
 interface Props {

@@ -1,5 +1,4 @@
-import { calculateTotal, endsWith } from '@src/helpers';
-import { useMedia } from '@src/hooks';
+import { calculateTotal, endsWith, useMedia } from '@src/lib';
 import clsx from 'clsx';
 import * as React from 'react';
 import {
@@ -10,7 +9,7 @@ import {
 } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
-import { InvoiceFormType } from './@types';
+import type { InvoiceFormType } from './@types';
 import { PriceOutput } from './price-output';
 
 interface Props {

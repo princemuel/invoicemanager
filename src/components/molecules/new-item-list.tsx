@@ -1,5 +1,4 @@
-import { calculateTotal, endsWith } from '@src/helpers';
-import { useMedia } from '@src/hooks';
+import { calculateTotal, endsWith, useMedia } from '@src/lib';
 import clsx from 'clsx';
 import * as React from 'react';
 import {

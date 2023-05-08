@@ -1,10 +1,10 @@
 import { Layout } from '@src/components';
-import { PersistLogin, RequireAuth } from '@src/middleware';
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+import { PersistLogin, RequireAuth } from '../lib';
 import { LoginRoute, RegisterRoute } from './auth';
 import { HomeRoute } from './home';
 import {

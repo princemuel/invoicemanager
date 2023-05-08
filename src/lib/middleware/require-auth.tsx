@@ -1,7 +1,7 @@
-import { useAuthState } from '@src/context';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuthState } from '../context';
 
-type Props = {};
+interface Props {}
 
 const RequireAuth = (props: Props) => {
   const session = useAuthState();

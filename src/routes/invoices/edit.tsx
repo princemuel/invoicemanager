@@ -1,6 +1,5 @@
 import { EditInvoiceForm, InvoiceFormTemplate } from '@src/components';
-import { useGetInvoiceQuery } from '@src/hooks';
-import { client } from '@src/lib';
+import { client, useGetInvoiceQuery } from '@src/lib';
 import { useParams } from 'react-router-dom';
 
 type Props = {};

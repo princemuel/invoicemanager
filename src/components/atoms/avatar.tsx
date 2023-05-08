@@ -1,5 +1,4 @@
-import { useAuthState } from '@src/context';
-import { trim } from '@src/helpers';
+import { trim, useAuthState } from '@src/lib';
 
 interface Props {
   src?: string;

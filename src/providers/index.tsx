@@ -10,8 +10,12 @@ import * as React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { RouterProvider } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AuthProvider, ModalProvider, ThemeProvider } from '../context';
-import { getErrorMessage } from '../helpers';
+import {
+  AuthProvider,
+  ModalProvider,
+  ThemeProvider,
+  getErrorMessage,
+} from '../lib';
 import { router } from '../routes';
 import { ToastProvider } from './toast';
 
@@ -63,6 +67,7 @@ const Providers = (props: Props) => {
         logger: {
           log: console.log,
           warn: console.warn,
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
           error: () => {},
         },
       })

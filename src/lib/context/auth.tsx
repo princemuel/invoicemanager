@@ -1,3 +1,4 @@
+import { IUser } from '@src/@types';
 import { produce } from 'immer';
 import {
   Dispatch,
@@ -7,9 +8,8 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import type { IUser } from '../@types';
+import { client } from '../client';
 import { useGetUserQuery, useRefreshAuthQuery } from '../hooks';
-import { client } from '../lib';
 interface IState {
   token?: string;
   user?: Partial<IUser>;

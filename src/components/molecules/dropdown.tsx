@@ -1,6 +1,6 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { icons } from '@src/common';
-import { pluralize } from '@src/helpers';
+import { pluralize } from '@src/lib';
 import { Dispatch, Fragment, SetStateAction } from 'react';
 
 interface Props {

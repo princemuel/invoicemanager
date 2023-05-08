@@ -1,4 +1,4 @@
-import { constants } from '@src/helpers';
+import { constants } from '@src/lib';
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
 

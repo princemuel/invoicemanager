@@ -1,6 +1,6 @@
 import { Avatar, Logo, ThemeButton } from '../atoms';
 
-type Props = {};
+interface Props {}
 
 const Sidebar = (props: Props) => {
   return (
