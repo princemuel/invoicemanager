@@ -1,7 +1,5 @@
 import { IErrorResponse } from '@src/@types';
-import { useAuthDispatch } from '@src/context';
-import { useLogoutQuery } from '@src/hooks';
-import { client } from '@src/lib';
+import { client, useAuthDispatch, useLogoutQuery } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +32,7 @@ const LogoutButton = (props: Props) => {
 
   const logout = useCallback(() => {
     refetch();
-  }, []);
+  }, [refetch]);
 
   return (
     <button type='button' onClick={logout}>

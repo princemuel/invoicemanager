@@ -1,5 +1,9 @@
-import { calculateTotal, formatPrice } from '@src/helpers';
-import { InvoiceItemType, useMedia } from '@src/hooks';
+import {
+  InvoiceItemType,
+  calculateTotal,
+  formatPrice,
+  useMedia,
+} from '@src/lib';
 import clsx from 'clsx';
 import * as React from 'react';
 import { Text } from '../atoms';

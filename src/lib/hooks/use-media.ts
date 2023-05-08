@@ -1,5 +1,5 @@
-import { isBrowser, off, on } from '@src/helpers';
 import { useEffect, useState } from 'react';
+import { isBrowser, off, on } from '../helpers';
 
 export function useMedia(query: string, defaultState?: boolean) {
   const [state, setState] = useState(() =>

@@ -1,12 +1,12 @@
 import { Dialog, Transition } from '@headlessui/react';
 import {
   InvoiceType,
+  client,
   useDeleteInvoiceMutation,
   useGetInvoiceQuery,
   useGetInvoicesQuery,
   useUpdateInvoiceMutation,
-} from '@src/hooks';
-import { client } from '@src/lib';
+} from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { Fragment, useCallback, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';

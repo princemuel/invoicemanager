@@ -1,4 +1,4 @@
-import { useSetTheme, useTheme } from '@src/context';
+import { useSetTheme, useTheme } from '@src/lib';
 import { clsx } from 'clsx';
 
 const ThemeButton = () => {

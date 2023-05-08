@@ -1,5 +1,4 @@
-import { datetime } from '@src/helpers';
-import { InvoiceType, useMedia } from '@src/hooks';
+import { InvoiceType, datetime, useMedia } from '@src/lib';
 import * as React from 'react';
 import { BackLink, StatusButton, Text } from '../atoms';
 import { InvoiceActions, InvoiceItemDetails } from '../molecules';

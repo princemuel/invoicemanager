@@ -1,11 +1,11 @@
 import { IErrorResponse } from '@src/@types';
-import { useAuthDispatch, useAuthState } from '@src/context';
-import { useGetUserQuery, usePersist, useRefreshAuthQuery } from '@src/hooks';
-import { client } from '@src/lib';
+import { Loader } from '@src/components';
 import * as React from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Loader } from '../components/organisms';
+import { client } from '../client';
+import { useAuthDispatch, useAuthState } from '../context';
+import { useGetUserQuery, usePersist, useRefreshAuthQuery } from '../hooks';
 
 interface Props {}
 

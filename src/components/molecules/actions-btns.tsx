@@ -1,4 +1,4 @@
-import { InvoiceType } from '@src/hooks';
+import type { InvoiceType } from '@src/lib';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 

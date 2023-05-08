@@ -1,8 +1,11 @@
 import { IErrorResponse } from '@src/@types';
 import { icons } from '@src/common';
-import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@src/helpers';
-import { useLoginMutation, usePersist } from '@src/hooks';
-import { client } from '@src/lib';
+import { client, useLoginMutation, usePersist } from '@src/lib';
+import {
+  LoginFormSchema,
+  RHFSubmitHandler,
+  useZodForm,
+} from '@src/lib/helpers';
 import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

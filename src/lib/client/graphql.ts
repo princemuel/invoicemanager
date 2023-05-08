@@ -1,5 +1,5 @@
-import { constants } from '@src/helpers';
 import { GraphQLClient } from 'graphql-request';
+import { constants } from '../helpers';
 
 const endpoint = `${constants.BASE_URL}`; //  process?.env?.NEXT_PUBLIC_GRAPHQL_ENDPOINT ??
 

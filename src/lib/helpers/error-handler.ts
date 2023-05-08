@@ -1,7 +1,9 @@
-type ErrorWithMessage = {
+interface ErrorWithMessage {
   message: string;
-};
-type ErrorDataWithMessage = { data: { message: string } };
+}
+interface ErrorDataWithMessage {
+  data: { message: string };
+}
 
 export function getErrorMessage(error: unknown) {
   return toErrorWithMessage(error).message;

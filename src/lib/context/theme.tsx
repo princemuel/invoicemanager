@@ -1,5 +1,5 @@
-import { off, on } from '@src/helpers';
 import * as React from 'react';
+import { off, on } from '../helpers';
 
 type ThemeMode = 'dark' | 'light';
 type ThemeState = ReturnType<typeof useThemeMode>[0] | null;
@@ -8,9 +8,9 @@ type SetThemeState = ReturnType<typeof useThemeMode>[1] | null;
 const ThemeContext = React.createContext<ThemeState>(null);
 const SetThemeContext = React.createContext<SetThemeState>(null);
 
-type Props = {
+interface Props {
   children: React.ReactNode;
-};
+}
 
 const ThemeProvider = ({ children }: Props) => {
   const [mode, setMode] = useThemeMode();

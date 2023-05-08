@@ -1,6 +1,6 @@
-import { useAuthState } from '@src/context';
 import jwtDecode, { JwtPayload } from 'jwt-decode';
 import { useCookies } from 'react-cookie';
+import { useAuthState } from '../context';
 
 interface TokenPayload extends JwtPayload {
   email: string;

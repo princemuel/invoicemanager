@@ -1,7 +1,11 @@
 import type { IErrorResponse } from '@src/@types';
-import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@src/helpers';
-import { useRegisterMutation } from '@src/hooks';
-import { client } from '@src/lib';
+import {
+  RHFSubmitHandler,
+  RegisterFormSchema,
+  client,
+  useRegisterMutation,
+  useZodForm,
+} from '@src/lib';
 import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

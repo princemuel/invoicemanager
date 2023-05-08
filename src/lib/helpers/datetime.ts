@@ -1,10 +1,11 @@
 import { uuid } from '@src/common';
-import dayjs from 'dayjs';
+import dayjs, { extend } from 'dayjs';
 import LocaleData from 'dayjs/plugin/localeData';
 import UTC from 'dayjs/plugin/utc';
 
-dayjs.extend(LocaleData);
-dayjs.extend(UTC);
+extend(LocaleData);
+extend(UTC);
+
 interface IDay {
   id: ReturnType<typeof uuid>;
   date: dayjs.Dayjs;
@@ -16,8 +17,6 @@ export class DateTime {
   static DAYS = dayjs.weekdaysMin();
   static MONTHS = dayjs.monthsShort();
   static TODAY = dayjs.utc();
-
-  constructor() {}
 
   private uuid() {
     return uuid();
