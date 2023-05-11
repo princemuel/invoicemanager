@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2015",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext", "WebWorker"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -22,6 +22,6 @@
       "@src/*": ["./src/*"]
     }
   },
-  "include": ["./src"],
+  "include": ["./src", "**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

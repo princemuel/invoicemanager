@@ -1,4 +1,3 @@
-export * from './@types';
 export * from './actions-btns';
 export * from './calendar';
 export * from './dropdown';

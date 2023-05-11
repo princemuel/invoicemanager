@@ -1,4 +1,4 @@
-import type { IErrorResponse } from '@src/@types';
+import type { Project } from '@src/@types';
 import * as React from 'react';
 import { toast } from 'react-toastify';
 import { LoadingSpinner } from '../atoms';
@@ -25,7 +25,7 @@ const QueryResult = <T,>({
   children,
 }: Props<T>) => {
   if (error) {
-    (error as IErrorResponse).response.errors.forEach((err) => {
+    (error as Project.IErrorResponse).response.errors.forEach((err) => {
       if (err.message.includes('Authorised'))
         toast.error('Something unexpected happened. Please try again.');
       else toast.error(err.message);

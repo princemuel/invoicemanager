@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-type Props = {};
+interface Props {}
 
 const MainContent = (props: Props) => {
   return (

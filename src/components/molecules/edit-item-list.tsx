@@ -9,12 +9,13 @@ import {
 } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
-import type { InvoiceFormType } from './@types';
+
+import { Project } from '@src/@types';
 import { PriceOutput } from './price-output';
 
 interface Props {
-  methods: UseFormReturn<InvoiceFormType, any>;
-  invoice: InvoiceFormType;
+  methods: UseFormReturn<Project.InvoiceFormType, any>;
+  invoice: Project.InvoiceFormType;
 }
 
 const EditItemList = ({ methods, invoice }: Props) => {

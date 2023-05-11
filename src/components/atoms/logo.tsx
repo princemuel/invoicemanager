@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-type Props = {};
+interface Props {}
 
 const Logo = (props: Props) => {
   return (

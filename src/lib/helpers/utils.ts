@@ -1,9 +1,4 @@
-import type {
-  DraftInvoice,
-  Invoice,
-  PaidInvoice,
-  PendingInvoice,
-} from '@src/@types';
+import type { Project } from '@src/@types';
 import {
   DehydrateOptions,
   QueryClient,
@@ -51,18 +46,22 @@ export function approximate(num = 0, fractionDigits = 0) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export const isDraftInvoice = (invoice: Invoice): invoice is DraftInvoice => {
-  return invoice.status === 'DRAFT';
+export const isDraftInvoice = (
+  invoice?: Project.Invoice
+): invoice is Project.DraftInvoice => {
+  return invoice?.status === 'DRAFT';
 };
 
 export const isPendingInvoice = (
-  invoice: Invoice
-): invoice is PendingInvoice => {
-  return invoice.status === 'PENDING';
+  invoice?: Project.Invoice
+): invoice is Project.PendingInvoice => {
+  return invoice?.status === 'PENDING';
 };
 
-export const isPaidInvoice = (invoice: Invoice): invoice is PaidInvoice => {
-  return invoice.status === 'PAID';
+export const isPaidInvoice = (
+  invoice?: Project.Invoice
+): invoice is Project.PaidInvoice => {
+  return invoice?.status === 'PAID';
 };
 
 export function range(start: number, stop: number, step: number) {

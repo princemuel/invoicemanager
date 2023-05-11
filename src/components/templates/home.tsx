@@ -3,7 +3,7 @@ import {
   EnvelopeOpenIcon,
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
-import type { IStatus } from '@src/@types';
+import type { Project } from '@src/@types';
 import {
   client,
   datetime,
@@ -19,7 +19,7 @@ import { StatusButton, Text } from '../atoms';
 import { PageSEO } from './seo';
 import styles from './templates.module.css';
 
-const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
+const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
 const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 
 interface Props {}
@@ -32,8 +32,8 @@ const HomeTemplate = (props: Props) => {
   const invoices = React.useMemo(() => {
     return (data?.invoices || []).sort((a, b) => {
       return (
-        status.indexOf(a.status as IStatus[number]) -
-        status.indexOf(b.status as IStatus[number])
+        status.indexOf(a.status as Project.IStatus[number]) -
+        status.indexOf(b.status as Project.IStatus[number])
       );
     });
   }, [data?.invoices]);
@@ -80,7 +80,7 @@ const HomeTemplate = (props: Props) => {
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h4' className='font-bold text-blue-950'>
-                  Total {pluralize('Invoice', invoices.length)}
+                  Total Invoices
                 </Text>
                 <div className='rounded-brand bg-green-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-green-500' />
@@ -95,7 +95,7 @@ const HomeTemplate = (props: Props) => {
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h4' className='font-bold text-blue-950'>
-                  Pending {pluralize('Invoice', pendingInvoices.length)}
+                  Pending Invoices
                 </Text>
                 <div className='rounded-brand bg-violet-100 p-4'>
                   <EnvelopeOpenIcon className='aspect-square w-4 text-violet-500' />
@@ -110,7 +110,7 @@ const HomeTemplate = (props: Props) => {
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
               <div className='flex items-center justify-between gap-4'>
                 <Text as='h4' className='font-bold text-blue-950'>
-                  Draft {pluralize('Invoice', draftInvoices.length)}
+                  Draft Invoices
                 </Text>
                 <div className='rounded-brand bg-blue-100 p-4'>
                   <InboxArrowDownIcon className='aspect-square w-4 text-blue-500' />
@@ -164,7 +164,10 @@ const HomeTemplate = (props: Props) => {
                     key={invoice?.id}
                     className='rounded-brand bg-neutral-100 p-[1.6rem] shadow-100 transition-[background,border] delay-0 duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-600 max-sx:pt-4'
                   >
-                    <blockquote className='grid grid-cols-2 grid-rows-3 items-end'>
+                    <Link
+                      to={`invoices/${String(invoice?.id)}`}
+                      className='grid grid-cols-2 grid-rows-3 items-end'
+                    >
                       <Text as='p' className='body-100 font-bold'>
                         <span className='text-brand-400'>#</span>
                         <span className='uppercase text-brand-900 dark:text-neutral-100'>
@@ -201,7 +204,7 @@ const HomeTemplate = (props: Props) => {
                         status={invoice?.status}
                         className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end'
                       />
-                    </blockquote>
+                    </Link>
                   </li>
                 ))
               ) : (

@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
-import type { IStatus } from '@src/@types';
+import type { Project } from '@src/@types';
 import { icons } from '@src/common';
 import {
   capitalize,
@@ -18,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 import { PageSEO } from './seo';
 
-const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
+const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
 interface Props {}
 
@@ -41,8 +41,8 @@ const InvoicesTemplate = (props: Props) => {
       })
     : invoices.sort((a, b) => {
         return (
-          status.indexOf(a.status as IStatus[number]) -
-          status.indexOf(b.status as IStatus[number])
+          status.indexOf(a.status as Project.IStatus[number]) -
+          status.indexOf(b.status as Project.IStatus[number])
         );
       });
 
@@ -53,6 +53,7 @@ const InvoicesTemplate = (props: Props) => {
         description={`The list of all the current user's invoices`}
         isArticle={false}
       />
+
       <header className='mt-20 flex items-center'>
         <div className='flex-1'>
           <Text as='h1'>Invoices</Text>

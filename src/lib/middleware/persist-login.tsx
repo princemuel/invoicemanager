@@ -1,4 +1,4 @@
-import { IErrorResponse } from '@src/@types';
+import type { Project } from '@src/@types';
 import { Loader } from '@src/components';
 import * as React from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -31,7 +31,7 @@ const PersistLogin = (props: Props) => {
         setTrueSuccess(true);
         dispatch('auth/addToken');
       },
-      onError(err: IErrorResponse) {
+      onError(err: Project.IErrorResponse) {
         err.response.errors.forEach(async (error) => {
           toast.error(error.message);
 
@@ -66,7 +66,7 @@ const PersistLogin = (props: Props) => {
       onSuccess: async (data) => {
         dispatch('auth/addUser');
       },
-      onError(err: IErrorResponse) {
+      onError(err: Project.IErrorResponse) {
         err.response.errors.forEach(async (error) => {
           toast.error(error.message);
 

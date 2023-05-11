@@ -2,7 +2,7 @@ import { EditInvoiceForm, InvoiceFormTemplate } from '@src/components';
 import { client, useGetInvoiceQuery } from '@src/lib';
 import { useParams } from 'react-router-dom';
 
-type Props = {};
+interface Props {}
 
 const EditInvoiceRoute = (props: Props) => {
   const { invoiceId } = useParams();

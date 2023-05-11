@@ -1,4 +1,4 @@
-import type { IErrorResponse } from '@src/@types';
+import type { Project } from '@src/@types';
 import {
   RHFSubmitHandler,
   RegisterFormSchema,
@@ -28,7 +28,7 @@ const RegisterForm = (props: Props) => {
       toast.success(data.register?.message);
       navigate('/login');
     },
-    onError(e: IErrorResponse) {
+    onError(e: Project.IErrorResponse) {
       e.response.errors.forEach(async (error) => {
         toast.error(error.message);
       });
