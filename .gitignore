@@ -162,12 +162,13 @@ dist
 .prettierignore
 
 # misc
+.DS_Store
+*.pem
+
 # misc
 dist
 dist-ssr
-design
-*.pem
-
 local
+
+*.pem
 *.local.*
-!README.md
