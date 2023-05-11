@@ -11,6 +11,7 @@ import {
   hasValues,
   pluralize,
   useGetInvoicesQuery,
+  useMedia,
 } from '@src/lib';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -24,6 +25,8 @@ const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 interface Props {}
 
 const HomeTemplate = (props: Props) => {
+  const isMobile = useMedia('(max-width: 40em)');
+
   const { data } = useGetInvoicesQuery(client, {});
 
   const invoices = React.useMemo(() => {
@@ -136,7 +139,7 @@ const HomeTemplate = (props: Props) => {
           </div>
         </section>
 
-        <section className='h-container flex flex-col gap-12 rounded-brand bg-neutral-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
+        <section className='h-container flex flex-col gap-12 rounded-brand bg-neutral-300 px-10 py-12 shadow-100 dark:bg-brand-700'>
           <div className='flex items-center justify-between'>
             <Text as='h2' className='text-brand-900 dark:text-neutral-100'>
               Invoices
@@ -150,55 +153,116 @@ const HomeTemplate = (props: Props) => {
             </Link>
           </div>
 
-          <table className='w-full'>
-            <thead className='bg-brand-500 p-4'>
-              <tr className='grid grid-cols-5 items-center justify-items-start p-4'>
-                {HeaderCells.map((cell) => (
-                  <th
-                    key={cell}
-                    className='body-100 p-2 font-bold !text-neutral-100 last:justify-self-center'
-                  >
-                    {cell}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody className='p-4'>
+          {isMobile ? (
+            <ul
+              aria-label='Invoices List'
+              className='flex w-full flex-col gap-6'
+            >
               {hasValues(invoices) ? (
-                invoices.slice(0, 7).map((invoice) => (
-                  <tr
-                    key={invoice.id}
-                    className='body-100 grid grid-cols-5 items-center justify-items-start p-4 text-brand-900/90 dark:text-neutral-100'
+                invoices.map((invoice) => (
+                  <li
+                    key={invoice?.id}
+                    className='rounded-brand bg-neutral-100 p-[1.6rem] shadow-100 transition-[background,border] delay-0 duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-600 max-sx:pt-4'
                   >
-                    <td className=''>
-                      <span className='font-bold text-brand-400'>#</span>
-                      <span className='uppercase'>{invoice?.tag}</span>
-                    </td>
-                    <td className=''>
-                      <time dateTime={invoice?.paymentDue}>
-                        {datetime.toDateString(invoice?.paymentDue)}
-                      </time>
-                    </td>
-                    <td className=''>{formatPrice(invoice?.total)}</td>
-                    <td className=''>{invoice?.clientName}</td>
-                    <td className='justify-self-stretch'>
+                    <blockquote className='grid grid-cols-2 grid-rows-3 items-end'>
+                      <Text as='p' className='body-100 font-bold'>
+                        <span className='text-brand-400'>#</span>
+                        <span className='uppercase text-brand-900 dark:text-neutral-100'>
+                          {invoice?.tag}
+                        </span>
+                      </Text>
+
+                      <Text
+                        as='p'
+                        className='body-100 flex-1 font-medium text-brand-400 dark:text-brand-100'
+                        aria-live='polite'
+                      >
+                        <span>Due </span>
+                        <time dateTime={invoice?.paymentDue}>
+                          {datetime.toDateString(invoice?.paymentDue)}
+                        </time>
+                      </Text>
+
+                      <Text
+                        as='p'
+                        className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100'
+                      >
+                        {invoice?.clientName}
+                      </Text>
+
+                      <Text
+                        as='p'
+                        className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100'
+                      >
+                        <output>{formatPrice(invoice?.total)}</output>
+                      </Text>
+
                       <StatusButton
                         status={invoice?.status}
-                        className='w-full px-6 py-4'
+                        className='col-start-2 col-end-3 row-start-3 row-end-4 h-16 w-[11rem] flex-1 justify-self-end'
                       />
-                    </td>
-                  </tr>
+                    </blockquote>
+                  </li>
                 ))
               ) : (
-                <tr className='body-100 grid place-content-center p-8'>
-                  <td className='text-brand-900/90 dark:text-neutral-100'>
+                <li className='body-100 grid place-content-center p-8'>
+                  <p className='text-brand-900/90 dark:text-neutral-100'>
                     You have no invoices at this moment
-                  </td>
-                </tr>
+                  </p>
+                </li>
               )}
-            </tbody>
-          </table>
+            </ul>
+          ) : (
+            <table className='w-full'>
+              <thead className='bg-brand-500 p-4'>
+                <tr className='grid grid-cols-5 items-center justify-items-start p-4'>
+                  {HeaderCells.map((cell) => (
+                    <th
+                      key={cell}
+                      className='body-100 p-2 font-bold !text-neutral-100 last:justify-self-center'
+                    >
+                      {cell}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+
+              <tbody className='p-4'>
+                {hasValues(invoices) ? (
+                  invoices.slice(0, 7).map((invoice) => (
+                    <tr
+                      key={invoice.id}
+                      className='body-100 grid grid-cols-5 items-center justify-items-start p-4 text-brand-900/90 dark:text-neutral-100'
+                    >
+                      <td className=''>
+                        <span className='font-bold text-brand-400'>#</span>
+                        <span className='uppercase'>{invoice?.tag}</span>
+                      </td>
+                      <td className=''>
+                        <time dateTime={invoice?.paymentDue}>
+                          {datetime.toDateString(invoice?.paymentDue)}
+                        </time>
+                      </td>
+                      <td className=''>{formatPrice(invoice?.total)}</td>
+                      <td className=''>{invoice?.clientName}</td>
+                      <td className='justify-self-stretch'>
+                        <StatusButton
+                          status={invoice?.status}
+                          className='w-full px-6 py-4'
+                        />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className='body-100 grid place-content-center p-8'>
+                    <td className='text-brand-900/90 dark:text-neutral-100'>
+                      You have no invoices at this moment
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </section>
       </section>
     </React.Fragment>
