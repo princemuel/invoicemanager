@@ -20,3 +20,5 @@ export const constants = {
 
   BASE_URL_PROD: 'https://invoicemail.vercel.app',
 };
+
+console.log(constants.BASE_URL);
