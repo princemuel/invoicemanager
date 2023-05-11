@@ -1,4 +1,4 @@
-import type { InvoiceType } from '@src/lib';
+import { InvoiceType, isPaidInvoice } from '@src/lib';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 
@@ -32,7 +32,8 @@ const InvoiceActions = ({
         type='button'
         className='btn btn-invoice font-bold'
         onClick={() => {
-          if (invoice?.status !== 'PAID') updateStatus(invoice);
+          // @ts-expect-error disable typecheck error
+          if (!isPaidInvoice(invoice)) updateStatus(invoice);
         }}
       >
         Mark as Paid

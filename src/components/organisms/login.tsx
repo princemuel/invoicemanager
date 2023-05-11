@@ -1,4 +1,4 @@
-import { IErrorResponse } from '@src/@types';
+import { Project } from '@src/@types';
 import { icons } from '@src/common';
 import { client, useLoginMutation, usePersist } from '@src/lib';
 import {
@@ -29,7 +29,7 @@ const LoginForm = (props: Props) => {
       toast.success('Login Successful');
       navigate('/');
     },
-    onError(e: IErrorResponse) {
+    onError(e: Project.IErrorResponse) {
       e.response.errors.forEach(async (error) => {
         toast.error(error.message);
       });
@@ -80,7 +80,7 @@ const LoginForm = (props: Props) => {
             name='password'
             label={'Password'}
             className='col-span-6'
-            autoComplete='new-password'
+            autoComplete='current-password'
           />
 
           <button

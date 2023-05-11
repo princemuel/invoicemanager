@@ -137,7 +137,7 @@ const InvoiceDetails = ({ invoice, updateStatus, openDeleteModal }: Props) => {
         </div>
 
         {isMobile ? (
-          <div className='sticky bottom-0 px-[2.4rem] py-9 dark:bg-brand-700'>
+          <div className='sticky bottom-0 bg-neutral-100 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
             <InvoiceActions
               invoice={invoice}
               updateStatus={updateStatus}

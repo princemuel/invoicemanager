@@ -4,27 +4,27 @@ import {
   RHFSubmitHandler,
   calculateTotal,
   client,
+  constants,
   hasValues,
   terms,
   useGetInvoiceQuery,
   useGetInvoicesQuery,
   useUpdateInvoiceMutation,
   useZodForm,
-  constants,
 } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Text } from '../atoms';
 import { Calendar, Dropdown, EditItemList, FormField } from '../molecules';
+
 interface Props {}
 
 const EditInvoiceForm = (props: Props) => {
   const { invoiceId } = useParams();
-  const location = useLocation();
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();

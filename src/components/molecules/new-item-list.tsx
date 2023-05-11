@@ -1,3 +1,4 @@
+import type { Project } from '@src/@types';
 import { calculateTotal, endsWith, useMedia } from '@src/lib';
 import clsx from 'clsx';
 import * as React from 'react';
@@ -9,11 +10,10 @@ import {
 } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
-import { InvoiceFormType } from './@types';
 import { PriceOutput } from './price-output';
 
 interface Props {
-  methods: UseFormReturn<InvoiceFormType, any>;
+  methods: UseFormReturn<Project.InvoiceFormType, any>;
 }
 
 const NewItemList = ({ methods }: Props) => {

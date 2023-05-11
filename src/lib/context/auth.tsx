@@ -1,4 +1,4 @@
-import { IUser } from '@src/@types';
+import type { Project } from '@src/@types';
 import { GraphQLClient } from 'graphql-request';
 import { produce } from 'immer';
 import {
@@ -13,7 +13,7 @@ import { client } from '../client';
 import { useGetUserQuery, useRefreshAuthQuery } from '../hooks';
 interface IState {
   token?: string;
-  user?: Partial<IUser>;
+  user?: Partial<Project.IUser>;
 }
 
 type IAction = 'auth/addUser' | 'auth/addToken' | 'auth/logout';
@@ -74,7 +74,7 @@ function useAuth(client: GraphQLClient) {
   return useReducer(reducer, initialState);
 }
 
-function authReducer(user?: Partial<IUser>, token?: string) {
+function authReducer(user?: Partial<Project.IUser>, token?: string) {
   return produce((draft: IState, action: IAction) => {
     switch (action) {
       case 'auth/addUser':

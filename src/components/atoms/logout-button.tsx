@@ -1,4 +1,4 @@
-import { IErrorResponse } from '@src/@types';
+import type { Project } from '@src/@types';
 import { client, useAuthDispatch, useLogoutQuery } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
@@ -22,7 +22,7 @@ const LogoutButton = (props: Props) => {
         queryClient.clear();
         navigate('/login');
       },
-      onError(error: IErrorResponse) {
+      onError(error: Project.IErrorResponse) {
         dispatch('auth/logout');
         queryClient.clear();
         navigate('/login');

@@ -1,6 +1,6 @@
 import { InvoiceTemplate } from '@src/components';
 
-type Props = {};
+interface Props {}
 
 const InvoiceRoute = (props: Props) => {
   return <InvoiceTemplate />;

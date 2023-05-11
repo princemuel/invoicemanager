@@ -1,7 +1,7 @@
-import { IconProps } from '@src/common';
+import { Project } from '@src/@types';
 import * as React from 'react';
 
-interface IProps extends IconProps {
+interface IProps extends Project.IconProps {
   fileName: string;
   iconPath?: string;
   onCompleted: () => void;

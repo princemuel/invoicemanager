@@ -1,4 +1,4 @@
-import type { InvoiceStatus } from '@src/@types';
+import { Project } from '@src/@types';
 import {
   DateTime,
   InvoiceFormSchema,
@@ -22,7 +22,7 @@ import { Calendar, Dropdown, FormField, NewItemList } from '../molecules';
 interface Props {}
 
 const NewInvoiceForm = (props: Props) => {
-  const [status, setStatus] = useState<InvoiceStatus>('PENDING');
+  const [status, setStatus] = useState<Project.InvoiceStatus>('PENDING');
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
 
@@ -265,17 +265,17 @@ const NewInvoiceForm = (props: Props) => {
         </div>
 
         <div className='sticky bottom-0 bg-neutral-100 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
-          <section className='h-container flex items-center gap-6'>
+          <section className='h-container flex items-center gap-4'>
             <button
               type='button'
-              className='btn body-100 bg-neutral-300 px-8 py-6 font-bold text-brand-400 first:mr-auto'
+              className='btn body-100 bg-neutral-300 px-6 py-6 font-bold text-brand-400 first:mr-auto'
               onClick={() => void navigate(-1)}
             >
               Discard
             </button>
             <button
               type='submit'
-              className='btn body-100 bg-[#373B53] px-8 py-6 font-bold text-brand-300 hover:bg-brand-900'
+              className='btn body-100 bg-[#373B53] px-6 py-6 font-bold text-brand-300 hover:bg-brand-900'
               onClick={() => void setStatus('DRAFT')}
             >
               Save as draft
@@ -283,7 +283,7 @@ const NewInvoiceForm = (props: Props) => {
             <button
               type='submit'
               // disabled={!isSubmittable}
-              className='btn body-100 bg-brand-500 px-8 py-6 font-bold text-neutral-100 hover:bg-brand-200'
+              className='btn body-100 bg-brand-500 px-6 py-6 font-bold text-neutral-100 hover:bg-brand-200'
               onClick={() => void setStatus('PENDING')}
             >
               Save & Send

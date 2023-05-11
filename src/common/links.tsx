@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   IconAddSVG,
   IconArrowDownSVG,
@@ -9,8 +8,6 @@ import {
   IconDeleteSVG,
   LogoSVG,
 } from './svg-icons';
-
-export interface IconProps extends React.ComponentPropsWithoutRef<'svg'> {}
 
 export const icons = {
   arrow: {
