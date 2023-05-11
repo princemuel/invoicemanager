@@ -80,7 +80,7 @@ const EditInvoiceForm = (props: Props) => {
         country: invoice?.senderAddress?.country || '',
         postCode: invoice?.senderAddress?.postCode || '',
       },
-      //@ts-expect-error
+      //@ts-expect-error ignore expected error
       status: invoice?.status || 'PENDING',
       total: invoice?.total || 0,
     },
@@ -97,7 +97,7 @@ const EditInvoiceForm = (props: Props) => {
         const dueTime = selectedDate.valueOf() + duration;
 
         draft.paymentDue = new Date(dueTime).toISOString();
-        //@ts-expect-error
+        //@ts-expect-error ignore expected error
         draft.status = status;
 
         for (const item of draft?.items) {
@@ -113,7 +113,7 @@ const EditInvoiceForm = (props: Props) => {
         throw new Error(JSON.stringify(result.error));
       }
 
-      // @ts-expect-error
+      //@ts-expect-error ignore expected error
       updateInvoice({ input: draft, where: { id: invoiceId } });
       methods.reset();
     } catch (error) {
@@ -291,7 +291,7 @@ const EditInvoiceForm = (props: Props) => {
               Item List
             </legend>
 
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error ignore expected errorerror */}
             <EditItemList methods={methods} invoice={invoice} />
           </fieldset>
           {/*<!--------- ITEM DETAILS END ---------!>*/}
@@ -309,6 +309,7 @@ const EditInvoiceForm = (props: Props) => {
             <button
               type='submit'
               className='btn body-100 bg-brand-500 px-8 py-6 font-bold text-neutral-100'
+              disabled={!isSubmittable}
               onClick={() => void setStatus('PENDING')}
             >
               Save Changes

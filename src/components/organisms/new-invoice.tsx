@@ -39,7 +39,7 @@ const NewInvoiceForm = (props: Props) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [methods.watch]);
+  }, [methods]);
 
   const { user } = useAuthState();
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ const NewInvoiceForm = (props: Props) => {
       }
 
       console.table(draft);
-      //@ts-expect-error
+      //@ts-expect-error ignore expected error
       createInvoice({ input: draft });
       methods.reset();
     } catch (error) {
@@ -276,13 +276,14 @@ const NewInvoiceForm = (props: Props) => {
             <button
               type='submit'
               className='btn body-100 bg-[#373B53] px-6 py-6 font-bold text-brand-300 hover:bg-brand-900'
+              disabled={!isSubmittable}
               onClick={() => void setStatus('DRAFT')}
             >
               Save as draft
             </button>
             <button
               type='submit'
-              // disabled={!isSubmittable}
+              disabled={!isSubmittable}
               className='btn body-100 bg-brand-500 px-6 py-6 font-bold text-neutral-100 hover:bg-brand-200'
               onClick={() => void setStatus('PENDING')}
             >
