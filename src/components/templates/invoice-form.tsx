@@ -13,7 +13,7 @@ const InvoiceFormTemplate = ({ id, children, className, title }: Props) => {
   return (
     <section
       aria-labelledby={id}
-      className={clsx('relative min-h-screen', className)}
+      className={clsx('relative min-h-full', className)}
     >
       <div className='h-container'>
         <header className='mt-10'>

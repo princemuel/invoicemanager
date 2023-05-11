@@ -264,7 +264,7 @@ const NewInvoiceForm = (props: Props) => {
           {/*<!--------- ITEM DETAILS END ---------!>*/}
         </div>
 
-        <div className='sticky bottom-0 bg-neutral-100 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
+        <div className='sticky bottom-0 bg-neutral-200 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
           <section className='h-container flex items-center gap-4'>
             <button
               type='button'
