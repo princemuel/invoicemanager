@@ -1,2 +1,3 @@
+export * from './error';
 export * from './persist-login';
-export * from './require-auth';
+export * from './prefetch';

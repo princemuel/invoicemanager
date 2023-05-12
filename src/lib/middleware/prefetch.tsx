@@ -38,4 +38,4 @@ const Prefetch = () => {
 
   return <Outlet />;
 };
-export default Prefetch;
+export { Prefetch };
