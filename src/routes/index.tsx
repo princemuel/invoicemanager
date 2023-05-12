@@ -1,10 +1,11 @@
 import { Layout } from '@src/components';
+import Prefetch from '@src/lib/middleware/prefetch';
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { PersistLogin, RequireAuth } from '../lib';
+import { PersistLogin } from '../lib';
 import { LoginRoute, RegisterRoute } from './auth';
 import { HomeRoute } from './home';
 import {
@@ -21,7 +22,7 @@ export const router = createBrowserRouter(
       <Route path='register' element={<RegisterRoute />} />
 
       <Route element={<PersistLogin />}>
-        <Route element={<RequireAuth />}>
+        <Route element={<Prefetch />}>
           <Route index element={<HomeRoute />} />
 
           <Route path='invoices'>
