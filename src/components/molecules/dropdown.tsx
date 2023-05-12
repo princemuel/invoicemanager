@@ -46,7 +46,7 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
           leaveTo='opacity-0'
         >
           <Listbox.Options
-            className={`absolute z-10 mt-8 w-full rounded-brand bg-neutral-100 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300`}
+            className={`absolute z-20 mt-8 w-full rounded-brand bg-neutral-100 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300`}
           >
             {terms?.map((term) => {
               return (
