@@ -8,7 +8,7 @@ const EditInvoiceRoute = (props: Props) => {
   const { invoiceId } = useParams();
 
   const { data } = useGetInvoiceQuery(client, {
-    where: { id: invoiceId! },
+    where: { id: invoiceId as string },
   });
   return (
     <InvoiceFormTemplate

@@ -27,7 +27,7 @@ interface Props {}
 const HomeTemplate = (props: Props) => {
   const isMobile = useMedia('(max-width: 40em)');
 
-  const { data } = useGetInvoicesQuery(client, {});
+  const { data } = useGetInvoicesQuery(client);
 
   const invoices = React.useMemo(() => {
     return (data?.invoices || []).sort((a, b) => {

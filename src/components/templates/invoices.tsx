@@ -23,7 +23,7 @@ const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
 interface Props {}
 
 const InvoicesTemplate = (props: Props) => {
-  const { data } = useGetInvoicesQuery(client, {});
+  const { data } = useGetInvoicesQuery(client);
   const [selectedStatus, setSelectedStatus] = useState([
     statuses[0],
     statuses[1],
