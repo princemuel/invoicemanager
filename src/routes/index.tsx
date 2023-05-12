@@ -1,11 +1,10 @@
 import { Layout } from '@src/components';
-import Prefetch from '@src/lib/middleware/prefetch';
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { PersistLogin } from '../lib';
+import { PersistLogin, Prefetch } from '../lib';
 import { LoginRoute, RegisterRoute } from './auth';
 import { HomeRoute } from './home';
 import {
