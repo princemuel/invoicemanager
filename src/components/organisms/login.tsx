@@ -1,6 +1,11 @@
 import { Project } from '@src/@types';
 import { icons } from '@src/common';
-import { client, useLoginMutation, usePersist } from '@src/lib';
+import {
+  client,
+  useAuthDispatch,
+  useLoginMutation,
+  usePersist,
+} from '@src/lib';
 import {
   LoginFormSchema,
   RHFSubmitHandler,
@@ -23,9 +28,11 @@ const LoginForm = (props: Props) => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useAuthDispatch();
 
   const { mutate: login, isLoading } = useLoginMutation(client, {
     onSuccess(data) {
+      dispatch('auth/addToken');
       toast.success('Login Successful');
       navigate('/');
     },
