@@ -1,7 +1,7 @@
 import type { Project } from '@src/@types';
 import { Loader } from '@src/components';
 import * as React from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { client } from '../client';
 import { useAuthDispatch, useAuthState } from '../context';
@@ -19,17 +19,15 @@ interface Props {}
 
 const PersistLogin = (props: Props) => {
   const [persist] = usePersist();
-  const location = useLocation();
 
   const auth = useAuthState();
-  const navigate = useNavigate();
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
 
   const [isTrueSuccess, setIsTrueSuccess] = React.useState(false);
   const [isTrueError, setIsTrueError] = React.useState(false);
 
-  const token = auth.token;
+  const token = auth?.token;
 
   const refreshAuth = useRefreshAuthQuery(client, undefined, {
     enabled: !token && persist && !isTrueError,
@@ -75,7 +73,7 @@ const PersistLogin = (props: Props) => {
     // persist: no
     console.log('%c no persist', 'color: yellow;');
     content = <Outlet />;
-  } else if (refreshAuth.status === 'loading') {
+  } else if (refreshAuth.isLoading) {
     //persist: yes, token: no
     console.log('%c loading', 'color: blue;');
     // add a loader here

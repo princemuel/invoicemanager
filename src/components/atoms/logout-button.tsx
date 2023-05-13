@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-type Props = {};
+interface Props {}
 
 const LogoutButton = (props: Props) => {
   const navigate = useNavigate();
