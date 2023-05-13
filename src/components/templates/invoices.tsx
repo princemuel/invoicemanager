@@ -10,6 +10,7 @@ import {
   reverse,
   statuses,
   trim,
+  useAuthState,
   useGetInvoicesQuery,
   useMedia,
 } from '@src/lib';
@@ -23,7 +24,6 @@ const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
 interface Props {}
 
 const InvoicesTemplate = (props: Props) => {
-  const { data } = useGetInvoicesQuery(client, {});
   const [selectedStatus, setSelectedStatus] = useState([
     statuses[0],
     statuses[1],
@@ -31,8 +31,12 @@ const InvoicesTemplate = (props: Props) => {
   ]);
   const isWide = useMedia('(min-width: 50em)');
 
-  const invoices = data?.invoices || [];
+  const auth = useAuthState();
+  const { data } = useGetInvoicesQuery(client, undefined, {
+    enabled: Boolean(auth?.token),
+  });
 
+  const invoices = data?.invoices || [];
   const filtered = hasValues(selectedStatus)
     ? invoices.filter((invoice) => {
         return selectedStatus.some(

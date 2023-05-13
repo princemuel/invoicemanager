@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { PersistLogin, RequireAuth } from '../lib';
+import { PersistLogin } from '../lib';
 import { LoginRoute, RegisterRoute } from './auth';
 import { HomeRoute } from './home';
 import {
@@ -21,16 +21,14 @@ export const router = createBrowserRouter(
       <Route path='register' element={<RegisterRoute />} />
 
       <Route element={<PersistLogin />}>
-        <Route element={<RequireAuth />}>
-          <Route index element={<HomeRoute />} />
+        <Route index element={<HomeRoute />} />
 
-          <Route path='invoices'>
-            <Route index element={<InvoicesRoute />} />
-            <Route path=':invoiceId' element={<InvoiceRoute />} />
+        <Route path='invoices'>
+          <Route index element={<InvoicesRoute />} />
+          <Route path=':invoiceId' element={<InvoiceRoute />} />
 
-            <Route path=':invoiceId/edit' element={<EditInvoiceRoute />} />
-            <Route path='new' element={<NewInvoiceRoute />} />
-          </Route>
+          <Route path=':invoiceId/edit' element={<EditInvoiceRoute />} />
+          <Route path='new' element={<NewInvoiceRoute />} />
         </Route>
       </Route>
       <Route path='*' element={<h1>Error Page</h1>} />

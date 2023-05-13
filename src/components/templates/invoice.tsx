@@ -2,6 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import {
   InvoiceType,
   client,
+  useAuthState,
   useDeleteInvoiceMutation,
   useGetInvoiceQuery,
   useGetInvoicesQuery,
@@ -16,17 +17,23 @@ import { PageSEO } from './seo';
 interface Props {}
 
 const InvoiceTemplate = (props: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+
   const { invoiceId } = useParams();
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const auth = useAuthState();
+  const { data } = useGetInvoiceQuery(
+    client,
+    {
+      where: { id: invoiceId as string },
+    },
+    { enabled: Boolean(auth?.token) }
+  );
 
-  const { data } = useGetInvoiceQuery(client, {
-    where: { id: invoiceId as string },
-  });
   const invoice = data?.invoice;
 
   const { mutate: updateInvoice } = useUpdateInvoiceMutation(client, {

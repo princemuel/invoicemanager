@@ -1,11 +1,19 @@
 import type { Project } from '@src/@types';
 import { Loader } from '@src/components';
 import * as React from 'react';
-import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { client } from '../client';
 import { useAuthDispatch, useAuthState } from '../context';
-import { useGetUserQuery, usePersist, useRefreshAuthQuery } from '../hooks';
+import { usePersist, useRefreshAuthQuery } from '../hooks';
+import { AuthError } from './error';
+
+const messages = [
+  'email was not found',
+  'token is invalid',
+  'token has expired',
+  'Internal Server Error',
+];
 
 interface Props {}
 
@@ -16,87 +24,54 @@ const PersistLogin = (props: Props) => {
   const auth = useAuthState();
   const navigate = useNavigate();
   const dispatch = useAuthDispatch();
+  const navigate = useNavigate();
 
-  const [trueSuccess, setTrueSuccess] = React.useState(false);
+  const [isTrueSuccess, setIsTrueSuccess] = React.useState(false);
+  const [isTrueError, setIsTrueError] = React.useState(false);
 
   const token = auth.token;
 
-  const refreshAuth = useRefreshAuthQuery(
-    client,
-    {},
-    {
-      enabled: !token && persist,
-      retry: 1,
-      onSuccess(data) {
-        setTrueSuccess(true);
-        dispatch('auth/addToken');
-      },
-      onError(err: Project.IErrorResponse) {
-        err.response.errors.forEach(async (error) => {
-          toast.error(error.message);
+  const refreshAuth = useRefreshAuthQuery(client, undefined, {
+    enabled: !token && persist && !isTrueError,
+    retry: (failureCount, error: Project.IErrorResponse) => {
+      if (failureCount > 1) return false;
 
-          if (
-            error.message.includes('expired') ||
-            error.message.includes('invalid') ||
-            error.message.includes('not found')
-          ) {
-            dispatch('auth/logout');
-            navigate('/login');
-          }
+      const isRefreshAuthError = messages.some((message) => {
+        return error?.response?.errors?.[0].message.includes(message);
+      });
 
-          if (error.extensions.code === 'FORBIDDEN') {
-            try {
-              refreshAuth.refetch();
-              dispatch('auth/addToken');
-            } catch (error) {
-              dispatch('auth/logout');
-              navigate('/login');
-            }
-          }
-        });
-      },
-    }
-  );
+      return !isRefreshAuthError;
+    },
+    onSuccess(data) {
+      setIsTrueSuccess(true);
+      dispatch('auth/addToken');
+    },
+    onError(err: Project.IErrorResponse) {
+      err?.response?.errors?.forEach((error) => {
+        toast.error(error?.message);
+      });
 
-  const userQuery = useGetUserQuery(
-    client,
-    {},
-    {
-      enabled: trueSuccess,
-      onSuccess: async (data) => {
-        dispatch('auth/addUser');
-      },
-      onError(err: Project.IErrorResponse) {
-        err.response.errors.forEach(async (error) => {
-          toast.error(error.message);
+      const isRefreshAuthError = messages.some((message) =>
+        err?.response?.errors?.[0].message.includes(message)
+      );
 
-          if (
-            error.message.includes('expired') ||
-            error.message.includes('invalid') ||
-            error.message.includes('not found')
-          ) {
-            dispatch('auth/logout');
-            navigate('/login');
-          }
+      if (isRefreshAuthError) {
+        setIsTrueError(true);
+        dispatch('auth/logout');
+      }
+    },
+  });
 
-          if (error.extensions.code === 'FORBIDDEN') {
-            try {
-              refreshAuth.refetch();
-              dispatch('auth/addToken');
+  let content: JSX.Element = <></>;
 
-              userQuery?.refetch();
-            } catch (error) {
-              dispatch('auth/logout');
-              navigate('/login');
-            }
-          }
-        });
-      },
-    }
-  );
+  // after logout, clear all tokens, block all and take user to login
+  // persist and token ? outlet ...
+  // on browser window reopen, if token is not yet expired, refresh token
 
-  let content: JSX.Element | null = null;
-  if (!persist) {
+  // !persist and token ? outlet
+  // on browser window reopen, tho' token is not yet expired, take user to login
+
+  if (!persist && token) {
     // persist: no
     console.log('%c no persist', 'color: yellow;');
     content = <Outlet />;
@@ -105,11 +80,13 @@ const PersistLogin = (props: Props) => {
     console.log('%c loading', 'color: blue;');
     // add a loader here
     content = <Loader />;
-  } else if (refreshAuth.status === 'error') {
+  } else if (isTrueError) {
     //persist: yes, token: no
     console.log('%c error', 'color: red;');
-    content = <Navigate to='/login' state={{ from: location }} replace />;
-  } else if (trueSuccess) {
+    content = (
+      <AuthError message={refreshAuth?.error?.response?.errors[0]?.message} />
+    );
+  } else if (isTrueSuccess) {
     //persist: yes, token: yes
     console.log('%c success', 'color: green;');
     content = <Outlet />;

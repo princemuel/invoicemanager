@@ -10,6 +10,7 @@ import {
   formatPrice,
   hasValues,
   pluralize,
+  useAuthState,
   useGetInvoicesQuery,
   useMedia,
 } from '@src/lib';
@@ -27,7 +28,15 @@ interface Props {}
 const HomeTemplate = (props: Props) => {
   const isMobile = useMedia('(max-width: 40em)');
 
-  const { data } = useGetInvoicesQuery(client, {});
+  const auth = useAuthState();
+  const { data } = useGetInvoicesQuery(
+    client,
+    undefined,
+    {
+      enabled: Boolean(auth?.token),
+    },
+    {}
+  );
 
   const invoices = React.useMemo(() => {
     return (data?.invoices || []).sort((a, b) => {
