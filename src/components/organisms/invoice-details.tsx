@@ -13,7 +13,7 @@ const InvoiceDetails = ({ invoice, updateStatus, openDeleteModal }: Props) => {
   const isMobile = useMedia(`(max-width: 50em)`);
   return (
     <React.Fragment>
-      <section aria-label=''>
+      <section aria-label='' className='relative'>
         <div className='h-container'>
           <BackLink url='/invoices' className='mt-20' />
         </div>
@@ -137,7 +137,7 @@ const InvoiceDetails = ({ invoice, updateStatus, openDeleteModal }: Props) => {
         </div>
 
         {isMobile ? (
-          <div className='sticky bottom-0 bg-neutral-100 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
+          <div className='sticky bottom-0 bg-neutral-200 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
             <InvoiceActions
               invoice={invoice}
               updateStatus={updateStatus}

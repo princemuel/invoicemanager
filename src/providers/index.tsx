@@ -42,7 +42,7 @@ const Providers = (props: Props) => {
 
         queryCache: new QueryCache({
           // onSuccess: (data) => {
-          //   //@ts-expect-error
+          // //@ts-expect-error ignore expected error
           //   toast.success(data.message);
           // },
           onError: (error, query) => {
@@ -55,7 +55,7 @@ const Providers = (props: Props) => {
         // configure global cache callbacks to show toast notifications
         mutationCache: new MutationCache({
           // onSuccess: (data) => {
-          //   //@ts-expect-error
+          // //@ts-expect-error ignore expected error
           //   toast.success(data.message);
           // },
           onError: (error, variables, context, mutation) => {

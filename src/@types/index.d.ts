@@ -86,7 +86,7 @@ export declare namespace Project {
     clientEmail: string;
     clientName: string;
     description: string;
-    items: ILineItem[];
+    items: [ILineItem, ...ILineItem[]];
     senderAddress: IAddress;
     issueDate?: string | undefined;
     paymentDue?: string | undefined;

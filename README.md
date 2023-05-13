@@ -110,8 +110,8 @@ function authReducer(user?: Partial<IUser>, token?: string) {
 }
 
 function useAuth(client: GraphQLClient) {
-  const refreshAuthQuery = useRefreshAuthQuery(client, {});
-  const userQuery = useGetUserQuery(client, {});
+  const refreshAuthQuery = useRefreshAuthQuery(client);
+  const userQuery = useGetUserQuery(client);
 
   const token = refreshAuthQuery?.data?.refreshAuth?.token;
   if (token) client.setHeader('authorization', `Bearer ${token}`);

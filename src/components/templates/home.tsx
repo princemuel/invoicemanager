@@ -27,7 +27,7 @@ interface Props {}
 const HomeTemplate = (props: Props) => {
   const isMobile = useMedia('(max-width: 40em)');
 
-  const { data } = useGetInvoicesQuery(client, {});
+  const { data } = useGetInvoicesQuery(client);
 
   const invoices = React.useMemo(() => {
     return (data?.invoices || []).sort((a, b) => {
@@ -75,11 +75,14 @@ const HomeTemplate = (props: Props) => {
           </div>
         </section>
 
-        <section className='h-container rounded-brand bg-brand-100 px-10 py-12 shadow-100 dark:bg-brand-700'>
+        <section className='h-container rounded-brand bg-neutral-300 px-10 py-12  dark:bg-brand-700'>
           <div className={styles['invoice__cards']}>
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-600'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h4' className='font-bold text-blue-950'>
+                <Text
+                  as='h4'
+                  className='font-bold text-blue-950 dark:text-neutral-100'
+                >
                   Total Invoices
                 </Text>
                 <div className='rounded-brand bg-green-100 p-4'>
@@ -87,14 +90,17 @@ const HomeTemplate = (props: Props) => {
                 </div>
               </div>
 
-              <Text className='heading-3 font-bold text-brand-800'>
+              <Text className='heading-3 font-bold text-brand-800 dark:text-neutral-100'>
                 {invoices.length}
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-600'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h4' className='font-bold text-blue-950'>
+                <Text
+                  as='h4'
+                  className='font-bold text-blue-950 dark:text-neutral-100'
+                >
                   Pending Invoices
                 </Text>
                 <div className='rounded-brand bg-violet-100 p-4'>
@@ -102,14 +108,17 @@ const HomeTemplate = (props: Props) => {
                 </div>
               </div>
 
-              <Text className='heading-3 font-bold text-brand-800'>
+              <Text className='heading-3 font-bold text-brand-800  dark:text-neutral-100'>
                 {pendingInvoices.length}
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-600'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h4' className='font-bold text-blue-950'>
+                <Text
+                  as='h4'
+                  className='font-bold text-blue-950 dark:text-neutral-100'
+                >
                   Draft Invoices
                 </Text>
                 <div className='rounded-brand bg-blue-100 p-4'>
@@ -117,14 +126,17 @@ const HomeTemplate = (props: Props) => {
                 </div>
               </div>
 
-              <Text className='heading-3 font-bold text-brand-800'>
+              <Text className='heading-3 font-bold text-brand-800  dark:text-neutral-100'>
                 {draftInvoices.length}
               </Text>
             </div>
 
-            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4'>
+            <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-600'>
               <div className='flex items-center justify-between gap-4'>
-                <Text as='h4' className='font-bold text-blue-950'>
+                <Text
+                  as='h4'
+                  className='font-bold text-blue-950 dark:text-neutral-100'
+                >
                   Paid {pluralize('Invoice', paidInvoices.length)}
                 </Text>
                 <div className='rounded-brand bg-amber-100 p-4'>
@@ -132,7 +144,7 @@ const HomeTemplate = (props: Props) => {
                 </div>
               </div>
 
-              <Text className='heading-3 font-bold text-brand-800'>
+              <Text className='heading-3 font-bold text-brand-800  dark:text-neutral-100'>
                 {paidInvoices.length}
               </Text>
             </div>
