@@ -91,7 +91,7 @@ function useDynamicSVGImport(
         updateLoadingState();
       }
     })();
-  }, [fileName, onCompleted, onException]);
+  }, [fileName, onCompleted, onException, options.iconPath]);
 
   return { error, isLoading, RenderedElement: ImportedIconRef.current };
 }

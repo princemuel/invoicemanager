@@ -5,52 +5,82 @@ import { Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { client } from '../client';
 import { useAuthDispatch, useAuthState } from '../context';
-import { usePersist, useRefreshAuthQuery } from '../hooks';
+import { useRefreshAuthQuery } from '../hooks';
 import { AuthError } from './error';
+
+const messages = [
+  'email was not found',
+  'token is invalid',
+  'token has expired',
+  'Internal Server Error',
+];
 
 interface Props {}
 
 const PersistLogin = (props: Props) => {
-  const [persist] = usePersist();
-
   const auth = useAuthState();
   const dispatch = useAuthDispatch();
 
-  const [trueSuccess, setTrueSuccess] = React.useState(false);
+  const [isTrueSuccess, setIsTrueSuccess] = React.useState(false);
+  const [isTrueError, setIsTrueError] = React.useState(false);
 
   const token = auth?.token;
 
-  const refreshAuth = useRefreshAuthQuery(client, void 0, {
-    enabled: !token && persist,
-    retry: 1,
+  const refreshAuth = useRefreshAuthQuery(client, undefined, {
+    enabled: !token && !isTrueError,
+    retry: (failureCount, error: Project.IErrorResponse) => {
+      if (failureCount > 1) return false;
+
+      const isRefreshAuthError = messages.some((message) => {
+        return error?.response?.errors?.[0].message.includes(message);
+      });
+
+      return !isRefreshAuthError;
+    },
     onSuccess(data) {
-      setTrueSuccess(true);
+      setIsTrueSuccess(true);
       dispatch('auth/addToken');
+      dispatch('auth/addUser');
     },
     onError(err: Project.IErrorResponse) {
-      err.response.errors.forEach(async (error) => {
-        toast.error(error.message);
+      err?.response?.errors?.forEach((error) => {
+        toast.error(error?.message);
       });
+
+      const isRefreshAuthError = messages.some((message) =>
+        err?.response?.errors?.[0].message.includes(message)
+      );
+
+      if (isRefreshAuthError) {
+        setIsTrueError(true);
+        dispatch('auth/logout');
+      }
     },
   });
 
   let content: JSX.Element = <></>;
-  if (!persist) {
-    // persist: no
-    console.log('%c no persist', 'color: yellow;');
+
+  // after logout, clear all tokens, block all and take user to login
+  // persist and token ? outlet ...
+  // on browser window reopen, if token is not yet expired, refresh token
+
+  // !persist and token ? outlet
+  // on browser window reopen, tho' token is not yet expired, take user to login
+
+  if (token) {
     content = <Outlet />;
   } else if (refreshAuth.isLoading) {
     //persist: yes, token: no
     console.log('%c loading', 'color: blue;');
     // add a loader here
     content = <Loader />;
-  } else if (refreshAuth.isError) {
+  } else if (isTrueError) {
     //persist: yes, token: no
     console.log('%c error', 'color: red;');
     content = (
       <AuthError message={refreshAuth?.error?.response?.errors[0]?.message} />
     );
-  } else if (refreshAuth.isSuccess && trueSuccess) {
+  } else if (isTrueSuccess) {
     //persist: yes, token: yes
     console.log('%c success', 'color: green;');
     content = <Outlet />;

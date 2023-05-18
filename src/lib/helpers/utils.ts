@@ -203,7 +203,9 @@ export function loggedMethod<This, Args extends any[], Return>(
   ---------------------------------*
  */
 
-export function hasValues<T>(array: T[] | null | undefined) {
+export function hasValues<T>(
+  array: T[] | null | undefined
+): array is NonNullable<T[]> {
   return (array || []).length > 0;
 }
 

@@ -8,8 +8,10 @@ interface Props {
 export function AuthError({ message }: Props) {
   return (
     <section className='grid min-h-screen place-content-center'>
-      <div className=''>
-        <Text as={'p'}>{message}</Text>
+      <div className='text-center'>
+        <Text as={'h2'} className='text-red-700'>
+          {message}
+        </Text>
         <Text as={'p'} className='text-3xl underline'>
           <Link to='/login'>Please login again</Link>.
         </Text>

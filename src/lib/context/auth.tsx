@@ -6,7 +6,6 @@ import {
   ReactNode,
   createContext,
   useContext,
-  useMemo,
   useReducer,
 } from 'react';
 import { client } from '../client';
@@ -33,10 +32,7 @@ interface ProviderProps {
 }
 
 export const AuthProvider = ({ children }: ProviderProps) => {
-  let [state, dispatch] = useAuth(client);
-
-  state = useMemo(() => state, [state]);
-  dispatch = useMemo(() => dispatch, [dispatch]);
+  const [state, dispatch] = useAuth(client);
 
   return (
     <AuthStore.Provider value={state}>

@@ -7,21 +7,12 @@ export declare module 'react' {
 }
 
 export declare namespace Project {
-  type ElementProps<E extends React.ElementType<any>> = $ElementProps<E> &
-    Omit<React.ComponentPropsWithoutRef<E>, keyof $ElementProps<E>>;
-
   interface IconProps extends React.ComponentPropsWithoutRef<'svg'> {}
 
   type $ElementProps<E extends React.ElementType<any>> = {
     children: React.ReactNode;
     as?: E;
   };
-
-  // type ElementProps<T> = T extends React.ComponentType<infer Props>
-  //   ? Props extends object
-  //     ? Props
-  //     : never
-  //   : never;
 
   type ElementProps<E extends React.ElementType<any>> = $ElementProps<E> &
     Omit<React.ComponentPropsWithoutRef<E>, keyof $ElementProps<E>>;
@@ -36,25 +27,17 @@ export declare namespace Project {
     ? { [K in keyof T]: T[K] }
     : never;
 
-  /*===============================*
+  /*==============================*
           EVENT TYPES
- *===============================*
-*/
+    ==============================*/
   type ReactFormEvent = React.FormEvent<HTMLFormElement>;
   type ReactSelectEvent = React.MouseEvent<HTMLLIElement>;
   type ReactInputEvent = React.ChangeEvent<HTMLInputElement>;
   type ReactMouseEvent = React.MouseEvent<HTMLButtonElement>;
 
-  /*===============================*
-          PROJECT MODEL TYPES
- *===============================*
-*/
-
-  /*===============================*
+  /*==============================*
           DATA MODELS
- *===============================*
-*/
-
+    ==============================*/
   interface IUser {
     id: string;
     firstName: string;
@@ -208,13 +191,13 @@ export declare namespace Project {
     ? Fallback
     : T;
 
-  // get function properties
+  // get method names in an object
   type FunctionPropertyNames<T> = {
     [P in keyof T]: T[P] extends Function ? P : never;
   }[keyof T];
   type FunctionProperties<T> = Pick<T, FunctionPropertyNames<T>>;
 
-  // get non function properties
+  // get non method names in an object
   type NonFunctionPropertyNames<T> = {
     [P in keyof T]: T[P] extends Function ? never : P;
   }[keyof T];

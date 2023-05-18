@@ -1,41 +1,48 @@
-import type { Project } from '@src/@types';
+import { Project } from '@src/@types';
 import { client, useAuthDispatch, useLogoutQuery } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 interface Props {}
 
 const LogoutButton = (props: Props) => {
+  const navigate = useNavigate();
+  const dispatch = useAuthDispatch();
   const queryClient = useQueryClient();
 
-  const dispatch = useAuthDispatch();
-  const navigate = useNavigate();
+  const [shouldLogout, setShouldLogout] = useState(false);
 
-  const { refetch } = useLogoutQuery(
-    client,
-    {},
-    {
-      enabled: false,
-      onSuccess(data) {
-        dispatch('auth/logout');
-        queryClient.clear();
-        navigate('/login');
-      },
-      onError(error: Project.IErrorResponse) {
-        dispatch('auth/logout');
-        queryClient.clear();
-        navigate('/login');
-      },
-    }
-  );
+  const { data } = useLogoutQuery(client, undefined, {
+    enabled: shouldLogout,
+    retry: false,
 
-  const logout = useCallback(() => {
-    refetch();
-  }, [refetch]);
+    //! Bad Code..I Know 🤭
+    onSuccess(data) {
+      setShouldLogout(false);
+      toast.success(data.logout.message);
+      dispatch('auth/logout');
+      client.setHeader('authorization', `Bearer`);
+      queryClient.clear();
+      navigate('/login');
+    },
+    onError(error: Project.IErrorResponse) {
+      setShouldLogout(false);
+      dispatch('auth/logout');
+      client.setHeader('authorization', `Bearer`);
+      queryClient.clear();
+      navigate('/login');
+    },
+  });
 
   return (
-    <button type='button' onClick={logout}>
+    <button
+      type='button'
+      onClick={() => {
+        setShouldLogout(true);
+      }}
+    >
       Logout
     </button>
   );
