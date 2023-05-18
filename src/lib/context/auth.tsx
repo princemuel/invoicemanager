@@ -62,7 +62,7 @@ function useAuth(client: GraphQLClient) {
   const userQuery = useGetUserQuery(client);
 
   const token = refreshAuthQuery?.data?.refreshAuth?.token;
-  // if (token) client.setHeader('authorization', `Bearer ${token}`);
+  if (token) client.setHeader('authorization', `Bearer ${token}`);
 
   const user = userQuery?.data?.user;
 

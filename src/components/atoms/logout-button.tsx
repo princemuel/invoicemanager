@@ -17,17 +17,20 @@ const LogoutButton = (props: Props) => {
   const { data } = useLogoutQuery(client, undefined, {
     enabled: shouldLogout,
     retry: false,
+
+    //! Bad Code..I Know 🤭
     onSuccess(data) {
       setShouldLogout(false);
       toast.success(data.logout.message);
       dispatch('auth/logout');
-      // client.setHeader('authorization', `Bearer`);
+      client.setHeader('authorization', `Bearer`);
       queryClient.clear();
       navigate('/login');
     },
     onError(error: Project.IErrorResponse) {
       setShouldLogout(false);
       dispatch('auth/logout');
+      client.setHeader('authorization', `Bearer`);
       queryClient.clear();
       navigate('/login');
     },

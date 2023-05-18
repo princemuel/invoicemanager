@@ -1,11 +1,5 @@
 import { Project } from '@src/@types';
-import { icons } from '@src/common';
-import {
-  client,
-  useAuthDispatch,
-  useLoginMutation,
-  usePersist,
-} from '@src/lib';
+import { client, useAuthDispatch, useLoginMutation } from '@src/lib';
 import {
   LoginFormSchema,
   RHFSubmitHandler,
@@ -21,7 +15,6 @@ import { Loader } from './loader';
 type Props = {};
 
 const LoginForm = (props: Props) => {
-  const [persist, setPersist] = usePersist();
   const methods = useZodForm({
     schema: LoginFormSchema,
     mode: 'onChange',
@@ -33,6 +26,7 @@ const LoginForm = (props: Props) => {
   const { mutate: login, isLoading } = useLoginMutation(client, {
     onSuccess(data) {
       dispatch('auth/addToken');
+      dispatch('auth/addUser');
       toast.success('Login Successful');
       navigate('/');
     },
@@ -89,23 +83,6 @@ const LoginForm = (props: Props) => {
             className='col-span-6'
             autoComplete='current-password'
           />
-
-          <button
-            type='button'
-            className='group col-span-6 flex items-center gap-6'
-            aria-pressed={persist}
-            onClick={setPersist}
-          >
-            <span className='inline-grid aspect-square w-[1.6rem] place-items-center rounded-[0.2rem] border  border-brand-400/25 bg-brand-100 group-hover:border-brand-500 group-aria-pressed:bg-brand-500 dark:bg-brand-700 dark:group-aria-pressed:bg-brand-500'>
-              <img
-                src={icons.actions.check}
-                className='hidden group-aria-pressed:block'
-                alt=''
-              />
-            </span>
-
-            <span className='body-100'>Keep me logged in</span>
-          </button>
 
           <div className='col-span-6 mt-6'>
             <button

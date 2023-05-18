@@ -1,5 +1,10 @@
 {
+  "editor.tabSize": 2,
+  "editor.formatOnSaveMode": "modificationsIfAvailable",
   "editor.formatOnSave": true,
+  "prettier.documentSelectors": ["*.{tsx,ts}", "*.{jsx,js}"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
   "editor.inlineSuggest.enabled": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
@@ -11,5 +16,6 @@
     "enable": true
   },
 
-  "tailwindCSS.rootFontSize": 10
+  "tailwindCSS.rootFontSize": 10,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true
 }

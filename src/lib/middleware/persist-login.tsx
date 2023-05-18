@@ -1,11 +1,11 @@
 import type { Project } from '@src/@types';
 import { Loader } from '@src/components';
 import * as React from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { client } from '../client';
 import { useAuthDispatch, useAuthState } from '../context';
-import { usePersist, useRefreshAuthQuery } from '../hooks';
+import { useRefreshAuthQuery } from '../hooks';
 import { AuthError } from './error';
 
 const messages = [
@@ -18,11 +18,8 @@ const messages = [
 interface Props {}
 
 const PersistLogin = (props: Props) => {
-  const [persist] = usePersist();
-
   const auth = useAuthState();
   const dispatch = useAuthDispatch();
-  const navigate = useNavigate();
 
   const [isTrueSuccess, setIsTrueSuccess] = React.useState(false);
   const [isTrueError, setIsTrueError] = React.useState(false);
@@ -30,7 +27,7 @@ const PersistLogin = (props: Props) => {
   const token = auth?.token;
 
   const refreshAuth = useRefreshAuthQuery(client, undefined, {
-    enabled: !token && persist && !isTrueError,
+    enabled: !token && !isTrueError,
     retry: (failureCount, error: Project.IErrorResponse) => {
       if (failureCount > 1) return false;
 
@@ -43,6 +40,7 @@ const PersistLogin = (props: Props) => {
     onSuccess(data) {
       setIsTrueSuccess(true);
       dispatch('auth/addToken');
+      dispatch('auth/addUser');
     },
     onError(err: Project.IErrorResponse) {
       err?.response?.errors?.forEach((error) => {
@@ -69,9 +67,7 @@ const PersistLogin = (props: Props) => {
   // !persist and token ? outlet
   // on browser window reopen, tho' token is not yet expired, take user to login
 
-  if (!persist && token) {
-    // persist: no
-    console.log('%c no persist', 'color: yellow;');
+  if (token) {
     content = <Outlet />;
   } else if (refreshAuth.isLoading) {
     //persist: yes, token: no
