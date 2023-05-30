@@ -1,4 +1,3 @@
-import type { Project } from '@src/@types';
 import {
   DehydrateOptions,
   QueryClient,
@@ -46,21 +45,17 @@ export function approximate(num = 0, fractionDigits = 0) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export const isDraftInvoice = (
-  invoice?: Project.Invoice
-): invoice is Project.DraftInvoice => {
+export const isDraftInvoice = (invoice?: Invoice): invoice is DraftInvoice => {
   return invoice?.status === 'DRAFT';
 };
 
 export const isPendingInvoice = (
-  invoice?: Project.Invoice
-): invoice is Project.PendingInvoice => {
+  invoice?: Invoice
+): invoice is PendingInvoice => {
   return invoice?.status === 'PENDING';
 };
 
-export const isPaidInvoice = (
-  invoice?: Project.Invoice
-): invoice is Project.PaidInvoice => {
+export const isPaidInvoice = (invoice?: Invoice): invoice is PaidInvoice => {
   return invoice?.status === 'PAID';
 };
 
@@ -87,14 +82,14 @@ export function calculateTotal<T extends Item>(
 ): number;
 export function calculateTotal<T extends number>(quantity: T, price: T): number;
 export function calculateTotal(a?: unknown, b?: unknown) {
-  try {
-    if (!a) throw new TypeError('The item or value is not defined');
+  if (!a) return 0;
 
-    if (typeof a === 'number' && typeof b === 'number') {
-      return approximate(a * b, 2);
-    }
+  if (typeof a === 'number' && typeof b === 'number') {
+    return approximate(a * b, 2);
+  }
 
-    return (a as Item[])?.reduce((total, current) => {
+  if (Array.isArray(a)) {
+    return (a as Item[]).reduce((total, current) => {
       if (b === 'total') {
         total += parseNumSafe(Number(current.total));
       } else {
@@ -104,9 +99,9 @@ export function calculateTotal(a?: unknown, b?: unknown) {
       }
       return approximate(total, 2);
     }, 0);
-  } catch (e) {
-    return 0;
   }
+
+  return 0;
 }
 
 export function formatPrice(price = 0) {

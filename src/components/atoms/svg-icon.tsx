@@ -1,7 +1,6 @@
-import { Project } from '@src/@types';
 import * as React from 'react';
 
-interface IProps extends Project.IconProps {
+interface IProps extends IconProps {
   fileName: string;
   iconPath?: string;
   onCompleted: () => void;
@@ -21,20 +20,19 @@ export function Icon({
     iconPath,
   });
 
+  let content: JSX.Element | null = null;
+
   if (isLoading) {
-    return (
+    content = (
       <div className='aspect-square w-10 animate-pulse rounded-full bg-slate-400' />
     );
-  }
-  if (error) {
+  } else if (error) {
     console.error(error);
-    return null;
+    content = null;
+  } else if (RenderedElement) {
+    content = <RenderedElement {...rest} />;
   }
-
-  if (RenderedElement) {
-    return <RenderedElement {...rest} />;
-  }
-  return null;
+  return content;
 }
 
 interface Options {
@@ -75,11 +73,15 @@ function useDynamicSVGImport(
   const { onCompleted, onException } = options;
   React.useEffect(() => {
     updateLoadingState();
+    const url = new URL(
+      `./${options.iconPath}/${fileName}.svg`,
+      import.meta.url
+    ).href;
 
     (async function () {
       try {
         ImportedIconRef.current = (
-          await import(`./${options.iconPath}/${fileName}.svg`)
+          await import(/* @vite-ignore */ url)
         ).ReactComponent;
         // const { default: namedImport } = await import(`../assets/icons/${name}.svg`);
         // ImportedIconRef.current = namedImport;

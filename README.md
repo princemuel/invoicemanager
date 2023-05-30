@@ -78,7 +78,7 @@ View the User Stories in the [User Stories Markdown File](./docs/stories.md)
 
 - How to create event driven reducers to keep application logic out of the ui and instead in the reducer
 
-```ts
+```tsx
 // The Pattern
 const reducer = (data) => (state, action) => {
   // ✅ you'll always have access to the latest server state in here
@@ -90,37 +90,41 @@ function App() {
 }
 
 // My Version
-function authReducer(user?: Partial<IUser>, token?: string) {
+function authReducer(client: GraphQLClient, token?: string) {
   return produce((draft: IState, action: IAction) => {
     switch (action) {
-      case 'auth/addUser':
-        draft.user = user;
-        break;
       case 'auth/addToken':
+        client.setHeader('authorization', `Bearer ${token}`);
         draft.token = token;
         break;
       case 'auth/logout':
+        client.setHeader('authorization', `Bearer`);
         draft.token = undefined;
-        draft.user = undefined;
         break;
       default:
         throw new Error(`Unhandled action type: ${action}`);
     }
   });
 }
-
 function useAuth(client: GraphQLClient) {
-  const refreshAuthQuery = useRefreshAuthQuery(client);
-  const userQuery = useGetUserQuery(client);
+  const { data } = useRefreshQuery(client);
+  const token = data?.refresh?.token;
 
-  const token = refreshAuthQuery?.data?.refreshAuth?.token;
-  if (token) client.setHeader('authorization', `Bearer ${token}`);
-
-  const user = userQuery?.data?.user;
-
-  const reducer = authReducer(user, token);
+  const reducer = authReducer(client, token);
   return useReducer(reducer, initialState);
 }
+
+export const AuthProvider = ({ children }: ProviderProps) => {
+  const [state, dispatch] = useAuth(client);
+
+  return (
+    <AuthStore.Provider value={state}>
+      <AuthStoreDispatch.Provider value={dispatch}>
+        {children}
+      </AuthStoreDispatch.Provider>
+    </AuthStore.Provider>
+  );
+};
 ```
 
 ### Continued development

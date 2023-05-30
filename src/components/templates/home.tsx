@@ -3,7 +3,6 @@ import {
   EnvelopeOpenIcon,
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
-import type { Project } from '@src/@types';
 import {
   client,
   datetime,
@@ -20,7 +19,7 @@ import { StatusButton, Text } from '../atoms';
 import { PageSEO } from './seo';
 import styles from './templates.module.css';
 
-const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
+const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 const HeaderCells = ['S/N', 'Due Date', 'Amount', 'Customer', 'Status'];
 
 interface Props {}
@@ -41,8 +40,8 @@ const HomeTemplate = (props: Props) => {
   const invoices = React.useMemo(() => {
     return (data?.invoices || []).sort((a, b) => {
       return (
-        status.indexOf(a.status as Project.IStatus[number]) -
-        status.indexOf(b.status as Project.IStatus[number])
+        status.indexOf(a.status as IStatus[number]) -
+        status.indexOf(b.status as IStatus[number])
       );
     });
   }, [data?.invoices]);
@@ -84,6 +83,7 @@ const HomeTemplate = (props: Props) => {
           </div>
         </section>
 
+        {/*  Use suspense here */}
         <section className='h-container rounded-brand bg-neutral-300 px-10 py-12  dark:bg-brand-700'>
           <div className={styles['invoice__cards']}>
             <div className='flex flex-col gap-4 rounded-lg bg-neutral-100 p-4 dark:bg-brand-600'>

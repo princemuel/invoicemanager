@@ -1,4 +1,3 @@
-import { Project } from '@src/@types';
 import { client, useAuthDispatch, useLogoutQuery } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -23,14 +22,12 @@ const LogoutButton = (props: Props) => {
       setShouldLogout(false);
       toast.success(data.logout.message);
       dispatch('auth/logout');
-      client.setHeader('authorization', `Bearer`);
       queryClient.clear();
       navigate('/login');
     },
-    onError(error: Project.IErrorResponse) {
+    onError(error: IErrorResponse) {
       setShouldLogout(false);
       dispatch('auth/logout');
-      client.setHeader('authorization', `Bearer`);
       queryClient.clear();
       navigate('/login');
     },

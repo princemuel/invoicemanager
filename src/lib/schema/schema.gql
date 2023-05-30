@@ -167,8 +167,7 @@ type Query {
   invoice(where: UniqueIdInput!): Invoice
   invoices: [Invoice]!
   logout: MessagePayload!
-  refreshAuth: AuthPayload
-  user: User
+  refresh: AuthPayload
 }
 
 input RegisterInput {

@@ -9,8 +9,10 @@ interface TokenPayload extends JwtPayload {
 }
 
 const useSession = () => {
-  const [cookies] = useCookies(['jwt']);
-  const token = (useAuthState().token || cookies.jwt) as string | undefined;
+  const [cookies] = useCookies(['x-access-token']);
+  const token = (useAuthState().token || cookies?.['x-access-token']) as
+    | string
+    | undefined;
 
   if (!token) return null;
   const decoded = jwtDecode<TokenPayload>(token);

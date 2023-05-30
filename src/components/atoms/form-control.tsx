@@ -1,4 +1,3 @@
-import type { Project } from '@src/@types';
 import clsx from 'clsx';
 
 const FormControl = <E extends React.ElementType = 'div'>({
@@ -6,7 +5,7 @@ const FormControl = <E extends React.ElementType = 'div'>({
   className,
   children,
   ...rest
-}: Project.ElementProps<E>) => {
+}: ElementProps<E>) => {
   const RenderedElement = as || 'div';
 
   return (

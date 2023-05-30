@@ -7,7 +7,7 @@ const config: CodegenConfig = {
   watch: true,
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
-    './src/hooks/react-query.ts': {
+    './src/lib/hooks/use-react-query.ts': {
       // preset: 'client',
       config: {
         noNamespaces: true,

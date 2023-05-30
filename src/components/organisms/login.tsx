@@ -1,4 +1,3 @@
-import { Project } from '@src/@types';
 import { client, useAuthDispatch, useLoginMutation } from '@src/lib';
 import {
   LoginFormSchema,
@@ -26,11 +25,10 @@ const LoginForm = (props: Props) => {
   const { mutate: login, isLoading } = useLoginMutation(client, {
     onSuccess(data) {
       dispatch('auth/addToken');
-      dispatch('auth/addUser');
       toast.success('Login Successful');
       navigate('/');
     },
-    onError(e: Project.IErrorResponse) {
+    onError(e: IErrorResponse) {
       e.response.errors.forEach(async (error) => {
         toast.error(error.message);
       });

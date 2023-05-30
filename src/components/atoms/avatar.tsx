@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import { useAuthState } from '@src/lib';
+import { useSession } from '@src/lib';
 import clsx from 'clsx';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const Avatar = ({ src, name }: Props) => {
-  const session = useAuthState();
+  const session = useSession();
 
   return (
     <Popover className='relative'>
@@ -24,9 +24,7 @@ const Avatar = ({ src, name }: Props) => {
             )}
           >
             <img
-              src={
-                src || session?.user?.photo || '/assets/images/image-avatar.jpg'
-              }
+              src={src || session?.photo || '/assets/images/image-avatar.jpg'}
               alt={'User'}
               // alt={user?.firstName || 'User'}
               width={80}
