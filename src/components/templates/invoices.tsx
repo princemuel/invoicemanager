@@ -1,5 +1,4 @@
 import { Listbox, Transition } from '@headlessui/react';
-import type { Project } from '@src/@types';
 import { icons } from '@src/common';
 import {
   capitalize,
@@ -19,7 +18,7 @@ import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 import { PageSEO } from './seo';
 
-const status: Project.IStatus = ['PAID', 'PENDING', 'DRAFT'];
+const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
 interface Props {}
 
@@ -45,8 +44,8 @@ const InvoicesTemplate = (props: Props) => {
       })
     : invoices.sort((a, b) => {
         return (
-          status.indexOf(a.status as Project.IStatus[number]) -
-          status.indexOf(b.status as Project.IStatus[number])
+          status.indexOf(a.status as IStatus[number]) -
+          status.indexOf(b.status as IStatus[number])
         );
       });
 

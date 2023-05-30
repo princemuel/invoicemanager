@@ -1,4 +1,3 @@
-import { Project } from '@src/@types';
 import {
   DateTime,
   InvoiceFormSchema,
@@ -7,9 +6,9 @@ import {
   client,
   constants,
   terms,
-  useAuthState,
   useCreateInvoiceMutation,
   useGetInvoicesQuery,
+  useSession,
   useZodForm,
 } from '@src/lib';
 import { useQueryClient } from '@tanstack/react-query';
@@ -22,7 +21,7 @@ import { Calendar, Dropdown, FormField, NewItemList } from '../molecules';
 interface Props {}
 
 const NewInvoiceForm = (props: Props) => {
-  const [status, setStatus] = useState<Project.InvoiceStatus>('PENDING');
+  const [status, setStatus] = useState<InvoiceStatus>('PENDING');
   const [selectedTerm, setSelectedTerm] = useState(terms[0].value);
   const [selectedDate, setSelectedDate] = useState(DateTime.TODAY);
 
@@ -41,9 +40,11 @@ const NewInvoiceForm = (props: Props) => {
     };
   }, [methods]);
 
-  const { user } = useAuthState();
+  const session = useSession();
+
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
   const { mutate: createInvoice } = useCreateInvoiceMutation(client, {
     onSuccess: (data, variables, context) => {
       queryClient.invalidateQueries({
@@ -67,7 +68,7 @@ const NewInvoiceForm = (props: Props) => {
         draft.total = calculateTotal(draft?.items, 'total');
 
         draft.tag = '';
-        draft.userId = user?.id as string;
+        draft.userId = session?.id as string;
       });
 
       const result = InvoiceFormSchema.safeParse(draft);

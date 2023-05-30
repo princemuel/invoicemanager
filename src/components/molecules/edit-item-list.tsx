@@ -10,12 +10,11 @@ import {
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
 
-import { Project } from '@src/@types';
 import { PriceOutput } from './price-output';
 
 interface Props {
-  methods: UseFormReturn<Project.InvoiceFormType, any>;
-  invoice: Project.InvoiceFormType;
+  methods: UseFormReturn<InvoiceFormType, any>;
+  invoice: InvoiceFormType;
 }
 
 const EditItemList = ({ methods, invoice }: Props) => {
