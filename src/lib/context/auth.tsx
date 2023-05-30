@@ -70,7 +70,7 @@ function authReducer(client: GraphQLClient, token?: string) {
         draft.token = token;
         break;
       case 'auth/logout':
-        client.setHeader('authorization', `Bearer`);
+        client.setHeader('authorization', '');
         draft.token = undefined;
         break;
       default:
