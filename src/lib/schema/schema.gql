@@ -168,7 +168,6 @@ type Query {
   invoices: [Invoice]!
   logout: MessagePayload!
   refresh: AuthPayload
-  user: User
 }
 
 input RegisterInput {
