@@ -1,4 +1,3 @@
-import type { Project } from '@src/@types';
 import { GraphQLClient } from 'graphql-request';
 import { produce } from 'immer';
 import {
@@ -9,17 +8,15 @@ import {
   useReducer,
 } from 'react';
 import { client } from '../client';
-import { useGetUserQuery, useRefreshAuthQuery } from '../hooks';
+import { useRefreshQuery } from '../hooks';
 interface IState {
   token?: string;
-  user?: Partial<Project.IUser>;
 }
 
-type IAction = 'auth/addUser' | 'auth/addToken' | 'auth/logout';
+type IAction = 'auth/addToken' | 'auth/logout';
 
 const initialState: IState = {
   token: undefined,
-  user: undefined,
 };
 
 const AuthStore = createContext<IState | undefined>(undefined);
@@ -58,30 +55,23 @@ export const useAuthDispatch = () => {
 };
 
 function useAuth(client: GraphQLClient) {
-  const refreshAuthQuery = useRefreshAuthQuery(client);
-  const userQuery = useGetUserQuery(client);
+  const { data } = useRefreshQuery(client);
+  const token = data?.refresh?.token;
 
-  const token = refreshAuthQuery?.data?.refreshAuth?.token;
-  if (token) client.setHeader('authorization', `Bearer ${token}`);
-
-  const user = userQuery?.data?.user;
-
-  const reducer = authReducer(user, token);
+  const reducer = authReducer(client, token);
   return useReducer(reducer, initialState);
 }
 
-function authReducer(user?: Partial<Project.IUser>, token?: string) {
+function authReducer(client: GraphQLClient, token?: string) {
   return produce((draft: IState, action: IAction) => {
     switch (action) {
-      case 'auth/addUser':
-        draft.user = user;
-        break;
       case 'auth/addToken':
+        client.setHeader('authorization', `Bearer ${token}`);
         draft.token = token;
         break;
       case 'auth/logout':
+        client.setHeader('authorization', `Bearer`);
         draft.token = undefined;
-        draft.user = undefined;
         break;
       default:
         throw new Error(`Unhandled action type: ${action}`);
