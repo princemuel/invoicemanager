@@ -1,11 +1,3 @@
-query GetUser {
-  user {
-    id
-    photo
-    email
-  }
-}
-
 mutation Register($input: RegisterInput!) {
   register(input: $input) {
     message
@@ -18,8 +10,8 @@ mutation Login($input: LoginInput!) {
   }
 }
 
-query RefreshAuth {
-  refreshAuth {
+query Refresh {
+  refresh {
     token
   }
 }
