@@ -1,10 +1,10 @@
 import { Layout } from '@src/components';
+import { AuthMiddleware } from '@src/lib';
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { PersistLogin } from '../lib';
 import { LoginRoute, RegisterRoute } from './auth';
 import { HomeRoute } from './home';
 import {
@@ -20,7 +20,7 @@ export const router = createBrowserRouter(
       <Route path='login' element={<LoginRoute />} />
       <Route path='register' element={<RegisterRoute />} />
 
-      <Route element={<PersistLogin />}>
+      <Route element={<AuthMiddleware />}>
         <Route index element={<HomeRoute />} />
 
         <Route path='invoices'>
