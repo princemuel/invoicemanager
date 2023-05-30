@@ -187,8 +187,7 @@ export interface QueryType {
   invoice?: Maybe<InvoiceType>;
   invoices: Array<Maybe<InvoiceType>>;
   logout: MessagePayloadType;
-  refreshAuth?: Maybe<AuthPayloadType>;
-  user?: Maybe<UserType>;
+  refresh?: Maybe<AuthPayloadType>;
 }
 
 export interface QueryInvoiceArgsType {
@@ -362,12 +361,6 @@ export type DeleteInvoiceMutationVariablesType = Exact<{
 
 export type DeleteInvoiceMutationType = { deleteInvoice?: { id?: string } };
 
-export type GetUserQueryVariablesType = Exact<{ [key: string]: never }>;
-
-export type GetUserQueryType = {
-  user?: { id: string; photo?: string; email: string };
-};
-
 export type RegisterMutationVariablesType = Exact<{
   input: RegisterInputType;
 }>;
@@ -380,9 +373,9 @@ export type LoginMutationVariablesType = Exact<{
 
 export type LoginMutationType = { login?: { token: string } };
 
-export type RefreshAuthQueryVariablesType = Exact<{ [key: string]: never }>;
+export type RefreshQueryVariablesType = Exact<{ [key: string]: never }>;
 
-export type RefreshAuthQueryType = { refreshAuth?: { token: string } };
+export type RefreshQueryType = { refresh?: { token: string } };
 
 export type LogoutQueryVariablesType = Exact<{ [key: string]: never }>;
 
@@ -674,45 +667,6 @@ useDeleteInvoiceMutation.fetcher = (
     variables,
     headers
   );
-export const GetUserDocumentType = /*#__PURE__*/ `
-    query GetUser {
-  user {
-    id
-    photo
-    email
-  }
-}
-    `;
-export const useGetUserQuery = <TData = GetUserQueryType, TError = unknown>(
-  client: GraphQLClient,
-  variables?: GetUserQueryVariablesType,
-  options?: UseQueryOptions<GetUserQueryType, TError, TData>,
-  headers?: RequestInit['headers']
-) =>
-  useQuery<GetUserQueryType, TError, TData>(
-    variables === undefined ? ['GetUser'] : ['GetUser', variables],
-    fetcher<GetUserQueryType, GetUserQueryVariablesType>(
-      client,
-      GetUserDocumentType,
-      variables,
-      headers
-    ),
-    options
-  );
-
-useGetUserQuery.getKey = (variables?: GetUserQueryVariablesType) =>
-  variables === undefined ? ['GetUser'] : ['GetUser', variables];
-useGetUserQuery.fetcher = (
-  client: GraphQLClient,
-  variables?: GetUserQueryVariablesType,
-  headers?: RequestInit['headers']
-) =>
-  fetcher<GetUserQueryType, GetUserQueryVariablesType>(
-    client,
-    GetUserDocumentType,
-    variables,
-    headers
-  );
 export const RegisterDocumentType = /*#__PURE__*/ `
     mutation Register($input: RegisterInput!) {
   register(input: $input) {
@@ -800,43 +754,40 @@ useLoginMutation.fetcher = (
     variables,
     headers
   );
-export const RefreshAuthDocumentType = /*#__PURE__*/ `
-    query RefreshAuth {
-  refreshAuth {
+export const RefreshDocumentType = /*#__PURE__*/ `
+    query Refresh {
+  refresh {
     token
   }
 }
     `;
-export const useRefreshAuthQuery = <
-  TData = RefreshAuthQueryType,
-  TError = unknown
->(
+export const useRefreshQuery = <TData = RefreshQueryType, TError = unknown>(
   client: GraphQLClient,
-  variables?: RefreshAuthQueryVariablesType,
-  options?: UseQueryOptions<RefreshAuthQueryType, TError, TData>,
+  variables?: RefreshQueryVariablesType,
+  options?: UseQueryOptions<RefreshQueryType, TError, TData>,
   headers?: RequestInit['headers']
 ) =>
-  useQuery<RefreshAuthQueryType, TError, TData>(
-    variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables],
-    fetcher<RefreshAuthQueryType, RefreshAuthQueryVariablesType>(
+  useQuery<RefreshQueryType, TError, TData>(
+    variables === undefined ? ['Refresh'] : ['Refresh', variables],
+    fetcher<RefreshQueryType, RefreshQueryVariablesType>(
       client,
-      RefreshAuthDocumentType,
+      RefreshDocumentType,
       variables,
       headers
     ),
     options
   );
 
-useRefreshAuthQuery.getKey = (variables?: RefreshAuthQueryVariablesType) =>
-  variables === undefined ? ['RefreshAuth'] : ['RefreshAuth', variables];
-useRefreshAuthQuery.fetcher = (
+useRefreshQuery.getKey = (variables?: RefreshQueryVariablesType) =>
+  variables === undefined ? ['Refresh'] : ['Refresh', variables];
+useRefreshQuery.fetcher = (
   client: GraphQLClient,
-  variables?: RefreshAuthQueryVariablesType,
+  variables?: RefreshQueryVariablesType,
   headers?: RequestInit['headers']
 ) =>
-  fetcher<RefreshAuthQueryType, RefreshAuthQueryVariablesType>(
+  fetcher<RefreshQueryType, RefreshQueryVariablesType>(
     client,
-    RefreshAuthDocumentType,
+    RefreshDocumentType,
     variables,
     headers
   );
