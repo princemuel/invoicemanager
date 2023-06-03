@@ -16,6 +16,15 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 
 function fetcher<TData, TVariables extends { [key: string]: any }>(
   client: GraphQLClient,
@@ -32,57 +41,57 @@ function fetcher<TData, TVariables extends { [key: string]: any }>(
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export interface Scalars {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string | number; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
-  DateTime: any;
+  DateTime: { input: any; output: any };
 }
 
 /** The address object used for both the client and sender's address information. It contains the person's street, city, post code and country data */
 export interface AddressType {
   /** The city where the person lives in */
-  city: Scalars['String'];
+  city: Scalars['String']['output'];
   /** The country where the person is located */
-  country: Scalars['String'];
+  country: Scalars['String']['output'];
   /** The post code of the person's state */
-  postCode: Scalars['String'];
+  postCode: Scalars['String']['output'];
   /** The street where the person resides */
-  street: Scalars['String'];
+  street: Scalars['String']['output'];
 }
 
 export interface AddressInputType {
   /** The city where the person lives in */
-  city: Scalars['String'];
+  city: Scalars['String']['input'];
   /** The country where the person is located */
-  country: Scalars['String'];
+  country: Scalars['String']['input'];
   /** The post code of the person's state */
-  postCode: Scalars['String'];
+  postCode: Scalars['String']['input'];
   /** The street where the person resides */
-  street: Scalars['String'];
+  street: Scalars['String']['input'];
 }
 
 export interface AuthPayloadType {
-  token: Scalars['String'];
+  token: Scalars['String']['output'];
 }
 
 export interface CreateInvoiceInputType {
   clientAddress: AddressInputType;
-  clientEmail: Scalars['String'];
-  clientName: Scalars['String'];
-  description: Scalars['String'];
+  clientEmail: Scalars['String']['input'];
+  clientName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
   /** The exact date and time the invoice was issued in ISO8601 */
-  issueDate: Scalars['DateTime'];
+  issueDate: Scalars['DateTime']['input'];
   items: Array<InvoiceItemInputType>;
-  paymentDue: Scalars['String'];
-  paymentTerms: Scalars['Int'];
+  paymentDue: Scalars['String']['input'];
+  paymentTerms: Scalars['Int']['input'];
   senderAddress: AddressInputType;
-  status: Scalars['String'];
-  tag: Scalars['String'];
-  total: Scalars['Float'];
-  userId?: InputMaybe<Scalars['ID']>;
+  status: Scalars['String']['input'];
+  tag: Scalars['String']['input'];
+  total: Scalars['Float']['input'];
+  userId?: InputMaybe<Scalars['ID']['input']>;
 }
 
 /** The object containing metadata about the invoice e.g. items purchased, when the payment is due, client address information, the current status, et cetera */
@@ -90,68 +99,68 @@ export interface InvoiceType {
   /** The address of the person receiving the invoice */
   clientAddress?: Maybe<AddressType>;
   /** The email of the person receiving the invoice */
-  clientEmail?: Maybe<Scalars['String']>;
+  clientEmail?: Maybe<Scalars['String']['output']>;
   /** The name of the person receiving the invoice */
-  clientName?: Maybe<Scalars['String']>;
+  clientName?: Maybe<Scalars['String']['output']>;
   /** The exact time the invoice was created */
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
   /** A high level description of the items listed in the invoice */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
   /** The GUID for the Invoice */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['ID']['output']>;
   /** The exact date and time the invoice was issued in ISO8601 */
-  issueDate?: Maybe<Scalars['DateTime']>;
+  issueDate?: Maybe<Scalars['DateTime']['output']>;
   /** The items listed in the invoice */
   items: Array<InvoiceItemType>;
   /** When the payment of the items listed in the invoice is due */
-  paymentDue?: Maybe<Scalars['String']>;
+  paymentDue?: Maybe<Scalars['String']['output']>;
   /** The number of days before an invoice's payment grace period expires. Can be 1, 7, 14 or 30 days */
-  paymentTerms?: Maybe<Scalars['Int']>;
+  paymentTerms?: Maybe<Scalars['Int']['output']>;
   /** The address of the person sending the invoice */
   senderAddress?: Maybe<AddressType>;
   /** The current status of the invoice */
-  status?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']['output']>;
   /** Unique id sequence used to tag the invoice */
-  tag?: Maybe<Scalars['String']>;
+  tag?: Maybe<Scalars['String']['output']>;
   /** The grand total of the price of the items listed in the invoice */
-  total?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']['output']>;
   /** The exact time the invoice was updated */
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** The GUID of the invoice's issuer */
-  userId?: Maybe<Scalars['ID']>;
+  userId?: Maybe<Scalars['ID']['output']>;
 }
 
 /** An item listed in the invoice */
 export interface InvoiceItemType {
   /** The id of this item */
-  id?: Maybe<Scalars['ID']>;
+  id?: Maybe<Scalars['ID']['output']>;
   /** The name of this item */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']['output']>;
   /** The price of this item */
-  price?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']['output']>;
   /** The amount of this item purchased */
-  quantity?: Maybe<Scalars['Int']>;
+  quantity?: Maybe<Scalars['Int']['output']>;
   /** The price of this item multiplied by the total number of this item purchased */
-  total?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']['output']>;
 }
 
 export interface InvoiceItemInputType {
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  price: Scalars['Float'];
-  quantity: Scalars['Int'];
-  total: Scalars['Float'];
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  price: Scalars['Float']['input'];
+  quantity: Scalars['Int']['input'];
+  total: Scalars['Float']['input'];
 }
 
 export interface LoginInputType {
   /** The email of the user */
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
   /** The password of the user */
-  password: Scalars['String'];
+  password: Scalars['String']['input'];
 }
 
 export interface MessagePayloadType {
-  message: Scalars['String'];
+  message: Scalars['String']['output'];
 }
 
 export interface MutationType {
@@ -196,58 +205,58 @@ export interface QueryInvoiceArgsType {
 
 export interface RegisterInputType {
   /** The user's verification code */
-  code?: InputMaybe<Scalars['String']>;
+  code?: InputMaybe<Scalars['String']['input']>;
   /** The email of the user */
-  email: Scalars['String'];
+  email: Scalars['String']['input'];
   /** The password of the user. Must match the countersign i.e the reentered password */
-  password: Scalars['String'];
+  password: Scalars['String']['input'];
   /** The image url generated from the user's email address */
-  photo?: InputMaybe<Scalars['String']>;
+  photo?: InputMaybe<Scalars['String']['input']>;
 }
 
 export interface UniqueIdInputType {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 }
 
 export interface UniqueIdWithUserIdType {
-  id: Scalars['ID'];
-  userId: Scalars['ID'];
+  id: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 }
 
 export interface UniqueUserIdType {
-  userId: Scalars['ID'];
+  userId: Scalars['ID']['input'];
 }
 
 export interface UpdateInvoiceInputType {
   clientAddress: AddressInputType;
-  clientEmail: Scalars['String'];
-  clientName: Scalars['String'];
-  description: Scalars['String'];
+  clientEmail: Scalars['String']['input'];
+  clientName: Scalars['String']['input'];
+  description: Scalars['String']['input'];
   items: Array<InvoiceItemInputType>;
-  paymentDue: Scalars['String'];
-  paymentTerms: Scalars['Int'];
+  paymentDue: Scalars['String']['input'];
+  paymentTerms: Scalars['Int']['input'];
   senderAddress: AddressInputType;
-  status: Scalars['String'];
-  total: Scalars['Float'];
+  status: Scalars['String']['input'];
+  total: Scalars['Float']['input'];
 }
 
 export interface UserType {
   /** The user's verification code */
-  code?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']['output']>;
   /** The exact time the user was created */
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTime']['output'];
   /** The email of the user */
-  email: Scalars['String'];
+  email: Scalars['String']['output'];
   /** The GUID for the User */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** The password of the user */
-  password?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']['output']>;
   /** The avatar of the user */
-  photo?: Maybe<Scalars['String']>;
+  photo?: Maybe<Scalars['String']['output']>;
   /** The exact time the user was updated */
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']['output']>;
   /** Defines whether the user is verifed or not */
-  verified?: Maybe<Scalars['Boolean']>;
+  verified?: Maybe<Scalars['Boolean']['output']>;
 }
 
 export type GetInvoicesQueryVariablesType = Exact<{ [key: string]: never }>;
