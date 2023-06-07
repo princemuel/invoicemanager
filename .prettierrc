@@ -1,5 +1,4 @@
 {
-  "tailwindConfig": "./tailwind.config.cjs",
   "bracketSpacing": true,
   "endOfLine": "lf",
   "htmlWhitespaceSensitivity": "css",
@@ -12,7 +11,10 @@
   "tabWidth": 2,
   "arrowParens": "always",
   "semi": true,
-  "jsxBracketSameLine": false,
   "jsxSingleQuote": true,
-  "useTabs": false
+  "useTabs": false,
+  "tailwindConfig": "tailwind.config.cjs",
+  "tailwindFunctions": ["cx"],
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "pluginSearchDirs": false
 }
