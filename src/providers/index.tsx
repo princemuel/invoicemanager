@@ -47,7 +47,8 @@ const Providers = (props: Props) => {
           // },
           onError: (error, query) => {
             if (query.state.data !== undefined) {
-              toast.error(`Something went wrong: ${getErrorMessage(error)}`);
+              //@ts-expect-error ignore expected error
+              toast.error(getErrorMessage(error?.response?.errors?.[0]));
             }
           },
         }),
@@ -60,7 +61,8 @@ const Providers = (props: Props) => {
           // },
           onError: (error, variables, context, mutation) => {
             if (mutation.state.data !== undefined) {
-              toast.error(`Something went wrong: ${getErrorMessage(error)}`);
+              //@ts-expect-error ignore expected error
+              toast.error(getErrorMessage(error?.response?.errors?.[0]));
             }
           },
         }),
