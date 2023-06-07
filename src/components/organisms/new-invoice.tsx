@@ -50,7 +50,7 @@ const NewInvoiceForm = (props: Props) => {
       queryClient.invalidateQueries({
         queryKey: useGetInvoicesQuery.getKey(),
       });
-      navigate('/invoices');
+      navigate('/invoices', { replace: true });
     },
   });
 
