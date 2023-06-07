@@ -9,7 +9,7 @@ import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
-import { FormField, FormFieldPassword } from '../molecules';
+import { FormField } from '../molecules';
 import { Loader } from './loader';
 
 type Props = {};
@@ -25,12 +25,7 @@ const RegisterForm = (props: Props) => {
   const { mutate: register, isLoading } = useRegisterMutation(client, {
     onSuccess(data) {
       toast.success(data.register?.message);
-      navigate('/login');
-    },
-    onError(e: IErrorResponse) {
-      e.response.errors.forEach(async (error) => {
-        toast.error(error.message);
-      });
+      navigate('/login', { replace: true });
     },
   });
 
@@ -74,18 +69,22 @@ const RegisterForm = (props: Props) => {
             autoComplete='username'
           />
 
-          <FormFieldPassword
+          <FormField
+            type='password'
             name='password'
             label={'Password'}
             className='col-span-6'
             autoComplete='new-password'
+            isPassword
           />
 
-          <FormFieldPassword
+          <FormField
+            type='password'
             name='countersign'
             label={'Confirm Password'}
             className='col-span-6'
             autoComplete='new-password'
+            isPassword
           />
 
           <div className='col-span-6 mt-6'>

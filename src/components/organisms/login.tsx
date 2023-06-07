@@ -8,7 +8,7 @@ import { FormProvider } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Text } from '../atoms';
-import { FormField, FormFieldPassword } from '../molecules';
+import { FormField } from '../molecules';
 import { Loader } from './loader';
 
 type Props = {};
@@ -24,14 +24,9 @@ const LoginForm = (props: Props) => {
 
   const { mutate: login, isLoading } = useLoginMutation(client, {
     onSuccess(data) {
-      dispatch('auth/addToken');
+      dispatch({ type: 'auth/addToken', payload: data.login?.token });
       toast.success('Login Successful');
-      navigate('/');
-    },
-    onError(e: IErrorResponse) {
-      e.response.errors.forEach(async (error) => {
-        toast.error(error.message);
-      });
+      navigate('/', { replace: true });
     },
   });
 
@@ -75,11 +70,13 @@ const LoginForm = (props: Props) => {
             autoComplete='username'
           />
 
-          <FormFieldPassword
+          <FormField
+            type='password'
             name='password'
             label={'Password'}
             className='col-span-6'
             autoComplete='current-password'
+            isPassword
           />
 
           <div className='col-span-6 mt-6'>

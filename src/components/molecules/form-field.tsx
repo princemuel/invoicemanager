@@ -1,5 +1,7 @@
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
+import { useReducer } from 'react';
 import { FormControl, FormErrorText, FormInput, FormLabel } from '../atoms';
-
 interface Props
   extends React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -10,10 +12,12 @@ interface Props
   labelClassName?: string;
   inputClassName?: string;
   errorClassName?: string;
+  isPassword?: boolean;
 }
 
 const FormField = ({
   name,
+  isPassword,
   type,
   placeholder,
   label,
@@ -24,10 +28,15 @@ const FormField = ({
   inputClassName,
   errorClassName,
 }: Props) => {
+  const [isPasswordShown, setIsPasswordShown] = useReducer(
+    (prev) => !prev,
+    false
+  );
+
   return (
-    <FormControl as='div' className={className}>
+    <FormControl as='div' className={clsx('relative', className)}>
       <FormInput
-        type={type}
+        type={isPassword && isPasswordShown ? 'text' : type}
         name={name}
         id={name}
         placeholder={placeholder}
@@ -40,6 +49,21 @@ const FormField = ({
         <FormLabel htmlFor={name} className={labelClassName} children={label} />
         <FormErrorText id={name} className={errorClassName} />
       </div>
+
+      {isPassword && (
+        <button
+          type='button'
+          onClick={setIsPasswordShown}
+          className='absolute right-0 top-[56%] mr-6'
+        >
+          {isPasswordShown ? (
+            <EyeSlashIcon className='aspect-square w-7 text-brand-500' />
+          ) : (
+            <EyeIcon className='aspect-square w-7 text-brand-500' />
+          )}
+          <span className='sr-only'>View Password</span>
+        </button>
+      )}
     </FormControl>
   );
 };
