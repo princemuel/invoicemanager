@@ -1,10 +1,10 @@
-# Invoice Note (In Progress)
+# Invoice Tracker Web App (In Progress)
 
 ![Design preview](./preview.jpg)
 
 ## Table of contents
 
-- [Invoice Note (In Progress)](#invoice-note-in-progress)
+- [Invoice Tracker Web App (In Progress)](#invoice-tracker-web-app-in-progress)
   - [Table of contents](#table-of-contents)
   - [Overview](#overview)
     - [Screenshot](#screenshot)
@@ -48,7 +48,7 @@ Press `.` on the keyboard to view this project's code just like in Visual Studio
 - [React](https://react.dev/learn) - A Javascript library for web and native user interfaces
 - [Next.js](https://nextjs.org/docs) - A React framework for building web applications
 - [Typescript](https://www.typescriptlang.org/docs/) - A strongly typed programming language that builds on JavaScript, giving you better tooling at any scale
-- [Graphql](https://graphql.org/learn/) - A server-side runtime for executing queries using a type system you define for your data
+- [GraphQl](https://graphql.org/learn/) - A server-side runtime for executing queries using a type system you define for your data
 - [TanStack Query for React](https://tanstack.com/query/latest/docs/react/overview) - A powerful asynchronous state management library for React which makes fetching, caching, synchronizing and updating server state in your web applications a breeze
 - [Immer](https://immerjs.github.io/immer/) - A javascript package which helps you interact with your data by simply modifying it while keeping all the benefits of immutable data
 - [Tailwind CSS](https://tailwindcss.com/docs/installation) - A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup
