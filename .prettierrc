@@ -1,0 +1,19 @@
+{
+  "bracketSpacing": true,
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css",
+  "embeddedLanguageFormatting": "auto",
+  "bracketSameLine": false,
+  "printWidth": 80,
+  "quoteProps": "as-needed",
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "semi": true,
+  "jsxSingleQuote": true,
+  "useTabs": false,
+  "tailwindConfig": "tailwind.config.js",
+  "tailwindFunctions": ["cx"],
+  "plugins": ["prettier-plugin-prisma", "prettier-plugin-tailwindcss"]
+}
