@@ -1,13 +1,6 @@
 /*==============================*
           DATA MODELS
     ==============================*/
-interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  photo: string;
-}
 
 type Invoices = Array<Invoice>;
 
