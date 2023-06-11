@@ -2,6 +2,7 @@
   "editor.tabSize": 2,
 
   "editor.inlineSuggest.enabled": true,
+  "editor.wordWrapColumn": 120,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
     "source.addMissingImports": true,
@@ -13,5 +14,8 @@
   },
 
   "tailwindCSS.rootFontSize": 10,
-  "editor.bracketPairColorization.independentColorPoolPerBracketType": true
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
+  "dotenv.enableAutocloaking": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
