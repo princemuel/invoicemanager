@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  invoices      Invoice[]
+
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Invoice {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  tag String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  issued    DateTime @default(now())
+
+  paymentDue   String
+  paymentTerms Int
+
+  description String
+  status      String? @default("PENDING")
+
+  senderAddress Address
+
+  clientName    String
+  clientEmail   String
+  clientAddress Address
+
+  items InvoiceItem[]
+  total Float
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @db.ObjectId
+
+  @@map("invoices")
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  access_token      String? @db.String
+  refresh_token     String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique @map("session_token")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @db.ObjectId
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+type Address {
+  street   String
+  city     String
+  postCode String
+  country  String
+}
+
+type InvoiceItem {
+  id       String
+  name     String
+  quantity Int
+  price    Float
+  total    Float
+}
