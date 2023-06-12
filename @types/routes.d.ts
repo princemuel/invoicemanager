@@ -8,7 +8,7 @@ interface IRoute {
   text: string;
   url: __next_route_internal_types__.StaticRoutes;
 }
-interface ISocial {
+interface IIcons {
   id: string;
   alt: string;
   icon: IconRFCType;
@@ -18,10 +18,16 @@ interface ISocial {
 type IconRFCType = (props: IconProps) => JSX.Element;
 
 interface ISvgIcons {
-  logo: IconRFCType;
-  arrows: {
-    down: IconRFCType;
-    left: IconRFCType;
+  arrow: {
     right: IconRFCType;
+    left: IconRFCType;
+    down: IconRFCType;
   };
+  actions: {
+    add: IconRFCType;
+    delete: IconRFCType;
+    check: IconRFCType;
+  };
+  logo: IconRFCType;
+  calendar: IconRFCType;
 }
