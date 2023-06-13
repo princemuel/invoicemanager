@@ -1,3 +1,5 @@
+'use client';
+
 import { Popover } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
 import * as React from 'react';

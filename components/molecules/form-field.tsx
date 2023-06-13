@@ -1,3 +1,5 @@
+'use client';
+
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { cx } from 'cva';
 import { useReducer } from 'react';

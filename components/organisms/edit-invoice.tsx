@@ -16,9 +16,9 @@ import {
 } from '@/lib';
 import { useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { Text } from '../atoms';
 import { DatePicker, Dropdown, EditItemList, FormField } from '../molecules';

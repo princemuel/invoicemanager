@@ -6,5 +6,4 @@ export * from './form-field';
 export * from './invoice-item-details';
 export * from './new-item-list';
 export * from './price-output';
-export * from './query-result';
 export * from './user-menu';

@@ -16,7 +16,6 @@ import {
   InboxArrowDownIcon,
 } from '@heroicons/react/24/solid';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
 import styles from './templates.module.css';
 

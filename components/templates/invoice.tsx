@@ -1,3 +1,5 @@
+'use client';
+
 import {
   InvoiceType,
   client,
@@ -10,7 +12,6 @@ import {
 import { Dialog, Transition } from '@headlessui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Fragment, useCallback, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { InvoiceDetails } from '../organisms';
 
 interface Props {}
