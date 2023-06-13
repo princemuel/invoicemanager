@@ -1,4 +1,7 @@
+'use client';
+
 import { calculateTotal, endsWith, useMedia } from '@/lib';
+import { cx } from 'cva';
 import * as React from 'react';
 import {
   FieldPathValue,
@@ -212,16 +215,14 @@ const NewItemList = ({ methods }: Props) => {
               )}
 
               <div className='col-span-2 self-start sx:self-center'>
-                {isMobile ? (
-                  <FormLabel
-                    htmlFor={`items.${index}.total`}
-                    className={'block text-brand-400 dark:text-brand-300'}
-                  >
-                    Price
-                  </FormLabel>
-                ) : (
-                  <React.Fragment />
-                )}
+                <FormLabel
+                  htmlFor={`items.${index}.total`}
+                  className={
+                    'block text-brand-400 dark:text-brand-300 md:hidden'
+                  }
+                >
+                  Price
+                </FormLabel>
 
                 <PriceOutput index={index} errors={errors} />
               </div>

@@ -1,9 +1,10 @@
+'use client';
+
 import { icons } from '@/common';
 import { DateTime, datetime } from '@/lib';
 import { Menu, Transition } from '@headlessui/react';
 import { cx } from 'cva';
 import { Dayjs } from 'dayjs';
-import Image from 'next/image';
 import * as React from 'react';
 
 interface Props {
@@ -49,11 +50,7 @@ const DatePicker = ({
               </span>
 
               <span className='pointer-events-none'>
-                <Image
-                  src={icons.calendar}
-                  alt='select an invoice issue date'
-                  className=''
-                />
+                <icons.calendar />
               </span>
             </Menu.Button>
 
@@ -78,7 +75,7 @@ const DatePicker = ({
                       }}
                       className='grid place-content-center'
                     >
-                      <img src={icons.arrow.left} alt={''} />
+                      <icons.arrow.left />
                       <span className='sr-only'>Previous Month</span>
                     </button>
 
@@ -99,7 +96,7 @@ const DatePicker = ({
                       }}
                       className='grid place-content-center'
                     >
-                      <img src={icons.arrow.right} alt={''} />
+                      <icons.arrow.right />
                       <span className='sr-only'>Next Month</span>
                     </button>
                   </div>

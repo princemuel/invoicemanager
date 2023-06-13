@@ -1,3 +1,5 @@
+'use client';
+
 import {
   client,
   datetime,
@@ -16,7 +18,6 @@ import {
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
-import { PageSEO } from './seo';
 import styles from './templates.module.css';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
@@ -60,8 +61,6 @@ const HomeTemplate = (props: Props) => {
 
   return (
     <React.Fragment>
-      <PageSEO title='Home' isArticle={false} />
-
       <section className='mb-20 flex flex-col gap-12'>
         <section className='h-container'>
           <header className='mt-12'>

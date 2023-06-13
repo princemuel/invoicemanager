@@ -1,3 +1,5 @@
+'use client';
+
 import { InvoiceType, datetime, useMedia } from '@/lib';
 import * as React from 'react';
 import { BackLink, StatusButton, Text } from '../atoms';

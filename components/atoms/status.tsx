@@ -7,18 +7,18 @@ interface Props {
 }
 
 const StatusButton = ({ status = 'PENDING', className }: Props) => {
-  let colors: string;
+  let classes: string;
 
   switch (status) {
     case 'DRAFT':
-      colors =
+      classes =
         'text-[#373B53] bg-[#373B53]/[0.06] dark:text-brand-100 dark:bg-brand-100/[0.06]';
       break;
     case 'PENDING':
-      colors = 'text-[#FF8F00] bg-[#FF8F00]/[0.06]';
+      classes = 'text-[#FF8F00] bg-[#FF8F00]/[0.06]';
       break;
     case 'PAID':
-      colors = 'text-[#33D69F] bg-[#33D69F]/[0.06]';
+      classes = 'text-[#33D69F] bg-[#33D69F]/[0.06]';
       break;
     default:
       throw new Error(
@@ -31,7 +31,7 @@ const StatusButton = ({ status = 'PENDING', className }: Props) => {
       type='button'
       className={cx(
         `body-100 flex items-center justify-center gap-3 rounded-brand font-bold`,
-        colors,
+        classes,
         className
       )}
     >

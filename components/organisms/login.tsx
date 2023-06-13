@@ -1,4 +1,7 @@
+'use client';
+
 import { LoginFormSchema, RHFSubmitHandler, useZodForm } from '@/lib';
+import Link from 'next/link';
 import { FormProvider } from 'react-hook-form';
 import { Text } from '../atoms';
 import { FormField } from '../molecules';

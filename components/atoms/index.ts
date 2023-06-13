@@ -8,6 +8,5 @@ export * from './logo';
 export * from './logout-button';
 export * from './provider';
 export * from './status';
-export * from './svg-icon';
 export * from './text';
 export * from './theme-button';

@@ -3,7 +3,6 @@
 import { icons } from '@/common';
 import { pluralize } from '@/lib';
 import { Listbox, Transition } from '@headlessui/react';
-import Image from 'next/image';
 import { Dispatch, Fragment, SetStateAction } from 'react';
 
 interface Props {
@@ -31,11 +30,7 @@ const Dropdown = ({ terms, selected, setSelected }: Props) => {
           </span>
 
           <span className='pointer-events-none'>
-            <Image
-              src={icons.arrow.down}
-              alt='select a payment term'
-              className='transform-gpu ui-open:-rotate-180'
-            />
+            <icons.arrow.down className='transform-gpu ui-open:-rotate-180' />
           </span>
         </Listbox.Button>
 

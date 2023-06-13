@@ -7,13 +7,12 @@ import { nunito_sans } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
+  // metadataBase: new URL(process.env.VERCEL_URL || ''),
   title: {
     template: 'Invoice Tacker | %s',
     default: 'Invoice Tracker',
   },
   description: '',
-
-  // metadataBase: new URL(process.env.VERCEL_URL || ''),
   generator: 'Next.js',
   applicationName: 'Invoice Tracker',
   referrer: 'origin-when-cross-origin',
@@ -82,7 +81,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' className={cx('', nunito_sans.className)}>
-      <body>
+      <body className='relative flex min-h-screen flex-col md:flex-row'>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

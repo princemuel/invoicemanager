@@ -1,3 +1,5 @@
+'use client';
+
 import { cx } from 'cva';
 import Link from 'next/link';
 

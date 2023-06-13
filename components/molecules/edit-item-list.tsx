@@ -1,4 +1,7 @@
+'use client';
+
 import { calculateTotal, endsWith, useMedia } from '@/lib';
+import { cx } from 'cva';
 import * as React from 'react';
 import {
   FieldPathValue,
@@ -8,8 +11,6 @@ import {
 } from 'react-hook-form';
 import { v4 as uuid } from 'uuid';
 import { FormErrorText, FormLabel } from '../atoms';
-
-import { cx } from 'cva';
 import { PriceOutput } from './price-output';
 
 interface Props {
@@ -40,7 +41,7 @@ const EditItemList = ({ methods, invoice }: Props) => {
         if (endsWith(name, 'quantity') || endsWith(name, 'price')) {
           const { items } = value;
           const [, indexString, fieldName] = name.split('.');
-          const index = parseInt(indexString);
+          const index = Number.parseInt(indexString);
           const fieldValue = get(value, name) as FieldPathValue<
             typeof value,
             typeof name

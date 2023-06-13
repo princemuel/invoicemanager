@@ -46,7 +46,9 @@ const FormField = ({
       />
 
       <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
-        <FormLabel htmlFor={name} className={labelClassName} children={label} />
+        <FormLabel htmlFor={name} className={labelClassName}>
+          {label}
+        </FormLabel>
         <FormErrorText id={name} className={errorClassName} />
       </div>
 

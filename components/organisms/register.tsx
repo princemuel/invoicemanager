@@ -1,3 +1,5 @@
+'use client';
+
 import { RHFSubmitHandler, RegisterFormSchema, useZodForm } from '@/lib';
 import Link from 'next/link';
 import { FormProvider } from 'react-hook-form';

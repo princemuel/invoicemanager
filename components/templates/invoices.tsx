@@ -1,22 +1,19 @@
 import { icons } from '@/common';
+
 import {
   capitalize,
-  client,
   datetime,
   formatPrice,
   hasValues,
-  reverse,
   statuses,
   trim,
-  useAuthState,
-  useGetInvoicesQuery,
-  useMedia,
 } from '@/lib';
 import { Listbox, Transition } from '@headlessui/react';
+import { reverse } from 'dns';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { StatusButton, Text } from '../atoms';
-import { PageSEO } from './seo';
 
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
@@ -51,12 +48,6 @@ const InvoicesTemplate = (props: Props) => {
 
   return (
     <section aria-label='Invoices Page' className='h-container'>
-      <PageSEO
-        title={`Invoices`}
-        description={`The list of all the current user's invoices`}
-        isArticle={false}
-      />
-
       <header className='mt-20 flex items-center'>
         <div className='flex-1'>
           <Text as='h1'>Invoices</Text>
@@ -93,11 +84,7 @@ const InvoicesTemplate = (props: Props) => {
                 </p>
 
                 <span className='pointer-events-none'>
-                  <img
-                    src={icons.arrow.down}
-                    alt='filter invoices by status'
-                    className='transform-gpu ui-open:-rotate-180'
-                  />
+                  <icons.arrow.down className='transform-gpu ui-open:-rotate-180' />
                 </span>
               </Listbox.Button>
 
@@ -123,11 +110,7 @@ const InvoicesTemplate = (props: Props) => {
                             type='button'
                             className='inline-grid aspect-square w-[1.6rem] place-items-center rounded-[0.2rem] border  border-brand-400/25 bg-brand-100 group-hover:border-brand-500 group-aria-selected:bg-brand-500 dark:bg-brand-700 dark:group-aria-selected:bg-brand-500'
                           >
-                            <img
-                              src={icons.actions.check}
-                              className='hidden group-aria-selected:block'
-                              alt=''
-                            />
+                            <icons.actions.check />
                           </button>
 
                           <span className='body-100 col-span-2 font-bold'>
@@ -147,7 +130,7 @@ const InvoicesTemplate = (props: Props) => {
             to={'new'}
           >
             <span className='grid aspect-square place-content-center rounded-full bg-neutral-100 p-4'>
-              <img src={icons.actions.add} alt={''} />
+              <icons.actions.add />
             </span>
 
             <span>{trim(`New ${isWide ? 'Invoice' : ''}`)}</span>
@@ -207,7 +190,7 @@ const InvoicesTemplate = (props: Props) => {
                   as='p'
                   className='hidden sx:col-start-6 sx:col-end-7 sx:block'
                 >
-                  <img src={icons.arrow.right} alt={''} />
+                  <icons.arrow.right />
                 </Text>
               </Link>
             </li>
@@ -215,7 +198,7 @@ const InvoicesTemplate = (props: Props) => {
         ) : (
           <li className='flex min-h-full items-center justify-center'>
             <article className='flex flex-col items-center gap-20 text-center'>
-              <img
+              <Image
                 src={'/assets/svgs/illustration-empty.svg'}
                 width='242'
                 height='200'
