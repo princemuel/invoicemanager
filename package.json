@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npm -s run prisma generate"
+    "gen:prisma": "prisma generate",
+    "postinstall": "pnpm -s run gen:prisma"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
