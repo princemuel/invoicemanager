@@ -96,33 +96,3 @@ export const InvoiceFormSchema = z.object({
 export type RHFSubmitHandler<T extends ZodType<any, any, any>> = SubmitHandler<
   z.infer<T>
 >;
-
-const isValidId = (id: string): id is `${string}/${string}` => {
-  return id.split('/').length === 2;
-};
-
-const baseSchema = z.object({
-  id: z.string().refine(isValidId),
-});
-
-type Input = z.input<typeof baseSchema> & {
-  children: Input[];
-};
-
-type Output = z.output<typeof baseSchema> & {
-  children: Output[];
-};
-
-const schema: z.ZodType<Output, z.ZodTypeDef, Input> = baseSchema.extend({
-  children: z.lazy(() => schema.array()),
-});
-
-// type NestedKey<O extends Record<string, unknown>> = {
-//   [K in Extract<keyof O, string>]: O[K] extends Array<any>
-//     ? K
-//     : O[K] extends Record<string, unknown>
-//     ? `${K}` | `${K}.${NestedKey<O[K]>}`
-//     : K;
-// }[Extract<keyof O, string>];
-
-// type nestedKeys = NestedKey<InvoiceFormSchema>;
