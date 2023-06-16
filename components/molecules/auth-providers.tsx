@@ -1,25 +1,44 @@
 import { cx } from 'cva';
-import type { ClientSafeProvider } from 'next-auth/react';
-import { getProviders } from 'next-auth/react';
+import type { IconType } from 'react-icons';
+import { AiFillGithub } from 'react-icons/ai';
+import { FcGoogle } from 'react-icons/fc';
+import { Provider } from '../atoms';
 
 interface Props {
   className?: string;
-  children: (filtered: ClientSafeProvider[]) => React.ReactNode;
 }
 
-export async function ProviderButtons({ className, children }: Props) {
-  const providers = await getProviders();
+const icons = [FcGoogle, AiFillGithub];
+const providers: IProvider[] = [
+  {
+    id: 'github',
+    name: 'Github',
+  },
+  {
+    id: 'google',
+    name: 'Google',
+  },
+];
 
-  const filtered = Object.values(providers || {}).filter((provider) => {
-    // hack!! just to get github, google and omit credentials
-    return provider?.name?.toLowerCase().includes('g');
-  });
+interface Props {
+  className?: string;
+  children: (
+    providers: IProvider[],
+    icons: IconType[],
+    Provider: ({
+      provider,
+      icon,
+    }: {
+      provider: IProvider;
+      icon: IconType;
+    }) => JSX.Element
+  ) => React.ReactNode;
+}
 
-  console.log('FILTERED', filtered);
-  console.log('FILTERED', providers);
+export function ProviderButtons({ className, children }: Props) {
   return (
-    <section className={cx('flex w-full flex-col gap-6', className)}>
-      {children?.(filtered)}
-    </section>
+    <div className={cx('flex w-full flex-col gap-8', className)}>
+      {children?.(providers, icons, Provider)}
+    </div>
   );
 }
