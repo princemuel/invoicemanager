@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { cx } from 'cva';
 import { Metadata } from 'next';
 import * as React from 'react';
-import { nunito_sans } from './fonts';
+import { league_spartan, nunito_sans } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -80,7 +80,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className={cx('', nunito_sans.className)}>
+    <html
+      lang='en'
+      className={cx('', nunito_sans.className, league_spartan.className)}
+      suppressHydrationWarning
+    >
       <body className='relative flex min-h-screen flex-col md:flex-row'>
         <Providers>{children}</Providers>
         <Analytics />
