@@ -1,3 +1,5 @@
+'use client';
+
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { cx } from 'cva';
 import { useReducer } from 'react';
@@ -46,7 +48,9 @@ const FormField = ({
       />
 
       <div className='flex items-center justify-between text-brand-400 peer-aria-[invalid="true"]:!text-accent-200 dark:text-brand-300'>
-        <FormLabel htmlFor={name} className={labelClassName} children={label} />
+        <FormLabel htmlFor={name} className={labelClassName}>
+          {label}
+        </FormLabel>
         <FormErrorText id={name} className={errorClassName} />
       </div>
 

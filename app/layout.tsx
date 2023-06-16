@@ -3,17 +3,16 @@ import { Analytics } from '@vercel/analytics/react';
 import { cx } from 'cva';
 import { Metadata } from 'next';
 import * as React from 'react';
-import { nunito_sans } from './fonts';
+import { league_spartan, nunito_sans } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
+  // metadataBase: new URL(process.env.VERCEL_URL || ''),
   title: {
     template: 'Invoice Tacker | %s',
     default: 'Invoice Tracker',
   },
   description: '',
-
-  // metadataBase: new URL(process.env.VERCEL_URL || ''),
   generator: 'Next.js',
   applicationName: 'Invoice Tracker',
   referrer: 'origin-when-cross-origin',
@@ -81,8 +80,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en' className={cx('', nunito_sans.className)}>
-      <body>
+    <html
+      lang='en'
+      className={cx('', nunito_sans.className, league_spartan.className)}
+      suppressHydrationWarning
+    >
+      <body className='relative flex min-h-screen flex-col md:flex-row'>
         <Providers>{children}</Providers>
         <Analytics />
       </body>

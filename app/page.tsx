@@ -1,3 +1,9 @@
+import { HomeTemplate } from '@/components';
+
 export default function Home() {
-  return <h1>Hello</h1>;
+  return (
+    <main className='relative min-h-screen flex-1'>
+      <HomeTemplate />
+    </main>
+  );
 }

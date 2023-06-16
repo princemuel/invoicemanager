@@ -140,33 +140,10 @@ export function getMonth(string: string) {
 export function serialize<T>(data: T): NonNullable<T> {
   return JSON.parse(JSON.stringify(data));
 }
-declare interface ObjectConstructor {
-  keys<T extends Record<string, unknown>>(o: T): (keyof T)[];
-}
 
 export const objectKeys = <O extends {}>(object: O): (keyof O)[] => {
   return Object.keys(object) as (keyof O)[];
 };
-export const objectValues = <O extends {}>(object: O): O[] => {
-  return Object.values(object) as O[];
-};
-
-export function deepFreeze<T extends { [key: keyof any]: any }>(object: T) {
-  if (object == null) throw new Error('data must be an object');
-  // Retrieve the property names defined on object
-  const propNames = Reflect.ownKeys(object);
-
-  // Freeze properties before freezing self
-  for (const name of propNames) {
-    const value = object[name];
-
-    if ((value && typeof value === 'object') || typeof value === 'function') {
-      deepFreeze(value);
-    }
-  }
-
-  return Object.freeze(object);
-}
 
 /*---------------------------------*
             ARRAY UTILS           *
