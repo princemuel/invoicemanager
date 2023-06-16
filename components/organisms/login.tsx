@@ -3,6 +3,7 @@
 import type { RHFSubmitHandler } from '@/lib';
 import {
   LoginFormSchema,
+  reverse,
   useLoginModal,
   useRegisterModal,
   useZodForm,
@@ -15,7 +16,7 @@ import toast from 'react-hot-toast';
 import { AiFillGithub } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { Text } from '../atoms';
-import { BaseModal } from '../molecules';
+import { BaseModal, FormField, ProviderButtons } from '../molecules';
 
 const icons = [FcGoogle, AiFillGithub];
 
@@ -36,14 +37,16 @@ export const LoginForm = (props: Props) => {
 
   const handleToggle = React.useCallback(() => {
     login.close();
+
     signup.open();
   }, [login, signup]);
 
   const onSubmit: RHFSubmitHandler<typeof LoginFormSchema> = async (data) => {
     try {
       const result = LoginFormSchema.safeParse(data);
+      // The data is invalid
       if (!result.success) {
-        throw result.error;
+        throw new Error(JSON.stringify(result.error));
       }
 
       console.log(result.data);
@@ -85,23 +88,45 @@ export const LoginForm = (props: Props) => {
       onSubmit={onSubmit}
     >
       <fieldset className='grid grid-cols-6 gap-8'>
-        <Dialog.Title as='legend' className={'text-5xl font-bold tracking-300'}>
-          Login
-        </Dialog.Title>
+        <header className='flex items-center justify-between'>
+          <Dialog.Title
+            as='legend'
+            className={'text-5xl font-bold tracking-300'}
+          >
+            Login
+          </Dialog.Title>
+        </header>
 
-        <div className='col-span-6 mt-6'>
+        <FormField
+          type='email'
+          name='email'
+          label={'Email Address'}
+          className='col-span-6'
+          autoComplete='username'
+        />
+
+        <FormField
+          type='password'
+          name='password'
+          label={'Password'}
+          className='col-span-6'
+          autoComplete='current-password'
+          isPassword
+        />
+
+        <div className='col-span-6'>
           <button
             type='submit'
             disabled={!isSubmittable}
-            className='btn w-full border-none bg-accent-200 p-6 text-500 font-normal text-neutral-100 outline-none transition duration-500 hover:bg-accent-100 focus:bg-accent-100'
+            className='btn w-full rounded-pill border-none bg-accent-200 p-6 text-500 font-normal text-neutral-100 outline-none transition duration-500 hover:bg-neutral-100 hover:text-brand-500 focus:bg-neutral-100 focus:text-brand-500'
           >
             Login to your account
           </button>
         </div>
-        {/*
-        <ProviderButtons className='col-span-6 mt-6'>
-          {(filtered) =>
-            [...reverse(filtered)].map((provider, i) => (
+
+        <ProviderButtons className='col-span-6'>
+          {(providers, icons, Provider) =>
+            [...reverse(providers)].map((provider, i) => (
               <Provider
                 key={provider.name}
                 provider={provider}
@@ -109,13 +134,12 @@ export const LoginForm = (props: Props) => {
               />
             ))
           }
-        </ProviderButtons> */}
+        </ProviderButtons>
 
         <div className='col-span-6 flex items-center justify-center gap-4 text-500'>
           <Text>Don’t have an account?</Text>
           <button
             type='button'
-            ref={focusRef}
             className='text-accent-200'
             onClick={handleToggle}
           >
