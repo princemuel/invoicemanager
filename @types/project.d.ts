@@ -1,5 +1,15 @@
 // import type { RequestInit } from 'graphql-request/build/esm/types.dom';
 // This helps with type inference when using the component
+interface ModalState {
+  show: boolean;
+  open: () => void;
+  close: () => void;
+}
+
+interface IProvider {
+  id: 'github' | 'google';
+  name: Capitalize<IProvider['id']>;
+}
 
 interface IErrorResponse {
   response: { errors: IError[]; data: IErrorData };
