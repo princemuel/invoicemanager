@@ -85,6 +85,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-sans)'],
+        accent: ['var(--font-accent)'],
       },
       cursor: {
         pointer:
