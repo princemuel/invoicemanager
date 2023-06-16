@@ -1,5 +1,5 @@
-import db from '../api/prisma';
 import { getSession } from './get-session';
+import db from './prisma';
 
 export async function getUser() {
   try {

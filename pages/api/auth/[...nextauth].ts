@@ -1,15 +1,15 @@
+import db from '@/app/lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { compare } from 'bcrypt';
-import { AuthOptions, TokenSet } from 'next-auth';
+import bcrypt from 'bcrypt';
+import NextAuth, { AuthOptions, TokenSet } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
-import db from './prisma';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     GithubProvider({
@@ -58,7 +58,10 @@ const authOptions: AuthOptions = {
             'Invalid Credentials: This user does not exist'
           );
 
-        const matches = await compare(credentials.password, user.password);
+        const matches = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
         if (!matches) {
           throw new TypeError(
             'Invalid Credentials: Please enter a valid password'
@@ -138,4 +141,4 @@ const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === 'development',
 };
 
-export default authOptions;
+export default NextAuth(authOptions);
