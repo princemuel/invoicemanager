@@ -1,4 +1,4 @@
-import db from '@/lib/prisma';
+import db from '../api/prisma';
 import { getSession } from './get-session';
 
 export async function getUser() {
