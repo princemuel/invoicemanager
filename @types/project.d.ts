@@ -11,6 +11,10 @@ interface IProvider {
   name: Capitalize<IProvider['id']>;
 }
 
+interface IParams {
+  [key: string]: string | undefined;
+}
+
 interface IErrorResponse {
   response: { errors: IError[]; data: IErrorData };
 }

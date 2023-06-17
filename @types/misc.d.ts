@@ -24,9 +24,7 @@ namespace Misc {
       }
     : unknown;
 
-  type RequiredKeys<T> = {
-    [K in keyof T]-?: {} extends { [P in K]: T[K] } ? never : K;
-  }[keyof T];
+  type BrowserNativeObject = Date | FileList | File;
 
   type LooseAutocomplete<T extends string> = T | Omit<string, T>;
 
@@ -37,6 +35,16 @@ namespace Misc {
       ? { [K in keyof O]: Expand<O[K]> }
       : never
     : T;
+
+  type RequiredKeys<T> = {
+    [K in keyof T]-?: {} extends { [P in K]: T[K] } ? never : K;
+  }[keyof T];
+
+  type DeepRequired<T> = T extends BrowserNativeObject | Blob
+    ? T
+    : {
+        [K in keyof T]-?: NonNullable<DeepRequired<T[K]>>;
+      };
 
   type DeepPartial<T> = T extends Function
     ? T
