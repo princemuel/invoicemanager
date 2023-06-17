@@ -1,19 +1,18 @@
 import Image from 'next/image';
 
 interface Props {
-  src?: string;
+  src?: string | null;
 }
 
 const Avatar = ({ src }: Props) => {
   return (
     <Image
-      src={src || '/assets/images/image-avatar.jpg'}
+      src={src || '/assets/placeholder.jpg'}
       alt={'User'}
+      className='rounded-full'
       // alt={user?.firstName || 'User'}
-      width={80}
-      height={80}
-      placeholder='blur'
-      className=''
+      width={30}
+      height={30}
     />
   );
 };

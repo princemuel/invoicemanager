@@ -16,6 +16,7 @@ interface Props
 const Provider = ({ provider, icon: Icon }: Props) => {
   return (
     <button
+      type='button'
       className={cx('flex items-center justify-center gap-4 text-500')}
       onClick={() => signIn(provider.id)}
     >
