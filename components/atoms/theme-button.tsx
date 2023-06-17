@@ -14,8 +14,8 @@ const ThemeButton = () => {
       className={cx(
         'aspect-square w-8 bg-cover bg-no-repeat',
         !isDarkMode
-          ? 'bg-[url(/assets/svgs/icon-moon.svg)]'
-          : 'bg-[url(/assets/svgs/icon-sun.svg)]'
+          ? 'bg-[url(/assets/icon-moon.svg)]'
+          : 'bg-[url(/assets/icon-sun.svg)]'
       )}
       onClick={updateTheme}
     >
