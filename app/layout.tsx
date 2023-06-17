@@ -1,3 +1,4 @@
+import { Sidebar } from '@/components';
 import { Providers } from '@/providers';
 import { Analytics } from '@vercel/analytics/react';
 import { cx } from 'cva';
@@ -5,6 +6,7 @@ import { Metadata } from 'next';
 import * as React from 'react';
 import { league_spartan, nunito_sans } from './fonts';
 import './globals.css';
+import { getUser } from './lib/get-user';
 
 export const metadata: Metadata = {
   // metadataBase: new URL(process.env.VERCEL_URL || ''),
@@ -74,11 +76,14 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getUser();
+  // const user = {};
+
   return (
     <html
       lang='en'
@@ -86,7 +91,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className='relative flex min-h-screen flex-col md:flex-row'>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Sidebar userImage={user?.image} />
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>

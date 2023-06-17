@@ -25,7 +25,7 @@ const Providers = ({ children }: Props) => {
         <ModalProvider>{children}</ModalProvider>
         <ReactQueryDevtools
           toggleButtonProps={{
-            style: { width: '1rem', aspectRatio: 1, borderRadius: '50%' },
+            style: { width: '1.5rem', aspectRatio: 1, borderRadius: '50%' },
           }}
           position='bottom-right'
           initialIsOpen={false}

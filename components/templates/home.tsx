@@ -1,12 +1,13 @@
 'use client';
 
 import { useLoginModal } from '@/lib';
+import Link from 'next/link';
 
 export const HomeTemplate = () => {
   const login = useLoginModal();
 
   return (
-    <div className='fixed inset-0 flex items-center justify-center'>
+    <div className=''>
       <button
         type='button'
         onClick={login.open}
@@ -14,6 +15,8 @@ export const HomeTemplate = () => {
       >
         Open dialog
       </button>
+
+      <Link href={'/invoices'}>Invoices</Link>
     </div>
   );
 };
