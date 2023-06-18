@@ -2,23 +2,7 @@ import { getUser } from '@/app/lib/get-user';
 import db from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request, { params }: { params: IParams }) {
-  const user = await getUser();
-  if (!user) return NextResponse.error();
-
-  const { id } = params;
-  if (!id || typeof id !== 'string') {
-    throw new ReferenceError('This invoice id is not valid');
-  }
-
-  const invoice = db.invoice.findFirstOrThrow({
-    where: { id, userId: user.id },
-  });
-
-  return NextResponse.json(invoice);
-}
-
-export async function POST(request: Request, { params }: { params: IParams }) {
+export async function PATCH(request: Request, { params }: { params: IParams }) {
   const user = await getUser();
   if (!user) return NextResponse.error();
 
