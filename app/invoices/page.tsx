@@ -1,13 +1,12 @@
-import { EmptyState } from '@/components';
+import { InvoicesPageTemplate } from '@/components';
+import { fetchAllInvoices } from '../lib/get-invoices';
 
-export default async function InvoicesPage() {
-  const invoices = null;
-
-  if (!invoices) return <EmptyState />;
+export default async function PageRoute() {
+  const invoices = await fetchAllInvoices();
 
   return (
-    <div>
-      <h1>Invoices Page</h1>
-    </div>
+    <main className='w-full'>
+      <InvoicesPageTemplate invoices={invoices || []} />
+    </main>
   );
 }
