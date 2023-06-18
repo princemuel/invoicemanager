@@ -47,13 +47,13 @@ const TermsDropdown = ({ terms, selected, setSelected }: Props) => {
           leaveTo='opacity-0'
         >
           <Listbox.Options
-            className={`absolute z-20 mt-8 w-full rounded-brand bg-neutral-100 shadow-200 transition-all duration-500 dark:bg-brand-700 dark:shadow-300`}
+            className={`absolute z-20 mt-8 w-full divide-y divide-brand-100 rounded-brand bg-neutral-100 shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300`}
           >
             {terms?.map((term) => {
               return (
                 <Listbox.Option
                   key={term.id}
-                  className='body-100 divide-y divide-brand-100 p-8 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:divide-brand-600 dark:text-brand-100'
+                  className='body-100 p-8 font-bold text-brand-900 hover:text-brand-500 focus:text-brand-500 dark:text-brand-100'
                   value={term.value}
                 >
                   <span className='block truncate'>
