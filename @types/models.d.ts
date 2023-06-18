@@ -45,7 +45,7 @@ interface InvoiceType {
   tag: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  issued?: Date | string;
+  issued: string;
   paymentDue: string;
   paymentTerms: number;
   description: string;
@@ -72,7 +72,7 @@ interface InvoiceFormType {
   description: string;
   items: [ILineItem, ...ILineItem[]];
   senderAddress: IAddress;
-  issueDate?: string;
+  issued?: string;
   paymentDue?: string;
   paymentTerms?: number;
   status?: InvoiceStatus;

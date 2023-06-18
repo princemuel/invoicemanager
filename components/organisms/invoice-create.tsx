@@ -6,6 +6,7 @@ import {
   InvoiceFormSchema,
   calculateTotal,
   constants,
+  getErrorMessage,
   terms,
   useCreateInvoiceModal,
   useZodForm,
@@ -13,6 +14,7 @@ import {
 import { produce } from 'immer';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+import { toast } from 'react-hot-toast';
 import { Text } from '../atoms';
 import {
   BaseModal,
@@ -49,7 +51,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
     try {
       const draft = produce(data, (draft) => {
         draft.paymentTerms = selectedTerm;
-        draft.issueDate = selectedDate.toISOString();
+        draft.issued = selectedDate.toISOString();
 
         const duration = constants.ONE_DAY * (Number(selectedTerm) || 1);
         const dueTime = selectedDate.valueOf() + duration;
@@ -79,6 +81,8 @@ const CreateInvoiceForm = ({ userId }: Props) => {
         body: JSON.stringify(draft),
       });
 
+      if (!response.ok) throw new Error('Invalid Response');
+
       await response.json();
 
       setIsFetching(false);
@@ -89,9 +93,10 @@ const CreateInvoiceForm = ({ userId }: Props) => {
         } else {
           router.refresh();
         }
+        invoiceModal.close();
       });
     } catch (error) {
-      console.error('SUBMIT_ERROR', error);
+      toast.error(getErrorMessage(error));
     }
   };
 

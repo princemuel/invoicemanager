@@ -19,7 +19,6 @@ export async function fetchAllInvoices(): Promise<InvoiceType[]> {
         ...invoice,
         createdAt: invoice.createdAt.toISOString(),
         updatedAt: invoice.updatedAt.toISOString(),
-        issued: invoice.issued.toISOString(),
       };
     });
   } catch (error) {
