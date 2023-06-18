@@ -8,9 +8,10 @@ import { Toaster } from 'react-hot-toast';
 import { ModalProvider } from './modals';
 interface Props {
   children: React.ReactNode;
+  userId: string;
 }
 
-const Providers = ({ children }: Props) => {
+const Providers = ({ children, userId }: Props) => {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
@@ -22,7 +23,7 @@ const Providers = ({ children }: Props) => {
         attribute='data-mode'
       >
         <Toaster />
-        <ModalProvider>{children}</ModalProvider>
+        <ModalProvider userId={userId}>{children}</ModalProvider>
         <ReactQueryDevtools
           toggleButtonProps={{
             style: { width: '1.5rem', aspectRatio: 1, borderRadius: '50%' },

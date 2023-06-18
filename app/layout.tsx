@@ -91,7 +91,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className='relative flex min-h-screen flex-col md:flex-row'>
-        <Providers>
+        <Providers userId={user?.id || ''}>
           <Sidebar userImage={user?.image} />
           {children}
         </Providers>
