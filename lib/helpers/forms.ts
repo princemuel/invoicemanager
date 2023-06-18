@@ -30,12 +30,14 @@ export const GenericEmailContraint = z
   .trim();
 
 // Zod Schemas
-const AddressSchema = z.object({
-  street: GenericStringContraint.nonempty(),
-  city: GenericStringContraint.nonempty(),
-  country: GenericStringContraint.nonempty(),
-  postCode: GenericStringContraint.nonempty().toUpperCase(),
-});
+const AddressSchema = z
+  .object({
+    street: GenericStringContraint.nonempty(),
+    city: GenericStringContraint.nonempty(),
+    country: GenericStringContraint.nonempty(),
+    postCode: GenericStringContraint.nonempty().toUpperCase(),
+  })
+  .strict();
 
 const GenericItemSchema = z.object({
   id: z.string().optional(),
