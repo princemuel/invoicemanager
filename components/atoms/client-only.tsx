@@ -18,5 +18,5 @@ export const ClientOnly = ({ children }: Props) => {
 
   if (!hasMounted) return null;
 
-  return <React.Fragment>{children}</React.Fragment>;
+  return <>{children}</>;
 };
