@@ -1,24 +1,28 @@
 'use client';
 
 import { Dialog, Transition } from '@headlessui/react';
+import { cx } from 'cva';
 import React, { Fragment } from 'react';
+import type { FieldValues, UseFormReturn } from 'react-hook-form';
 import { FormProvider } from 'react-hook-form';
 
-interface Props {
+interface Props<T extends FieldValues> {
   show: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  className?: string;
   onSubmit: any;
-  methods: any;
+  methods: UseFormReturn<T, any, undefined>;
 }
 
-export const BaseModal = ({
+export const BaseModal = <T extends FieldValues>({
   show,
   onClose,
+  className,
   children,
   onSubmit,
   methods,
-}: Props) => {
+}: Props<T>) => {
   return (
     <Transition show={show} as={Fragment}>
       <Dialog
@@ -54,7 +58,11 @@ export const BaseModal = ({
             >
               <Dialog.Panel
                 as='div'
-                className='w-full max-w-2xl transform rounded-brand bg-neutral-100 align-middle shadow-xl transition-all dark:bg-brand-600'
+                className={cx(
+                  'relative w-full transform rounded-brand bg-neutral-100 shadow-xl transition-all dark:bg-brand-600',
+                  'max-w-2xl',
+                  className
+                )}
               >
                 <FormProvider {...methods}>
                   <form
