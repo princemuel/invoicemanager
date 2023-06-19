@@ -17,6 +17,7 @@ interface Props<T extends FieldValues> {
 
 export const BaseModal = <T extends FieldValues>({
   show,
+
   onClose,
   className,
   children,
@@ -39,14 +40,11 @@ export const BaseModal = <T extends FieldValues>({
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
         >
-          <div
-            className='fixed inset-0 bg-neutral-900 bg-opacity-25 '
-            aria-hidden='true'
-          />
+          <div className='fixed inset-0 bg-brand-900/25' aria-hidden='true' />
         </Transition.Child>
 
         <div className='fixed inset-0 overflow-y-auto'>
-          <div className='flex min-h-full items-center justify-center p-8'>
+          <div className='flex min-h-full items-center justify-center p-8 backdrop-blur-sm'>
             <Transition.Child
               as={Fragment}
               enter='ease-out duration-300'
