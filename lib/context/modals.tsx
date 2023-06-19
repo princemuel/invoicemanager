@@ -20,12 +20,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-const useCurrentModal = () => React.useState<string>();
+const useCurrentModal = () => React.useState('');
 const useModalState = () => React.useState<IModalState>();
 
 export const ModalsProvider = ({ children }: Props) => {
-  const [currentModal, setCurrentModal] = React.useState<string>();
-  const [modals, setModals] = React.useState<IModalsState>({});
+  const [currentModal, setCurrentModal] = useCurrentModal();
+  const [modals, setModals] = useModalState();
 
   return (
     <ModalsContext.Provider value={modals}>
