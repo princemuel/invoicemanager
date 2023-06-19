@@ -1,3 +1,4 @@
+export * from './actions-btns';
 export * from './auth-provider';
 export * from './avatar';
 export * from './back-link';
