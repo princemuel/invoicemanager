@@ -2,7 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
-import { UseFormProps, useForm as useReactHookForm } from 'react-hook-form';
+import { UseFormProps, useForm as useHookForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export function useZodForm<T extends z.ZodType>(
@@ -10,7 +10,7 @@ export function useZodForm<T extends z.ZodType>(
     schema: T;
   }
 ) {
-  return useReactHookForm<T['_input']>({
+  return useHookForm<T['_input']>({
     ...props,
     resolver: zodResolver(props.schema, undefined, {
       // This makes it so we can use `.transform()`s on the schema without same transform getting applied again when it reaches the server

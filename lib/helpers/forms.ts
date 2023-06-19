@@ -8,7 +8,7 @@ export const terms = [
   { value: 30, id: '30' },
 ];
 
-export const statuses = [
+export const invoiceFilters: InvoiceFilter[] = [
   { value: 'PAID', id: 'PAID' },
   { value: 'PENDING', id: 'PENDING' },
   { value: 'DRAFT', id: 'DRAFT' },
@@ -30,19 +30,20 @@ export const GenericEmailContraint = z
   .trim();
 
 // Zod Schemas
-const AddressSchema = z.object({
-  street: GenericStringContraint.nonempty(),
-  city: GenericStringContraint.nonempty(),
-  country: GenericStringContraint.nonempty(),
-  postCode: GenericStringContraint.nonempty().toUpperCase(),
-});
-
 const GenericItemSchema = z.object({
   id: z.string().optional(),
   name: GenericStringContraint.nonempty(),
   quantity: z.number().nonnegative().int().step(1),
   price: z.number().nonnegative().step(0.01),
   total: z.number().nonnegative().optional(),
+});
+
+const GenericAddressSchema = z.object({
+  id: z.string().optional(),
+  street: GenericStringContraint.nonempty(),
+  city: GenericStringContraint.nonempty(),
+  country: GenericStringContraint.nonempty(),
+  postCode: GenericStringContraint.nonempty().toUpperCase(),
 });
 
 const AuthFormSchema = z.object({
@@ -78,15 +79,15 @@ export const LoginFormSchema = AuthFormSchema.pick({
 });
 
 export const InvoiceFormSchema = z.object({
-  clientAddress: AddressSchema,
+  clientAddress: GenericAddressSchema,
   clientEmail: GenericEmailContraint,
   clientName: GenericStringContraint.nonempty(),
   description: GenericStringContraint.nonempty(),
-  issueDate: z.string().datetime().optional(),
+  issued: z.string().datetime().optional(),
   items: GenericItemSchema.array().nonempty(),
   paymentDue: z.string().datetime().optional(),
   paymentTerms: z.number().nonnegative().int().optional(),
-  senderAddress: AddressSchema,
+  senderAddress: GenericAddressSchema,
   status: z.enum(['DRAFT', 'PENDING', 'PAID']).optional(),
   tag: z.string().optional(),
   total: z.number().nonnegative().optional(),

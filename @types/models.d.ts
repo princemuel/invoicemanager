@@ -6,6 +6,16 @@ type AuthFormData = Pick<
   'name' | 'email' | 'password'
 >;
 
+interface Term {
+  id: string;
+  value: number;
+}
+
+interface InvoiceFilter {
+  id: string;
+  value: string;
+}
+
 interface IUser extends TUser {
   createdAt: string;
   updatedAt: string;
@@ -40,12 +50,17 @@ interface PaidInvoice extends InvoiceFormType {
   status: 'PAID';
 }
 
+interface InvoiceTypeSafe extends InvoiceType {
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 interface InvoiceType {
   id?: string;
   tag: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
-  issued?: Date | string;
+  issued: string;
   paymentDue: string;
   paymentTerms: number;
   description: string;
@@ -72,7 +87,7 @@ interface InvoiceFormType {
   description: string;
   items: [ILineItem, ...ILineItem[]];
   senderAddress: IAddress;
-  issueDate?: string;
+  issued?: string;
   paymentDue?: string;
   paymentTerms?: number;
   status?: InvoiceStatus;

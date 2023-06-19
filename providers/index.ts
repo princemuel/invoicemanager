@@ -1,1 +1,2 @@
-export { Providers } from './providers';
+export * from './modals';
+export * from './providers';

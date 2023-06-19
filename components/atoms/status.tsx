@@ -2,7 +2,7 @@ import { capitalize } from '@/lib';
 import { cx } from 'cva';
 
 interface Props {
-  status?: string;
+  status?: string | null;
   className?: string;
 }
 

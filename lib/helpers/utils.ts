@@ -39,17 +39,15 @@ export function approximate(num = 0, fractionDigits = 0) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export const isDraftInvoice = (invoice?: Invoice): invoice is DraftInvoice => {
+export const isDraftInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'DRAFT';
 };
 
-export const isPendingInvoice = (
-  invoice?: Invoice
-): invoice is PendingInvoice => {
+export const isPendingInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'PENDING';
 };
 
-export const isPaidInvoice = (invoice?: Invoice): invoice is PaidInvoice => {
+export const isPaidInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'PAID';
 };
 
@@ -60,8 +58,9 @@ export function range(start: number, stop: number, step: number) {
   );
 }
 
-export function parseNumSafe(value: number) {
-  return Number.isNaN(value) || isNaN(value) ? 0 : value;
+export function safeNum<T>(value: T) {
+  const updated = Number(value);
+  return Number.isNaN(updated) || isNaN(updated) ? 0 : updated;
 }
 
 interface Item {
@@ -85,11 +84,9 @@ export function calculateTotal(a?: unknown, b?: unknown) {
   if (Array.isArray(a)) {
     return (a as Item[]).reduce((total, current) => {
       if (b === 'total') {
-        total += parseNumSafe(Number(current.total));
+        total += safeNum(current?.total);
       } else {
-        total +=
-          parseNumSafe(Number(current.quantity)) *
-          parseNumSafe(Number(current.price));
+        total += safeNum(current?.quantity) * safeNum(current?.price);
       }
       return approximate(total, 2);
     }, 0);

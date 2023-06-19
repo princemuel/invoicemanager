@@ -1,17 +1,24 @@
-import { LoginForm, RegisterForm } from '@/components';
+import {
+  ClientOnly,
+  CreateInvoiceForm,
+  LoginForm,
+  RegisterForm,
+} from '@/components';
 import * as React from 'react';
 
 interface Props {
   children: React.ReactNode;
+  userId: string;
 }
 
-const ModalProvider = ({ children }: Props) => {
+const ModalProvider = ({ children, userId }: Props) => {
   return (
-    <React.Fragment>
+    <ClientOnly>
       <LoginForm />
       <RegisterForm />
+      <CreateInvoiceForm userId={userId} />
       {children}
-    </React.Fragment>
+    </ClientOnly>
   );
 };
 

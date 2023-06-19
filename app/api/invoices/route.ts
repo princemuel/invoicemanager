@@ -9,26 +9,16 @@ const suid = new ShortUniqueId({
   dictionary: 'hex',
 });
 
-export async function GET(request: Request) {
-  const user = await getUser();
-  if (!user) return NextResponse.error();
-
-  const invoices = db.invoice.findMany({
-    where: {
-      userId: user.id,
-    },
-  });
-
-  return NextResponse.json(invoices);
-}
-
 export async function POST(request: Request) {
   const user = await getUser();
   if (!user) return NextResponse.error();
 
-  const body = (await request.json()) as InvoiceType;
+  const body: InvoiceTypeSafe = await request.json();
+
+  console.log(body);
+
   for (const value of objectKeys(body)) {
-    if (!body[value]) return NextResponse.error();
+    if (body[value] == undefined) return NextResponse.error();
   }
 
   const data = produce(body, (draft) => {
