@@ -17,10 +17,8 @@ interface Props {
   methods: UseFormReturn<InvoiceFormType, any>;
 }
 
-const NewItemList = ({ methods }: Props) => {
+const CreateInvoiceItemList = ({ methods }: Props) => {
   const isMobile = useMedia(`(max-width: 40em)`);
-
-  console.log(isMobile);
 
   const { fields, append, remove } = useFieldArray({
     name: 'items',
@@ -271,4 +269,4 @@ const NewItemList = ({ methods }: Props) => {
   );
 };
 
-export { NewItemList };
+export { CreateInvoiceItemList };
