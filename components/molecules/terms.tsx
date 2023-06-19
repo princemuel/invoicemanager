@@ -11,11 +11,6 @@ interface Props {
   setSelected: Dispatch<SetStateAction<number>>;
 }
 
-interface Term {
-  id: string;
-  value: number;
-}
-
 const TermsDropdown = ({ terms, selected, setSelected }: Props) => {
   return (
     <Listbox value={selected} onChange={setSelected}>
