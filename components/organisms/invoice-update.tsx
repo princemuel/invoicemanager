@@ -7,60 +7,86 @@ import {
   calculateTotal,
   constants,
   getErrorMessage,
+  hasValues,
   terms,
-  useCreateInvoiceModal,
+  useApiState,
+  useEditInvoiceModal,
   useZodForm,
 } from '@/lib';
 import { produce } from 'immer';
-import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { toast } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { v4 as uuid } from 'uuid';
 import { Text } from '../atoms';
 import {
   BaseModal,
-  CreateInvoiceItemList,
   DatePicker,
   FormField,
   TermsDropdown,
+  UpdateInvoiceItemList,
 } from '../molecules';
 
 interface Props {
-  userId: string;
+  invoice: InvoiceTypeSafe;
 }
 
-const CreateInvoiceForm = ({ userId }: Props) => {
-  const invoiceModal = useCreateInvoiceModal();
+const UpdateInvoiceForm = ({ invoice }: Props) => {
+  const invoiceModal = useEditInvoiceModal();
 
   const methods = useZodForm({
     schema: InvoiceFormSchema,
-    mode: 'onChange',
+    mode: 'all',
+    defaultValues: {
+      clientAddress: {
+        street: invoice?.clientAddress?.street || '',
+        city: invoice?.clientAddress?.city || '',
+        country: invoice?.clientAddress?.country || '',
+        postCode: invoice?.clientAddress?.postCode || '',
+      },
+      clientEmail: invoice?.clientEmail || '',
+      clientName: invoice?.clientName || '',
+      description: invoice?.description || '',
+      items: hasValues(invoice?.items) ? invoice?.items : [],
+      paymentDue: DateTime.parse(invoice?.paymentDue).toISOString(),
+      paymentTerms: invoice?.paymentTerms || 1,
+      senderAddress: {
+        street: invoice?.senderAddress?.street || '',
+        city: invoice?.senderAddress?.city || '',
+        country: invoice?.senderAddress?.country || '',
+        postCode: invoice?.senderAddress?.postCode || '',
+      },
+      //@ts-expect-error ignore expected error
+      status: invoice?.status || 'PENDING',
+      total: invoice?.total || 0,
+    },
   });
 
-  const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
-  const [isFetching, setIsFetching] = React.useState(false);
+  const { router, isMutating, setIsFetching, startTransition } = useApiState();
 
-  const isMutating = isFetching || isPending;
-
-  const [status, setStatus] = React.useState<InvoiceStatus>('PENDING');
-  const [selectedTerm, setSelectedTerm] = React.useState(terms[0].value);
-  const [selectedDate, setSelectedDate] = React.useState(DateTime.TODAY);
+  const [status, setStatus] = React.useState(invoice?.status);
+  const [selectedTerm, setSelectedTerm] = React.useState(
+    invoice?.paymentTerms || terms[0].value
+  );
+  const [selectedDate, setSelectedDate] = React.useState(
+    DateTime.parse(invoice?.issued)
+  );
 
   const onSubmit: RHFSubmitHandler<typeof InvoiceFormSchema> = async (data) => {
     try {
       const draft = produce(data, (draft) => {
         draft.paymentTerms = selectedTerm;
-        draft.issued = selectedDate.toISOString();
 
         const duration = constants.ONE_DAY * (Number(selectedTerm) || 1);
         const dueTime = selectedDate.valueOf() + duration;
 
         draft.paymentDue = new Date(dueTime).toISOString();
+        //@ts-expect-error ignore expected error
         draft.status = status;
-        draft.total = calculateTotal(draft?.items, 'total');
 
-        draft.tag = '';
-        draft.userId = userId;
+        for (const item of draft?.items) {
+          item.id = uuid();
+        }
+        draft.total = calculateTotal(draft?.items, 'total');
       });
 
       const result = InvoiceFormSchema.safeParse(draft);
@@ -68,12 +94,10 @@ const CreateInvoiceForm = ({ userId }: Props) => {
         throw new Error(JSON.stringify(result.error));
       }
 
-      // console.table(draft);
-
       setIsFetching(true);
 
-      const response = await fetch('/api/invoices', {
-        method: 'POST',
+      const response = await fetch(`/api/invoices/${invoice?.id}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -109,13 +133,13 @@ const CreateInvoiceForm = ({ userId }: Props) => {
     >
       <div>
         <header className='mb-10'>
-          <Text as='h1' className='text-brand-900 dark:text-neutral-100'>
-            New Invoice
+          <Text as='h1' className='text-brand-900 dark:text-neutral-100 '>
+            Edit <span className='uppercase'>#{invoice.tag}</span>
           </Text>
         </header>
 
         {/*<!--------- SENDER DETAILS START ---------!>*/}
-        <fieldset className='grid grid-cols-6 gap-12'>
+        <fieldset className='grid grid-cols-6 gap-6'>
           <Text
             as='legend'
             className='body-100 col-span-6 block font-bold text-brand-500'
@@ -127,7 +151,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='senderAddress.street'
             label={'Street Address'}
-            placeholder='19 Union Terrace'
+            defaultValue={invoice?.senderAddress?.street}
             className='col-span-6 mt-10'
             autoComplete='street-address'
           />
@@ -136,7 +160,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='senderAddress.city'
             label={'City'}
-            placeholder='London'
+            defaultValue={invoice?.senderAddress?.city}
             className='col-span-3 max-s:col-span-6 sx:col-span-2'
             autoComplete='address-level2'
           />
@@ -145,7 +169,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='senderAddress.postCode'
             label={'Post Code'}
-            placeholder='E1 3EZ'
+            defaultValue={invoice?.senderAddress?.postCode}
             className='col-span-3 max-s:col-span-6 sx:col-span-2'
             autoComplete='postal-code'
           />
@@ -154,7 +178,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='senderAddress.country'
             label={'Country'}
-            placeholder='United Kingdom'
+            defaultValue={invoice?.senderAddress?.country}
             className='col-span-6 sx:col-span-2'
             autoComplete='country-name'
           />
@@ -162,7 +186,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
         {/*<!--------- SENDER DETAILS END ---------!>*/}
 
         {/*<!--------- CLIENT DETAILS START ---------!>*/}
-        <fieldset className='mt-20 grid grid-cols-6 gap-12'>
+        <fieldset className='mt-20 grid grid-cols-6 gap-6'>
           <Text
             as='legend'
             className='body-100 col-span-6 block font-bold text-brand-500'
@@ -174,7 +198,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='clientName'
             label={"Client's Name"}
-            placeholder='Alex Grim'
+            defaultValue={invoice?.clientName}
             className='col-span-6 mt-10'
             autoComplete='name'
           />
@@ -183,7 +207,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='email'
             name='clientEmail'
             label={"Client's Email"}
-            placeholder='e.g. alexgrim@mail.com'
+            defaultValue={invoice?.clientEmail}
             className='col-span-6'
             autoComplete='email'
           />
@@ -192,7 +216,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='clientAddress.street'
             label={'Street Address'}
-            placeholder='84 Church Way'
+            defaultValue={invoice?.clientAddress?.street}
             className='col-span-6'
             autoComplete='street-address'
           />
@@ -201,7 +225,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='clientAddress.city'
             label={'City'}
-            placeholder='Bradford'
+            defaultValue={invoice?.clientAddress?.city}
             className='col-span-3 max-s:col-span-6 sx:col-span-2'
             autoComplete='address-level2'
           />
@@ -210,7 +234,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='clientAddress.postCode'
             label={'Post Code'}
-            placeholder='BD1 9PB'
+            defaultValue={invoice?.clientAddress?.postCode}
             className='col-span-3 max-s:col-span-6 sx:col-span-2'
             autoComplete='postal-code'
           />
@@ -219,7 +243,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='clientAddress.country'
             label={'Country'}
-            placeholder='United Kingdom'
+            defaultValue={invoice?.clientAddress?.country}
             className='col-span-6 sx:col-span-2'
             autoComplete='country-name'
           />
@@ -227,16 +251,17 @@ const CreateInvoiceForm = ({ userId }: Props) => {
         {/*<!--------- CLIENT DETAILS END ---------!>*/}
 
         {/*<!--------- PAYMENT DETAILS START ---------!>*/}
-        <fieldset className='mt-16 grid grid-cols-6 gap-12'>
+        <fieldset className='mt-16 grid grid-cols-6 gap-6'>
           <Text as='legend' className='sr-only'>
             Payment Info
           </Text>
 
           <div className='relative col-span-6 sm:col-span-3'>
             <DatePicker
-              title='Issue Date'
+              title='Invoice Date'
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
+              disabled
             />
           </div>
 
@@ -259,7 +284,7 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             type='text'
             name='description'
             label={'Product Description'}
-            placeholder='e.g. Graphic Design Service'
+            defaultValue={invoice?.description}
             className='col-span-6'
           />
         </fieldset>
@@ -271,33 +296,27 @@ const CreateInvoiceForm = ({ userId }: Props) => {
             Item List
           </legend>
 
-          <CreateInvoiceItemList methods={methods} />
+          {/* @ts-expect-error ignore expected error  */}
+          <UpdateInvoiceItemList methods={methods} invoice={invoice} />
         </fieldset>
+        {/*<!--------- ITEM DETAILS END ---------!>*/}
 
-        <div className='sticky bottom-0 bg-neutral-200 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
-          <section className='h-container flex items-center gap-4'>
+        <div className='sticky bottom-0 z-10 bg-neutral-200 bg-100 px-[2.4rem] py-10 dark:bg-brand-700'>
+          <section className='h-container flex items-center gap-6'>
             <button
               type='button'
-              className='btn body-100 bg-neutral-300 px-6 py-6 font-bold text-brand-400 first:mr-auto'
+              className='btn body-100 bg-neutral-300 px-8 py-6 font-bold text-brand-300 first:ml-auto dark:bg-[#373B53]'
               onClick={invoiceModal.close}
             >
-              Discard
+              Cancel
             </button>
             <button
               type='submit'
-              className='btn body-100 bg-[#373B53] px-6 py-6 font-bold text-brand-300 hover:bg-brand-900'
+              className='btn body-100 bg-brand-500 px-8 py-6 font-bold text-neutral-100'
               disabled={!isSubmittable}
-              onClick={() => void setStatus('DRAFT')}
-            >
-              Save as draft
-            </button>
-            <button
-              type='submit'
-              disabled={!isSubmittable}
-              className='btn body-100 bg-brand-500 px-6 py-6 font-bold text-neutral-100 hover:bg-brand-200'
               onClick={() => void setStatus('PENDING')}
             >
-              Save & Send
+              Save Changes
             </button>
           </section>
         </div>
@@ -306,4 +325,4 @@ const CreateInvoiceForm = ({ userId }: Props) => {
   );
 };
 
-export { CreateInvoiceForm };
+export { UpdateInvoiceForm };
