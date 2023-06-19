@@ -2,7 +2,7 @@ import { getErrorMessage } from '@/lib';
 import { getUser } from './get-user';
 import db from './prisma';
 
-export async function fetchAllInvoices(): Promise<InvoiceType[]> {
+export async function fetchAllInvoices(): Promise<InvoiceTypeSafe[]> {
   try {
     const user = await getUser();
     if (!user) return [];
