@@ -6,8 +6,8 @@ import {
   datetime,
   formatPrice,
   hasValues,
+  invoiceFilters,
   reverse,
-  statuses,
   trim,
   useCreateInvoiceModal,
   useMedia,
@@ -21,18 +21,16 @@ import { StatusButton, Text } from '../atoms';
 const status: IStatus = ['PAID', 'PENDING', 'DRAFT'];
 
 interface Props {
-  invoices: InvoiceType[];
+  invoices: InvoiceTypeSafe[];
 }
 
 const InvoicesPageTemplate = ({ invoices }: Props) => {
   const isWide = useMedia('(min-width: 50em)', true);
   const invoiceModal = useCreateInvoiceModal();
 
-  const [selectedStatus, setSelectedStatus] = useState([
-    statuses[0],
-    statuses[1],
-    statuses[2],
-  ]);
+  const [selectedStatus, setSelectedStatus] = useState<InvoiceFilter[]>(
+    () => []
+  );
 
   const filtered = hasValues(selectedStatus)
     ? invoices.filter((invoice) => {
@@ -46,6 +44,8 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
           status.indexOf(b.status as IStatus[number])
         );
       });
+
+  console.log(filtered.map((f) => f.status));
 
   return (
     <section aria-label='Invoices Page' className='h-container'>
@@ -106,7 +106,7 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
               >
                 <div className='absolute z-10 mt-16 w-full rounded-brand bg-neutral-100 p-[2.4rem] pr-12 shadow-200 dark:bg-brand-600 dark:shadow-300'>
                   <Listbox.Options className={'flex flex-col gap-8'}>
-                    {[...reverse(statuses)].map((stat) => {
+                    {[...reverse(invoiceFilters)].map((stat) => {
                       return (
                         <Listbox.Option
                           key={stat.id}
