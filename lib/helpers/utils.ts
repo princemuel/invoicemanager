@@ -39,17 +39,15 @@ export function approximate(num = 0, fractionDigits = 0) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export const isDraftInvoice = (invoice?: Invoice): invoice is DraftInvoice => {
+export const isDraftInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'DRAFT';
 };
 
-export const isPendingInvoice = (
-  invoice?: Invoice
-): invoice is PendingInvoice => {
+export const isPendingInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'PENDING';
 };
 
-export const isPaidInvoice = (invoice?: Invoice): invoice is PaidInvoice => {
+export const isPaidInvoice = (invoice?: InvoiceTypeSafe) => {
   return invoice?.status === 'PAID';
 };
 

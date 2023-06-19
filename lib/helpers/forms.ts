@@ -8,7 +8,7 @@ export const terms = [
   { value: 30, id: '30' },
 ];
 
-export const statuses = [
+export const invoiceFilters: InvoiceFilter[] = [
   { value: 'PAID', id: 'PAID' },
   { value: 'PENDING', id: 'PENDING' },
   { value: 'DRAFT', id: 'DRAFT' },

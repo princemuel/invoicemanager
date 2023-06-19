@@ -1,7 +1,7 @@
-import { uuid } from '@/common';
 import dayjs, { extend } from 'dayjs';
 import LocaleData from 'dayjs/plugin/localeData';
 import UTC from 'dayjs/plugin/utc';
+import { v4 as uuid } from 'uuid';
 
 extend(LocaleData);
 extend(UTC);
