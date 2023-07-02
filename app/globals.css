@@ -3,8 +3,8 @@
 /* -------------------------------- */
 
 /*!Theme Name:
-Theme URI: https://pm-invoice.vercel.app/
-Repository: https://github.com/princemuel/invoice-web-app
+Theme URI: https://invoicetracker.vercel.app/
+Repository: https://github.com/princemuel/invoicetracker
 Description: A web app where you can send invoices as pdf to your clients' emails.This web application presents the products using the most user-friendly format with accessibility in mind.
 Author's Name: Samuel Chukwuzube
 Author's Moniker: princemuel
@@ -93,7 +93,8 @@ Version: 02
     font: inherit;
     color: inherit;
   }
-  :where(button, label, select, summary, [role='button'], [role='option']) {
+
+  :where(button, label, select, summary, [role='button'], [role='option'],   [role='menuitem']) {
     @apply cursor-pointer;
   }
   :where(textarea) {
@@ -139,7 +140,6 @@ Version: 02
   @media (prefers-reduced-motion: no-preference) {
     :where(html:focus-within) {
       scroll-behavior: smooth;
-      scroll-behavior: auto;
     }
   }
 
@@ -209,18 +209,6 @@ Version: 02
  */
 @layer components {
   /* ********** BUTTONS ********** */
-  :is(
-      button,
-      a,
-      label,
-      select,
-      summary,
-      [role='button'],
-      [role='option'],
-      [role='menuitem']
-    ) {
-    @apply cursor-pointer;
-  }
   .btn {
     @apply grid place-content-center gap-4 rounded-pill leading-200 tracking-200 transition-all;
   }
