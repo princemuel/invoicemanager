@@ -75,7 +75,11 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function RootLayout({ children }: LayoutRouteProps) {
+export default async function RootDashBoardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const user = await fetchAuthUser();
   // const user = {};
 
