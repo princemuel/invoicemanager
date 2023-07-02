@@ -1,10 +1,16 @@
 import { getErrorMessage } from '@/lib';
-import { getUser } from './get-user';
+import { cache } from 'react';
+import 'server-only';
+import { fetchAuthUser } from './get-user';
 import db from './prisma';
 
-export async function fetchAllInvoices(): Promise<InvoiceTypeSafe[]> {
+export const preload = () => {
+  void fetchAllInvoices();
+};
+
+export const fetchAllInvoices = cache(async (): Promise<InvoiceTypeSafe[]> => {
   try {
-    const user = await getUser();
+    const user = await fetchAuthUser();
     if (!user) return [];
 
     const data = await db.invoice.findMany({
@@ -24,4 +30,4 @@ export async function fetchAllInvoices(): Promise<InvoiceTypeSafe[]> {
   } catch (error) {
     throw new Error(getErrorMessage(error));
   }
-}
+});
