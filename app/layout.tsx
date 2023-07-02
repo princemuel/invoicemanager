@@ -3,10 +3,9 @@ import { Providers } from '@/providers';
 import { Analytics } from '@vercel/analytics/react';
 import { cx } from 'cva';
 import { Metadata } from 'next';
-import * as React from 'react';
 import { league_spartan, nunito_sans } from './fonts';
 import './globals.css';
-import { getUser } from './lib/get-user';
+import { fetchAuthUser } from './lib/get-user';
 
 export const metadata: Metadata = {
   // metadataBase: new URL(process.env.VERCEL_URL || ''),
@@ -76,12 +75,8 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const user = await getUser();
+export default async function RootLayout({ children }: LayoutRouteProps) {
+  const user = await fetchAuthUser();
   // const user = {};
 
   return (
