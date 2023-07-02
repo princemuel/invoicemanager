@@ -11,6 +11,16 @@ const nextConfig = {
     //   loaders: { '.svg': ['@svgr/webpack'] },
     // },
   },
+  images: {
+    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
   webpack(config, { isServer }) {
     if (!isServer) {
       config.resolve.fallback = {
@@ -25,6 +35,7 @@ const nextConfig = {
         ...fileLoaderRule,
         test: /(?<!inline)\.svg$/i,
       },
+
       {
         test: /\.inline.svg$/i,
         use: [
@@ -50,18 +61,8 @@ const nextConfig = {
         ],
       }
     );
-    fileLoaderRule.exclude = /\.svg$/;
+    fileLoaderRule.exclude = /\.svg$/i;
     return config;
-  },
-  images: {
-    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
-    formats: ['image/avif', 'image/webp'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
   },
 };
 
