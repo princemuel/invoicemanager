@@ -1,5 +1,5 @@
 import { ClientOnly, EmptyState, HomeTemplate } from '@/components';
-import { fetchAuthUser } from './lib/get-user';
+import { fetchAuthUser } from '../lib/get-user';
 
 export default async function Home() {
   const user = await fetchAuthUser();
