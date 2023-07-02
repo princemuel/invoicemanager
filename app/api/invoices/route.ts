@@ -1,4 +1,4 @@
-import { getUser } from '@/app/lib/get-user';
+import { fetchAuthUser } from '@/app/lib/get-user';
 import db from '@/app/lib/prisma';
 import { objectKeys } from '@/lib';
 import { produce } from 'immer';
@@ -10,7 +10,7 @@ const suid = new ShortUniqueId({
 });
 
 export async function POST(request: Request) {
-  const user = await getUser();
+  const user = await fetchAuthUser();
   if (!user) return NextResponse.error();
 
   const body: InvoiceTypeSafe = await request.json();
