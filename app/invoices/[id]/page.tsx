@@ -1,10 +1,19 @@
 import { getInvoiceById } from '@/app/lib/get-invoice-by-id';
-import { EmptyState, InvoiceTemplate } from '@/components';
+import { fetchAuthUser } from '@/app/lib/get-user';
+import { ClientOnly, EmptyState, InvoiceTemplate } from '@/components';
 
 async function PageRoute({ params }: { params: IParams }) {
-  const invoice = await getInvoiceById(params);
+  const user = await fetchAuthUser();
 
-  if (!invoice) return <EmptyState />;
+  if (!user)
+    return (
+      <ClientOnly>
+        <EmptyState user={user} />
+      </ClientOnly>
+    );
+
+  const invoice = await getInvoiceById(params);
+  if (!invoice) return <EmptyState user={user?.email} />;
 
   return (
     <main className='w-full'>
