@@ -138,8 +138,8 @@ export function serialize<T>(data: T): NonNullable<T> {
   return JSON.parse(JSON.stringify(data));
 }
 
-export const objectKeys = <O extends {}>(object: O): (keyof O)[] => {
-  return Object.keys(object) as (keyof O)[];
+export const objectKeys = <T extends {}>(obj: T): Array<keyof T> => {
+  return Object.keys(obj) as Array<keyof T>;
 };
 
 /*---------------------------------*

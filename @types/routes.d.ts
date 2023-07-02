@@ -15,19 +15,6 @@ interface IIcons {
   url: string;
 }
 
-type IconRFCType = (props: IconProps) => JSX.Element;
+type IconRFCType = (props: IconProps) => React.JSX.Element;
 
-interface ISvgIcons {
-  arrow: {
-    right: IconRFCType;
-    left: IconRFCType;
-    down: IconRFCType;
-  };
-  actions: {
-    add: IconRFCType;
-    delete: IconRFCType;
-    check: IconRFCType;
-  };
-  logo: IconRFCType;
-  calendar: IconRFCType;
-}
+ 

@@ -1,7 +1,5 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ThemeProvider } from 'next-themes';
 import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -12,27 +10,16 @@ interface Props {
 }
 
 const Providers = ({ children, userId }: Props) => {
-  const [queryClient] = React.useState(() => new QueryClient());
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        storageKey='int-theme'
-        defaultTheme='system'
-        enableSystem={true}
-        attribute='data-mode'
-      >
-        <Toaster />
-        <ModalProvider userId={userId}>{children}</ModalProvider>
-        <ReactQueryDevtools
-          toggleButtonProps={{
-            style: { width: '1.5rem', aspectRatio: 1, borderRadius: '50%' },
-          }}
-          position='bottom-right'
-          initialIsOpen={false}
-        />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider
+      storageKey='int-theme'
+      defaultTheme='system'
+      enableSystem={true}
+      attribute='data-mode'
+    >
+      <Toaster />
+      <ModalProvider userId={userId}>{children}</ModalProvider>
+    </ThemeProvider>
   );
 };
 

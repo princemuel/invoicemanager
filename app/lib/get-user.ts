@@ -1,7 +1,7 @@
 import { getSession } from './get-session';
 import db from './prisma';
 
-export async function getUser() {
+export const fetchAuthUser = async (): Promise<IUser | null> => {
   try {
     const session = await getSession();
     if (!session?.user?.email) return null;
@@ -22,4 +22,4 @@ export async function getUser() {
   } catch (error) {
     return null;
   }
-}
+};

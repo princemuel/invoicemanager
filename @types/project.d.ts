@@ -14,6 +14,9 @@ interface IProvider {
 interface IParams {
   [key: string]: string | undefined;
 }
+interface LayoutRouteProps {
+  [key: string]: React.ReactNode;
+}
 
 interface IErrorResponse {
   response: { errors: IError[]; data: IErrorData };

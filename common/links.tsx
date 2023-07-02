@@ -9,7 +9,9 @@ import {
   LogoSVG,
 } from './icons';
 
-export const icons: ISvgIcons = {
+type IconObject = 'arrow' | 'actions' | 'app' | 'form';
+
+export const icons: Record<IconObject, Record<string, IconRFCType>> = {
   arrow: {
     right: (props) => <IconArrowRightSVG {...props} />,
     left: (props) => <IconArrowLeftSVG {...props} />,
@@ -20,6 +22,10 @@ export const icons: ISvgIcons = {
     delete: (props) => <IconDeleteSVG {...props} />,
     check: (props) => <IconCheckSVG {...props} />,
   },
-  logo: (props) => <LogoSVG {...props} />,
-  calendar: (props) => <IconCalendarSVG {...props} />,
+  app: {
+  	logo: (props) => <LogoSVG {...props} />,
+  },
+  form: {
+  	calendar: (props) => <IconCalendarSVG {...props} />,
+  },
 };

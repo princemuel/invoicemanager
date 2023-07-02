@@ -1,9 +1,9 @@
-import { getUser } from '@/app/lib/get-user';
+import { fetchAuthUser } from '@/app/lib/get-user';
 import db from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request, { params }: { params: IParams }) {
-  const user = await getUser();
+  const user = await fetchAuthUser();
   if (!user) return NextResponse.error();
 
   const { id } = params;
@@ -23,7 +23,7 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
 // just testing this: PATCH OR PUT
 export async function PATCH(request: Request, { params }: { params: IParams }) {
-  const user = await getUser();
+  const user = await fetchAuthUser();
   if (!user) return NextResponse.error();
 
   const { id } = params;
@@ -49,7 +49,7 @@ export async function DELETE(
 ) {
   const { id } = params;
 
-  const user = await getUser();
+  const user = await fetchAuthUser();
   if (!user) return NextResponse.error();
 
   if (!id || typeof id !== 'string') {

@@ -50,7 +50,7 @@ const DatePicker = ({
               </span>
 
               <span className='pointer-events-none'>
-                <icons.calendar
+                <icons.form.calendar
                   xlinkTitle='select an invoice issue date'
                   className=''
                 />
