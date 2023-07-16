@@ -1,24 +1,26 @@
-import { fetchAuthUser } from '@/app/lib/get-user';
-import db from '@/app/lib/prisma';
+import db from '@/app/database';
 import { objectKeys } from '@/lib';
+import createHttpError from 'http-errors';
 import { produce } from 'immer';
 import { NextResponse } from 'next/server';
 import ShortUniqueId from 'short-unique-id';
+import { getAuthSession } from '../auth/[...nextauth]/options';
 
 const suid = new ShortUniqueId({
   dictionary: 'hex',
 });
 
 export async function POST(request: Request) {
-  const user = await fetchAuthUser();
-  if (!user) return NextResponse.error();
+  const session = await getAuthSession();
 
   const body: InvoiceTypeSafe = await request.json();
 
-  console.log(body);
-
   for (const value of objectKeys(body)) {
-    if (body[value] == undefined) return NextResponse.error();
+    if (body[value] == undefined) {
+      throw new createHttpError.BadRequest(
+        `Malformed data received. Got ${body[value]}`
+      );
+    }
   }
 
   const data = produce(body, (draft) => {
