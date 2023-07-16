@@ -16,6 +16,9 @@ interface InvoiceFilter {
   value: string;
 }
 
+/**
+ * @deprecated since version 2.0
+ */
 interface IUser extends TUser {
   createdAt: string;
   updatedAt: string;

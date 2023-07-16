@@ -18,28 +18,24 @@ interface LayoutRouteProps {
   [key: string]: React.ReactNode;
 }
 
-interface IErrorResponse {
-  response: { errors: IError[]; data: IErrorData };
-}
+type ClassValue =
+  | ClassArray
+  | ClassDictionary
+  | string
+  | number
+  | null
+  | boolean
+  | undefined;
+type ClassDictionary = Record<string, any>;
+type ClassArray = ClassValue[];
 
-interface IError {
-  message: string;
-  locations: IErrorLocation[];
-  path: string[];
-  extensions: IErrorExtensions;
-}
-interface IErrorLocation {
-  line: number;
-  column: number;
-}
-interface IErrorExtensions {
-  code: string;
-  http: { status: number };
-  stacktrace: string[];
-}
-interface IErrorData {
-  [x: string]: any;
-}
+interface ServerActionResult<Result>
+  extends Promise<
+    | Result
+    | {
+        error: string;
+      }
+  > {}
 
 type SuccessResponseCode = 200;
 type ErrorResponseCode = 400 | 500;

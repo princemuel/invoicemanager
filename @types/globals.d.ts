@@ -1,8 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 
 export declare global {
-  interface GlobalReducerActions {}
   var prisma: PrismaClient | undefined;
+
+  interface GlobalReducerActions {}
 }
 
 type GlobalReducer<IState> = (
@@ -13,9 +14,3 @@ type GlobalReducer<IState> = (
     } & GlobalReducerActions[ActionType];
   }[keyof GlobalReducerActions]
 ) => IState;
-
-export declare module 'react' {
-  function forwardRef<T, P = {}>(
-    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
-  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-}
