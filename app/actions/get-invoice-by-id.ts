@@ -1,7 +1,7 @@
 import { getErrorMessage, objectKeys } from '@/lib';
 import { cache } from 'react';
 import 'server-only';
-import db from './prisma';
+import db from '../database';
 
 export const preload = (params: IParams) => {
   void getInvoiceById(params);
