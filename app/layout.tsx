@@ -1,10 +1,11 @@
-import { Providers } from '@/providers';
 import { Analytics } from '@vercel/analytics/react';
 import { cx } from 'cva';
 import type { Metadata } from 'next';
-import { league_spartan, nunito_sans } from '../fonts';
-import '../globals.css';
-import { fetchAuthUser } from '../lib/get-user';
+import { FontAccent, FontSans } from './fonts';
+import './globals.css';
+
+import { Sidebar } from '@/components';
+import { Providers } from '@/providers';
 
 export const metadata: Metadata = {
   // metadataBase: new URL(process.env.VERCEL_URL || ''),
@@ -74,22 +75,22 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function RootPublicLayout({
+export default async function RootDashBoardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await fetchAuthUser();
-  // const user = {};
-
   return (
     <html
       lang='en'
-      className={cx('', nunito_sans.className, league_spartan.className)}
+      className={cx('', FontAccent.className, FontSans.className)}
       suppressHydrationWarning
     >
-      <body className='relative flex min-h-screen flex-col md:flex-row'>
-        <Providers userId={user?.id || ''}>{children}</Providers>
+      <body className='relative flex min-h-screen flex-col text-brand-900 dark:bg-brand-800 dark:text-neutral-100 md:flex-row'>
+        <Providers>
+          <Sidebar />
+          {children}
+        </Providers>
         <Analytics />
       </body>
     </html>
