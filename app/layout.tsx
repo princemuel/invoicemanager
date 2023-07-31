@@ -1,10 +1,10 @@
 import { Analytics } from '@vercel/analytics/react';
-import { cx } from 'cva';
 import type { Metadata } from 'next';
-import { FontAccent, FontSans } from './fonts';
+import { fonts } from './fonts';
 import './globals.css';
 
-import { Sidebar } from '@/components';
+import { Sidebar, TailwindIndicator } from '@/components';
+import { cn } from '@/lib';
 import { Providers } from '@/providers';
 
 export const metadata: Metadata = {
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default async function RootDashBoardLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -83,13 +83,14 @@ export default async function RootDashBoardLayout({
   return (
     <html
       lang='en'
-      className={cx('', FontAccent.className, FontSans.className)}
-      suppressHydrationWarning
+      className={cn(fonts)}
+      // suppressHydrationWarning
     >
       <body className='relative flex min-h-screen flex-col text-brand-900 dark:bg-brand-800 dark:text-neutral-100 md:flex-row'>
         <Providers>
           <Sidebar />
           {children}
+          <TailwindIndicator />
         </Providers>
         <Analytics />
       </body>

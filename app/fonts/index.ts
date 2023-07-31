@@ -1,13 +1,16 @@
+import { cn } from '@/lib';
 import localFont from 'next/font/local';
 
-export const league_spartan = localFont({
+const FontSans = localFont({
   src: './league-spartan.ttf',
   variable: '--font-sans',
   display: 'swap',
 });
 
-export const nunito_sans = localFont({
-  src: './nunito-sans.ttf',
+const FontAccent = localFont({
+  src: './rubik.ttf',
   variable: '--font-accent',
   display: 'swap',
 });
+
+export const fonts = cn(FontAccent.variable, FontSans.variable);
