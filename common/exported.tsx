@@ -6,12 +6,14 @@ import {
   IconCalendarSVG,
   IconCheckSVG,
   IconDeleteSVG,
+  IconMoon,
+  IconSun,
   LogoSVG,
-} from './icons';
+} from './assets';
 
 type IconObject = 'arrow' | 'actions' | 'app' | 'form';
 
-export const icons: Record<IconObject, Record<string, IconRFCType>> = {
+export const icons = {
   arrow: {
     right: (props) => <IconArrowRightSVG {...props} />,
     left: (props) => <IconArrowLeftSVG {...props} />,
@@ -23,9 +25,11 @@ export const icons: Record<IconObject, Record<string, IconRFCType>> = {
     check: (props) => <IconCheckSVG {...props} />,
   },
   app: {
-  	logo: (props) => <LogoSVG {...props} />,
+    logo: (props) => <LogoSVG {...props} />,
+    moon: (props) => <IconMoon {...props} />,
+    sun: (props) => <IconSun {...props} />,
   },
   form: {
-  	calendar: (props) => <IconCalendarSVG {...props} />,
+    calendar: (props) => <IconCalendarSVG {...props} />,
   },
-};
+} satisfies Record<IconObject, Record<string, IconRFCType>>;
