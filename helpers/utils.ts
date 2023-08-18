@@ -1,16 +1,33 @@
+import { cx } from 'cva';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+const customTwMerge = extendTailwindMerge({
+  classGroups: {
+    'font-size': [
+      { text: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] },
+    ],
+  },
+});
+
+export function cn(...args: ClassValue[]) {
+  return customTwMerge(cx(args));
+}
+
 /*---------------------------------*
             STRING UTILS           *
   ---------------------------------*
  */
 
 export function capitalize(string = '') {
-  return string?.[0]?.toUpperCase() + string?.slice(1).toLowerCase();
+  return (
+    string?.[0]?.toLocaleUpperCase() + string?.slice(1).toLocaleLowerCase()
+  );
 }
 export function trim(string = '') {
   return string?.trim();
 }
 
-export function removeFirstChar(string = '') {
+export function omitFirstChar(string = '') {
   return string?.slice(1);
 }
 export function pluralize(word: string, value: number) {
@@ -20,6 +37,11 @@ export function pluralize(word: string, value: number) {
 export function truncate(str = '', length = str.length) {
   return str.length > length ? `${str.substring(0, length)}...` : str;
 }
+const replaceDot = (value: string) => value.replaceAll('.', '-');
+const replaceCaps = (value: string) =>
+  value.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`);
+
+export const replaceDotsAndCaps = compose(replaceCaps, replaceDot);
 
 type EndsWith<W, S extends string> = W extends `${infer _R}${S}` ? W : never;
 
@@ -138,12 +160,12 @@ export function serialize<T>(data: T): NonNullable<T> {
   return JSON.parse(JSON.stringify(data));
 }
 
-export const objectKeys = <T extends {}>(obj: T): Array<keyof T> => {
+export const objectKeys = <T extends object>(obj: T): Array<keyof T> => {
   return Object.keys(obj) as Array<keyof T>;
 };
 
 /*---------------------------------*
-            ARRAY UTILS           *
+            ARRAY UTILS            *
   ---------------------------------*
  */
 
@@ -287,3 +309,71 @@ export function off<T extends Window | Document | HTMLElement | EventTarget>(
     );
   }
 }
+
+/*---------------------------------*
+            FP UTILS               *
+  ---------------------------------*
+*/
+export /**
+ * (B -> C) . (A -> B) = A -> C
+ */
+function compose<A extends any[], B, C>(
+  f: (arg: B) => C,
+  g: (...args: A) => B
+): (...args: A) => C;
+
+export /**
+ * (B -> C) . (A -> B) = A -> C
+ */
+function compose<A extends any[], B, C>(
+  f: (arg: B) => C,
+  g: (...args: A) => B,
+  ...args: A
+): C;
+
+export /**
+ * (B -> C) . (A -> B) = A -> C
+ */
+function compose<A extends any[], B, C>(
+  f: (arg: B) => C,
+  g: (...args: A) => B,
+  ...maybeArgs: A
+) {
+  return maybeArgs.length === 0
+    ? (...args: A) => f(g(...args))
+    : f(g(...maybeArgs));
+}
+
+export /**
+ * A function which accepts the pairs of guards:
+ * the first one is the `validator`, expected to return a boolean value.
+ *
+ * If the value is `true`, it's `executor` should run with the provided `args`
+ * and return from the `guards` function.
+ * If the value is `false`, the process continues to the next `validator`.
+ *
+ * When no `validator` succeeds, the default executor is run.
+ */
+function guard<Function extends Misc.VariadicFunction>(
+  ...qualifiers: [...Misc.GuardQualifier<Function>[], Function]
+): Function {
+  return ((...args: Parameters<Function>) => {
+    const length = qualifiers.length - 1;
+
+    for (let index = 0; index < length; index += 1) {
+      const [validator, expression] = (
+        qualifiers as Misc.GuardQualifier<Function>[]
+      )[index];
+
+      if (validator(...args)) {
+        return expression(...args);
+      }
+    }
+
+    return (qualifiers[length] as Function)(...args);
+  }) as Function;
+}
+
+// const issTring =(value: any): value is string => typeof  value === "string"
+
+// const blah = guard(issTring)(cn)

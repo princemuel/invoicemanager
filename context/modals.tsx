@@ -51,7 +51,7 @@ export function useModal() {
     throw new ReferenceError(`useModal must be used in a ModalsProvider`);
   }
 
-  const init = React.useCallback(
+  const register = React.useCallback(
     (name: string, Component: React.JSX.Element) => {
       if (!modals[name]) {
         setModals((state) => ({ ...state, [name]: Component }));
@@ -71,5 +71,5 @@ export function useModal() {
     setCurrentModal('');
   }, [setCurrentModal]);
 
-  return { init, open, close };
+  return { register, open, close };
 }
