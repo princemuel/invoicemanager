@@ -16,23 +16,27 @@ interface InvoiceFilter {
   value: string;
 }
 
+interface AuthUser extends TUser {
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * @deprecated since version 2.0
  */
 interface IUser extends TUser {
   createdAt: string;
   updatedAt: string;
-  emailVerified: string | null;
 }
 interface TUser {
   id: string;
+  kindeId: string;
   createdAt: Date;
   updatedAt: Date;
-  name: string | null;
+  firstName: string | null;
+  lastName: string | null;
   email: string | null;
-  emailVerified: Date | null;
   image: string | null;
-  password: string | null;
 }
 
 type Invoices = Array<Invoice>;

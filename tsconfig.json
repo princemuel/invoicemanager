@@ -24,6 +24,14 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "app/env/schema.mjs",
+    "app/env/server.mjs",
+    "app/env/client.mjs"
+  ],
   "exclude": ["node_modules"]
 }

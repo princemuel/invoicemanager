@@ -81,6 +81,9 @@ module.exports = {
         accent: {
           100: '#ff9797',
           200: '#EC5757',
+          300: '#373B53',
+          400: '#FF8F00',
+          500: '#33D69F',
         },
       },
       fontFamily: {
