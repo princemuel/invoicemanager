@@ -1,20 +1,23 @@
 import db from '@/app/database';
-import { objectKeys } from '@/lib';
+import { objectKeys } from '@/helpers';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import createHttpError from 'http-errors';
 import { produce } from 'immer';
 import { NextResponse } from 'next/server';
 import ShortUniqueId from 'short-unique-id';
-import { getAuthSession } from '../auth/[...nextauth]/options';
 
 const suid = new ShortUniqueId({
   dictionary: 'hex',
 });
 
 export async function POST(request: Request) {
-  const session = await getAuthSession();
+  const { isAuthenticated } = getKindeServerSession();
+
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
 
   const body: InvoiceTypeSafe = await request.json();
-
+  // use zod to validate data
   for (const value of objectKeys(body)) {
     if (body[value] == undefined) {
       throw new createHttpError.BadRequest(

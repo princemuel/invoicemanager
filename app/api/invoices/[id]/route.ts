@@ -1,19 +1,20 @@
 import db from '@/app/database';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import createHttpError from 'http-errors';
 import { NextResponse } from 'next/server';
-import { getAuthSession } from '../../auth/[...nextauth]/options';
 
 export async function PUT(request: Request, { params }: { params: IParams }) {
-  const session = await getAuthSession();
-
   const { id } = params;
-  if (!id || typeof id !== 'string') {
+  const { isAuthenticated } = getKindeServerSession();
+
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
+  if (!id || typeof id !== 'string')
     throw new createHttpError.BadRequest(
       `Malformed data. Expected 'string' Got ${id}`
     );
-  }
-  const body: InvoiceType = await request.json();
 
+  const body: InvoiceType = await request.json();
   const data = await db.invoice.update({
     where: { id },
     data: body,
@@ -24,9 +25,11 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
 // just testing this: PATCH OR PUT
 export async function PATCH(request: Request, { params }: { params: IParams }) {
-  const session = await getAuthSession();
-
   const { id } = params;
+  const { isAuthenticated } = getKindeServerSession();
+
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
   if (!id || typeof id !== 'string') {
     throw new createHttpError.BadRequest(
       `Malformed data. Expected 'string' Got ${id}`
@@ -34,7 +37,6 @@ export async function PATCH(request: Request, { params }: { params: IParams }) {
   }
 
   const body: InvoiceType = await request.json();
-
   const data = await db.invoice.update({
     where: { id },
     data: {
@@ -50,9 +52,10 @@ export async function DELETE(
   { params }: { params: IParams }
 ) {
   const { id } = params;
+  const { isAuthenticated } = getKindeServerSession();
 
-  const session = await getAuthSession();
-
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
   if (!id || typeof id !== 'string') {
     throw new createHttpError.BadRequest(
       `Malformed data. Expected 'string' Got ${id}`
