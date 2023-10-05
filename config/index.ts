@@ -1,2 +1,2 @@
-export * from './constants.config';
+export * from './baseurl';
 export * from './seo.config';
