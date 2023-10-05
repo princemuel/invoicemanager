@@ -3,7 +3,7 @@
  *===============================*
 */
 
-declare namespace Misc {
+namespace Misc {
   type Immutable<T> = T extends PrimitiveType
     ? T
     : T extends AtomicObject
@@ -32,6 +32,16 @@ declare namespace Misc {
   ];
 
   type LooseAutocomplete<T extends string> = T | Omit<string, T>;
+
+  type Simplify<ObjectType> = {
+    [KeyType in keyof ObjectType]: ObjectType[KeyType];
+  } & {};
+
+  type Lookup<T> = {
+    [K in keyof T]: {
+      key: K;
+    };
+  }[keyof T];
 
   type ObjectEntry<T extends {}> = T extends object
     ? { [K in keyof T]: [K, Required<T>[K]] }[keyof T] extends infer E
