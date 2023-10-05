@@ -11,5 +11,8 @@ export const useApiState = () => {
 
   const isMutating = isFetching || isPending;
 
-  return { router, isMutating, setIsFetching, startTransition };
+  return React.useMemo(
+    () => ({ router, isMutating, setIsFetching, startTransition }) as const,
+    [isMutating, router]
+  );
 };

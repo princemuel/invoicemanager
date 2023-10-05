@@ -17,7 +17,7 @@ export function useMedia(query: string, defaultState?: boolean) {
       setState(window?.matchMedia(query).matches);
     };
 
-    on(window, 'resize', handler);
+    on(window, `resize`, handler);
 
     // mql.addEventListener('change', handler);
     // setState(mql.matches);

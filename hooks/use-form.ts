@@ -1,25 +1,44 @@
-'use client';
+// 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as React from 'react';
-import { UseFormProps, useForm as useHookForm } from 'react-hook-form';
-import { z } from 'zod';
+import { SubmitHandler, UseFormProps, useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-export function useZodForm<T extends z.ZodType>(
+// React Hook Form Types
+export interface RHFormSubmitHandler<T extends z.ZodType<any, any, any>>
+  extends SubmitHandler<z.infer<T>> {}
+
+export function useZodForm<T extends z.ZodType<any, any, any>>(
   props: Omit<UseFormProps<T['_input']>, 'resolver'> & {
     schema: T;
   }
 ) {
-  return useHookForm<T['_input']>({
-    ...props,
-    resolver: zodResolver(props.schema, undefined, {
-      // This makes it so we can use `.transform()`s on the schema without same transform getting applied again when it reaches the server
-      raw: true,
-    }),
+  const { schema, ...rest } = props;
+
+  return useForm<T['_input']>({
+    ...rest,
+
+    resolver: async (data, context, options) => {
+      // you can debug your validation schema here
+      if (process.env.NODE_ENV !== 'production') {
+        console.log('formData', data);
+        console.log(
+          'validation result',
+          await zodResolver(schema, undefined, {
+            raw: true,
+          })(data, context, options)
+        );
+      }
+
+      return zodResolver(schema, undefined, {
+        raw: true,
+      })(data, context, options);
+    },
   });
 }
 
-export function useForm<State extends Record<string, unknown>>(
+export function useFormState<State extends Record<string, unknown>>(
   initialState: State
 ) {
   const [values, setValues] = React.useState(() => initialState);
