@@ -1,23 +1,22 @@
-import { getErrorMessage } from '@/lib';
+import { getErrorMessage } from '@/helpers';
 import { cache } from 'react';
 import 'server-only';
 import db from '../database';
 
-export const preload = (user: string) => {
-  void fetchAllInvoices(user);
+export const preloadInvoices = (userId: string) => {
+  void fetchAllInvoices(userId);
 };
 
 export const fetchAllInvoices = cache(
-  async (user: string): Promise<InvoiceTypeSafe[]> => {
+  async (userId: string): Promise<InvoiceTypeSafe[]> => {
     try {
       const data = await db.invoice.findMany({
         where: {
-          userId: user,
+          userId: userId,
         },
       });
-      if (!data) return [];
 
-      return data.map((invoice) => {
+      return (data || []).map((invoice) => {
         return {
           ...invoice,
           createdAt: invoice.createdAt.toISOString(),
