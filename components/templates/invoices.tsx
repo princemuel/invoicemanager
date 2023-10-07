@@ -9,9 +9,8 @@ import {
   invoiceFilters,
   reverse,
   trim,
-  useCreateInvoiceModal,
-  useMedia,
-} from '@/lib';
+} from '@/helpers';
+import { useCreateInvoiceModal, useMedia } from '@/hooks';
 import { Listbox, Transition } from '@headlessui/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -104,7 +103,7 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
                 leaveFrom='transform scale-100 opacity-100'
                 leaveTo='transform scale-95 opacity-0'
               >
-                <div className='absolute z-10 mt-16 w-full rounded-brand bg-neutral-100 p-[2.4rem] pr-12 shadow-200 dark:bg-brand-600 dark:shadow-300'>
+                <div className='absolute z-10 mt-16 w-full rounded-lg bg-white p-[2.4rem] pr-12 shadow-200 dark:bg-brand-600 dark:shadow-300'>
                   <Listbox.Options className={'flex flex-col gap-8'}>
                     {[...reverse(invoiceFilters)].map((stat) => {
                       return (
@@ -134,10 +133,10 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
 
           <button
             type='button'
-            className='body-100 flex items-center gap-2 rounded-pill bg-brand-500 p-2 pr-4 font-bold text-neutral-100'
-            onClick={invoiceModal.open}
+            className='body-100 flex items-center gap-2 rounded-pill bg-brand-500 p-2 pr-4 font-bold text-white'
+            onClick={invoiceModal.showModal}
           >
-            <span className='grid aspect-square place-content-center rounded-full bg-neutral-100 p-4'>
+            <span className='grid aspect-square place-content-center rounded-full bg-white p-4'>
               <icons.actions.add />
             </span>
 
@@ -151,7 +150,7 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
           filtered?.map((invoice) => (
             <li
               key={invoice?.id}
-              className='rounded-brand bg-neutral-100 p-[1.6rem] shadow-100 transition-[background,border] delay-0 duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-700 max-sx:pt-4'
+              className='rounded-lg bg-white p-[1.6rem] shadow-100 transition-[background,border] delay-0 duration-300 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] hover:border hover:border-brand-500 active:border active:border-brand-500 dark:bg-brand-700 max-sx:pt-4'
             >
               <Link
                 href={`/invoices/${invoice.id}`}
@@ -159,7 +158,7 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
               >
                 <Text as='p' className='body-100 font-bold'>
                   <span className='text-brand-400'>#</span>
-                  <span className='uppercase text-brand-900 dark:text-neutral-100'>
+                  <span className='uppercase text-brand-900 dark:text-white'>
                     {invoice?.tag}
                   </span>
                 </Text>
@@ -177,14 +176,14 @@ const InvoicesPageTemplate = ({ invoices }: Props) => {
 
                 <Text
                   as='p'
-                  className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-neutral-100 sx:justify-self-auto'
+                  className='body-100 col-start-2 col-end-3 row-start-1 flex-1 justify-self-end font-medium text-[#858BB2] dark:text-white sx:justify-self-auto'
                 >
                   {invoice?.clientName}
                 </Text>
 
                 <Text
                   as='p'
-                  className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-neutral-100 sx:text-right'
+                  className='row-start-3 row-end-4 flex-1 text-600 font-bold leading-500 tracking-400 text-brand-900 dark:text-white sx:text-right'
                 >
                   <output>{formatPrice(invoice?.total)}</output>
                 </Text>

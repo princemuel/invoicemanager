@@ -1,16 +1,20 @@
-import { fetchAllInvoices } from '@/app/actions/get-invoices';
-import { InvoicesPageTemplate } from '@/components';
-import { redirect } from 'next/navigation';
+import { InvoicesProvider } from '@/context';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { InvoicesTemplate } from './invoices';
 
 export default async function PageRoute() {
-  const session = await getAuthSession();
-  if (!session) redirect('/api/auth/signin?callbackUrl=/invoices');
+  const { getUser } = getKindeServerSession();
 
-  const invoices = await fetchAllInvoices(session?.user?.id);
+  const client = getUser();
+
+  const invoices = Promise.resolve([] as InvoiceTypeSafe[]);
 
   return (
-    <main className='w-full'>
-      <InvoicesPageTemplate invoices={invoices} />
+    <main aria-labelledby='heading' className='w-full'>
+      <pre>{JSON.stringify(client)}</pre>
+      <InvoicesProvider promise={invoices}>
+        <InvoicesTemplate />
+      </InvoicesProvider>
     </main>
   );
 }
