@@ -1,6 +1,6 @@
-import { BaseLayout } from '@/components/templates';
+import { BaseLayout } from '@/components';
 import { defineMeta } from '@/config';
-import { Providers } from '@/providers';
+import { GlobalProviders } from '@/providers';
 import { Analytics } from '@vercel/analytics/react';
 import { fonts } from './fonts';
 import './globals.css';
@@ -15,10 +15,9 @@ export default async function RootLayout({
   return (
     <html lang='en' className={fonts} suppressHydrationWarning>
       <body className='relative flex min-h-screen flex-col text-brand-900 dark:bg-brand-800 dark:text-white md:flex-row'>
-        <Providers>
+        <GlobalProviders>
           <BaseLayout>{children}</BaseLayout>
-        </Providers>
-
+        </GlobalProviders>
         <Analytics />
       </body>
     </html>
