@@ -2,11 +2,7 @@ import * as React from 'react';
 import { BreakpointIndicator } from '../atoms';
 import { Sidebar } from '../organisms';
 
-interface BaseLayoutProps {
-  children: React.ReactNode;
-}
-
-export function BaseLayout({ children }: BaseLayoutProps) {
+const BaseLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <React.Fragment>
       <Sidebar />
@@ -14,4 +10,6 @@ export function BaseLayout({ children }: BaseLayoutProps) {
       <BreakpointIndicator />
     </React.Fragment>
   );
-}
+};
+
+export { BaseLayout };
