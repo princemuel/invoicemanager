@@ -1,26 +1,21 @@
 'use client';
 
+import NiceModal from '@ebay/nice-modal-react';
 import { ThemeProvider } from 'next-themes';
-import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
-import { ModalProvider } from './modals';
-interface Props {
-  children: React.ReactNode;
-  userId: string;
-}
 
-const Providers = ({ children, userId }: Props) => {
+export function Providers({ children }: React.PropsWithChildren) {
   return (
     <ThemeProvider
-      storageKey='int-theme'
+      storageKey='THEME_MODE'
       defaultTheme='system'
       enableSystem={true}
       attribute='data-mode'
     >
-      <Toaster />
-      <ModalProvider userId={userId}>{children}</ModalProvider>
+      <NiceModal.Provider>
+        <Toaster />
+        {children}
+      </NiceModal.Provider>
     </ThemeProvider>
   );
-};
-
-export { Providers };
+}

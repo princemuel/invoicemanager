@@ -15,6 +15,7 @@
     "postinstall": "pnpm -s run gen:prisma"
   },
   "dependencies": {
+    "@ebay/nice-modal-react": "^1.2.13",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
