@@ -9,14 +9,7 @@ interface Props {
 export const ClientOnly = ({ children }: Props) => {
   const [hasMounted, setHasMounted] = React.useState(false);
 
-  React.useEffect(() => {
-    setHasMounted(true);
-    return () => {
-      setHasMounted(false);
-    };
-  }, []);
+  React.useEffect(() => setHasMounted(true), []);
 
-  if (!hasMounted) return null;
-
-  return <>{children}</>;
+  return !hasMounted ? null : <>{children}</>;
 };
