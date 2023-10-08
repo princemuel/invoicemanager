@@ -28,8 +28,8 @@ model User {
 }
 
 model Invoice {
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
-  tag String
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  slug String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,7 +39,7 @@ model Invoice {
   paymentTerms Int
 
   description String
-  status      String? @default("PENDING")
+  status      String? @default("pending")
 
   senderAddress Address
 
