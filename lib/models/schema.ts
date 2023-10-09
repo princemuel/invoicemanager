@@ -18,8 +18,8 @@ export const BaseInvoiceSchema = z.object({
   issued: z.string().datetime().optional(),
   paymentDue: z.string().datetime().optional(),
   paymentTerms: z.number().nonnegative().int().optional(),
-  status: z.enum(['DRAFT', 'PENDING', 'PAID']).optional(),
-  tag: z.string().optional(),
+  status: z.string().optional(),
+  slug: z.string().optional(),
   total: z.number().nonnegative().optional(),
   userId: z.string().optional(),
 });
