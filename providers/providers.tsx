@@ -1,8 +1,8 @@
 'use client';
 
-import ModalManager from '@/common/exported';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { Toaster as ToastProvider } from 'react-hot-toast';
+import ModalManager from './modal-manager';
 
 const GlobalProviders = ({ children }: { children: React.ReactNode }) => {
   return (
