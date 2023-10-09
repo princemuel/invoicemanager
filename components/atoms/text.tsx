@@ -6,7 +6,7 @@ interface TextVariants extends VariantProps<typeof text> {}
 
 export const Text = forwardRef(
   (
-    { as, variant, modifier, weight, size, className, children, ...restProps },
+    { as, intent, modifier, weight, size, className, children, ...restProps },
     forwardedRef
   ) => {
     const As = as || 'p';
@@ -15,7 +15,15 @@ export const Text = forwardRef(
       <As
         {...restProps}
         ref={forwardedRef}
-        className={cn(text({ variant, modifier, size, weight, className }))}
+        className={cn(
+          text({
+            intent,
+            modifier,
+            size,
+            weight,
+            className,
+          })
+        )}
       >
         {children}
       </As>
@@ -32,8 +40,8 @@ Text.displayName = 'Text';
 
 const text = cva('', {
   variants: {
-    variant: {
-      default: 'text-black dark:text-white',
+    intent: {
+      primary: 'text-brand-900 dark:text-white',
       brand: 'text-brand-500',
     },
     modifier: {
@@ -41,45 +49,31 @@ const text = cva('', {
       'dark/50': 'text-black/50',
     },
     size: {
-      'xx-small': 'text-200 leading-300 tracking-100',
-      'x-small': 'text-300 leading-100 tracking-700',
-      base: 'text-400 leading-300',
-      small: 'text-500 leading-200 tracking-300',
-      medium: 'text-600 leading-400 tracking-500',
-      large: 'text-700 leading-600 tracking-600',
-      xl: 'text-800 leading-500 tracking-200',
-      '2xl': 'text-900 leading-700 tracking-400',
-      '3xl': 'text-xl leading-800 tracking-600',
+      xl: 'text-900 leading-700 -tracking-500',
+      lg: 'text-700 leading-400 -tracking-300',
+      md: 'text-600 leading-500 -tracking-400',
+      sm: 'text-400 leading-200 -tracking-200',
+      xs: 'text-300 leading-300 -tracking-300',
     },
+    //////////// leaving this in case I need it later
     weight: {
-      light: 'font-light',
-      regular: 'font-normal',
-      medium: 'font-medium',
       bold: 'font-bold',
+      medium: 'font-medium',
+      regular: 'font-normal',
+      light: 'font-light',
     },
+    ////////////
     uppercase: {
       true: 'uppercase',
     },
   },
   compoundVariants: [
-    {
-      size: [
-        // '3xl',
-        // '2xl',
-        // 'xl',
-        // 'large',
-        // 'medium',
-        // 'small',
-        // 'x-small',
-        // 'xx-small',
-      ],
-      weight: 'bold',
-      className: 'uppercase',
-    },
+    { size: ['md', 'lg', 'xl'], className: 'font-bold' },
+    { size: ['xs', 'sm'], className: 'font-medium' },
   ],
   defaultVariants: {
-    variant: 'default',
-    size: 'base',
+    intent: 'primary',
+    size: 'sm',
     weight: 'medium',
   },
 });
