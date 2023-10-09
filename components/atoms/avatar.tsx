@@ -1,20 +1,18 @@
-import Image from 'next/image';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { NextImage } from './next-image';
 
-interface Props {
-  src?: string | null;
-}
-
-const Avatar = ({ src }: Props) => {
+export async function Avatar() {
+  const { getUser } = getKindeServerSession();
+  const user = getUser();
   return (
-    <Image
-      src={src || '/assets/placeholder.jpg'}
+    <NextImage
+      src={user?.picture || '/assets/placeholder.jpg'}
       alt={'User'}
       className='rounded-full'
       // alt={user?.firstName || 'User'}
       width={30}
       height={30}
+      placeholder='empty'
     />
   );
-};
-
-export { Avatar };
+}
