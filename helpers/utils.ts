@@ -1,4 +1,4 @@
-import { cx } from 'cva';
+import { cx, type CxOptions as ClassArgs } from 'cva';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 const customTwMerge = extendTailwindMerge({
@@ -9,7 +9,7 @@ const customTwMerge = extendTailwindMerge({
   },
 });
 
-export function cn(...args: ClassValue[]) {
+export function cn(...args: ClassArgs) {
   return customTwMerge(cx(args));
 }
 
@@ -164,6 +164,14 @@ export const objectKeys = <T extends object>(obj: T): Array<keyof T> => {
   return Object.keys(obj) as Array<keyof T>;
 };
 
+export function reverseRecord<T extends PropertyKey, U extends PropertyKey>(
+  data: Record<T, U>
+) {
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [value, key])
+  ) as Record<U, T>;
+}
+
 /*---------------------------------*
             ARRAY UTILS            *
   ---------------------------------*
@@ -309,6 +317,37 @@ export function off<T extends Window | Document | HTMLElement | EventTarget>(
     );
   }
 }
+
+/**
+ * Calls the callback if in the appropriate environment
+ */
+export function checkEnv(env: 'development' | 'production', cb: () => void) {
+  if (process.env.NODE_ENV === env) cb();
+}
+
+/*---------------------------------*
+            IMAGE UTILS            *
+  ---------------------------------*
+ */
+
+export const shimmer = (width: number, height: number) => `
+  <svg width="${width}" height="${height}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <linearGradient id="g">
+        <stop stop-color="#333" offset="20%" />
+        <stop stop-color="#222" offset="50%" />
+        <stop stop-color="#333" offset="70%" />
+      </linearGradient>
+    </defs>
+    <rect width="${width}" height="${height}" fill="#333" />
+    <rect id="r" width="${width}" height="${height}" fill="url(#g)" />
+    <animate xlink:href="#r" attributeName="x" from="-${width}" to="${width}" dur="1s" repeatCount="indefinite"  />
+  </svg>`;
+
+export const toBase64 = (str: string) =>
+  typeof window === 'undefined'
+    ? Buffer.from(str).toString('base64')
+    : window?.btoa(str);
 
 /*---------------------------------*
             FP UTILS               *

@@ -1,4 +1,4 @@
-import { StoreApi, UseBoundStore } from 'zustand';
+import { StoreApi, type UseBoundStore } from 'zustand';
 
 type WithSelectors<Store> = Store extends { getState: () => infer T }
   ? Store & { use: { [K in keyof T]: () => T[K] } }
