@@ -1,95 +1,64 @@
 import * as React from 'react';
 
-export function createNewStore<State>(
-  initialState: State,
-  displayName = 'Store'
-) {
-  const StateContext = React.createContext<StateType | null>(null);
-  const ServerContext = React.createContext<any | null>(null);
+export const createStore = <T,>(initialState: T) => {
+  type VoidCallback = (state: T) => void;
 
-  StateContext.displayName = displayName;
-  ServerContext.displayName = displayName;
+  let isInitialized = false;
+  let currentState = initialState;
+  const subscribers = new Set<VoidCallback>();
 
-  type Select<SelectorOutput> = (state: State) => SelectorOutput;
-
-  function useStoreContext<Snapshot>(selector: Select<Snapshot>) {
-    const store = React.useContext(StateContext);
-    const serverContext = React.useContext(ServerContext);
-
-    if (store == null)
-      throw new Error(
-        `use${StateContext.displayName} must be used within a ${StateContext.displayName}Provider`
-      );
-
-    const state = React.useSyncExternalStore(
-      store.subscribe,
-      () => selector(store.get()),
-      () => selector(serverContext)
-    );
-
-    return [state, store.set] as const;
-  }
-
-  type Props<T> = {
-    children: React.ReactNode;
-    serverState: T;
-  };
-
-  function Provider<T>({ children, serverState }: Props<T>) {
-    const store = useStoreState();
-    const value = React.useMemo(() => store, [store]);
-
-    return (
-      <ServerContext.Provider value={serverState}>
-        <StateContext.Provider value={value}>{children}</StateContext.Provider>
-      </ServerContext.Provider>
-    );
-  }
-
-  type StateType = ReturnType<typeof useStoreState>;
-
-  function useStoreState() {
-    let isInitialized = false;
-
-    const store = React.useRef(initialState);
-    const subscribers = React.useRef(new Set<VoidFunction>());
-
-    const get = React.useCallback(() => store?.current, []);
-
-    const set = React.useCallback((value: Partial<State>) => {
-      store.current = { ...store?.current, ...value };
-      subscribers?.current?.forEach((listener) => listener());
-    }, []);
-
-    const serverInitialize = (initialState: State) => {
+  return {
+    getSnapshot: () => currentState,
+    getServerSnapshot: () => currentState,
+    setState: (newState: Partial<T>) => {
+      currentState = { ...currentState, ...newState };
+      subscribers.forEach((listener) => listener(currentState));
+    },
+    subscribe: (listener: (state: T) => void) => {
+      subscribers.add(listener);
+      return () => subscribers.delete(listener);
+    },
+    serverInitialize: (initialState: T) => {
       if (!isInitialized) {
-        store.current = initialState;
+        currentState = initialState;
         isInitialized = true;
       }
-    };
+    },
+  };
+};
 
-    const subscribe = React.useCallback(
-      (listener: VoidFunction): VoidFunction => {
-        subscribers?.current?.add(listener);
-        return () => {
-          subscribers?.current?.delete(listener);
-        };
-      },
-      []
-    );
+type StoreType<T> = ReturnType<typeof createStore<T>>;
+type Select<T, SelectorOutput> = (state: T) => SelectorOutput;
 
-    return {
-      get,
-      set,
-      subscribe,
-      serverInitialize,
-    } as const;
-  }
+export const useStore = <State, Store extends StoreType<State>, Snapshot>(
+  store: Store,
+  selector: Select<State, Snapshot>
+): [Snapshot, (newState: Partial<State>) => void] => {
+  const snapshot = React.useSyncExternalStore(
+    store.subscribe,
+    () => selector(store.getSnapshot()),
+    () => selector(store.getServerSnapshot())
+  );
 
-  return [Provider, useStoreContext] as const;
-}
+  return [snapshot, store.setState];
+};
 
-const [NameProvider, useName] = createNewStore({
-  first: 'John',
-  last: 'Doe',
+// const ServerContext = React.createContext();
+
+// type Props = {
+//   children: React.ReactNode;
+//   defaultState: T;
+// };
+// function Provider({ children, defaultState }: Props) {
+//   return (
+//     <ServerContext.Provider value={defaultState}>
+//       {children}
+//     </ServerContext.Provider>
+//   );
+// }
+
+const store = createStore({
+  num: 10,
 });
+
+// const blah = useStore(store,s =>  s.);

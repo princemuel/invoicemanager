@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { FilterProvider } from './filters';
 
 const InvoicesContext = React.createContext<Promise<InvoiceTypeSafe[]> | null>(
   null
@@ -14,12 +15,14 @@ interface Props {
 export const InvoicesProvider = ({ children, promise }: Props) => {
   return (
     <InvoicesContext.Provider value={promise}>
-      {children}
+      <FilterProvider defaultValue={React.use(promise)}>
+        {children}
+      </FilterProvider>
     </InvoicesContext.Provider>
   );
 };
 
-export function useInvoices() {
+export function useInvoicesPromise() {
   const context = React.useContext(InvoicesContext);
   if (context == null)
     throw new Error(
