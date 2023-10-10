@@ -1,7 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
 declare global {
-  var prisma: PrismaClient | undefined;
   interface ObjectConstructor {
     entries<T extends {}>(object: T): ReadonlyArray<Misc.Entry<T>>;
   }
