@@ -6,7 +6,6 @@ import { cva, type VariantProps } from 'cva';
 import * as React from 'react';
 
 type ButtonVariants = Omit<RequiredVariantProps<typeof button>, '_content'>;
-
 type ButtonProps = Partial<ButtonVariants> &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
     asChild?: boolean;
@@ -22,14 +21,12 @@ type ButtonProps = Partial<ButtonVariants> &
 export const Button = React.forwardRef(
   (
     {
-      variant,
+      intent,
       modifier,
       size,
       fullWidth,
       disabled,
-      weight,
       rounded,
-      uppercase,
       asChild,
       className,
       ...restProps
@@ -44,14 +41,12 @@ export const Button = React.forwardRef(
         ref={forwardedRef}
         className={cn(
           button({
-            variant,
+            intent,
             modifier,
             size,
             fullWidth,
             disabled,
-            weight,
             rounded,
-            uppercase,
             className,
             _content: 'text',
           })
@@ -66,40 +61,40 @@ Button.displayName = 'Button';
 type IconButtonProps = Omit<ButtonProps, 'children' | 'asChild'> &
   (
     | {
-        icon: SVGComponent;
-        hiddenLabel: string;
+        icon?: SVGComponent;
+        hiddenLabel?: string;
         leadingIcon?: never;
         trailingIcon?: never;
       }
     | {
-        icon: never;
-        hiddenLabel: never;
+        icon?: never;
+        hiddenLabel?: never;
         leadingIcon?: SVGComponent;
         trailingIcon?: never;
       }
     | {
-        icon: never;
-        hiddenLabel: never;
+        icon?: never;
+        hiddenLabel?: never;
         leadingIcon?: never;
         trailingIcon?: SVGComponent;
       }
-  );
+  ) & { iconClassname?: string };
 
 export const IconButton = React.forwardRef(
   (
     {
       as,
       icon: Icon,
-      variant,
+      intent,
       modifier,
       size,
       fullWidth,
       disabled,
-      weight,
       rounded,
-      uppercase,
       hiddenLabel,
       children,
+      status,
+      iconClassname,
       leadingIcon: LeadingIcon,
       trailingIcon: TrailingIcon,
       className,
@@ -113,7 +108,9 @@ export const IconButton = React.forwardRef(
         (LeadingIcon && Icon) ||
         (TrailingIcon && Icon)
       ) {
-        console.warn('You should only have a single icon in your button');
+        throw new Error(
+          'You should only have a single icon in your IconButton component'
+        );
       }
     });
 
@@ -121,39 +118,44 @@ export const IconButton = React.forwardRef(
 
     return (
       <As
-        {...restProps}
-        ref={forwardedRef}
         className={cn(
           button({
-            variant,
+            intent,
             modifier,
             size,
             fullWidth,
+            status,
             disabled,
-            weight,
             rounded,
-            uppercase,
             className,
             _content: LeadingIcon || TrailingIcon ? 'textAndIcon' : 'icon',
           })
         )}
+        {...restProps}
+        ref={forwardedRef}
         disabled={disabled}
       >
         {Icon ? (
           <>
             <p className='sr-only'>{hiddenLabel}</p>
-            <Icon className='h-5 w-5' aria-hidden='true' />
+            <Icon className={cn('h-5 w-5', iconClassname)} aria-hidden='true' />
           </>
         ) : null}
 
         {LeadingIcon ? (
-          <LeadingIcon className='-ml-0.5 h-5 w-5' aria-hidden='true' />
+          <LeadingIcon
+            className={cn('-ml-0.5 h-5 w-5', iconClassname)}
+            aria-hidden='true'
+          />
         ) : null}
 
         {Icon ? null : children}
 
         {TrailingIcon ? (
-          <TrailingIcon className='-mr-0.5 h-5 w-5' aria-hidden='true' />
+          <TrailingIcon
+            className={cn('-mr-0.5 h-5 w-5', iconClassname)}
+            aria-hidden='true'
+          />
         ) : null}
       </As>
     );
@@ -164,49 +166,36 @@ IconButton.displayName = 'Button';
 const button = cva(
   [
     'relative group inline-flex items-center',
-    'transition-colors duration-300',
+    'transition-colors duration-300 ease-in',
     'focus-visible:outline-none focus-visible:ring-1',
   ],
   {
     variants: {
-      variant: {
+      intent: {
         default: '',
         primary:
-          'bg-brand-500 text-white hover:bg-brand-300 focus:bg-brand-300',
+          'bg-brand-500 text-white hover:bg-brand-200 focus:bg-brand-200',
         secondary:
-          'bg-neutral-200 text-brand-400  hover:bg-brand-100 hover:text-brand-400 focus:bg-brand-100 focus:text-brand-400 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-white dark:hover:text-brand-400 dark:focus:bg-white dark:focus:text-brand-400',
-        tertiary:
-          'bg-accent-300 text-brand-300 hover:bg-brand-900 dark:text-brand-100 dark:hover:bg-accent-300',
-        accent:
-          'bg-neutral-200 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-300',
-        // counter: 'text-black/25 hover:text-brand-500 focus:text-brand-500',
-        // chevron:
-        //   'gap-4 text-black/50 hover:animate-bounce hover:text-brand-500 active:text-brand-500',
+          'text-brand-300 dark:text-brand-100 bg-accent-300 dark:bg-accent-300 hover:bg-brand-900 dark:hover:bg-brand-700 focus:bg-brand-900 dark:focus:bg-brand-700',
+        soft: 'text-brand-400 dark:text-brand-100 bg-neutral-200 dark:bg-brand-600 hover:bg-brand-100 dark:hover:bg-white focus:bg-brand-100 dark:focus:bg-white',
         destructive: 'bg-accent-200 text-white hover:bg-accent-100',
-        monochrome:
-          'border border-black bg-white text-black hover:bg-black hover:text-white focus:bg-black focus:text-white',
       },
-
       modifier: {
         plain: 'border-none bg-transparent',
         outline: 'border border-current bg-transparent',
       },
-
-      size: {
-        // sm: 'px-7 py-5',
-        // base: 'px-12 py-5',
-        slim: 'text-400 leading-300 tracking-100',
-        medium: 'text-sm',
-        large: 'text-base',
+      status: {
+        // Invoice States
+        draft:
+          'bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100',
+        pending: 'bg-accent-400/[0.06] text-accent-400',
+        paid: 'bg-accent-500/[0.06] text-accent-500',
       },
-      weight: {
-        bold: 'font-bold',
-        medium: 'font-medium',
-        regular: 'font-normal',
+      size: {
+        sm: 'text-400 leading-200 -tracking-200',
       },
       rounded: {
-        small: 'rounded-lg',
-        pill: 'rounded-pill',
+        normal: '',
         full: 'rounded-full',
       },
       _content: {
@@ -217,62 +206,34 @@ const button = cva(
       fullWidth: {
         true: 'w-full',
       },
-      uppercase: {
-        true: 'uppercase',
-      },
       disabled: {
         true: 'pointer-events-none cursor-not-allowed opacity-50',
       },
     },
     compoundVariants: [
       {
-        modifier: 'outline',
-        variant: 'monochrome',
-        className: 'text-white hover:text-neutral-200',
+        size: ['sm'],
+        _content: ['text', 'textAndIcon'],
+        className: 'gap-x-2 px-3 h-12 font-bold',
       },
       {
-        modifier: ['outline', 'plain'],
-        variant: 'primary',
-        className:
-          'hover:text-brand-500 active:text-brand-500 hover:bg-transparent focus:bg-transparent',
+        intent: ['primary', 'secondary', 'soft', 'destructive'],
+        rounded: 'normal',
+        className: 'rounded-pill',
       },
+      { intent: ['default'], rounded: 'normal', className: 'rounded-md' },
+      { status: ['draft', 'pending', 'paid'], className: 'capitalize' },
       {
-        modifier: ['outline', 'plain'],
-        variant: 'secondary',
-        className:
-          'text-green-500 hover:bg-transparent focus:bg-transparent hover:text-green-600',
+        fullWidth: true,
+        className: 'justify-center text-center',
       },
-      {
-        modifier: ['outline', 'plain'],
-        variant: 'destructive',
-        className:
-          'text-red-500 hover:bg-transparent focus:bg-transparent hover:text-red-600',
-      },
-      {
-        size: 'slim',
-        className: 'px-3 py-1',
-      },
-      {
-        size: 'medium',
-        className: 'px-8 py-3',
-      },
-      {
-        // modifier: "",
-        size: 'large',
-        className: 'px-8 py-3',
-      },
-      {
-        size: 'large',
-        className: 'px-9 py-3',
-      },
-      { disabled: true, variant: 'default', className: 'border-gray-200' },
+      { disabled: true, intent: 'default', className: 'border-gray-200' },
     ],
 
     defaultVariants: {
-      variant: 'default',
-      size: 'slim',
-      weight: 'bold',
-      rounded: 'pill',
+      intent: 'default',
+      size: 'sm',
+      rounded: 'normal',
       _content: 'text',
     },
   }
