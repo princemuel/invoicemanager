@@ -15,6 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "downlevelIteration": true,
+    "noErrorTruncation": true,
     "plugins": [
       {
         "name": "next"
@@ -29,6 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
+    ".next/types/**/*.d.ts",
     "app/env/schema.mjs",
     "app/env/server.mjs",
     "app/env/client.mjs"
