@@ -9,15 +9,15 @@ const FontSans_Dev = localFont({
   variable: '--font-sans',
   display: 'swap',
 });
-const FontSans_Prod = League_Spartan({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
 const FontAccent_Dev = localFont({
   src: './rubik.ttf',
   variable: '--font-accent',
+  display: 'swap',
+});
+
+const FontSans_Prod = League_Spartan({
+  subsets: ['latin'],
+  variable: '--font-sans',
   display: 'swap',
 });
 const FontAccent_Prod = League_Spartan({
@@ -28,6 +28,6 @@ const FontAccent_Prod = League_Spartan({
 
 export const fonts = cn(
   isProduction
-    ? [FontSans_Prod.variable, FontAccent_Prod]
-    : [FontSans_Dev.variable, FontAccent_Dev]
+    ? [FontSans_Prod.variable, FontAccent_Prod.variable]
+    : [FontSans_Dev.variable, FontAccent_Dev.variable]
 );
