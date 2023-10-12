@@ -1,6 +1,7 @@
 import { InvoicesProvider } from '@/context';
+import { cn } from '@/helpers';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { InvoicesTemplate } from './invoices';
+import { InvoicesTemplateMobile } from './invoices.mobile';
 
 export default async function PageRoute() {
   const { getUser } = getKindeServerSession();
@@ -13,7 +14,10 @@ export default async function PageRoute() {
     <main aria-labelledby='heading' className='w-full'>
       <pre>{JSON.stringify(client)}</pre>
       <InvoicesProvider promise={invoices}>
-        <InvoicesTemplate />
+        <div className={cn('mt-12 flex flex-col gap-12')}>
+          <InvoicesTemplateMobile />
+          {/* <InvoicesTemplateDesktop /> */}
+        </div>
       </InvoicesProvider>
     </main>
   );
