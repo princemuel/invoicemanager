@@ -21,7 +21,7 @@ export function NextImage({
       height={height}
       priority={priority}
       placeholder={placeholder}
-      blurDataURL={blurDataURL}
+      blurDataURL={placeholder === 'empty' ? undefined : blurDataURL}
       {...rest}
     />
   );

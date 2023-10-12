@@ -6,7 +6,7 @@ export async function Avatar() {
   const user = getUser();
   return (
     <NextImage
-      src={user?.picture || '/assets/placeholder.jpg'}
+      src={user?.picture || '/placeholder.jpg'}
       alt={'User'}
       className='rounded-full'
       // alt={user?.firstName || 'User'}
