@@ -5,7 +5,6 @@ import {
   IconArrowRightSVG,
   IconCalendarSVG,
   IconCheckSVG,
-  IconDeleteSVG,
   IconMoon,
   IconSun,
   LogoSVG,
@@ -21,7 +20,6 @@ export const icons = {
   },
   actions: {
     add: (props) => <IconAddSVG {...props} />,
-    delete: (props) => <IconDeleteSVG {...props} />,
     check: (props) => <IconCheckSVG {...props} />,
   },
   app: {
