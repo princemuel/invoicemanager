@@ -1,26 +1,25 @@
 'use client';
 
-import { ThemeProvider } from 'next-themes';
-import * as React from 'react';
-import { Toaster } from 'react-hot-toast';
-import { ModalProvider } from './modals';
-interface Props {
-  children: React.ReactNode;
-  userId: string;
-}
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { Toaster as ToastProvider } from 'react-hot-toast';
+import ModalManager from './modal-manager';
 
-const Providers = ({ children, userId }: Props) => {
+const GlobalProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider
-      storageKey='int-theme'
+    <NextThemesProvider
+      storageKey='THEME_MODE'
       defaultTheme='system'
       enableSystem={true}
       attribute='data-mode'
     >
-      <Toaster />
-      <ModalProvider userId={userId}>{children}</ModalProvider>
-    </ThemeProvider>
+      <ModalManager.Provider>
+        <ToastProvider />
+        {children}
+      </ModalManager.Provider>
+    </NextThemesProvider>
   );
 };
 
-export { Providers };
+export { GlobalProviders };
+
+// ModalManager.register('my-modal-id', MyModal);

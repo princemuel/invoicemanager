@@ -1,27 +1,40 @@
 'use client';
 
-import { useThemeMode } from '@/lib';
-import { cx } from 'cva';
+import { icons } from '@/common';
+import { cn } from '@/helpers';
+import { useTheme } from 'next-themes';
+import React from 'react';
+import { ClientOnly } from './client-only';
 
-const ThemeButton = () => {
-  const { isMounted, isDarkMode, updateTheme } = useThemeMode();
-  if (!isMounted) return null;
+const ThemeToggle = () => {
+  const { setTheme, resolvedTheme: theme } = useTheme();
+  const [isPending, startTransition] = React.useTransition();
+
+  const isDarkMode = theme === 'dark';
+  const Icon = isDarkMode ? icons.app.sun : icons.app.moon;
+
+  const updateTheme = React.useCallback(() => {
+    startTransition(() => {
+      setTheme(isDarkMode ? 'light' : 'dark');
+    });
+  }, [isDarkMode, setTheme]);
 
   return (
-    <button
-      type='button'
-      title='Toggle Theme'
-      className={cx(
-        'aspect-square w-8 bg-cover bg-no-repeat',
-        !isDarkMode
-          ? 'bg-[url(/assets/icon-moon.svg)]'
-          : 'bg-[url(/assets/icon-sun.svg)]'
-      )}
-      onClick={updateTheme}
-    >
-      <span className='sr-only'>Toggle Theme</span>
-    </button>
+    <ClientOnly>
+      <button
+        type='button'
+        title='Toggle Theme'
+        className={cn(
+          'flex aspect-square w-5 items-center justify-center',
+          isPending && 'opacity-80'
+        )}
+        onClick={updateTheme}
+      >
+        <Icon className='transition-all' />
+        <span className='sr-only'>Toggle theme</span>
+      </button>
+    </ClientOnly>
   );
 };
 
-export { ThemeButton };
+export { ThemeToggle };

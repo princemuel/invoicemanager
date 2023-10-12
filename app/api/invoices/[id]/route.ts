@@ -1,18 +1,20 @@
-import { fetchAuthUser } from '@/app/lib/get-user';
-import db from '@/app/lib/prisma';
+import db from '@/app/database';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import createHttpError from 'http-errors';
 import { NextResponse } from 'next/server';
 
 export async function PUT(request: Request, { params }: { params: IParams }) {
-  const user = await fetchAuthUser();
-  if (!user) return NextResponse.error();
-
   const { id } = params;
-  if (!id || typeof id !== 'string') {
-    throw new ReferenceError('This invoice id is not valid');
-  }
+  const { isAuthenticated } = getKindeServerSession();
+
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
+  if (!id || typeof id !== 'string')
+    throw new createHttpError.BadRequest(
+      `Malformed data. Expected 'string' Got ${id}`
+    );
 
   const body: InvoiceType = await request.json();
-
   const data = await db.invoice.update({
     where: { id },
     data: body,
@@ -23,20 +25,22 @@ export async function PUT(request: Request, { params }: { params: IParams }) {
 
 // just testing this: PATCH OR PUT
 export async function PATCH(request: Request, { params }: { params: IParams }) {
-  const user = await fetchAuthUser();
-  if (!user) return NextResponse.error();
-
   const { id } = params;
+  const { isAuthenticated } = getKindeServerSession();
+
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
   if (!id || typeof id !== 'string') {
-    throw new ReferenceError('This invoice id is not valid');
+    throw new createHttpError.BadRequest(
+      `Malformed data. Expected 'string' Got ${id}`
+    );
   }
 
   const body: InvoiceType = await request.json();
-
   const data = await db.invoice.update({
     where: { id },
     data: {
-      status: body.status,
+      status: body?.status,
     },
   });
 
@@ -44,16 +48,18 @@ export async function PATCH(request: Request, { params }: { params: IParams }) {
 }
 
 export async function DELETE(
-  request: Request,
+  _request: Request,
   { params }: { params: IParams }
 ) {
   const { id } = params;
+  const { isAuthenticated } = getKindeServerSession();
 
-  const user = await fetchAuthUser();
-  if (!user) return NextResponse.error();
-
+  if (!isAuthenticated())
+    throw new createHttpError.Unauthorized(`This session is not authorized`);
   if (!id || typeof id !== 'string') {
-    throw new ReferenceError('This invoice id is not valid');
+    throw new createHttpError.BadRequest(
+      `Malformed data. Expected 'string' Got ${id}`
+    );
   }
 
   const data = await db.invoice.delete({

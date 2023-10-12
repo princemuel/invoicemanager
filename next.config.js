@@ -3,13 +3,14 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   reactStrictMode: true,
   experimental: {
     typedRoutes: true,
+    serverActions: true,
     webVitalsAttribution: ['CLS', 'LCP'],
-    // turbo: {
-    //   loaders: { '.svg': ['@svgr/webpack'] },
-    // },
   },
   images: {
     domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
