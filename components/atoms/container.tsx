@@ -8,7 +8,7 @@ const Outer = React.forwardRef<HTMLDivElement, Props>(
     return (
       <div ref={forwardedRef} className='sm:px-8' {...props}>
         <div
-          className={cn('max-w-screen-2xl mx-auto w-full lg:px-8', className)}
+          className={cn('mx-auto w-full max-w-screen-2xl lg:px-8', className)}
         >
           {children}
         </div>
@@ -28,7 +28,7 @@ const Inner = React.forwardRef<HTMLDivElement, Props>(
       >
         <div
           className={cn(
-            'mx-auto max-w-screen-md lg:max-w-screen-lg',
+            'mx-auto max-w-screen-md 2xl:max-w-screen-lg',
             className
           )}
         >
