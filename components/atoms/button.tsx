@@ -3,7 +3,7 @@
 import { checkEnv, cn } from '@/helpers';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'cva';
-import * as React from 'react';
+import { forwardRef } from 'react';
 
 type ButtonVariants = Omit<RequiredVariantProps<typeof button>, '_content'>;
 type ButtonProps = Partial<ButtonVariants> &
@@ -18,15 +18,16 @@ type ButtonProps = Partial<ButtonVariants> &
  * use as link as the button props are passed to the nested link.
  */
 
-export const Button = React.forwardRef(
+export const Button = forwardRef(
   (
     {
-      intent,
+      variant,
       modifier,
       size,
       fullWidth,
       disabled,
       rounded,
+      status,
       asChild,
       className,
       ...restProps
@@ -41,10 +42,11 @@ export const Button = React.forwardRef(
         ref={forwardedRef}
         className={cn(
           button({
-            intent,
+            variant,
             modifier,
             size,
             fullWidth,
+            status,
             disabled,
             rounded,
             className,
@@ -80,12 +82,12 @@ type IconButtonProps = Omit<ButtonProps, 'children' | 'asChild'> &
       }
   ) & { iconClassname?: string };
 
-export const IconButton = React.forwardRef(
+export const IconButton = forwardRef(
   (
     {
       as,
       icon: Icon,
-      intent,
+      variant,
       modifier,
       size,
       fullWidth,
@@ -93,7 +95,6 @@ export const IconButton = React.forwardRef(
       rounded,
       hiddenLabel,
       children,
-      status,
       iconClassname,
       leadingIcon: LeadingIcon,
       trailingIcon: TrailingIcon,
@@ -118,20 +119,19 @@ export const IconButton = React.forwardRef(
 
     return (
       <As
+        {...restProps}
         className={cn(
           button({
-            intent,
+            variant,
             modifier,
             size,
             fullWidth,
-            status,
             disabled,
             rounded,
             className,
             _content: LeadingIcon || TrailingIcon ? 'textAndIcon' : 'icon',
           })
         )}
-        {...restProps}
         ref={forwardedRef}
         disabled={disabled}
       >
@@ -171,7 +171,7 @@ const button = cva(
   ],
   {
     variants: {
-      intent: {
+      variant: {
         default: '',
         primary:
           'bg-brand-500 text-white hover:bg-brand-200 focus:bg-brand-200',
@@ -214,24 +214,28 @@ const button = cva(
       {
         size: ['sm'],
         _content: ['text', 'textAndIcon'],
-        className: 'gap-x-2 px-3 h-12 font-bold',
+        className:
+          'gap-x-1 w-20 h-11 px-2 sm:w-36 sm:gap-x-2 sm:h-12 font-bold',
       },
       {
-        intent: ['primary', 'secondary', 'soft', 'destructive'],
+        variant: ['primary', 'secondary', 'soft', 'destructive'],
         rounded: 'normal',
         className: 'rounded-pill',
       },
-      { intent: ['default'], rounded: 'normal', className: 'rounded-md' },
-      { status: ['draft', 'pending', 'paid'], className: 'capitalize' },
+      { variant: ['default'], rounded: 'normal', className: 'rounded-md' },
+      {
+        status: ['draft', 'pending', 'paid'],
+        className: 'capitalize !w-[6.5rem] !h-10 !py-3 !px-4 justify-around',
+      },
       {
         fullWidth: true,
         className: 'justify-center text-center',
       },
-      { disabled: true, intent: 'default', className: 'border-gray-200' },
+      { disabled: true, variant: 'default', className: 'border-gray-200' },
     ],
 
     defaultVariants: {
-      intent: 'default',
+      variant: 'default',
       size: 'sm',
       rounded: 'normal',
       _content: 'text',

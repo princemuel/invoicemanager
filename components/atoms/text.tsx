@@ -6,7 +6,7 @@ interface TextVariants extends VariantProps<typeof text> {}
 
 export const Text = forwardRef(
   (
-    { as, intent, modifier, weight, size, className, children, ...restProps },
+    { as, variant, modifier, weight, size, className, children, ...restProps },
     forwardedRef
   ) => {
     const As = as || 'p';
@@ -17,7 +17,7 @@ export const Text = forwardRef(
         ref={forwardedRef}
         className={cn(
           text({
-            intent,
+            variant,
             modifier,
             size,
             weight,
@@ -40,8 +40,11 @@ Text.displayName = 'Text';
 
 const text = cva('', {
   variants: {
-    intent: {
-      primary: 'text-brand-900 dark:text-white',
+    variant: {
+      default: 'text-brand-900 dark:text-white',
+      primary: 'text-brand-400',
+      secondary: 'text-brand-300',
+      accent: 'text-[#858BB2]',
       brand: 'text-brand-500',
     },
     modifier: {
@@ -69,10 +72,13 @@ const text = cva('', {
   },
   compoundVariants: [
     { size: ['md', 'lg', 'xl'], className: 'font-bold' },
-    { size: ['xs', 'sm'], className: 'font-medium' },
+    {
+      variant: ['primary', 'secondary', 'accent'],
+      className: 'dark:text-brand-100',
+    },
   ],
   defaultVariants: {
-    intent: 'primary',
+    variant: 'default',
     size: 'sm',
     weight: 'medium',
   },
