@@ -13,14 +13,15 @@ import NextLink from 'next/link';
 interface Props {
   className?: string;
 }
+const generateMessage = createInvoiceMessageBuilder(
+  'There {{ verb }} {{ count }} total invoice(s)'
+);
 
-const generateMessage = createInvoiceMessageBuilder('{{ count }} invoice(s)');
-
-export function InvoicesTemplateMobile({ className }: Props) {
+export function InvoicesTemplateDesktop({ className }: Props) {
   return (
     <>
       <div className={cn('', className)}>
-        <header>
+        <header className=''>
           <Container.Outer>
             <Container.Inner className='flex items-center'>
               <div className='flex-1'>
@@ -32,7 +33,7 @@ export function InvoicesTemplateMobile({ className }: Props) {
                   {generateMessage([])}
                 </Text> */}
                 <Text as='p' aria-live='polite' variant='secondary'>
-                  {generateMessage(invoices)}
+                  {generateMessage([1])}
                 </Text>
               </div>
 
@@ -44,7 +45,7 @@ export function InvoicesTemplateMobile({ className }: Props) {
                     <span className='grid aspect-square place-content-center rounded-full bg-white p-2'>
                       <icons.actions.add />
                     </span>
-                    <span>New</span>
+                    <span>New Invoice</span>
                   </NextLink>
                 </Button>
               </div>
@@ -59,13 +60,18 @@ export function InvoicesTemplateMobile({ className }: Props) {
                 invoices.map((invoice) => (
                   <li
                     key={invoice.id}
-                    className='rounded-lg bg-white px-6 py-8 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700'
+                    // ease-[cubic-bezier(0.25,0.1,0.25,1.0)]
+                    className='rounded-lg bg-white p-4 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700'
                   >
                     <NextLink
                       href={`/invoices/${invoice?.id}`}
-                      className='grid grid-cols-2 grid-rows-3'
+                      className='grid grid-flow-col-dense items-center justify-items-end gap-1'
                     >
-                      <Text as='p' weight='bold' className='uppercase'>
+                      <Text
+                        as='p'
+                        weight='bold'
+                        className='justify-self-start uppercase'
+                      >
                         <span className='text-brand-400'>#</span>
                         <span>{invoice?.id}</span>
                       </Text>
@@ -74,7 +80,7 @@ export function InvoicesTemplateMobile({ className }: Props) {
                         as='p'
                         variant='primary'
                         aria-live='polite'
-                        className='self-center'
+                        className='justify-self-start'
                       >
                         <span>Due</span>{' '}
                         <time
@@ -84,28 +90,23 @@ export function InvoicesTemplateMobile({ className }: Props) {
                         </time>
                       </Text>
 
-                      <Text
-                        as='p'
-                        variant='accent'
-                        className='col-start-2 col-end-3 row-start-1 justify-self-end'
-                      >
+                      <Text as='p' variant='accent' className=''>
                         {invoice?.clientName}
                       </Text>
 
-                      <Text
-                        as='p'
-                        size='md'
-                        weight='bold'
-                        className='row-start-3 row-end-4 self-end'
-                      >
+                      <Text as='p' size='md' weight='bold' className=''>
                         {formatAmount(invoice?.total)}
                       </Text>
 
                       <StatusButton
                         // @ts-expect-error
                         status={invoice.status}
-                        className='col-start-2 col-end-3 row-start-3 row-end-4 justify-self-end '
+                        // className='w-full justify-self-start'
                       />
+
+                      <div className=''>
+                        <icons.arrow.right />
+                      </div>
                     </NextLink>
                   </li>
                 ))
@@ -118,24 +119,16 @@ export function InvoicesTemplateMobile({ className }: Props) {
                       height='200'
                       className='w-full'
                       alt={'Invoices List Empty'}
-                      placeholder='empty'
                     />
 
                     <div className='flex flex-col items-center gap-5 px-10'>
-                      <Text as='h2' size='lg'>
-                        There is nothing here
-                      </Text>
+                      <h2>There is nothing here</h2>
 
-                      <Text
-                        as='p'
-                        variant='secondary'
-                        size='sm'
-                        className='max-w-[22rem]'
-                      >
+                      <p className='max-w-[22rem]'>
                         Create an invoice by clicking the{' '}
                         <em className='font-bold'>New Invoice</em> button and
                         get started
-                      </Text>
+                      </p>
                     </div>
                   </article>
                 </li>
