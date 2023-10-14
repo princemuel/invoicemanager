@@ -12,10 +12,10 @@ export default async function PageRoute() {
 
   return (
     <main aria-labelledby='heading' className='w-full'>
-      {/* <pre>{JSON.stringify(client)}</pre> */}
+      <div className='mt-12' />
       <InvoicesProvider promise={invoices}>
-        <InvoicesTemplateMobile className='mt-12 flex flex-col gap-12 sm:hidden' />
-        <InvoicesTemplateDesktop className='mt-12 hidden flex-col gap-12 sm:flex' />
+        <InvoicesTemplateMobile className='flex flex-col gap-12 sm:hidden' />
+        <InvoicesTemplateDesktop className='hidden flex-col gap-12 sm:flex' />
       </InvoicesProvider>
     </main>
   );
