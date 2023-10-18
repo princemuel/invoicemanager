@@ -17,13 +17,13 @@ interface LayoutRouteProps {
   [key: string]: React.ReactNode;
 }
 
-interface ServerActionResult<Result>
-  extends Promise<
-    | Result
-    | {
-        error: string;
-      }
-  > {}
+// interface ServerActionResult<Result>
+//   extends Promise<
+//     | Result
+//     | {
+//         error: string;
+//       }
+//   > {}
 
 // interface ServerActionResult<Result>
 //   extends Promise<
