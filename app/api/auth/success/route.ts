@@ -7,7 +7,8 @@ export async function GET(request: NextRequest) {
 
   const client = getUser();
 
-  if (!client || client == null || !client?.id)
+  // if (!client || client == null || !client?.id)
+  if (Boolean(client) || !client?.id)
     throw new Error(`Something went wrong with authentication '${client}'`);
 
   await createAuthUser(client);
