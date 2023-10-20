@@ -65,9 +65,7 @@ export const FormHelperText = ({
   return (
     <Text
       as='p'
-      role='status'
-      aria-live='polite'
-      // text-accent-200
+      role='alert'
       className={cn('!text-current', className)}
       {...rest}
     >
