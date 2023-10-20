@@ -17,7 +17,16 @@ import { schema } from './common';
 import { icons } from '@/common';
 import InvoiceItemsDesktop from './invoice.items.desktop';
 import InvoiceItemsMobile from './invoice.items.mobile';
-import { calculateTotal, endsWith, cn, approximate } from '@/helpers';
+import {
+  calculateTotal,
+  endsWith,
+  cn,
+  approximate,
+  pluralize,
+} from '@/helpers';
+import { Listbox, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
+import { Controller } from 'react-hook-form';
 
 interface Props {
   className?: string;
@@ -328,51 +337,7 @@ export default function InvoiceForm({ className }: Props) {
                 <FormLabel htmlFor='issued'>Invoice Date</FormLabel>
               </FormControl>
 
-              {/* <Listbox {...register('paymentTerms')}>
-                <FormControl className='relative col-span-6 sm:col-span-3'>
-                  <Listbox.Label as={FormLabel}>Payment Terms</Listbox.Label>
-                  <div className='relative'>
-                    <Listbox.Button
-                      title='select a payment'
-                      as={Button}
-                      className='peer '
-                    >
-                      <span className='block truncate'>
-                        Net {pluralize('Day', 10)}
-                      </span>
-
-                      <span className='pointer-events-none'>
-                        <icons.chevron.down
-                          aria-hidden
-                          className='transform-gpu ui-open:-rotate-180'
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Transition
-                      as={React.Fragment}
-                      enter='transition-opacity ease-in-out duration-300'
-                      enterFrom='opacity-0'
-                      enterTo='opacity-100'
-                      leave='transition-opacity ease-in-out duration-300'
-                      leaveFrom='opacity-100'
-                      leaveTo='opacity-0'
-                    >
-                      <Listbox.Options>
-                        {[1, 2, 3].map((term) => (
-                          <Listbox.Option key={term.toString()} value={term}>
-                            <span className='block truncate'>
-                              Net {term} {pluralize('Day', term)}
-                            </span>
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </FormControl>
-              </Listbox> */}
-
-              {/* <Controller
+              <Controller
                 name='paymentTerms'
                 control={control}
                 render={({ field }) => (
@@ -401,7 +366,7 @@ export default function InvoiceForm({ className }: Props) {
                         </Listbox.Button>
 
                         <Transition
-                          as={React.Fragment}
+                          as={Fragment}
                           enter='transition-opacity ease-in-out duration-300'
                           enterFrom='opacity-0'
                           enterTo='opacity-100'
@@ -426,7 +391,7 @@ export default function InvoiceForm({ className }: Props) {
                     </FormControl>
                   </Listbox>
                 )}
-              /> */}
+              />
 
               {/* data-invalid={Boolean(errors?.description)} */}
               <FormControl className='col-span-6'>
@@ -484,15 +449,18 @@ export default function InvoiceForm({ className }: Props) {
             </Button>
             <Button
               type='submit'
-              onClick={() => void setValue('status', 'draft')}
+              name='draft'
+              // onClick={() => void setValue('status', 'draft')}
               variant='secondary'
               className='ms-auto '
             >
               Save as draft
             </Button>
+
             <Button
+              name='pending'
               type='submit'
-              onClick={() => void setValue('status', 'pending')}
+              // onClick={() => void setValue('status', 'pending')}
               variant='primary'
             >
               Save & Send

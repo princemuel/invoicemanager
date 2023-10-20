@@ -2,54 +2,56 @@ import { cn } from '@/helpers';
 import { forwardRef } from 'react';
 import { Text } from './text';
 
-export const TextField = forwardRef(({ className, ...rest }, forwardedRef) => {
-  const classNa = cn('     ', className);
-  return (
-    <>
-      <input
-        className={cn(
-          'peer w-full rounded-lg border border-brand-100 bg-transparent px-5 py-4 text-400 font-bold leading-200 -tracking-200 text-brand-900 caret-brand-500 outline-none autofill:bg-white aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 hover:border-brand-500 focus:border-brand-500 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:autofill:bg-brand-700 dark:hover:border-brand-500 dark:focus:border-brand-500',
-          className
-        )}
-        {...rest}
-        ref={forwardedRef}
-      />
-    </>
-  );
-}) as ForwardRefComponent<'input', {}>;
+export const TextField = forwardRef(
+  ({ className, ...restProps }, forwardedRef) => {
+    return (
+      <>
+        <input
+          {...restProps}
+          className={cn(
+            'peer w-full rounded-lg border border-brand-100 bg-transparent px-5 py-4 text-400 font-bold leading-200 -tracking-200 text-brand-900 caret-brand-500 outline-none autofill:bg-white aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 hover:border-brand-500 focus:border-brand-500 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:autofill:bg-brand-700 dark:hover:border-brand-500 dark:focus:border-brand-500',
+            className
+          )}
+          ref={forwardedRef}
+        />
+      </>
+    );
+  }
+) as ForwardRefComponent<'input', {}>;
 TextField.displayName = 'TextField';
 
-export const FormControl = <E extends React.ElementType = 'div'>({
-  as,
-  className,
-  children,
-  ...rest
-}: ElementProps<E>) => {
-  const RenderedElement = as || 'div';
+export const FormControl = forwardRef(
+  ({ as, className, children, ...restProps }, forwardedRef) => {
+    const RenderedElement = as || 'div';
 
-  return (
-    <RenderedElement
-      className={cn('group flex flex-col-reverse gap-3', className)}
-      {...rest}
-    >
-      {children}
-    </RenderedElement>
-  );
-};
+    return (
+      <RenderedElement
+        {...restProps}
+        className={cn('group flex flex-col-reverse gap-3', className)}
+        ref={forwardedRef}
+      >
+        {children}
+      </RenderedElement>
+    );
+  }
+) as ForwardRefComponent<'div', {}>;
+FormControl.displayName = 'FormControl';
 
-interface LabelProps
-  extends React.DetailedHTMLProps<
-    React.LabelHTMLAttributes<HTMLLabelElement>,
-    HTMLLabelElement
-  > {}
-
-export function FormLabel({ className, children, ...rest }: LabelProps) {
-  return (
-    <Text as='label' className={cn('!text-current', className)} {...rest}>
-      {children}
-    </Text>
-  );
-}
+export const FormLabel = forwardRef(
+  ({ as, className, children, ...restProps }, forwardedRef) => {
+    return (
+      <Text
+        as='label'
+        {...restProps}
+        className={cn('!text-current', className)}
+        ref={forwardedRef}
+      >
+        {children}
+      </Text>
+    );
+  }
+) as ForwardRefComponent<'label', {}>;
+FormLabel.displayName = 'FormLabel';
 
 interface FormHelperTextProps
   extends React.DetailedHTMLProps<
@@ -60,14 +62,14 @@ interface FormHelperTextProps
 export const FormHelperText = ({
   className,
   children,
-  ...rest
+  ...restProps
 }: FormHelperTextProps) => {
   return (
     <Text
       as='p'
       role='alert'
+      {...restProps}
       className={cn('!text-current', className)}
-      {...rest}
     >
       {children}
     </Text>
