@@ -4,10 +4,10 @@
   "editor.inlineSuggest.enabled": true,
   "editor.wordWrapColumn": 100,
   "editor.codeActionsOnSave": {
-    // "source.addMissingImports": true,
-    // "source.fixAll": "explicit"
-    // "source.fixAll.eslint": false,
-    // "source.organizeImports": "explicit"
+    "source.addMissingImports": true,
+    "source.organizeImports": "never",
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": true
   },
 
   "eslint.codeAction.showDocumentation": {
