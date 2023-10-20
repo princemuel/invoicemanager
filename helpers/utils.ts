@@ -43,6 +43,10 @@ const replaceCaps = (value: string) =>
 
 export const replaceDotsAndCaps = compose(replaceCaps, replaceDot);
 
+export function createRegExpFromExtensions(...extensions: string[]) {
+  return new RegExp(`\\.(${extensions.join('|')})$`, 'i');
+}
+
 type EndsWith<W, S extends string> = W extends `${infer _R}${S}` ? W : never;
 
 export const endsWith = <Word extends string, Suffix extends string>(
@@ -57,21 +61,16 @@ export const endsWith = <Word extends string, Suffix extends string>(
   ---------------------------------*
  */
 
-export function approximate(num = 0, fractionDigits = 0) {
+export function approximate(num = 0, fractionDigits = 2) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export const isDraftInvoice = (invoice?: InvoiceTypeSafe) => {
-  return invoice?.status === 'DRAFT';
-};
-
-export const isPendingInvoice = (invoice?: InvoiceTypeSafe) => {
-  return invoice?.status === 'PENDING';
-};
-
-export const isPaidInvoice = (invoice?: InvoiceTypeSafe) => {
-  return invoice?.status === 'PAID';
-};
+export function safeNum(value: any, defaultValue = 0): number {
+  const num = Number(value);
+  return (Number.isNaN(num) || isNaN(num)) && !Object.is(num, 0)
+    ? defaultValue
+    : num;
+}
 
 export function range(start: number, stop: number, step: number) {
   return Array.from(
@@ -80,53 +79,39 @@ export function range(start: number, stop: number, step: number) {
   );
 }
 
-export function safeNum<T>(value: T) {
-  const updated = Number(value);
-  return Number.isNaN(updated) || isNaN(updated) ? 0 : updated;
-}
-
 interface Item {
   quantity?: number;
   price?: number;
   total?: number;
 }
+type FirstArg = number | Item[];
 
-export function calculateTotal<T extends Item>(
-  items?: T[],
-  params?: 'total'
-): number;
-export function calculateTotal<T extends number>(quantity: T, price: T): number;
-export function calculateTotal(a?: unknown, b?: unknown) {
-  if (!a) return 0;
-
-  if (typeof a === 'number' && typeof b === 'number') {
-    return approximate(a * b, 2);
-  }
-
+export function calculateTotal<T extends FirstArg>(
+  a?: T,
+  b?: T extends number
+    ? NonNullable<T>
+    : T extends (infer _)[]
+    ? 'total'
+    : never
+) {
   if (Array.isArray(a)) {
-    return (a as Item[]).reduce((total, current) => {
-      if (b === 'total') {
-        total += safeNum(current?.total);
-      } else {
-        total += safeNum(current?.quantity) * safeNum(current?.price);
-      }
-      return approximate(total, 2);
+    return a.reduce((acc, item) => {
+      const { total = 0, quantity = 0, price = 0 } = item;
+      return b === 'total' ? acc + total : acc + quantity * price;
     }, 0);
   }
 
-  return 0;
+  // bailout since the function expects 2 number params, or an array params
+  return safeNum(a) * safeNum(b);
 }
 
-export function formatPrice(price = 0) {
-  if (typeof price !== 'number')
-    throw new Error("The item's price must be of typeof 'number'");
-
+export const formatAmount = (price = 0, fractionDigits = 2) => {
   return Intl.NumberFormat('en-GB', {
-    maximumFractionDigits: 2,
+    maximumFractionDigits: fractionDigits,
     style: 'currency',
     currency: 'GBP',
   }).format(price);
-}
+};
 
 type FormatDateFunction = (
   date?: string,
@@ -178,9 +163,20 @@ export function reverseRecord<T extends PropertyKey, U extends PropertyKey>(
  */
 
 export function hasValues<T>(
-  array: T[] | null | undefined
-): array is NonNullable<T[]> {
-  return (array || []).length > 0;
+  value: T[] | null | undefined
+): value is NonNullable<T[]> {
+  return Array.isArray(value) && value.length > 0;
+}
+
+export function buildInvoiceMsg(message: string) {
+  return function <T>(data: T[]) {
+    const itemCount = data?.length || 0;
+    const verb = itemCount === 1 ? 'is' : 'are';
+
+    return message
+      .replace('{{ verb }}', verb)
+      .replace('{{ count }}', `${itemCount}`);
+  };
 }
 
 export function map<T>(

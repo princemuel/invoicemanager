@@ -17,6 +17,13 @@ export class DateTime {
   static DAYS = dayjs.weekdaysMin();
   static MONTHS = dayjs.monthsShort();
   static TODAY = dayjs.utc();
+  private static instance: Readonly<DateTime>;
+
+  private constructor() {}
+
+  public static getInstance(): Readonly<DateTime> {
+    return DateTime.instance || Object.freeze(new DateTime());
+  }
 
   private uuid() {
     return uuid();
@@ -105,4 +112,4 @@ export class DateTime {
   }
 }
 
-export const datetime = new DateTime();
+export const datetime = DateTime.getInstance();

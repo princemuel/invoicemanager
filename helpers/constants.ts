@@ -4,7 +4,7 @@ export const constants = {
   ONE_DAY: 24 * 3600 * 1000,
 
   DEFAULT_TITLE_META_TAG: 'Invoice Mail Web',
-  DEFAULT_SITE_LOGO: '/assets/logo.svg',
+  DEFAULT_SITE_LOGO: '/logo.svg',
   DEFAULT_DESC_META_TAG: '',
   RENDER_TITLE_META_TAG: (text?: string) =>
     text
