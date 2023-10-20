@@ -28,7 +28,7 @@ const Inner = React.forwardRef<HTMLDivElement, Props>(
       >
         <div
           className={cn(
-            'mx-auto max-w-screen-md 2xl:max-w-screen-lg',
+            'mx-auto max-w-screen-md 3xl:max-w-screen-lg',
             className
           )}
         >

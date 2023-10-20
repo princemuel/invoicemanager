@@ -192,6 +192,7 @@ const button = cva(
         paid: 'bg-accent-500/[0.06] text-accent-500',
       },
       size: {
+        xs: 'text-400 leading-200 -tracking-200',
         sm: 'text-400 leading-200 -tracking-200',
       },
       rounded: {
@@ -211,18 +212,30 @@ const button = cva(
       },
     },
     compoundVariants: [
-      {
-        size: ['sm'],
-        _content: ['text', 'textAndIcon'],
-        className:
-          'gap-x-1 w-20 h-11 px-2 sm:w-36 sm:gap-x-2 sm:h-12 font-bold',
-      },
+      //TODO: refactor this
       {
         variant: ['primary', 'secondary', 'soft', 'destructive'],
         rounded: 'normal',
-        className: 'rounded-pill',
+        className: 'rounded-pill justify-center',
       },
       { variant: ['default'], rounded: 'normal', className: 'rounded-md' },
+      {
+        size: ['sm'],
+        _content: ['text', 'textAndIcon'],
+        className: 'font-bold h-12 gap-x-2',
+      },
+      {
+        variant: ['soft', 'destructive', 'secondary'],
+        size: ['sm'],
+        _content: 'text',
+        className: 'px-4',
+      },
+      {
+        variant: ['primary'],
+        size: ['sm'],
+        // gap-x-1 w-20 h-11 px-2 sm:w-36 sm:gap-x-2 sm:h-12
+        className: 'px-2 sm:px-4',
+      },
       {
         status: ['draft', 'pending', 'paid'],
         className: 'capitalize !w-[6.5rem] !h-10 !py-3 !px-4 justify-around',

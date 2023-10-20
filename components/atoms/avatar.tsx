@@ -1,9 +1,9 @@
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import { getAuthSession } from '@/app/lib';
 import { NextImage } from './next-image';
 
 export async function Avatar() {
-  const { getUser } = getKindeServerSession();
-  const user = getUser();
+  const [_, user] = getAuthSession();
+
   return (
     <NextImage
       src={user?.picture || '/placeholder.jpg'}
