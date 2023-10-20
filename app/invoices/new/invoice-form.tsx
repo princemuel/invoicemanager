@@ -14,25 +14,22 @@ import { useApiState, useZodForm, type RHFormSubmitHandler } from '@/hooks';
 // import { Controller } from 'react-hook-form';
 import NextLink from 'next/link';
 import { schema } from './common';
+import { icons } from '@/common';
 import InvoiceItemsDesktop from './invoice.items.desktop';
 import InvoiceItemsMobile from './invoice.items.mobile';
-
-const initialState = {
-  type: null,
-  message: null,
-};
+import { calculateTotal, endsWith, cn, approximate } from '@/helpers';
 
 interface Props {
   className?: string;
 }
 
 export default function InvoiceForm({ className }: Props) {
-  const { startTransition } = useApiState();
-
   const methods = useZodForm({
     schema: schema,
     mode: 'onChange',
   });
+
+  const { startTransition } = useApiState();
 
   const {
     handleSubmit,
@@ -44,6 +41,8 @@ export default function InvoiceForm({ className }: Props) {
     getValues,
     formState: { errors },
   } = methods;
+
+  register('status');
 
   const onSubmit: RHFormSubmitHandler<typeof schema> = async (data) => {
     console.log(data);
@@ -58,13 +57,11 @@ export default function InvoiceForm({ className }: Props) {
     //  reset()
   };
 
-  register('status');
-
   return (
     <Form
       methods={methods}
       onSubmit={handleSubmit(onSubmit)}
-      className='flex flex-col gap-8'
+      className={cn('flex flex-col gap-8', className)}
     >
       <header>
         <Container>
@@ -463,18 +460,17 @@ export default function InvoiceForm({ className }: Props) {
           <fieldset className='> * + * space-y-5'>
             <Text
               as='legend'
-              variant='brand'
               weight='bold'
-              className='col-span-6'
+              className='col-span-6 text-[1.125rem] leading-8 -tracking-[0.32px] text-[#777F98]'
             >
               Item List
             </Text>
-          </fieldset>
 
-          <div className=''>
-            <InvoiceItemsMobile className='block sm:hidden' />
-            <InvoiceItemsDesktop className='hidden sm:block' />
-          </div>
+            <>
+              <InvoiceItemsMobile className='flex sm:hidden' />
+              <InvoiceItemsDesktop className='hidden sm:flex' />
+            </>
+          </fieldset>
         </Container>
 
         {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}

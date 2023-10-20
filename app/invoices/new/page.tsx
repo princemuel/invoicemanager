@@ -1,8 +1,8 @@
 import { getAuthSession } from '@/app/lib';
-import { icons } from '@/common';
-import { Button, Container } from '@/components';
+import { Text, Container, Button } from '@/components';
 import NextLink from 'next/link';
 import InvoiceForm from './invoice-form';
+import { icons } from '@/common';
 
 type Props = {};
 
@@ -18,7 +18,7 @@ export default function PageRoute() {
       <Container>
         {/* TODO: refactor this later */}
         <Button className='h-auto w-auto gap-x-3' asChild>
-          <NextLink href={'/invoices'}>
+          <NextLink href='/invoices'>
             <span>
               <icons.chevron.left />
             </span>
@@ -27,7 +27,7 @@ export default function PageRoute() {
         </Button>
       </Container>
 
-      <InvoiceForm className='mt-6 lg:mt-8' />
+      <InvoiceForm className='mt-12 lg:mt-8' />
     </main>
   );
 }
