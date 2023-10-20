@@ -1,18 +1,18 @@
 import type { Metadata } from 'next';
 import { getBaseUrl } from './baseurl';
 
-type MetaFunction = (data?: Metadata) => Metadata;
+type MetaFunction = (input?: Metadata) => Metadata;
 
 export const defineMeta: MetaFunction = (metadata) => {
-  const title: Metadata['title'] = 'Invoice Tracker - The...';
-  const description: Metadata['description'] = '';
+  const defaultTitle: Metadata['title'] = 'Invoice Tracker - The...';
+  const defaultDescription: Metadata['description'] = '';
 
   return {
     title: {
-      default: title,
+      default: defaultTitle,
       template: '%s - Invoice Tracker',
     },
-    description,
+    description: defaultDescription,
 
     metadataBase: new URL('/', getBaseUrl()),
     generator: 'Next.js',
@@ -26,7 +26,7 @@ export const defineMeta: MetaFunction = (metadata) => {
       'invoice',
       'invoice manager',
       'e-commerce',
-      title,
+      defaultTitle,
     ],
 
     creator: 'Prince Muel',
@@ -86,11 +86,11 @@ export const defineMeta: MetaFunction = (metadata) => {
 
     openGraph: {
       type: 'website',
-      title,
-      description,
+      title: defaultTitle,
+      description: defaultDescription,
       url: '/',
       locale: 'en_US',
-      siteName: title,
+      siteName: defaultTitle,
       // images: images.map((image) => ({
       //   url: image.url,
       //   alt: image.alt,
@@ -101,8 +101,8 @@ export const defineMeta: MetaFunction = (metadata) => {
     },
 
     twitter: {
-      title,
-      description,
+      title: defaultTitle,
+      description: defaultDescription,
       card: 'summary_large_image',
       site: '@iamprincemuel',
       creator: '@iamprincemuel',

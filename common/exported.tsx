@@ -10,10 +10,10 @@ import {
   LogoSVG,
 } from './assets';
 
-type IconObject = 'arrow' | 'actions' | 'app' | 'form';
+type IconObject = 'chevron' | 'actions' | 'app' | 'form';
 
 export const icons = {
-  arrow: {
+  chevron: {
     right: (props) => <IconArrowRightSVG {...props} />,
     left: (props) => <IconArrowLeftSVG {...props} />,
     down: (props) => <IconArrowDownSVG {...props} />,

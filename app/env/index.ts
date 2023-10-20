@@ -7,12 +7,34 @@ declare global {
 }
 
 const envVariables = z.object({
-  MONGODB_URI: z.string(),
-  GITHUB_ID: z.string(),
-  GITHUB_SECRET: z.string(),
-  GOOGLE_ID: z.string(),
-  GOOGLE_SECRET: z.string(),
-  NEXTAUTH_SECRET: z.string(),
+  KINDE_CLIENT_ID: z.string(),
+  KINDE_CLIENT_SECRET: z.string(),
+  KINDE_ISSUER_URL: z.string(),
+
+  KINDE_SITE_URL: z.string(),
+  KINDE_POST_LOGOUT_REDIRECT_URL: z.string(),
+  KINDE_POST_LOGIN_REDIRECT_URL: z.string(),
+
+  DATABASE_URL: z.string(),
+  NEXT_PUBLIC_SITE_URL: z.string(),
 });
 
-export const environment = envVariables.parse(process.env);
+try {
+  const result = envVariables.safeParse(process.env);
+  if (!result.success) {
+    const { fieldErrors } = result.error.flatten();
+
+    const message = Object.entries(fieldErrors)
+      .map(([field, errors]) =>
+        errors ? `${field}: ${errors.join(', ')}` : field
+      )
+      .join('\n ');
+    throw new ReferenceError(`Missing environment variables:\n${message}`);
+  }
+} catch (exception) {
+  if (exception instanceof ReferenceError) {
+    console.error('REFERENCE_ERROR', exception);
+  }
+  console.error('UNKNOWN_ERROR', exception);
+  process.exit(1);
+}

@@ -9,13 +9,13 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const db =
   globalThis?.prisma ||
   new PrismaClient({
-    log:
-      process.env.NODE_ENV === 'production'
-        ? ['error']
-        : ['query', 'error', 'warn'],
+    errorFormat: isProd ? 'minimal' : 'pretty',
+    log: isProd ? ['error'] : ['query', 'error', 'warn'],
   });
 
 if (process.env.NODE_ENV !== 'production') globalThis.prisma = db;

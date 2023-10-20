@@ -2,13 +2,14 @@
   "editor.tabSize": 2,
 
   "editor.inlineSuggest.enabled": true,
-  "editor.wordWrapColumn": 120,
+  "editor.wordWrapColumn": 100,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": true,
     "source.addMissingImports": true,
-    "source.fixAll": true,
-    "source.fixAll.eslint": false
+    "source.organizeImports": "never",
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": true
   },
+
   "eslint.codeAction.showDocumentation": {
     "enable": true
   },

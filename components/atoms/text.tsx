@@ -52,10 +52,11 @@ const text = cva('', {
       'dark/50': 'text-black/50',
     },
     size: {
-      xl: 'text-900 leading-700 -tracking-500',
-      lg: 'text-700 leading-400 -tracking-300',
-      md: 'text-600 leading-500 -tracking-400',
-      sm: 'text-400 leading-200 -tracking-200',
+      xl: 'text-900 leading-800 -tracking-500',
+      lg: 'text-700 leading-500 -tracking-300',
+      md: 'text-600 leading-600 -tracking-400',
+      sm: 'text-500 leading-400 -tracking-600',
+      base: 'text-400 leading-200 -tracking-200',
       xs: 'text-300 leading-300 -tracking-300',
     },
     //////////// leaving this in case I need it later
@@ -69,17 +70,25 @@ const text = cva('', {
     uppercase: {
       true: 'uppercase',
     },
+    disabled: {
+      true: '',
+    },
   },
   compoundVariants: [
-    { size: ['md', 'lg', 'xl'], className: 'font-bold' },
+    { size: ['sm', 'md', 'lg', 'xl'], className: 'font-bold' },
     {
       variant: ['primary', 'secondary', 'accent'],
       className: 'dark:text-brand-100',
     },
+    {
+      variant: ['default', 'primary', 'secondary', 'accent'],
+      disabled: true,
+      className: '!text-brand-500/20',
+    },
   ],
   defaultVariants: {
     variant: 'default',
-    size: 'sm',
+    size: 'base',
     weight: 'medium',
   },
 });
