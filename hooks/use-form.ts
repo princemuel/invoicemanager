@@ -38,7 +38,7 @@ export function useZodForm<T extends z.ZodType<any, any, any>>(
   });
 }
 
-export function useFormState<State extends Record<string, unknown>>(
+export function useFormStat<State extends Record<string, unknown>>(
   initialState: State
 ) {
   const [values, setValues] = React.useState(() => initialState);
