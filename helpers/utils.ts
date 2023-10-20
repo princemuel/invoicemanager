@@ -169,7 +169,7 @@ export function hasValues<T>(
 }
 
 export function buildInvoiceMsg(message: string) {
-  return function <T>(data: T[]) {
+  return function (data: any[]) {
     const itemCount = data?.length || 0;
     const verb = itemCount === 1 ? 'is' : 'are';
 
