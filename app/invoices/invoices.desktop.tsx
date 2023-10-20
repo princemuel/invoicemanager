@@ -1,19 +1,19 @@
 import { icons } from '@/common';
 import { Button, Container, NextImage, StatusButton, Text } from '@/components';
 import {
+  buildInvoiceMsg,
   cn,
-  createInvoiceMessageBuilder,
   datetime,
   formatAmount,
   hasValues,
 } from '@/helpers';
-import invoices from '@/public/data.json';
+import invoices from '@/public/data.local.json';
 import NextLink from 'next/link';
 
 interface Props {
   className?: string;
 }
-const generateMessage = createInvoiceMessageBuilder(
+const generateMessage = buildInvoiceMsg(
   'There {{ verb }} {{ count }} total invoice(s)'
 );
 
@@ -105,7 +105,7 @@ export function InvoicesTemplateDesktop({ className }: Props) {
                       />
 
                       <div className=''>
-                        <icons.arrow.right />
+                        <icons.chevron.right />
                       </div>
                     </NextLink>
                   </li>

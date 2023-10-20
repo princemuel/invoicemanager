@@ -11,8 +11,9 @@ export default async function PageRoute() {
   const invoices = Promise.resolve([] as InvoiceTypeSafe[]);
 
   return (
-    <main aria-labelledby='heading' className='w-full'>
+    <main aria-labelledby='heading-desktop heading-mobile' className='w-full'>
       <div className='mt-12' />
+
       <InvoicesProvider promise={invoices}>
         <InvoicesTemplateMobile className='flex flex-col gap-12 sm:hidden' />
         <InvoicesTemplateDesktop className='hidden flex-col gap-12 sm:flex' />

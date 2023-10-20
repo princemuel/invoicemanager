@@ -1,20 +1,20 @@
 import { icons } from '@/common';
 import { Button, Container, NextImage, StatusButton, Text } from '@/components';
 import {
+  buildInvoiceMsg,
   cn,
-  createInvoiceMessageBuilder,
   datetime,
   formatAmount,
   hasValues,
 } from '@/helpers';
-import invoices from '@/public/data.json';
+import invoices from '@/public/data.local.json';
 import NextLink from 'next/link';
 
 interface Props {
   className?: string;
 }
 
-const generateMessage = createInvoiceMessageBuilder('{{ count }} invoice(s)');
+const generateMessage = buildInvoiceMsg('{{ count }} invoice(s)');
 
 export function InvoicesTemplateMobile({ className }: Props) {
   return (
@@ -39,7 +39,7 @@ export function InvoicesTemplateMobile({ className }: Props) {
               <div className='flex items-center gap-6'>
                 <Text>HI</Text>
 
-                <Button variant='primary' asChild>
+                <Button variant='primary' className='px-2 ' asChild>
                   <NextLink href='/invoices/new'>
                     <span className='grid aspect-square place-content-center rounded-full bg-white p-2'>
                       <icons.actions.add />
@@ -129,7 +129,6 @@ export function InvoicesTemplateMobile({ className }: Props) {
                       <Text
                         as='p'
                         variant='secondary'
-                        size='sm'
                         className='max-w-[22rem]'
                       >
                         Create an invoice by clicking the{' '}
