@@ -14,34 +14,39 @@ interface Props {
 }
 const invoice = invoices[1];
 
-export function InvoiceTemplateMobile({ className }: Props) {
+export function InvoiceTemplateDesktop({ className }: Props) {
   return (
     <>
       <section className={cn('', className)}>
         <header>
           <Container>
-            <div className='flex items-center justify-between rounded-lg bg-white px-6 py-5 shadow-100 dark:bg-brand-700'>
+            <div className='flex items-center gap-5 rounded-lg bg-white px-8 py-5 shadow-100 dark:bg-brand-700'>
               <Text as='p' variant='accent'>
                 Status
               </Text>
-
               {/* @ts-expect-error */}
               <StatusButton status={invoice?.status} />
+
+              <div className='ml-auto flex items-center justify-between gap-2'>
+                <Button variant='soft'>Edit</Button>
+                <Button variant='destructive'>Delete</Button>
+                <Button variant='primary'>Mark as Paid</Button>
+              </div>
             </div>
           </Container>
         </header>
 
-        <article className='pb-14'>
+        <article className='pb-20'>
           <Container>
-            <div className='flex flex-col gap-12 rounded-lg bg-white px-6 py-8 shadow-100 dark:bg-brand-700'>
-              <div className='flex flex-col justify-between gap-7 sx:flex-row'>
+            <div className='flex flex-col gap-12 rounded-lg bg-white px-8 py-8 shadow-100 dark:bg-brand-700'>
+              <div className='flex justify-between gap-7'>
                 <div className='> * + * space-y-3'>
-                  <Text as='p' weight='bold' className='uppercase'>
+                  <Text as='p' weight='bold' className='text-base uppercase'>
                     <span className='text-brand-400'>#</span>
                     <span>{invoice.id}</span>
                   </Text>
 
-                  <Text as='h1' id='heading-mobile' variant='primary'>
+                  <Text as='h1' id='heading-desktop' variant='primary'>
                     {invoice.description}
                   </Text>
                 </div>
@@ -62,7 +67,8 @@ export function InvoiceTemplateMobile({ className }: Props) {
                 </address>
               </div>
 
-              <div className='flex justify-between gap-x-14 gap-y-10 max-md:flex-wrap'>
+              {/* gap-x-14 */}
+              <div className='flex justify-between gap-x-[clamp(3rem,10vw,5rem)] gap-y-10 max-md:flex-wrap'>
                 <div className='flex flex-initial flex-col gap-7'>
                   <div className='> * + * space-y-3'>
                     <Text as='p' variant='primary'>
@@ -130,61 +136,87 @@ export function InvoiceTemplateMobile({ className }: Props) {
                   </Text>
                 </div>
               </div>
+              <table className='grid grid-cols-1 overflow-clip rounded-lg bg-neutral-200 dark:bg-brand-600'>
+                <caption className='sr-only'>
+                  Items and Services Purchased
+                </caption>
 
-              <section className='overflow-clip rounded-lg bg-neutral-200 dark:bg-brand-600'>
-                <ul className='flex flex-col gap-6 p-6 '>
+                <thead className='px-8 py-5'>
+                  <tr className='grid grid-cols-4 justify-items-end'>
+                    <Text
+                      as='th'
+                      variant='primary'
+                      size='xs'
+                      className='justify-self-start'
+                    >
+                      Item Name
+                    </Text>
+                    <Text as='th' variant='primary' size='xs' className=''>
+                      QTY.
+                    </Text>
+                    <Text as='th' variant='primary' size='xs' className=''>
+                      Price
+                    </Text>
+                    <Text as='th' variant='primary' size='xs' className=''>
+                      Total
+                    </Text>
+                  </tr>
+                </thead>
+
+                <tbody className='flex flex-col gap-8 px-8 py-5'>
                   {/* {hasValues([]) ? ( */}
                   {hasValues(invoice?.items || []) ? (
                     invoice.items.map((item) => (
-                      <li key={item?.name + randomUUID()}>
-                        <article className='flex flex-col gap-2'>
-                          <header className='flex items-center justify-between'>
-                            <Text as='h4' weight='bold'>
-                              {item?.name}
-                            </Text>
+                      <tr
+                        key={item?.name + randomUUID()}
+                        className='grid grid-cols-4 justify-items-end gap-2'
+                      >
+                        <Text
+                          as='td'
+                          weight='bold'
+                          className='justify-self-start'
+                        >
+                          {item?.name}
+                        </Text>
 
-                            <Text as='output' weight='bold'>
-                              {formatAmount(item?.total)}
-                            </Text>
-                          </header>
+                        <Text as='td' weight='bold'>
+                          {item?.quantity}
+                        </Text>
 
-                          <div className=''>
-                            <Text as='p' variant='secondary' weight='bold'>
-                              {item?.quantity} x {formatAmount(item?.price)}
-                            </Text>
-                          </div>
-                        </article>
-                      </li>
+                        <Text as='td' variant='secondary' weight='bold'>
+                          {formatAmount(item?.price)}
+                        </Text>
+                        <Text as='td' variant='secondary' weight='bold'>
+                          {formatAmount(item?.total)}
+                        </Text>
+                      </tr>
                     ))
                   ) : (
-                    <li></li>
+                    <tr className='grid grid-cols-4 justify-items-end gap-2'>
+                      <Text as='td' weight='bold'>
+                        No items to show
+                      </Text>
+                    </tr>
                   )}
-                </ul>
+                </tbody>
 
-                <footer className='flex items-center justify-between bg-accent-300 p-6 dark:bg-brand-900'>
-                  <Text as='h4'>Grand Total</Text>
-
-                  <Text
-                    as='output'
-                    modifier='inverted'
-                    weight='bold'
-                    className='text-xl leading-8 -tracking-[0.42px]'
-                  >
-                    {formatAmount(calculateTotal(invoice.items, 'total'))}
-                  </Text>
-                </footer>
-              </section>
+                <tfoot className='bg-accent-300 px-8 py-5 dark:bg-brand-900'>
+                  <tr className='flex items-center justify-between'>
+                    <Text as='th'>Amount Due</Text>
+                    <Text
+                      as='td'
+                      modifier='inverted'
+                      weight='bold'
+                      className='text-2xl leading-8 -tracking-[0.5px]'
+                    >
+                      {formatAmount(calculateTotal(invoice.items, 'total'))}
+                    </Text>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
           </Container>
         </article>
-
-        <div className='sticky bottom-0 w-full bg-white p-6 shadow-100 dark:bg-brand-700'>
-          <div className='flex items-center justify-between gap-2'>
-            <Button variant='soft'>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
-            <Button variant='primary'>Mark as Paid</Button>
-          </div>
-        </div>
       </section>
     </>
   );
