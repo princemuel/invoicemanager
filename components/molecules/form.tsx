@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/helpers';
 import {
   FormProvider,
@@ -5,11 +7,9 @@ import {
   type UseFormReturn,
 } from 'react-hook-form';
 
-interface Props<T extends FieldValues> {
-  onSubmit: any;
+interface Props<T extends FieldValues>
+  extends React.HTMLAttributes<HTMLFormElement> {
   methods: UseFormReturn<T, any, undefined>;
-  children: React.ReactNode;
-  className?: string;
 }
 
 const Form = <T extends FieldValues>({
@@ -17,13 +17,11 @@ const Form = <T extends FieldValues>({
   onSubmit,
   className,
   methods,
+  ...restProps
 }: Props<T>) => {
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className={cn('flex w-full flex-col gap-6 p-8', className)}
-      >
+      <form {...restProps} className={cn('w-full', className)}>
         {children}
       </form>
     </FormProvider>
