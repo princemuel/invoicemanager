@@ -14,7 +14,6 @@ interface Props<T extends FieldValues>
 
 const Form = <T extends FieldValues>({
   children,
-  onSubmit,
   className,
   methods,
   ...restProps

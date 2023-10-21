@@ -11,7 +11,6 @@ import {
   TextField,
 } from '@/components';
 import { useApiState, useZodForm, type RHFormSubmitHandler } from '@/hooks';
-// import { Controller } from 'react-hook-form';
 import NextLink from 'next/link';
 import { schema } from './common';
 import { icons } from '@/common';
@@ -23,10 +22,13 @@ import {
   cn,
   approximate,
   pluralize,
+  DateTime,
 } from '@/helpers';
-import { Listbox, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Listbox, Transition, Menu } from '@headlessui/react';
+import { Fragment, useEffect, useCallback } from 'react';
 import { Controller } from 'react-hook-form';
+
+const terms = [1, 7, 14, 30];
 
 interface Props {
   className?: string;
@@ -35,6 +37,11 @@ interface Props {
 export default function InvoiceForm({ className }: Props) {
   const methods = useZodForm({
     schema: schema,
+    defaultValues: {
+      status: 'pending',
+      paymentTerms: 1,
+      issued: DateTime.TODAY.toISOString(),
+    },
     mode: 'onChange',
   });
 
@@ -51,7 +58,15 @@ export default function InvoiceForm({ className }: Props) {
     formState: { errors },
   } = methods;
 
-  register('status');
+  const statusValue = watch('status');
+  const issuedValue = watch('issued');
+  const paymentTermsValue = watch('paymentTerms');
+
+  useEffect(() => {
+    register('status');
+    register('issued');
+    register('paymentTerms');
+  }, [register]);
 
   const onSubmit: RHFormSubmitHandler<typeof schema> = async (data) => {
     console.log(data);
@@ -332,29 +347,53 @@ export default function InvoiceForm({ className }: Props) {
               Product Meta
             </Text>
 
-            <div className='grid grid-cols-6 gap-5'>
+            <div className='grid grid-cols-6 gap-6'>
               <FormControl className='relative col-span-6 sm:col-span-3'>
                 <FormLabel htmlFor='issued'>Invoice Date</FormLabel>
               </FormControl>
 
-              <Controller
-                name='paymentTerms'
+              {/* <Controller
+                name='issued'
                 control={control}
                 render={({ field }) => (
-                  <Listbox {...field}>
+                  <Menu as='div' {...field}>
                     <FormControl className='relative col-span-6 sm:col-span-3'>
-                      <Listbox.Label as={FormLabel}>
-                        Payment Terms
-                      </Listbox.Label>
+                      <Menu.Label as={FormLabel}>Payment Terms</Menu.Label>
 
-                      <div className='relative'>
-                        <Listbox.Button
-                          title='select a payment'
-                          as={Button}
-                          className='peer '
-                        >
+                      <Menu.Button as={Button}>
+                        <span className='block truncate'>
+                          {datetime.toDateString(selectedDate)}
+                        </span>
+
+                        <span className='pointer-events-none'>
+                          <icons.form.calendar
+                            xlinkTitle='select an invoice issue date'
+                            className=''
+                          />
+                        </span>
+                      </Menu.Button>
+                    </FormControl>
+                  </Menu>
+                )}
+              /> */}
+
+              <Listbox
+                value={paymentTermsValue}
+                onChange={(value) => setValue('paymentTerms', value)}
+              >
+                <FormControl className='relative col-span-6 flex-col sm:col-span-3'>
+                  <Listbox.Label as={FormLabel}>Payment Terms</Listbox.Label>
+
+                  <div className='relative z-[1] mt-1'>
+                    <Listbox.Button
+                      title='select a payment term'
+                      as={Button}
+                      className='peer inline-flex w-full items-center justify-between px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
+                    >
+                      {({ value }) => (
+                        <>
                           <span className='block truncate'>
-                            Net {pluralize('Day', 10)}
+                            Net {value} {pluralize('Day', value)}
                           </span>
 
                           <span className='pointer-events-none'>
@@ -363,35 +402,36 @@ export default function InvoiceForm({ className }: Props) {
                               className='transform-gpu ui-open:-rotate-180'
                             />
                           </span>
-                        </Listbox.Button>
+                        </>
+                      )}
+                    </Listbox.Button>
 
-                        <Transition
-                          as={Fragment}
-                          enter='transition-opacity ease-in-out duration-300'
-                          enterFrom='opacity-0'
-                          enterTo='opacity-100'
-                          leave='transition-opacity ease-in-out duration-300'
-                          leaveFrom='opacity-100'
-                          leaveTo='opacity-0'
-                        >
-                          <Listbox.Options>
-                            {[1, 2, 3].map((term) => (
-                              <Listbox.Option
-                                key={term.toString()}
-                                value={term}
-                              >
-                                <span className='block truncate'>
-                                  Net {term} {pluralize('Day', term)}
-                                </span>
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    </FormControl>
-                  </Listbox>
-                )}
-              />
+                    <Transition
+                      as={Fragment}
+                      enter='transition-opacity ease-in-out duration-300'
+                      enterFrom='opacity-0'
+                      enterTo='opacity-100'
+                      leave='transition-opacity ease-in-out duration-300'
+                      leaveFrom='opacity-100'
+                      leaveTo='opacity-0'
+                    >
+                      <Listbox.Options className='absolute z-20 mt-2 w-full divide-y divide-brand-100 rounded-lg bg-white shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300'>
+                        {terms.map((term) => (
+                          <Listbox.Option
+                            key={term.toString()}
+                            className='px-5 py-4 font-bold text-brand-900 ui-selected:text-brand-500 ui-active:text-brand-500 dark:text-brand-100 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500'
+                            value={term}
+                          >
+                            <span className='block truncate text-400 leading-200 -tracking-200'>
+                              Net {term} {pluralize('Day', term)}
+                            </span>
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </FormControl>
+              </Listbox>
 
               {/* data-invalid={Boolean(errors?.description)} */}
               <FormControl className='col-span-6'>
@@ -449,19 +489,17 @@ export default function InvoiceForm({ className }: Props) {
             </Button>
             <Button
               type='submit'
-              name='draft'
-              // onClick={() => void setValue('status', 'draft')}
               variant='secondary'
               className='ms-auto '
+              onClick={() => void setValue('status', 'draft')}
             >
               Save as draft
             </Button>
 
             <Button
-              name='pending'
               type='submit'
-              // onClick={() => void setValue('status', 'pending')}
               variant='primary'
+              onClick={() => void setValue('status', 'pending')}
             >
               Save & Send
             </Button>
