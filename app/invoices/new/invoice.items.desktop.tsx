@@ -1,5 +1,23 @@
-import { calculateTotal, endsWith, cn, approximate } from '@/helpers';
-import { useEffect, useCallback } from 'react';
+import {
+  Button,
+  Calendar,
+  Container,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Label,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  TextField,
+} from '@/components';
+import { approximate, calculateTotal, cn, endsWith } from '@/helpers';
+import { useCallback, useEffect } from 'react';
 import {
   get,
   useFieldArray,
@@ -7,18 +25,8 @@ import {
   type FieldPathValue,
   type UseFormReturn,
 } from 'react-hook-form';
-import { schema } from './common';
-import { icons } from '@/common';
-import {
-  Button,
-  Text,
-  FormHelperText,
-  FormLabel,
-  FormControl,
-  TextField,
-  IconButton,
-} from '@/components';
 import { v4 as uuid } from 'uuid';
+import { schema } from './common';
 
 type NewInvoiceFormType = UseFormReturn<typeof schema>;
 
@@ -110,60 +118,58 @@ export default function InvoiceItemsDesktop({ className }: Props) {
           const fieldErrors = errors?.items?.[index];
 
           return (
-            // items-end
             <li
               key={field.id}
               className='grid grid-cols-12 items-center gap-x-4'
             >
-              <FormControl
-                as='label'
-                className='col-span-5 data-[invalid="true"]:!text-accent-200 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.name)}
-              >
-                <TextField
-                  type='text'
-                  id={`items.${index}.name`}
-                  placeholder='Banner Design'
-                  {...register(`items.${index}.name`)}
-                  aria-invalid={Boolean(fieldErrors?.name)}
-                />
-              </FormControl>
+              <FormField
+                name={`items.${index}.name`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className='col-span-5'>
+                    <FormControl>
+                      <TextField
+                        type='text'
+                        placeholder='Banner Design'
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormControl
-                as='label'
-                className='col-span-2 data-[invalid="true"]:!text-accent-200 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.quantity)}
-              >
-                <TextField
-                  type='number'
-                  id={`items.${index}.quantity`}
-                  placeholder='1'
-                  {...register(`items.${index}.quantity`, {
-                    valueAsNumber: true,
-                  })}
-                  aria-invalid={Boolean(fieldErrors?.quantity)}
-                  step={1}
-                />
-              </FormControl>
+              <FormField
+                name={`items.${index}.quantity`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className='col-span-2'>
+                    <FormControl>
+                      <TextField
+                        type='number'
+                        placeholder='1'
+                        step={1}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormControl
-                as='label'
-                className='col-span-2 data-[invalid="true"]:!text-accent-200 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.price)}
-              >
-                <TextField
-                  type='number'
-                  id={`items.${index}.price`}
-                  placeholder='200.00'
-                  {...register(`items.${index}.price`, {
-                    valueAsNumber: true,
-                  })}
-                  aria-invalid={Boolean(fieldErrors?.price)}
-                  step={0.01}
-                />
-              </FormControl>
+              <FormField
+                name={`items.${index}.price`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className='col-span-2'>
+                    <FormControl>
+                      <TextField
+                        type='number'
+                        placeholder='200.00'
+                        step={0.01}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormControl className='col-span-2 '>
+              <FormItem className='col-span-2'>
                 <Text
                   as='output'
                   htmlFor={`items.${index}.price items.${index}.quantity`}
@@ -174,9 +180,9 @@ export default function InvoiceItemsDesktop({ className }: Props) {
                 >
                   {watch(`items.${index}.total`)}
                 </Text>
-              </FormControl>
+              </FormItem>
 
-              <FormControl className='col-span-1 justify-self-center'>
+              <FormItem className='col-span-1 justify-self-center'>
                 <button
                   type='button'
                   className='inline-block h-5 w-4 bg-[url(/icon-delete.svg)] bg-cover bg-no-repeat hover:bg-[url(/icon-delete-red.svg)] focus:bg-[url(/icon-delete-red.svg)]'
@@ -184,7 +190,7 @@ export default function InvoiceItemsDesktop({ className }: Props) {
                 >
                   <span className='sr-only'>Delete Item</span>
                 </button>
-              </FormControl>
+              </FormItem>
             </li>
           );
         })}

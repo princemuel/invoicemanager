@@ -2,10 +2,13 @@
 
 import { checkEnv, cn } from '@/helpers';
 import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'cva';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef } from 'react';
 
-type ButtonVariants = Omit<RequiredVariantProps<typeof button>, '_content'>;
+type ButtonVariants = Omit<
+  RequiredVariantProps<typeof buttonVariants>,
+  '_content'
+>;
 type ButtonProps = Partial<ButtonVariants> &
   Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> & {
     asChild?: boolean;
@@ -41,7 +44,7 @@ export const Button = forwardRef(
         {...restProps}
         ref={forwardedRef}
         className={cn(
-          button({
+          buttonVariants({
             variant,
             modifier,
             size,
@@ -121,7 +124,7 @@ export const IconButton = forwardRef(
       <As
         {...restProps}
         className={cn(
-          button({
+          buttonVariants({
             variant,
             modifier,
             size,
@@ -163,7 +166,7 @@ export const IconButton = forwardRef(
 ) as ForwardRefComponent<'button', IconButtonProps>;
 IconButton.displayName = 'Button';
 
-const button = cva(
+export const buttonVariants = cva(
   [
     'relative group inline-flex items-center',
     'transition-colors duration-300 ease-in',
