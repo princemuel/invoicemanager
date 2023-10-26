@@ -1,12 +1,6 @@
 import { icons } from '@/common';
 import { Button, Container, NextImage, StatusButton, Text } from '@/components';
-import {
-  buildInvoiceMsg,
-  cn,
-  datetime,
-  formatAmount,
-  hasValues,
-} from '@/helpers';
+import { buildInvoiceMsg, cn, formatAmount, hasValues } from '@/helpers';
 import invoices from '@/public/data.local.json';
 import NextLink from 'next/link';
 
@@ -80,7 +74,7 @@ export function InvoicesTemplateMobile({ className }: Props) {
                         <time
                           dateTime={new Date(invoice?.paymentDue).toISOString()}
                         >
-                          {datetime.toDateString(invoice?.paymentDue)}
+                          {/* {DateTime.toDateString(invoice?.paymentDue)} */}
                         </time>
                       </Text>
 

@@ -1,5 +1,23 @@
-import { calculateTotal, endsWith, cn, approximate } from '@/helpers';
-import { useEffect, useCallback } from 'react';
+import {
+  Button,
+  Calendar,
+  Container,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Label,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+  TextField,
+} from '@/components';
+import { approximate, calculateTotal, cn, endsWith } from '@/helpers';
+import { useCallback, useEffect } from 'react';
 import {
   get,
   useFieldArray,
@@ -7,18 +25,8 @@ import {
   type FieldPathValue,
   type UseFormReturn,
 } from 'react-hook-form';
-import { schema } from './common';
-import { icons } from '@/common';
-import {
-  Button,
-  Text,
-  FormHelperText,
-  FormLabel,
-  FormControl,
-  TextField,
-  IconButton,
-} from '@/components';
 import { v4 as uuid } from 'uuid';
+import { schema } from './common';
 
 type NewInvoiceFormType = UseFormReturn<typeof schema>;
 
@@ -96,65 +104,64 @@ export default function InvoiceItemsMobile({ className }: Props) {
 
           return (
             <li key={field.id} className='grid grid-cols-8 gap-x-4 gap-y-6'>
-              <FormControl
-                className='col-span-8 text-brand-400 data-[invalid="true"]:!text-accent-200 dark:text-brand-100 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.name)}
-              >
-                <TextField
-                  type='text'
-                  id={`items.${index}.name`}
-                  placeholder='Email Design'
-                  {...register(`items.${index}.name`)}
-                  aria-invalid={Boolean(fieldErrors?.name)}
-                  aria-errormessage={`errors-items.${index}.name`}
-                />
+              <FormField
+                name={`items.${index}.name`}
+                render={({ field }) => (
+                  <FormItem className='col-span-8'>
+                    <div className='flex items-center justify-between'>
+                      <FormLabel>Item Name</FormLabel>
+                      <FormMessage />
+                    </div>
 
-                <div className='group flex items-center justify-between'>
-                  <FormLabel htmlFor={`items.${index}.name`}>
-                    Item Name
-                  </FormLabel>
+                    <FormControl>
+                      <TextField
+                        type='text'
+                        placeholder='Email Design'
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-                  <FormHelperText id={`errors-items.${index}.name`}>
-                    {fieldErrors?.name?.message}
-                  </FormHelperText>
-                </div>
-              </FormControl>
+              <FormField
+                name={`items.${index}.quantity`}
+                render={({ field }) => (
+                  <FormItem className='col-span-2'>
+                    <FormLabel>Qty.</FormLabel>
 
-              <FormControl
-                className='col-span-2 text-brand-400 data-[invalid="true"]:!text-accent-200 dark:text-brand-100 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.quantity)}
-              >
-                <TextField
-                  type='number'
-                  id={`items.${index}.quantity`}
-                  placeholder='1'
-                  {...register(`items.${index}.quantity`, {
-                    valueAsNumber: true,
-                  })}
-                  aria-invalid={Boolean(fieldErrors?.quantity)}
-                  step={1}
-                />
-                <FormLabel htmlFor={`items.${index}.quantity`}>Qty.</FormLabel>
-              </FormControl>
+                    <FormControl>
+                      <TextField
+                        type='number'
+                        placeholder='1'
+                        step={1}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormControl
-                className='col-span-3 text-brand-400 data-[invalid="true"]:!text-accent-200 dark:text-brand-100 dark:data-[invalid="true"]:!text-accent-200'
-                data-invalid={Boolean(fieldErrors?.price)}
-              >
-                <TextField
-                  type='number'
-                  id={`items.${index}.price`}
-                  placeholder='200.00'
-                  {...register(`items.${index}.price`, {
-                    valueAsNumber: true,
-                  })}
-                  aria-invalid={Boolean(fieldErrors?.price)}
-                  step={0.01}
-                />
-                <FormLabel htmlFor={`items.${index}.price`}>Price</FormLabel>
-              </FormControl>
+              <FormField
+                name={`items.${index}.price`}
+                render={({ field }) => (
+                  <FormItem className='col-span-3'>
+                    <FormLabel>Price</FormLabel>
 
-              <FormControl className='col-span-2 self-start'>
+                    <FormControl>
+                      <TextField
+                        type='number'
+                        placeholder='200.00'
+                        step={0.01}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormItem className='col-span-2 self-start'>
+                <FormLabel htmlFor={`items.${index}.total`}>Total</FormLabel>
                 <Text
                   as='output'
                   htmlFor={`items.${index}.price items.${index}.quantity`}
@@ -165,10 +172,9 @@ export default function InvoiceItemsMobile({ className }: Props) {
                 >
                   {watch(`items.${index}.total`)}
                 </Text>
-                <FormLabel htmlFor={`items.${index}.total`}>Total</FormLabel>
-              </FormControl>
+              </FormItem>
 
-              <FormControl className='col-span-1 mt-7 self-center justify-self-center'>
+              <FormItem className='col-span-1 mt-7 self-center justify-self-center'>
                 <button
                   type='button'
                   className='inline-block h-5 w-4 bg-[url(/icon-delete.svg)] bg-cover bg-no-repeat hover:bg-[url(/icon-delete-red.svg)] focus:bg-[url(/icon-delete-red.svg)]'
@@ -176,11 +182,12 @@ export default function InvoiceItemsMobile({ className }: Props) {
                 >
                   <span className='sr-only'>Delete Item</span>
                 </button>
-              </FormControl>
+              </FormItem>
             </li>
           );
         })}
       </ul>
+
       <div>
         <Button
           type='button'

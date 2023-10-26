@@ -15,4 +15,4 @@ export const EmailContraint = z
   .toLowerCase()
   .trim();
 
-// const HasIDSchema = z.object({ id: z.number().int().positive() });
+// const HasIDSchema = z.object({ id: z.coerce.number().int().positive() });
