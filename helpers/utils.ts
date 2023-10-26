@@ -1,4 +1,4 @@
-import { cx, type CxOptions as ClassArgs } from 'cva';
+import { cx, type CxOptions as ClassArgs } from 'class-variance-authority';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 const customTwMerge = extendTailwindMerge({
