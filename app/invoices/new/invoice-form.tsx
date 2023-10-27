@@ -389,13 +389,14 @@ export default function InvoiceForm({ className }: Props) {
                           </FormControl>
                         </PopoverTrigger>
 
-                        <PopoverContent className='w-auto p-0' align='start'>
+                        <PopoverContent className='mt-2' align='start'>
                           <Calendar
                             mode='single'
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date('1900-01-01')
+                            disabled={
+                              (date) => date < new Date()
+                              // date < new Date() || date < new Date('1900-01-01')
                             }
                             initialFocus
                           />
@@ -405,62 +406,63 @@ export default function InvoiceForm({ className }: Props) {
                   )}
                 />
 
-                <Listbox
-                  value={paymentTermsValue}
-                  onChange={(value) => setValue('paymentTerms', value)}
+                <FormField
                   name='paymentTerms'
-                >
-                  <FormItem className='relative col-span-6 flex-col sm:col-span-3'>
-                    <Listbox.Label as={Label}>Payment Terms</Listbox.Label>
+                  render={({ field }) => (
+                    <Listbox {...field}>
+                      <FormItem className='relative col-span-6 flex-col sm:col-span-3'>
+                        <Listbox.Label as={Label}>Payment Terms</Listbox.Label>
 
-                    <div className='relative z-[1] mt-1'>
-                      <Listbox.Button
-                        title='select a payment term'
-                        as={Button}
-                        className='peer inline-flex w-full items-center justify-between px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
-                      >
-                        {({ value }) => (
-                          <>
-                            <span className='block truncate'>
-                              Net {value} {pluralize('Day', value)}
-                            </span>
+                        <div className='relative z-[1] mt-1'>
+                          <Listbox.Button
+                            title='select a payment term'
+                            as={Button}
+                            className='peer inline-flex w-full items-center justify-between px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
+                          >
+                            {({ value }) => (
+                              <>
+                                <span className='block truncate'>
+                                  Net {value} {pluralize('Day', value)}
+                                </span>
 
-                            <span className='pointer-events-none'>
-                              <icons.chevron.down
-                                aria-hidden
-                                className='transform-gpu transition-transform ui-open:-rotate-180'
-                              />
-                            </span>
-                          </>
-                        )}
-                      </Listbox.Button>
+                                <span className='pointer-events-none'>
+                                  <icons.chevron.down
+                                    aria-hidden
+                                    className='transform-gpu transition-transform ui-open:-rotate-180'
+                                  />
+                                </span>
+                              </>
+                            )}
+                          </Listbox.Button>
 
-                      <Transition
-                        as={Fragment}
-                        enter='transition-opacity ease-in-out duration-300'
-                        enterFrom='opacity-0'
-                        enterTo='opacity-100'
-                        leave='transition-opacity ease-in-out duration-300'
-                        leaveFrom='opacity-100'
-                        leaveTo='opacity-0'
-                      >
-                        <Listbox.Options className='absolute z-20 mt-2 w-full divide-y divide-brand-100 rounded-lg bg-white shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300'>
-                          {terms.map((term) => (
-                            <Listbox.Option
-                              key={term.toString()}
-                              className='px-5 py-4 font-bold text-brand-900 ui-selected:text-brand-500 ui-active:text-brand-500 dark:text-brand-100 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500'
-                              value={term}
-                            >
-                              <span className='block truncate text-400 leading-200 -tracking-200'>
-                                Net {term} {pluralize('Day', term)}
-                              </span>
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Transition>
-                    </div>
-                  </FormItem>
-                </Listbox>
+                          <Transition
+                            as={Fragment}
+                            enter='transition-opacity ease-in-out duration-300'
+                            enterFrom='opacity-0'
+                            enterTo='opacity-100'
+                            leave='transition-opacity ease-in-out duration-300'
+                            leaveFrom='opacity-100'
+                            leaveTo='opacity-0'
+                          >
+                            <Listbox.Options className='absolute z-20 mt-2 w-full divide-y divide-brand-100 rounded-lg bg-white shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300'>
+                              {terms.map((term) => (
+                                <Listbox.Option
+                                  key={term.toString()}
+                                  className='px-5 py-4 font-bold text-brand-900 ui-selected:text-brand-500 ui-active:text-brand-500 dark:text-brand-100 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500'
+                                  value={term}
+                                >
+                                  <span className='block truncate text-400 leading-200 -tracking-200'>
+                                    Net {term} {pluralize('Day', term)}
+                                  </span>
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      </FormItem>
+                    </Listbox>
+                  )}
+                />
 
                 <FormField
                   name='description'
