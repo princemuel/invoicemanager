@@ -1,11 +1,8 @@
 import { getErrorMessage, objectKeys } from '@/helpers';
-import {
-  getKindeServerSession,
-  type KindeUser,
-} from '@kinde-oss/kinde-auth-nextjs/server';
+import { getKindeServerSession, type KindeUser } from '@kinde-oss/kinde-auth-nextjs/server';
 import { cache } from 'react';
 // import 'server-only';
-import db from './_db';
+import db from '../_db';
 
 export async function createAuthUser(client: KindeUser): Promise<AuthUser> {
   let user = await db.user.findUnique({
@@ -71,24 +68,22 @@ export const preloadInvoices = (userId: string) => {
   void fetchAllInvoices(userId);
 };
 
-export const fetchAllInvoices = cache(
-  async (userId: string): Promise<InvoiceTypeSafe[]> => {
-    try {
-      const data = await db.invoice.findMany({
-        where: {
-          userId: userId,
-        },
-      });
+export const fetchAllInvoices = cache(async (userId: string): Promise<InvoiceTypeSafe[]> => {
+  try {
+    const data = await db.invoice.findMany({
+      where: {
+        userId: userId,
+      },
+    });
 
-      return (data || []).map((invoice) => {
-        return {
-          ...invoice,
-          createdAt: invoice.createdAt.toISOString(),
-          updatedAt: invoice.updatedAt.toISOString(),
-        };
-      });
-    } catch (error) {
-      throw new Error(getErrorMessage(error));
-    }
+    return (data || []).map((invoice) => {
+      return {
+        ...invoice,
+        createdAt: invoice.createdAt.toISOString(),
+        updatedAt: invoice.updatedAt.toISOString(),
+      };
+    });
+  } catch (error) {
+    throw new Error(getErrorMessage(error));
   }
-);
+});
