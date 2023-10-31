@@ -78,9 +78,9 @@ const FormItem = React.forwardRef(
     return (
       <FormItemContext.Provider value={{ id }}>
         <As
-          ref={forwardedRef}
           className={cn('group flex flex-col gap-3', className)}
           {...restProps}
+          ref={forwardedRef}
         />
       </FormItemContext.Provider>
     );
@@ -97,7 +97,6 @@ const FormControl = React.forwardRef<
 
   return (
     <Slot
-      ref={forwardedRef}
       id={formItemId}
       aria-describedby={
         !error
@@ -107,6 +106,7 @@ const FormControl = React.forwardRef<
       aria-errormessage={formMessageId}
       aria-invalid={Boolean(error)}
       {...restProps}
+      ref={forwardedRef}
     />
   );
 });
@@ -115,12 +115,12 @@ FormControl.displayName = 'FormControl';
 export const TextField = React.forwardRef(
   ({ className, ...restProps }, forwardedRef) => (
     <input
-      ref={forwardedRef}
       className={cn(
         'peer w-full rounded border border-brand-100 bg-transparent px-5 py-4 text-400 font-bold leading-200 -tracking-200 text-brand-900 caret-brand-500 outline-none transition-colors autofill:bg-white aria-[invalid="true"]:!border-accent-200 aria-[invalid="true"]:!text-accent-200 hover:border-brand-500 focus:border-brand-500 focus:aria-[invalid="true"]:!border-accent-200 focus:aria-[invalid="true"]:!ring-accent-200 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:autofill:bg-brand-700 dark:hover:border-brand-500 dark:focus:border-brand-500',
         className
       )}
       {...restProps}
+      ref={forwardedRef}
     />
   )
 ) as ForwardRefComponent<'input', {}>;
@@ -134,10 +134,10 @@ const FormLabel = React.forwardRef<
 
   return (
     <Label
-      ref={forwardedRef}
       className={cn(error && 'text-accent-200 dark:text-accent-200', className)}
       htmlFor={formItemId}
       {...restProps}
+      ref={forwardedRef}
     />
   );
 });
@@ -155,13 +155,13 @@ const FormMessage = React.forwardRef<
   return (
     <p
       role='alert'
-      ref={forwardedRef}
       id={formMessageId}
       className={cn(
         'text-400 font-medium leading-200 -tracking-200 text-accent-200',
         className
       )}
       {...restProps}
+      ref={forwardedRef}
     >
       {body}
     </p>
@@ -177,10 +177,10 @@ const FormDescription = React.forwardRef<
 
   return (
     <p
-      ref={forwardedRef}
       id={formDescriptionId}
       className={cn('text-xs', className)}
       {...restProps}
+      ref={forwardedRef}
     />
   );
 });

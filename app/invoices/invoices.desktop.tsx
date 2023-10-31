@@ -54,7 +54,6 @@ export function InvoicesTemplateDesktop({ className }: Props) {
                 invoices.map((invoice) => (
                   <li
                     key={invoice.id}
-                    //ease-&lsqb;cubic-bezier(0.25,0.1,0.25,1.0)&rsqb
                     className='rounded-lg bg-white p-4 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700'
                   >
                     <NextLink

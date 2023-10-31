@@ -2,10 +2,14 @@ import { cx, type CxOptions as ClassArgs } from 'class-variance-authority';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 const customTwMerge = extendTailwindMerge({
-  classGroups: {
-    'font-size': [
-      { text: ['100', '200', '300', '400', '500', '600', '700', '800', '900'] },
-    ],
+  extend: {
+    classGroups: {
+      'font-size': [
+        {
+          text: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+        },
+      ],
+    },
   },
 });
 
@@ -19,17 +23,12 @@ export function cn(...args: ClassArgs) {
  */
 
 export function capitalize(string = '') {
-  return (
-    string?.[0]?.toLocaleUpperCase() + string?.slice(1).toLocaleLowerCase()
-  );
-}
-export function trim(string = '') {
-  return string?.trim();
+  return string[0].toLocaleUpperCase() + string.slice(1).toLocaleLowerCase();
 }
 
-export function omitFirstChar(string = '') {
-  return string?.slice(1);
-}
+export const trim = (string = '') => string.trim();
+export const omitFirstChar = (string = '') => string.slice(1);
+
 export function pluralize(word: string, value: number) {
   return value === 1 ? `${word}` : `${word}s`;
 }
@@ -134,6 +133,11 @@ export const formatDate: FormatDateFunction = (
 
 export function getMonth(string: string) {
   return string?.split(/(?<=^\S+)\s/)[1];
+}
+
+export function monthsAgo(datetime: Date, value = 0) {
+  datetime.setMonth(datetime.getMonth() - value);
+  return datetime;
 }
 
 /*---------------------------------*

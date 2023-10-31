@@ -5,8 +5,8 @@ import { StringContraint } from './constraints';
 export const BaseUserSchema = z.object({
   id: z.string(),
   kindeId: z.string(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
 
   email: z.string().toLowerCase().trim().nullable(),
   firstName: z.string().trim().nullable(),
@@ -15,9 +15,8 @@ export const BaseUserSchema = z.object({
 });
 
 export const BaseInvoiceSchema = z.object({
-  issued: z.coerce.date(),
-  paymentDue: z.coerce.date().optional(),
-  paymentTerms: z.coerce.number().nonnegative().int().optional(),
+  paymentDue: z.string().datetime(),
+  paymentTerms: z.coerce.number().int().nonnegative().optional(),
   status: z.string().optional(),
   slug: z.string().optional(),
   total: z.coerce.number().nonnegative().optional(),
@@ -44,3 +43,9 @@ export const ItemSchema = z.object({
   price: z.coerce.number().nonnegative().step(0.01),
   total: z.coerce.number().nonnegative().optional(),
 });
+
+export const ServerResultSchema = z.discriminatedUnion('status', [
+  z.object({ status: z.literal('success'), data: z.string() }),
+  z.object({ status: z.literal('error'), error: z.string() }),
+  // z.object({ status: z.literal("error"), error: z.instanceof(Error) }),
+]);

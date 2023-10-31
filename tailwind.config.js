@@ -86,28 +86,13 @@ module.exports = {
       },
 
       screens: {
-        sx: '36em', // @media (min-width: 576px) { ... },
+        xs: '36em', // @media (min-width: 576px) { ... },
         sm: '40em', // @media (min-width: 640px) { ... }
         md: '48em', // @media (min-width: 768px) { ... }
         lg: '64em', // @media (min-width: 1024px) { ... }
         xl: '80em', // @media (min-width: 1280px) { ... }
         '2xl': '96em', // @media (min-width: 1536px) { ... }
         '3xl': '112.5em', // @media (min-width: 1800px) { ... }
-      },
-
-      keyframes: {
-        'accordion-down': {
-          from: { height: 0 },
-          to: { height: 'var(--radix-accordion-content-height)' },
-        },
-        'accordion-up': {
-          from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
       },
 
       cursor: {
@@ -136,8 +121,7 @@ module.exports = {
         },
         '.grid-cols-auto': {
           '--min-col-size': '15rem',
-          gridTemplateColumns:
-            'repeat(auto-fit, minmax(min(var(--min-col-size), 100%), 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(var(--min-col-size), 100%), 1fr))',
         },
       });
     }),

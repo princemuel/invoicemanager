@@ -28,7 +28,7 @@ export function InvoiceTemplateMobile({ className }: Props) {
         <article className='pb-14'>
           <Container>
             <div className='flex flex-col gap-12 rounded-lg bg-white px-6 py-8 shadow-100 dark:bg-brand-700'>
-              <div className='flex flex-col justify-between gap-7 sx:flex-row'>
+              <div className='xs:flex-row flex flex-col justify-between gap-7'>
                 <div className='> * + * space-y-3'>
                   <Text as='p' weight='bold' className='uppercase'>
                     <span className='text-brand-400'>#</span>

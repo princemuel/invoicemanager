@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getBaseUrl } from './baseurl';
+import { resolveBaseURL } from './baseurl';
 
 type MetaFunction = (input?: Metadata) => Metadata;
 
@@ -14,7 +14,7 @@ export const defineMeta: MetaFunction = (metadata) => {
     },
     description: defaultDescription,
 
-    metadataBase: new URL('/', getBaseUrl()),
+    metadataBase: new URL('/', resolveBaseURL()),
     generator: 'Next.js',
     applicationName: 'Invoice Tracker',
     referrer: 'origin-when-cross-origin',
@@ -107,12 +107,6 @@ export const defineMeta: MetaFunction = (metadata) => {
       site: '@iamprincemuel',
       creator: '@iamprincemuel',
     },
-
-    colorScheme: 'dark light',
-    themeColor: [
-      { media: '(prefers-color-scheme: dark)', color: '#000112' },
-      { media: '(prefers-color-scheme: light)', color: '#635fc7' },
-    ],
 
     robots: {
       index: true,
