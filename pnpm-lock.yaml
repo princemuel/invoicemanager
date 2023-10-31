@@ -65,6 +65,9 @@ dependencies:
   eslint-config-next:
     specifier: 14.0.1
     version: 14.0.1(eslint@8.52.0)(typescript@5.2.2)
+  http-errors-enhanced:
+    specifier: ^1.1.2
+    version: 1.1.2
   immer:
     specifier: ^10.0.3
     version: 10.0.3
@@ -2631,13 +2634,6 @@ packages:
     resolution: {integrity: sha512-TlgT8JntpcbmKUFzjhsyhGfP2fsiz1Mv56im6enJ905xG1DAYesxJaeSbGqQmAw8OWPdhyJGhGSQGKRNJ45u9w==}
     dependencies:
       undici-types: 5.26.5
-    dev: false
-
-  /@types/node@20.8.9:
-    resolution: {integrity: sha512-UzykFsT3FhHb1h7yD4CA4YhBHq545JC0YnEz41xkipN88eKQtL6rSgocL5tbAP6Ola9Izm/Aw4Ora8He4x0BHg==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
 
   /@types/prop-types@15.7.9:
     resolution: {integrity: sha512-n1yyPsugYNSmHgxDFjicaI2+gCNjsBck8UX9kuofAKlc0h1bL+20oSF72KeNaW2DUlesbEVCFgyV2dPGTiY42g==}
@@ -4865,6 +4861,11 @@ packages:
     dependencies:
       function-bind: 1.1.2
 
+  /http-errors-enhanced@1.1.2:
+    resolution: {integrity: sha512-o0l6ku2KW2Bb8iFM9MwnWbtjm0sex5HXCMyJuv4G3pf0BNZBJ1jzSErwtYJs0qQttJE6pLkGBO2INP/iUOeBqw==}
+    engines: {node: '>= 18.18.0'}
+    dev: false
+
   /http-errors@1.4.0:
     resolution: {integrity: sha512-oLjPqve1tuOl5aRhv8GK5eHpqP1C9fb+Ol+XTLjKfLltE44zdDbEdjPSbU7Ch5rSNsVFqZn97SrMmZLdu1/YMw==}
     engines: {node: '>= 0.6'}
@@ -5150,7 +5151,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.8.9
+      '@types/node': 20.8.10
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true

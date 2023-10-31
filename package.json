@@ -35,6 +35,7 @@
     "date-fns": "^2.30.0",
     "eslint": "8.52.0",
     "eslint-config-next": "14.0.1",
+    "http-errors-enhanced": "^1.1.2",
     "immer": "^10.0.3",
     "next": "^14.0.1",
     "next-themes": "^0.2.1",
