@@ -25,4 +25,4 @@ const FontAccent_Prod = Rubik({
   display: 'swap',
 });
 
-export const fonts = cn(FontSans.variable, FontAccent_Prod.variable);
+export const fontVars = cn(FontSans.variable, FontAccent_Prod.variable);
