@@ -30,9 +30,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/**/*.d.ts",
-    "app/env/schema.mjs",
-    "app/env/server.mjs",
-    "app/env/client.mjs"
+    "app/_env/schema.mjs",
+    "app/_env/server.mjs",
+    "app/_env/client.mjs"
   ],
   "exclude": ["node_modules"]
 }

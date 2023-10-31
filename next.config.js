@@ -2,23 +2,29 @@
 const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: process.env.NODE_ENV === 'production',
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: true,
+  productionBrowserSourceMaps: true,
   experimental: {
     typedRoutes: true,
-    serverActions: true,
     webVitalsAttribution: ['CLS', 'LCP'],
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com'],
     formats: ['image/avif', 'image/webp'],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'avatars.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
       },
     ],
   },

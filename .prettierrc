@@ -4,7 +4,7 @@
   "htmlWhitespaceSensitivity": "css",
   "embeddedLanguageFormatting": "auto",
   "bracketSameLine": false,
-  "printWidth": 80,
+  "printWidth": 96,
   "quoteProps": "as-needed",
   "singleQuote": true,
   "trailingComma": "es5",
@@ -14,6 +14,6 @@
   "jsxSingleQuote": true,
   "useTabs": false,
   "tailwindConfig": "tailwind.config.js",
-  "tailwindFunctions": ["cx"],
+  "tailwindFunctions": ["cn", "cva"],
   "plugins": ["prettier-plugin-prisma", "prettier-plugin-tailwindcss"]
 }
