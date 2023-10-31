@@ -1,4 +1,4 @@
-import { getAuthSession } from '@/app/lib';
+import { getAuthSession } from '@/app/_data/lib';
 import { NextImage } from './next-image';
 
 export async function Avatar() {
