@@ -1,7 +1,7 @@
 'use client';
 
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { Toaster as ToastProvider } from 'react-hot-toast';
+import ToastManager from './toast-manager';
 import ModalManager from './modal-manager';
 
 const GlobalProviders = ({ children }: { children: React.ReactNode }) => {
@@ -13,8 +13,8 @@ const GlobalProviders = ({ children }: { children: React.ReactNode }) => {
       attribute='data-mode'
     >
       <ModalManager.Provider>
-        <ToastProvider />
         {children}
+        <ToastManager />
       </ModalManager.Provider>
     </NextThemesProvider>
   );
