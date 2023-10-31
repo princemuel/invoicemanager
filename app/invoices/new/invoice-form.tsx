@@ -3,11 +3,10 @@
 import { icons } from '@/common';
 import {
   Button,
-  Calendar,
   Container,
+  DatePicker,
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,7 +18,14 @@ import {
   Text,
   TextField,
 } from '@/components';
-import { cn, pluralize } from '@/helpers';
+import {
+  cn,
+  monthsAgo,
+  pluralize,
+  calculateTotal,
+  safeNum,
+  approximate,
+} from '@/helpers';
 import { useApiState, useZodForm, type RHFormSubmitHandler } from '@/hooks';
 import { Listbox, Transition } from '@headlessui/react';
 import { format } from 'date-fns';
@@ -28,8 +34,15 @@ import { Fragment, useEffect } from 'react';
 import { schema } from './common';
 import InvoiceItemsDesktop from './invoice.items.desktop';
 import InvoiceItemsMobile from './invoice.items.mobile';
+import { produce } from 'immer';
+import toast from 'react-hot-toast';
+import { z } from 'zod';
+import { ServerResultSchema } from '@/lib';
 
 const terms = [1, 7, 14, 30];
+
+// transform with zod
+// Hi there. Please I'm using react-day-picker with react-hook-form and zod. My input and output should be ISO string. React-Day-Picker accepts the input as new Date(ISO-string) but is always returning the output as a date object instead of ISO-string. Please any ideas on how I can setup my zod schema to integrate with react-day-picker and properly convert the output? Thanks
 
 interface Props {
   className?: string;
@@ -45,9 +58,8 @@ export default function InvoiceForm({ className }: Props) {
       senderAddress: { street: '', city: '', postCode: '', country: '' },
       description: '',
       items: [],
-
       issued: new Date(),
-      paymentDue: new Date(),
+      paymentDue: new Date().toISOString(),
       paymentTerms: 1,
       total: 0,
       status: 'pending',
@@ -55,44 +67,65 @@ export default function InvoiceForm({ className }: Props) {
     mode: 'onChange',
   });
 
-  const { startTransition } = useApiState();
+  const { router, isMutating, startTransition, setIsFetching } = useApiState();
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    watch,
-    control,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = form;
-
-  const statusValue = watch('status');
-  const paymentTermsValue = watch('paymentTerms');
+  const { handleSubmit, register, reset, setValue, formState } = form;
 
   useEffect(() => {
     register('status');
-    register('paymentTerms');
+    register('paymentDue');
   }, [register]);
 
-  const onSubmit: RHFormSubmitHandler<typeof schema> = async (data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const draft = produce(data, (draft) => {
+        const duration = safeNum(draft.paymentTerms, 1) * 24 * 3600 * 1000;
+        const dueTime = duration + Date.parse(draft.issued.toISOString());
 
-    const result = schema.safeParse(data);
+        draft.paymentDue = new Date(dueTime).toISOString();
+        draft.total = approximate(calculateTotal(draft?.items, 'total'), 2);
+      });
 
-    if (result.success) {
-      console.log('result.data', result.data);
-    } else {
-      console.log('result.error', result.error);
+      const result = schema.safeParse(draft);
+      if (!result.success) throw result.error;
+
+      setIsFetching(true);
+
+      const response = await fetch('/api/invoices/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...draft, issued: draft.issued.toISOString() }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Network Error: returned ${response.status}`);
+      }
+
+      const json = ServerResultSchema.parse(await response.json());
+      if (json.status === 'error') throw new Error(json.error);
+
+      toast.success(json.data);
+      // startTransition(() => {
+      //   router.refresh();
+      //   reset();
+      //   router.push('/invoices');
+      // });
+    } catch (error) {
+      toast.error(`There was a problem with the operation: ${error}`);
+    } finally {
+      setIsFetching(false);
     }
-    //  reset()
-  };
+  });
+
+  const isSubmittable =
+    Boolean(formState.isDirty) && Boolean(formState.isValid);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className={cn('flex flex-col gap-8', className)}
       >
         <header>
@@ -183,7 +216,7 @@ export default function InvoiceForm({ className }: Props) {
                 <FormField
                   name='senderAddress.country'
                   render={({ field }) => (
-                    <FormItem className='col-span-3 max-3xs:col-span-6 sm:col-span-2'>
+                    <FormItem className='col-span-6 sm:col-span-2'>
                       <div className='flex items-center justify-between'>
                         <FormLabel>Country</FormLabel>
                         <FormMessage />
@@ -328,7 +361,7 @@ export default function InvoiceForm({ className }: Props) {
                 <FormField
                   name='clientAddress.country'
                   render={({ field }) => (
-                    <FormItem className='col-span-3 max-3xs:col-span-6 sm:col-span-2'>
+                    <FormItem className='col-span-6 sm:col-span-2'>
                       <div className='flex items-center justify-between'>
                         <FormLabel>Country</FormLabel>
                         <FormMessage />
@@ -354,7 +387,7 @@ export default function InvoiceForm({ className }: Props) {
           <Container>
             <fieldset className='> * + * space-y-5'>
               <Text as='legend' className='sr-only'>
-                Product Meta
+                Product Payment Meta
               </Text>
 
               <div className='grid grid-cols-6 gap-6'>
@@ -362,21 +395,15 @@ export default function InvoiceForm({ className }: Props) {
                   name='issued'
                   render={({ field }) => (
                     <FormItem className='relative col-span-6 flex flex-col sm:col-span-3'>
-                      <FormLabel>Invoice Date</FormLabel>
+                      <FormLabel>Invoice Issued Date</FormLabel>
 
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
-                            <Button
-                              className='peer inline-flex w-full items-center justify-between px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
-                              // className={cn(
-                              //   'flex w-full items-center justify-between'
-                              //   // !field.value && 'text-muted-foreground'
-                              // )}
-                            >
+                            <Button className='inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'>
                               {field.value ? (
                                 <span className='block truncate'>
-                                  {format(field.value, 'PPP')}
+                                  {format(new Date(field.value), 'dd MMM yyyy')}
                                 </span>
                               ) : (
                                 <span>Pick a date</span>
@@ -390,15 +417,12 @@ export default function InvoiceForm({ className }: Props) {
                         </PopoverTrigger>
 
                         <PopoverContent className='mt-2' align='start'>
-                          <Calendar
+                          <DatePicker
                             mode='single'
-                            selected={field.value}
+                            initialFocus={true}
+                            selected={new Date(field.value)}
                             onSelect={field.onChange}
-                            disabled={
-                              (date) => date < new Date()
-                              // date < new Date() || date < new Date('1900-01-01')
-                            }
-                            initialFocus
+                            disabled={(date) => date < monthsAgo(new Date(), 3)}
                           />
                         </PopoverContent>
                       </Popover>
@@ -417,7 +441,7 @@ export default function InvoiceForm({ className }: Props) {
                           <Listbox.Button
                             title='select a payment term'
                             as={Button}
-                            className='peer inline-flex w-full items-center justify-between px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
+                            className='inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500'
                           >
                             {({ value }) => (
                               <>
@@ -448,7 +472,7 @@ export default function InvoiceForm({ className }: Props) {
                               {terms.map((term) => (
                                 <Listbox.Option
                                   key={term.toString()}
-                                  className='px-5 py-4 font-bold text-brand-900 ui-selected:text-brand-500 ui-active:text-brand-500 dark:text-brand-100 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500'
+                                  className='px-5 py-4 font-bold text-brand-900 outline-none ui-selected:text-brand-500 ui-active:text-brand-500 dark:text-brand-100 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500'
                                   value={term}
                                 >
                                   <span className='block truncate text-400 leading-200 -tracking-200'>
@@ -495,7 +519,7 @@ export default function InvoiceForm({ className }: Props) {
               <Text
                 as='legend'
                 weight='bold'
-                className='col-span-6 text-[1.125rem] leading-8 -tracking-[0.32px] text-[#777F98]'
+                className='col-span-6 text-lg leading-8 -tracking-[0.32px] text-[#777F98]'
               >
                 Item List
               </Text>
@@ -516,6 +540,7 @@ export default function InvoiceForm({ className }: Props) {
               <Button variant='soft' asChild>
                 <NextLink href='/invoices'>Discard</NextLink>
               </Button>
+
               <Button
                 type='submit'
                 variant='secondary'

@@ -1,16 +1,9 @@
-import { getAuthSession } from '@/app/lib';
-import { Text, Container, Button } from '@/components';
+import { Container, Button } from '@/components';
 import NextLink from 'next/link';
 import InvoiceForm from './invoice-form';
 import { icons } from '@/common';
 
-type Props = {};
-
 export default function PageRoute() {
-  const formAction = '';
-
-  const [_, user] = getAuthSession();
-
   return (
     <main aria-labelledby='heading' className='relative w-full'>
       <div className='mt-12 lg:mt-16' />
