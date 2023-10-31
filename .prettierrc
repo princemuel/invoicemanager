@@ -4,7 +4,7 @@
   "htmlWhitespaceSensitivity": "css",
   "embeddedLanguageFormatting": "auto",
   "bracketSameLine": false,
-  "printWidth": 96,
+  "printWidth": 80,
   "quoteProps": "as-needed",
   "singleQuote": true,
   "trailingComma": "es5",
