@@ -28,14 +28,14 @@ model User {
 }
 
 model Invoice {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  slug String @unique
+  id   String  @id @default(auto()) @map("_id") @db.ObjectId
+  slug String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issued       String
-  paymentDue   String
+  issued       DateTime
+  paymentDue   DateTime
   paymentTerms Int
 
   description String

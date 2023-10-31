@@ -25,30 +25,21 @@ export function useZodForm<T extends z.ZodType<any, any, any>>(
         console.log('formData', data);
         console.log(
           'validation result',
-          await zodResolver(schema, undefined, {
-            raw: true,
-          })(data, context, options)
+          await zodResolver(schema, undefined, { mode: 'async' })(data, context, options)
         );
       }
 
-      return zodResolver(schema, undefined, {
-        raw: true,
-      })(data, context, options);
+      return zodResolver(schema, undefined, { mode: 'async' })(data, context, options);
     },
   });
 }
 
-export function useFormStat<State extends Record<string, unknown>>(
-  initialState: State
-) {
+export function useFormStat<State extends Record<string, unknown>>(initialState: State) {
   const [values, setValues] = React.useState(() => initialState);
 
-  const update = React.useCallback(
-    <Key extends keyof State>(name: Key, value: State[Key]) => {
-      setValues((fields) => ({ ...fields, [name]: value }));
-    },
-    []
-  );
+  const update = React.useCallback(<Key extends keyof State>(name: Key, value: State[Key]) => {
+    setValues((fields) => ({ ...fields, [name]: value }));
+  }, []);
 
   return [values, update] as const;
 }
