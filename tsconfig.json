@@ -21,7 +21,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -30,9 +30,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/types/**/*.d.ts",
-    "app/_env/schema.mjs",
-    "app/_env/server.mjs",
-    "app/_env/client.mjs"
+    "src/app/_env/schema.mjs",
+    "src/app/_env/server.mjs",
+    "src/app/_env/client.mjs"
   ],
   "exclude": ["node_modules"]
 }
