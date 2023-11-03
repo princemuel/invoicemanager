@@ -5,9 +5,9 @@ const plugin = require('tailwindcss/plugin');
 module.exports = {
   darkMode: ['class', '[data-mode="dark"]'],
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     container: {
@@ -121,7 +121,8 @@ module.exports = {
         },
         '.grid-cols-auto': {
           '--min-col-size': '15rem',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(var(--min-col-size), 100%), 1fr))',
+          gridTemplateColumns:
+            'repeat(auto-fit, minmax(min(var(--min-col-size), 100%), 1fr))',
         },
       });
     }),
