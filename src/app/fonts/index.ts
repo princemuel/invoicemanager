@@ -19,11 +19,11 @@ const FontSans = localFont({
   ],
 });
 
-const FontAccent_Prod = Rubik({
+const FontAccent = Rubik({
   weight: 'variable',
   subsets: ['latin'],
   variable: '--font-accent',
   display: 'swap',
 });
 
-export const fontVars = cn(FontSans.variable, FontAccent_Prod.variable);
+export const fontVars = cn(FontSans.variable, FontAccent.variable);

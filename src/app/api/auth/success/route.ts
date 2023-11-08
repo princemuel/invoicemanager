@@ -1,5 +1,5 @@
-import db from '@/app/_data/db.server';
-import { getAuthSession } from '@/app/_data/lib';
+import db from '@/app/database/db.server';
+import { getAuthSession } from '@/app/database/lib';
 import { handleServerError } from '@/helpers';
 import { HttpError } from 'http-errors-enhanced';
 import { NextResponse } from 'next/server';
