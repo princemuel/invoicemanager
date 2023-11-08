@@ -14,10 +14,18 @@
     "format:check": "prettier --check \"{app,lib,components}**/*.{ts,tsx,mdx}\" --cache",
     "postinstall": "pnpm -s run gen:prisma"
   },
+  "engines": {
+    "node": ">=18",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm",
+    "bun": "please-use-pnpm",
+    "pnpm": ">=8"
+  },
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.13",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
+    "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.2",
     "@kinde-oss/kinde-auth-nextjs": "^1.8.25",
     "@prisma/client": "^5.5.2",
