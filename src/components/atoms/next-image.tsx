@@ -4,8 +4,8 @@ import Image from 'next/image';
 export function NextImage({
   alt,
   src,
-  width = 700,
-  height = 475,
+  width,
+  height,
   priority = false,
   placeholder = 'blur',
   blurDataURL = `data:image/svg+xml;base64,${toBase64(
