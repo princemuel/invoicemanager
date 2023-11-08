@@ -46,6 +46,6 @@ export const ItemSchema = z.object({
 
 export const ServerResultSchema = z.discriminatedUnion('status', [
   z.object({ status: z.literal('success'), data: z.string() }),
-  z.object({ status: z.literal('error'), error: z.string() }),
+  z.object({ status: z.literal('failed'), error: z.string() }),
   // z.object({ status: z.literal("error"), error: z.instanceof(Error) }),
 ]);
