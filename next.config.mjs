@@ -1,5 +1,11 @@
+/**
+ * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
+ * This is especially useful for Docker builds.
+ */
+!process.env.SKIP_ENV_VALIDATION && (await import('./src/env.dto.mjs'));
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
     reactRemoveProperties: process.env.NODE_ENV === 'production',
@@ -7,6 +13,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // !disable this later
   productionBrowserSourceMaps: true,
   experimental: {
     typedRoutes: true,
@@ -32,12 +39,7 @@ const nextConfig = {
       },
     ],
   },
-  webpack(config, { isServer }) {
-    if (!isServer) {
-      config.resolve.fallback = {
-        fs: false,
-      };
-    }
+  webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg')
     );
@@ -77,4 +79,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default config;
