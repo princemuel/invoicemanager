@@ -4,7 +4,7 @@ import {
   type KindeUser,
 } from '@kinde-oss/kinde-auth-nextjs/server';
 import { cache } from 'react';
-import db from './db.server';
+import db from '../db.server';
 // import 'server-only';
 
 export async function createAuthUser(client: KindeUser): Promise<AuthUser> {
