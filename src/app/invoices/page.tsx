@@ -1,12 +1,30 @@
+import db from '@/app/db.server';
+import { defineMeta } from '@/config';
 import { InvoicesProvider } from '@/context';
+import { getAuthSession } from '../database/lib';
+import { getProfileDTO } from '../database/user.dto';
 import { InvoicesTemplateDesktop } from './invoices.desktop';
 import { InvoicesTemplateMobile } from './invoices.mobile';
-import { getAuthSession } from '../_data/lib';
 
-export default async function PageRoute() {
-  const { authenticated, user } = getAuthSession();
+export const metadata = defineMeta({
+  title: 'Invoices',
+  description: 'A list of all my past and current invoices',
+});
 
-  const invoices = Promise.resolve([] as InvoiceTypeSafe[]);
+async function PageRoute() {
+  const { user } = getAuthSession();
+  const profile = await getProfileDTO(user);
+
+  const invoices = db.invoice.findMany({
+    where: { userId: profile.id },
+    select: {
+      slug: true,
+      paymentDue: true,
+      clientName: true,
+      total: true,
+      status: true,
+    },
+  });
 
   return (
     <main aria-labelledby='heading-desktop heading-mobile' className='w-full'>
@@ -19,3 +37,4 @@ export default async function PageRoute() {
     </main>
   );
 }
+export default PageRoute;

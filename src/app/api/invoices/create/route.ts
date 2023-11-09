@@ -1,44 +1,40 @@
-import { produce } from 'immer';
-import { z } from 'zod';
-import { createRandomHex } from '../utils.invoices';
-import db from '@/app/_data/db.server';
-import { AddressSchema, BaseInvoiceSchema, ItemSchema } from '@/lib';
-import { StringContraint, EmailContraint } from '@/lib/models/constraints';
+import { getAuthSession } from '@/app/database/lib';
+import db from '@/app/db.server';
 import { handleServerError } from '@/helpers';
+import { NewInvoiceServerSchema } from '@/lib';
+import { HttpError } from 'http-errors-enhanced';
+import { produce } from 'immer';
+import { createRandomHex } from '../utils.invoices';
 
 const generateHex = createRandomHex();
 
-const InvoiceSchema = BaseInvoiceSchema.extend({
-  clientName: StringContraint,
-  clientEmail: EmailContraint,
-  clientAddress: AddressSchema,
-  senderAddress: AddressSchema,
-
-  issued: z.string().datetime(),
-  description: StringContraint,
-  items: ItemSchema.array().nonempty(),
-});
+const schema = NewInvoiceServerSchema;
 
 export async function POST(request: Request) {
   try {
-    // validate set
-    const result = InvoiceSchema.safeParse(await request.json());
-    if (!result.success) throw result.error;
+    const { authenticated } = getAuthSession();
+    if (!authenticated)
+      throw new HttpError(
+        401,
+        'Unauthorized request: Check your login details and try again'
+      );
 
-    const body = produce(result.data, (draft) => {
+    const result = schema.parse(await request.json());
+
+    const body = produce(result, (draft) => {
       draft.slug = generateHex.next().value;
     });
 
     console.log(body);
 
-    // const response = await db.invoice.create({
-    //   data: body,
-    // });
+    const response = await db.invoice.create({
+      data: body,
+    });
 
     return Response.json(
       {
-        success: true,
-        data: `Invoice #${body?.slug?.toUpperCase()} created!`,
+        status: 'success',
+        data: `Invoice #${response?.slug?.toUpperCase()} created!`,
       },
       { status: 201 }
     );

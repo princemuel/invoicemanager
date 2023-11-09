@@ -1,8 +1,12 @@
+'use client';
+
 import { icons } from '@/common';
 import { Button, Container, NextImage, StatusButton, Text } from '@/components';
+import { useInvoicesPromise } from '@/context';
 import { buildInvoiceMsg, cn, formatAmount, hasValues } from '@/helpers';
-import invoices from '../../public/data.local.json';
+import { format } from 'date-fns';
 import NextLink from 'next/link';
+import * as React from 'react';
 
 interface Props {
   className?: string;
@@ -11,7 +15,12 @@ const generateMessage = buildInvoiceMsg(
   'There {{ verb }} {{ count }} total invoice(s)'
 );
 
+const invoices: any[] = [];
+
 export function InvoicesTemplateDesktop({ className }: Props) {
+  const promise = useInvoicesPromise();
+  const invoices = React.use(promise);
+
   return (
     <>
       <div className={cn('', className)}>
@@ -23,11 +32,8 @@ export function InvoicesTemplateDesktop({ className }: Props) {
                   Invoices
                 </Text>
 
-                {/* <Text as='p' aria-live='polite' variant='secondary'>
-                  {generateMessage([])}
-                </Text> */}
                 <Text as='p' aria-live='polite' variant='secondary'>
-                  {generateMessage([1])}
+                  {generateMessage(invoices)}
                 </Text>
               </div>
 
@@ -50,14 +56,14 @@ export function InvoicesTemplateDesktop({ className }: Props) {
         <section aria-label='Invoice List' className=''>
           <Container>
             <ul className='flex flex-col gap-6'>
-              {hasValues([1]) ? (
+              {hasValues(invoices) ? (
                 invoices.map((invoice) => (
                   <li
-                    key={invoice.id}
+                    key={invoice.slug}
                     className='rounded-lg bg-white p-4 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700'
                   >
                     <NextLink
-                      href={`/invoices/${invoice?.id}`}
+                      href={`/invoices/${invoice?.slug}`}
                       className='grid grid-flow-col-dense items-center justify-items-end gap-1'
                     >
                       <Text
@@ -66,7 +72,7 @@ export function InvoicesTemplateDesktop({ className }: Props) {
                         className='justify-self-start uppercase'
                       >
                         <span className='text-brand-400'>#</span>
-                        <span>{invoice?.id}</span>
+                        <span>{invoice?.slug}</span>
                       </Text>
 
                       <Text
@@ -79,7 +85,7 @@ export function InvoicesTemplateDesktop({ className }: Props) {
                         <time
                           dateTime={new Date(invoice?.paymentDue).toISOString()}
                         >
-                          {/* {DateTime.toDateString(invoice?.paymentDue)} */}
+                          {format(new Date(invoice?.paymentDue), 'dd MMM yyyy')}
                         </time>
                       </Text>
 

@@ -1,20 +1,43 @@
+import { getAuthSession } from '@/app/database/lib';
+import { getProfileDTO } from '@/app/database/user.dto';
+import db from '@/app/db.server';
 import { icons } from '@/common';
 import { Button, Container } from '@/components';
-import { InvoiceProvider } from '@/context';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import NextLink from 'next/link';
+import { notFound } from 'next/navigation';
 import NextScript from 'next/script';
 import { InvoiceTemplateDesktop } from './invoice.desktop';
 import { InvoiceTemplateMobile } from './invoice.mobile';
 
-export default async function PageRoute({ params }: { params: IParams }) {
-  const { getUser } = getKindeServerSession();
+interface Props {
+  params: IParams;
+}
 
-  const client = getUser();
+const PageRoute = async ({ params: { slug } }: Props) => {
+  if (!slug) notFound();
 
-  console.log(JSON.stringify(params));
+  const { user } = getAuthSession();
+  const profile = await getProfileDTO(user);
 
-  const invoice = Promise.resolve({} as InvoiceTypeSafe);
+  const invoice = await db.invoice.findUnique({
+    where: { slug: slug, userId: profile.id },
+    select: {
+      slug: true,
+      paymentDue: true,
+      paymentTerms: true,
+      issued: true,
+      clientName: true,
+      clientAddress: true,
+      clientEmail: true,
+      description: true,
+      items: true,
+      senderAddress: true,
+      total: true,
+      status: true,
+    },
+  });
+
+  if (!invoice) notFound();
 
   return (
     <main
@@ -34,22 +57,30 @@ export default async function PageRoute({ params }: { params: IParams }) {
           </Button>
         </Container>
 
-        <InvoiceProvider promise={invoice}>
-          <InvoiceTemplateMobile className='flex flex-col gap-4 sm:hidden' />
-          <InvoiceTemplateDesktop className='hidden flex-col gap-4 sm:flex' />
-        </InvoiceProvider>
+        <InvoiceTemplateMobile
+          invoice={invoice}
+          className='flex flex-col gap-4 sm:hidden'
+        />
+        <InvoiceTemplateDesktop
+          invoice={invoice}
+          className='hidden flex-col gap-4 sm:flex'
+        />
       </div>
 
       <NextScript src='/table-aria.js' strategy='lazyOnload' />
     </main>
   );
-}
+};
 
-// Return a list of `params` to populate the [id] dynamic segment
-export async function generateStaticParams() {
-  const invoices = await import('../../../public/data.local.json').then(
-    (res) => res.default
-  );
+export default PageRoute;
 
-  return invoices.map(({ id }) => ({ slug: id }));
-}
+// export async function generateStaticParams() {
+//   const { user } = getAuthSession();
+//   const profile = await getProfileDTO(user);
+//   const invoices = await db.invoice.findMany({
+//     where: { userId: profile.id },
+//     select: { slug: true },
+//   });
+
+//   return (invoices || []).map((invoice) => invoice?.slug);
+// }

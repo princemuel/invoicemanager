@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from '@/app/session';
 import { icons } from '@/common';
 import {
   Button,
@@ -19,26 +20,24 @@ import {
   TextField,
 } from '@/components';
 import {
+  approximate,
+  calculateTotal,
   cn,
   monthsAgo,
   pluralize,
-  calculateTotal,
   safeNum,
-  approximate,
 } from '@/helpers';
-import { useApiState, useZodForm, type RHFormSubmitHandler } from '@/hooks';
+import { useApiState, useZodForm } from '@/hooks';
+import { ServerResultSchema } from '@/lib';
 import { Listbox, Transition } from '@headlessui/react';
 import { format } from 'date-fns';
+import { produce } from 'immer';
 import NextLink from 'next/link';
 import { Fragment, useEffect } from 'react';
-import { schema } from './common';
+import toast from 'react-hot-toast';
 import InvoiceItemsDesktop from './invoice.items.desktop';
 import InvoiceItemsMobile from './invoice.items.mobile';
-import { produce } from 'immer';
-import toast from 'react-hot-toast';
-import { z } from 'zod';
-import { ServerResultSchema } from '@/lib';
-import { time } from 'console';
+import { schema } from './schema';
 
 const terms = [1, 7, 14, 30];
 
@@ -47,22 +46,30 @@ interface Props {
 }
 
 export default function InvoiceForm({ className }: Props) {
+  const session = useSession();
+
   const form = useZodForm({
     schema: schema,
+    mode: 'onChange',
     defaultValues: {
+      slug: '',
+
       clientName: '',
       clientEmail: '',
       clientAddress: { street: '', city: '', postCode: '', country: '' },
       senderAddress: { street: '', city: '', postCode: '', country: '' },
+
+      issued: new Date(),
       description: '',
       items: [],
-      issued: new Date(),
+      total: 0,
+
       paymentDue: new Date().toISOString(),
       paymentTerms: 1,
-      total: 0,
       status: 'pending',
+
+      userId: session.id,
     },
-    mode: 'onChange',
   });
 
   const { router, isMutating, controllerRef, startTransition, setFetchStatus } =
@@ -95,7 +102,7 @@ export default function InvoiceForm({ className }: Props) {
 
       timeout = setTimeout(() => {
         setFetchStatus('delayed');
-      }, 3000);
+      }, 10000);
 
       const response = await fetch('/api/invoices/create', {
         method: 'POST',
@@ -111,14 +118,15 @@ export default function InvoiceForm({ className }: Props) {
       }
 
       const json = ServerResultSchema.parse(await response.json());
-      if (json.status === 'error') throw new Error(json.error);
+      if (json.status === 'failed') throw new Error(json.error);
 
       toast.success(json.data);
-      // startTransition(() => {
-      //   router.refresh();
-      //   reset();
-      //   router.push('/invoices');
-      // });
+
+      startTransition(() => {
+        router.refresh();
+        reset();
+        router.push('/invoices');
+      });
     } catch (error: any) {
       error.name === 'AbortError'
         ? setFetchStatus('canceled')
@@ -126,7 +134,6 @@ export default function InvoiceForm({ className }: Props) {
 
       toast.error(`There was a problem with the operation: ${error}`);
     } finally {
-      setFetchStatus('idle');
       clearTimeout(timeout);
     }
   });
@@ -565,6 +572,7 @@ export default function InvoiceForm({ className }: Props) {
               <Button
                 type='submit'
                 variant='primary'
+                disabled={isSubmittable}
                 onClick={() => void setValue('status', 'pending')}
               >
                 Save & Send

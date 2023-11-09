@@ -1,8 +1,11 @@
+'use client';
+
 import { icons } from '@/common';
 import { Button, Container, NextImage, StatusButton, Text } from '@/components';
+import { useInvoicesPromise } from '@/context';
 import { buildInvoiceMsg, cn, formatAmount, hasValues } from '@/helpers';
-import invoices from '../../public/data.local.json';
 import NextLink from 'next/link';
+import * as React from 'react';
 
 interface Props {
   className?: string;
@@ -10,7 +13,12 @@ interface Props {
 
 const generateMessage = buildInvoiceMsg('{{ count }} invoice(s)');
 
+const invoices: any[] = [];
+
 export function InvoicesTemplateMobile({ className }: Props) {
+  const promise = useInvoicesPromise();
+  const invoices = React.use(promise);
+
   return (
     <>
       <div className={cn('', className)}>
@@ -22,9 +30,6 @@ export function InvoicesTemplateMobile({ className }: Props) {
                   Invoices
                 </Text>
 
-                {/* <Text as='p' aria-live='polite' variant='secondary'>
-                  {generateMessage([])}
-                </Text> */}
                 <Text as='p' aria-live='polite' variant='secondary'>
                   {generateMessage(invoices)}
                 </Text>
@@ -49,19 +54,19 @@ export function InvoicesTemplateMobile({ className }: Props) {
         <section aria-label='Invoice List' className=''>
           <Container>
             <ul className='flex flex-col gap-6'>
-              {hasValues([1]) ? (
+              {hasValues(invoices) ? (
                 invoices.map((invoice) => (
                   <li
-                    key={invoice.id}
+                    key={invoice.slug}
                     className='rounded-lg bg-white px-6 py-8 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700'
                   >
                     <NextLink
-                      href={`/invoices/${invoice?.id}`}
+                      href={`/invoices/${invoice?.slug}`}
                       className='grid grid-cols-2 grid-rows-3'
                     >
                       <Text as='p' weight='bold' className='uppercase'>
                         <span className='text-brand-400'>#</span>
-                        <span>{invoice?.id}</span>
+                        <span>{invoice?.slug}</span>
                       </Text>
 
                       <Text
