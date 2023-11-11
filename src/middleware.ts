@@ -1,18 +1,10 @@
-import { authMiddleware } from '@kinde-oss/kinde-auth-nextjs/server';
+import { withAuth } from '@kinde-oss/kinde-auth-nextjs/middleware';
+import type { NextRequest } from 'next/server';
+
+export default function middleware(request: NextRequest) {
+  return withAuth(request);
+}
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    // '/((?!api|_next/static|_next/image|favicon.ico).*)',
-    // '/((?!api|_next/static|_next/image|favicon.ico|^$).*)',
-    '/invoices',
-  ],
+  matcher: ['/invoices', '/invoices/(.*)'],
 };
-
-export default authMiddleware;
