@@ -1,5 +1,7 @@
-import { UserProfile } from '@clerk/remix';
+import { UserProfile } from "@clerk/remix";
 
-export default function UserProfilePage() {
-  return <UserProfile path='/user' routing='path' />;
+function PageRoute() {
+  return <UserProfile path="/user" routing="path" />;
 }
+
+export default PageRoute;

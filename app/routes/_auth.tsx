@@ -1,13 +1,13 @@
-import { Outlet } from '@remix-run/react';
+import { Outlet } from "@remix-run/react";
 
 type Props = {};
 
-const AuthLayout = (props: Props) => {
+function LayoutRoute(props: Props) {
   return (
-    <main className='flex min-h-screen items-center justify-center'>
+    <main className="flex min-h-screen items-center justify-center">
       <Outlet />
     </main>
   );
-};
+}
 
-export default AuthLayout;
+export default LayoutRoute;

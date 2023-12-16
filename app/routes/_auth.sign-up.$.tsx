@@ -1,5 +1,7 @@
-import { SignUp } from '@clerk/remix';
+import { SignUp } from "@clerk/remix";
 
-export default function SignUpPage() {
-  return <SignUp path='/sign-up' routing='path' signInUrl='/sign-in' />;
+function PageRoute() {
+  return <SignUp path="/sign-up" routing="path" signInUrl="/sign-in" />;
 }
+
+export default PageRoute;
