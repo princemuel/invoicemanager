@@ -5,7 +5,8 @@ import {
   hasValues,
   tw,
 } from "@/helpers/utils";
-import { Link } from "@remix-run/react";
+import { loader } from "@/routes/invoices._index";
+import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
 import { Text } from "./text";
@@ -15,9 +16,11 @@ type Props = { className?: string };
 const generateMessage = buildItemCountMsg(
   "There {{ verb }} {{ count }} total invoice(s)",
 );
-const invoices: any[] = [];
 
 export function InvoicesDesktop({ className }: Props) {
+  const data = useLoaderData<typeof loader>();
+
+  const invoices = data.invoices;
   return (
     <div className={tw("", className)}>
       <header className="container">
