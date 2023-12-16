@@ -19,9 +19,9 @@ import {
   useTheme,
 } from "remix-themes";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
+import styles from "./globals.css";
 import { tw } from "./helpers/utils";
 import { themeSessionResolver } from "./sessions.server";
-import styles from "./styles/globals.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
