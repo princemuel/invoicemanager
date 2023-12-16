@@ -1,27 +1,4 @@
-/* -------------------------------- */
-/*               BASE               */
-/* -------------------------------- */
-
-/*!Theme Name:
-Theme URI: https://invoicetracker.vercel.app/
-Repository: https://github.com/princemuel/invoicetracker
-Description: A web app where you can send invoices as pdf to your clients' emails.This web application presents the products using the most user-friendly format with accessibility in mind.
-Author's Name: Samuel Chukwuzube
-Author's Moniker: princemuel
-Version: 02
-*/
-
-/*
- * This injects Tailwind's base styles and any base styles registered by
- * plugins.
- */
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
-/*============================
-       CUSTOM RESETS
-   ============================
- */
 @layer base {
   :root {
     isolation: isolate;
@@ -43,9 +20,6 @@ Version: 02
     font: inherit;
     box-sizing: inherit;
   }
-  :where([hidden]:not([hidden='until-found'])) {
-    display: none !important;
-  }
 
   /* Set core body defaults */
   :where(body) {
@@ -59,15 +33,15 @@ Version: 02
       label,
       select,
       summary,
-      [role='button'],
-      [role='option'],
-      [role='menuitem']
+      [role="button"],
+      [role="option"],
+      [role="menuitem"]
     ) {
     @apply cursor-pointer;
   }
 
   @media not all and (min-resolution: 0.001dpcm) {
-    :where(img[loading='lazy']) {
+    :where(img[loading="lazy"]) {
       clip-path: inset(0.5px);
     }
   }
@@ -105,6 +79,8 @@ Version: 02
   }
 }
 
+@tailwind components;
+@tailwind utilities;
 @layer utilities {
   .skip-nav {
     @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-500 px-[0.5em] py-[1em] text-white transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
