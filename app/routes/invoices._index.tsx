@@ -24,7 +24,7 @@ export const meta: MetaFunction = () => {
 
 function PageRoute() {
   return (
-    <main aria-labelledby="page-heading" className="w-full ">
+    <main aria-labelledby="page-heading" className="min-h-screen w-full">
       <div className="mt-12" />
 
       <InvoicesDesktop className="hidden flex-col gap-12 sm:flex" />

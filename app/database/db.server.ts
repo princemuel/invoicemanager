@@ -3,15 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import chalk from "chalk";
 
 export const db = singleton("prisma", () => {
-  const production = process.env.NODE_ENV === "production";
-
-  // NOTE: if you change anything in this function
-  // you'll need to restart the dev server to see your changes.
-
-  // Feel free to change this log threshold
-  // to something that makes sense for you
-
   const THRESHHOLD = 20;
+  const production = process.env.NODE_ENV === "production";
 
   const client = new PrismaClient({
     errorFormat: production ? "minimal" : "pretty",
