@@ -17,15 +17,13 @@ type $ElementProps<E extends React.ElementType<any>> = {
 type ElementProps<E extends React.ElementType<any>> = $ElementProps<E> &
   Omit<React.ComponentPropsWithoutRef<E>, keyof $ElementProps<E>>;
 
-interface IconProps extends React.ComponentPropsWithoutRef<'svg'> {}
+interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {}
 type SVGComponent = React.ComponentType<React.SVGAttributes<SVGSVGElement>>;
 
-type PropsFrom<O> = O extends React.FC<infer Props>
-  ? Props
-  : O extends React.Component<infer Props>
-  ? Props
-  : O extends object
-  ? { [Prop in keyof O]: O[Prop] }
+type PropsFrom<O> =
+  O extends React.FC<infer Props> ? Props
+  : O extends React.Component<infer Props> ? Props
+  : O extends object ? { [Prop in keyof O]: O[Prop] }
   : never;
 
 /* -------------------------------------------------------------------------------------------------
@@ -54,13 +52,11 @@ interface ForwardRefComponent<
    * so that events are typed when using JSX.IntrinsicElements.
    */
   <As = IntrinsicElementString>(
-    props: As extends ''
-      ? { as: keyof JSX.IntrinsicElements }
-      : As extends React.ComponentType<infer P>
-      ? Merge<P, OwnProps & { as: As }>
-      : As extends keyof JSX.IntrinsicElements
-      ? Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
-      : never
+    props: As extends "" ? { as: keyof JSX.IntrinsicElements }
+    : As extends React.ComponentType<infer P> ? Merge<P, OwnProps & { as: As }>
+    : As extends keyof JSX.IntrinsicElements ?
+      Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
+    : never,
   ): React.ReactElement | null;
 }
 
@@ -73,13 +69,11 @@ interface MemoComponent<IntrinsicElementString, OwnProps = {}>
     ForwardRefComponent<IntrinsicElementString, OwnProps>
   > {
   <As = IntrinsicElementString>(
-    props: As extends ''
-      ? { as: keyof JSX.IntrinsicElements }
-      : As extends React.ComponentType<infer P>
-      ? Merge<P, OwnProps & { as: As }>
-      : As extends keyof JSX.IntrinsicElements
-      ? Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
-      : never
+    props: As extends "" ? { as: keyof JSX.IntrinsicElements }
+    : As extends React.ComponentType<infer P> ? Merge<P, OwnProps & { as: As }>
+    : As extends keyof JSX.IntrinsicElements ?
+      Merge<JSX.IntrinsicElements[As], OwnProps & { as: As }>
+    : never,
   ): React.ReactElement | null;
 }
 
@@ -102,9 +96,8 @@ type OwnProps<E> = E extends ForwardRefComponent<any, infer P> ? P : {};
 /**
  * Infers the JSX.IntrinsicElement if E is a ForwardRefExoticComponentWithAs
  */
-type IntrinsicElement<E> = E extends ForwardRefComponent<infer I, any>
-  ? I
-  : never;
+type IntrinsicElement<E> =
+  E extends ForwardRefComponent<infer I, any> ? I : never;
 type NarrowIntrinsic<E> = E extends keyof JSX.IntrinsicElements ? E : never;
 
 // type ForwardRefExoticComponent<E, OwnProps> = React.ForwardRefExoticComponent<
@@ -114,14 +107,4 @@ type NarrowIntrinsic<E> = E extends keyof JSX.IntrinsicElements ? E : never;
 //   >
 // >;
 
-interface IParams {
-  [key: string]: string | undefined;
-}
-
 type Callback<T> = (data: T) => void;
-
-type Level = [0, 1, 2, 3, 4, 5, 6][number];
-
-interface CSSCustomProps extends React.CSSProperties {
-  '--min-col-size': string;
-}
