@@ -18,7 +18,7 @@
   "singleAttributePerLine": false,
 
   "tailwindConfig": "./tailwind.config.ts",
-  "tailwindFunctions": ["twcn", "cn", "tv", "cva"],
+  "tailwindFunctions": ["tw", "cn", "tv", "cva"],
   "tailwindAttributes": ["tw"],
 
   "plugins": ["prettier-plugin-prisma", "prettier-plugin-tailwindcss"],

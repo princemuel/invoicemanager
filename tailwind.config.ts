@@ -6,7 +6,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 
 export default {
-  darkMode: ["class", '[data-mode="dark"]'],
+  darkMode: ["class", '[data-color-mode="dark"]'],
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
   theme: {
     screens: {

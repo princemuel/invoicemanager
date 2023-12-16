@@ -139,7 +139,7 @@ dist
 .tern-port
 
 # production
-/build
+build
 
 # Local Netlify folder
 .netlify
