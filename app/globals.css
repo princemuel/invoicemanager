@@ -20,9 +20,6 @@
     font: inherit;
     box-sizing: inherit;
   }
-  :where([hidden]:not([hidden="until-found"])) {
-    display: none !important;
-  }
 
   /* Set core body defaults */
   :where(body) {

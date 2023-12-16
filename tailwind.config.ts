@@ -6,8 +6,15 @@ import defaultTheme from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 
 export default {
-  darkMode: ["class", '[data-color-mode="dark"]'],
+  darkMode: ["class", '[data-darkreader-theme="dark"]'],
   content: ["./app/**/*.{js,jsx,ts,tsx}"],
+  corePlugins: {
+    float: false,
+    container: false,
+  },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     screens: {
       "3xs": "24em", // @media (min-width: 384px) { ... }
