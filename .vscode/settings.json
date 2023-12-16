@@ -5,10 +5,9 @@
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 96,
   "editor.codeActionsOnSave": {
-    // "source.addMissingImports": true,
-    // "source.organizeImports": "explicit"
-    "source.fixAll": "explicit",
-    "source.fixAll.eslint": "never"
+    "source.addMissingImports": "explicit",
+    "source.organizeImports": "explicit",
+    "source.fixAll": "explicit"
   },
 
   "eslint.codeAction.showDocumentation": {
