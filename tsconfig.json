@@ -1,6 +1,7 @@
 {
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "**/*.mjs"],
   "compilerOptions": {
+    "module": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,

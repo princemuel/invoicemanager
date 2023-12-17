@@ -42,7 +42,7 @@ export const loader = (args: LoaderFunctionArgs) => {
   return rootAuthLoader(args, async ({ request }) => {
     const { getTheme } = await themeSessionResolver(request);
 
-    return { theme: getTheme(), userId: request.auth.userId };
+    return { theme: getTheme() };
   });
 };
 
