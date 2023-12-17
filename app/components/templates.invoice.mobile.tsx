@@ -1,4 +1,4 @@
-import { calculateTotal, formatAmount, hasValues } from "@/helpers/utils";
+import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import { loader } from "@/routes/invoices.$slug";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
@@ -18,7 +18,21 @@ export function InvoiceMobile({ className }: Props) {
             Status
           </Text>
 
-          {/* <StatusButton status={invoice?.status} /> */}
+          <Button
+            type="button"
+            className={tw(
+              "!h-10 !w-[6.5rem] justify-around !px-4 !py-3 capitalize",
+              invoice.status === "draft" &&
+                "bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100",
+              invoice.status === "pending" &&
+                "bg-accent-400/[0.06] text-accent-400",
+              invoice.status === "paid" &&
+                "bg-accent-500/[0.06] text-accent-500",
+            )}
+          >
+            <span className="h-2 w-2 rounded-full bg-current" />
+            <span>{invoice?.status}</span>
+          </Button>
         </div>
       </header>
 

@@ -96,10 +96,21 @@ export function InvoicesMobile({ className }: Props) {
                     {formatAmount(invoice?.total)}
                   </Text>
 
-                  {/* <StatusButton
-                        status={invoice.status}
-                        className='col-start-2 col-end-3 row-start-3 row-end-4 justify-self-end '
-                      /> */}
+                  <Button
+                    type="button"
+                    className={tw(
+                      "col-start-2 col-end-3 row-start-3 row-end-4 !h-10 !w-[6.5rem] justify-around justify-self-end !px-4 !py-3 capitalize ",
+                      invoice.status === "draft" &&
+                        "bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100",
+                      invoice.status === "pending" &&
+                        "bg-accent-400/[0.06] text-accent-400",
+                      invoice.status === "paid" &&
+                        "bg-accent-500/[0.06] text-accent-500",
+                    )}
+                  >
+                    <span className="h-2 w-2 rounded-full bg-current" />
+                    <span>{invoice?.status}</span>
+                  </Button>
                 </Link>
               </li>
             ))

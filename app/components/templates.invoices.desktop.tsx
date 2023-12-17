@@ -91,10 +91,22 @@ export function InvoicesDesktop({ className }: Props) {
                     {formatAmount(invoice?.total)}
                   </Text>
 
-                  {/* <StatusButtonNextLink
-                        status={invoice.status}
-                        // className='w-full justify-self-start'
-                      /> */}
+                  {/* // className='w-full justify-self-start' */}
+                  <Button
+                    type="button"
+                    className={tw(
+                      "!h-10 !w-[6.5rem] justify-around !px-4 !py-3 capitalize ",
+                      invoice.status === "draft" &&
+                        "bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100",
+                      invoice.status === "pending" &&
+                        "bg-accent-400/[0.06] text-accent-400",
+                      invoice.status === "paid" &&
+                        "bg-accent-500/[0.06] text-accent-500",
+                    )}
+                  >
+                    <span className="h-2 w-2 rounded-full bg-current" />
+                    <span>{invoice?.status}</span>
+                  </Button>
 
                   <div className="">
                     <IconArrowRight />
