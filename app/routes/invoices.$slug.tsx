@@ -31,7 +31,7 @@ function PageRoute() {
 export default PageRoute;
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  invariant(params.slug, "Missing slug param");
+  invariant(params.slug, "Missing slug parameter");
   const payload = params.slug;
 
   const invoices = await import("../database/db.json").then(
