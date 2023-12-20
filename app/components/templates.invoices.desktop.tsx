@@ -9,6 +9,7 @@ import { loader } from "@/routes/invoices._index";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
+import { InvoiceFilters } from "./invoice-filters";
 import { Text } from "./text";
 
 type Props = { className?: string };
@@ -33,8 +34,9 @@ export function InvoicesDesktop({ className }: Props) {
               {generateMessage(invoices)}
             </Text>
           </div>
+
           <div className="flex items-center gap-6">
-            <Text>HI</Text>
+            <InvoiceFilters />
 
             <Button variant="primary" asChild>
               <Link to="create">

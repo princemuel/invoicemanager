@@ -1,6 +1,6 @@
 import { InvoicesDesktop } from "@/components/templates.invoices.desktop";
 import { InvoicesMobile } from "@/components/templates.invoices.mobile";
-import { MetaFunction, json } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
 
 type Props = {};
 
@@ -43,10 +43,20 @@ type Order = {
   paymentDue: string;
 };
 
-export async function loader() {
-  const invoices = await import("../database/db.json").then(
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const statuses = url.searchParams.getAll("status");
+
+  const response = await import("../database/db.json").then(
     (response) => response.default,
   );
+
+  const invoices =
+    statuses.length > 0 ?
+      response.filter((item) =>
+        statuses.some((status) => item.status === status),
+      )
+    : response;
 
   return json({ invoices: invoices ?? [] });
 }
