@@ -1,4 +1,4 @@
-import { IconArrowRight, IconPlus } from "@/common";
+import { IconArrowDown, IconArrowRight, IconPlus } from "@/common";
 import {
   buildItemCountMsg,
   formatAmount,
@@ -6,8 +6,10 @@ import {
   tw,
 } from "@/helpers/utils";
 import { loader } from "@/routes/invoices._index";
+import { Transition } from "@headlessui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
+import { useState } from "react";
 import { Button } from "./button";
 import { InvoiceFilters } from "./invoice-filters";
 import { Text } from "./text";
@@ -20,8 +22,9 @@ const generateMessage = buildItemCountMsg(
 
 export function InvoicesDesktop({ className }: Props) {
   const data = useLoaderData<typeof loader>();
-
   const invoices = data.invoices;
+
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <div className={tw("", className)}>
       <header className="container">
@@ -36,7 +39,36 @@ export function InvoicesDesktop({ className }: Props) {
           </div>
 
           <div className="flex items-center gap-6">
-            <InvoiceFilters />
+            <button
+              type="button"
+              className="body-100 flex items-center gap-6 self-center font-bold"
+              onClick={() => setIsVisible((state) => !state)}
+            >
+              <Text as="span" className="inline-block truncate">
+                Filter by status
+              </Text>
+
+              <span
+                className={tw(
+                  "pointer-events-none transform-gpu",
+                  isVisible && "-rotate-180",
+                )}
+              >
+                <IconArrowDown xlinkTitle="filter invoices by status" />
+              </span>
+            </button>
+
+            <Transition
+              show={isVisible}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <InvoiceFilters />
+            </Transition>
 
             <Button variant="primary" asChild>
               <Link to="create">

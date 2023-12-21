@@ -1,4 +1,4 @@
-import { IconPlus } from "@/common";
+import { IconArrowDown, IconPlus } from "@/common";
 import {
   buildItemCountMsg,
   formatAmount,
@@ -6,8 +6,10 @@ import {
   tw,
 } from "@/helpers/utils";
 import { loader } from "@/routes/invoices._index";
+import { Transition } from "@headlessui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
+import { useState } from "react";
 import { Button } from "./button";
 import { InvoiceFilters } from "./invoice-filters";
 import { Text } from "./text";
@@ -20,12 +22,14 @@ export function InvoicesMobile({ className }: Props) {
   const data = useLoaderData<typeof loader>();
   const invoices = data.invoices;
 
+  const [isVisible, setIsVisible] = useState(false);
+
   return (
     <div className={tw("", className)}>
       <header className="container">
         <div className="flex items-center">
           <div className="flex-1">
-            <Text as="h1" id="heading" size="xl">
+            <Text as="h1" id="page-heading" size="lg">
               Invoices
             </Text>
 
@@ -35,7 +39,40 @@ export function InvoicesMobile({ className }: Props) {
           </div>
 
           <div className="flex items-center gap-6">
-            <InvoiceFilters />
+            <div className="relative mt-1 flex w-full flex-col">
+              <button
+                type="button"
+                className="flex w-full items-center gap-6 self-center"
+                onClick={() => setIsVisible((state) => !state)}
+              >
+                <Text as="span" weight="bold" className="inline-block truncate">
+                  Filter
+                </Text>
+
+                <span
+                  className={tw(
+                    "pointer-events-none transform-gpu",
+                    isVisible && "-rotate-180",
+                  )}
+                >
+                  <IconArrowDown xlinkTitle="filter invoices by status" />
+                </span>
+              </button>
+
+              <Transition
+                show={isVisible}
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <div className="absolute z-10 mt-4 w-full shadow-200 dark:shadow-300">
+                  <InvoiceFilters />
+                </div>
+              </Transition>
+            </div>
 
             <Button variant="primary" className="px-2 " asChild>
               <Link to="create">
