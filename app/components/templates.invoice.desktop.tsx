@@ -1,5 +1,5 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
-import { loader } from "@/routes/invoices.$slug";
+import type { loader } from "@/routes/invoices.$slug";
 import { useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
@@ -51,7 +51,7 @@ export function InvoiceDesktop({ className }: Props) {
                 <span>{invoice.slug}</span>
               </Text>
 
-              <Text as="h1" id="heading-desktop" variant="primary">
+              <Text as="h1" id="page-heading" variant="primary">
                 {invoice.description}
               </Text>
             </div>
