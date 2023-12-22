@@ -1,5 +1,5 @@
 import { tw } from "@/helpers/utils";
-import { cva, type VariantProps } from "cva";
+import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 
 interface TextVariants extends VariantProps<typeof text> {}

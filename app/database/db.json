@@ -1,0 +1,513 @@
+[
+  {
+    "slug": "RT3080",
+    "issueDate": "2021-08-18",
+    "paymentDue": "2021-08-19",
+    "description": "Re-branding",
+    "paymentTerms": 1,
+    "clientName": "Jensen Huang",
+    "clientEmail": "jensenh@mail.com",
+    "status": "paid",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "106 Kendell Street",
+      "city": "Sharrington",
+      "postCode": "NR24 5WQ",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Brand Guidelines",
+        "quantity": 1,
+        "price": 1800.9,
+        "total": 1800.9
+      }
+    ],
+    "total": 1800.9
+  },
+  {
+    "slug": "XM9141",
+    "issueDate": "2021-08-21",
+    "paymentDue": "2021-09-20",
+    "description": "Graphic Design",
+    "paymentTerms": 30,
+    "clientName": "Alex Grim",
+    "clientEmail": "alexgrim@mail.com",
+    "status": "pending",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "84 Church Way",
+      "city": "Bradford",
+      "postCode": "BD1 9PB",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Banner Design",
+        "quantity": 1,
+        "price": 156.0,
+        "total": 156.0
+      },
+      {
+        "slug": "item18",
+        "name": "Email Design",
+        "quantity": 2,
+        "price": 200.0,
+        "total": 400.0
+      }
+    ],
+    "total": 556.0
+  },
+  {
+    "slug": "RG0314",
+    "issueDate": "2021-09-24",
+    "paymentDue": "2021-10-01",
+    "description": "Website Redesign",
+    "paymentTerms": 7,
+    "clientName": "John Morrison",
+    "clientEmail": "jm@myco.com",
+    "status": "paid",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "79 Dover Road",
+      "city": "Westhall",
+      "postCode": "IP19 3PF",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Website Redesign",
+        "quantity": 1,
+        "price": 14002.33,
+        "total": 14002.33
+      }
+    ],
+    "total": 14002.33
+  },
+  {
+    "slug": "RT2080",
+    "issueDate": "2021-10-11",
+    "paymentDue": "2021-10-12",
+    "description": "Logo Concept",
+    "paymentTerms": 1,
+    "clientName": "Alysa Werner",
+    "clientEmail": "alysa@email.co.uk",
+    "status": "pending",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "63 Warwick Road",
+      "city": "Carlisle",
+      "postCode": "CA20 2TG",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Logo Sketches",
+        "quantity": 1,
+        "price": 102.04,
+        "total": 102.04
+      }
+    ],
+    "total": 102.04
+  },
+  {
+    "slug": "AA1449",
+    "issueDate": "2021-10-7",
+    "paymentDue": "2021-10-14",
+    "description": "Re-branding",
+    "paymentTerms": 7,
+    "clientName": "Mellisa Clarke",
+    "clientEmail": "mellisa.clarke@example.com",
+    "status": "pending",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "46 Abbey Row",
+      "city": "Cambridge",
+      "postCode": "CB5 6EG",
+      "country": "United Kingdom"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "New Logo",
+        "quantity": 1,
+        "price": 1532.33,
+        "total": 1532.33
+      },
+      {
+        "slug": "item18",
+        "name": "Brand Guidelines",
+        "quantity": 1,
+        "price": 2500.0,
+        "total": 2500.0
+      }
+    ],
+    "total": 4032.33
+  },
+  {
+    "slug": "TY9141",
+    "issueDate": "2021-10-01",
+    "paymentDue": "2021-10-31",
+    "description": "Landing Page Design",
+    "paymentTerms": 30,
+    "clientName": "Thomas Wayne",
+    "clientEmail": "thomas@dc.com",
+    "status": "pending",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "3964  Queens Lane",
+      "city": "Gotham",
+      "postCode": "60457",
+      "country": "United States of America"
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Web Design",
+        "quantity": 1,
+        "price": 6155.91,
+        "total": 6155.91
+      }
+    ],
+    "total": 6155.91
+  },
+  {
+    "slug": "FV2353",
+    "issueDate": "2021-11-05",
+    "paymentDue": "2021-11-12",
+    "description": "Logo Re-design",
+    "paymentTerms": 7,
+    "clientName": "Anita Wainwright",
+    "clientEmail": "",
+    "status": "draft",
+    "senderAddress": {
+      "street": "19 Union Terrace",
+      "city": "London",
+      "postCode": "E1 3EZ",
+      "country": "United Kingdom"
+    },
+    "clientAddress": {
+      "street": "",
+      "city": "",
+      "postCode": "",
+      "country": ""
+    },
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Logo Re-design",
+        "quantity": 1,
+        "price": 3102.04,
+        "total": 3102.04
+      }
+    ],
+    "total": 3102.04
+  },
+  {
+    "slug": "1a7b8c",
+    "total": 100.0,
+    "clientName": "John Doe",
+    "status": "draft",
+    "paymentDue": "2023-01-31",
+    "description": "Description for Invoice 1",
+    "senderAddress": {
+      "street": "123 Main Street",
+      "city": "Anytown",
+      "postCode": "12345",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "456 Oak Avenue",
+      "city": "Another City",
+      "postCode": "67890",
+      "country": "USA"
+    },
+    "issueDate": "2023-01-15",
+    "clientEmail": "john.doe@example.com",
+    "items": [
+      {
+        "slug": "item1",
+        "name": "Product A",
+        "quantity": 2,
+        "price": 25.0,
+        "total": 50.0
+      },
+      {
+        "slug": "item2",
+        "name": "Product B",
+        "quantity": 3,
+        "price": 15.0,
+        "total": 45.0
+      }
+    ],
+    "paymentTerms": 15
+  },
+  {
+    "slug": "4e2a7f",
+    "total": 75.5,
+    "clientName": "Jane Smith",
+    "status": "pending",
+    "paymentDue": "2023-02-15",
+    "description": "Description for Invoice 2",
+    "senderAddress": {
+      "street": "789 Broad Street",
+      "city": "Cityville",
+      "postCode": "54321",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "101 Pine Road",
+      "city": "Townsville",
+      "postCode": "98765",
+      "country": "USA"
+    },
+    "issueDate": "2023-02-01",
+    "clientEmail": "jane.smith@example.com",
+    "items": [
+      {
+        "slug": "item3",
+        "name": "Product C",
+        "quantity": 1,
+        "price": 30.0,
+        "total": 30.0
+      },
+      {
+        "slug": "item4",
+        "name": "Product D",
+        "quantity": 2,
+        "price": 22.75,
+        "total": 45.5
+      }
+    ],
+    "paymentTerms": 30
+  },
+  {
+    "slug": "3f8b2d",
+    "total": 120.0,
+    "clientName": "Eva White",
+    "status": "draft",
+    "paymentDue": "2023-03-15",
+    "description": "Description for Invoice 6",
+    "senderAddress": {
+      "street": "567 Pine Lane",
+      "city": "Sunnyville",
+      "postCode": "54321",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "890 Oak Street",
+      "city": "Greenfield",
+      "postCode": "98765",
+      "country": "USA"
+    },
+    "issueDate": "2023-03-01",
+    "clientEmail": "eva.white@example.com",
+    "items": [
+      {
+        "slug": "item11",
+        "name": "Product X",
+        "quantity": 3,
+        "price": 20.0,
+        "total": 60.0
+      },
+      {
+        "slug": "item12",
+        "name": "Product Y",
+        "quantity": 2,
+        "price": 30.0,
+        "total": 60.0
+      }
+    ],
+    "paymentTerms": 20
+  },
+  {
+    "slug": "6a9c1f",
+    "total": 90.5,
+    "clientName": "Samuel Turner",
+    "status": "pending",
+    "paymentDue": "2023-04-05",
+    "description": "Description for Invoice 7",
+    "senderAddress": {
+      "street": "456 Maple Avenue",
+      "city": "Riverdale",
+      "postCode": "13579",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "789 Elm Street",
+      "city": "Hilltop",
+      "postCode": "24680",
+      "country": "USA"
+    },
+    "issueDate": "2023-03-20",
+    "clientEmail": "samuel.turner@example.com",
+    "items": [
+      {
+        "slug": "item13",
+        "name": "Product Z",
+        "quantity": 1,
+        "price": 50.0,
+        "total": 50.0
+      },
+      {
+        "slug": "item14",
+        "name": "Product W",
+        "quantity": 2,
+        "price": 20.25,
+        "total": 40.5
+      }
+    ],
+    "paymentTerms": 25
+  },
+  {
+    "slug": "2b3e7a",
+    "total": 180.0,
+    "clientName": "Olivia Williams",
+    "status": "completed",
+    "paymentDue": "2023-05-01",
+    "description": "Description for Invoice 8",
+    "senderAddress": {
+      "street": "101 Cedar Street",
+      "city": "Meadowview",
+      "postCode": "11223",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "202 Birch Lane",
+      "city": "Mountainville",
+      "postCode": "33445",
+      "country": "USA"
+    },
+    "issueDate": "2023-04-15",
+    "clientEmail": "olivia.williams@example.com",
+    "items": [
+      {
+        "slug": "item15",
+        "name": "Product Q",
+        "quantity": 2,
+        "price": 60.0,
+        "total": 120.0
+      },
+      {
+        "slug": "item16",
+        "name": "Product R",
+        "quantity": 1,
+        "price": 60.0,
+        "total": 60.0
+      }
+    ],
+    "paymentTerms": 30
+  },
+  {
+    "slug": "5d4f8e",
+    "total": 70.75,
+    "clientName": "Max Miller",
+    "status": "draft",
+    "paymentDue": "2023-04-10",
+    "description": "Description for Invoice 9",
+    "senderAddress": {
+      "street": "303 Walnut Street",
+      "city": "Woodsville",
+      "postCode": "55667",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "404 Oak Lane",
+      "city": "Havenfield",
+      "postCode": "88999",
+      "country": "USA"
+    },
+    "issueDate": "2023-03-25",
+    "clientEmail": "max.miller@example.com",
+    "items": [
+      {
+        "slug": "item17",
+        "name": "Product S",
+        "quantity": 3,
+        "price": 15.0,
+        "total": 45.0
+      },
+      {
+        "slug": "item18",
+        "name": "Product T",
+        "quantity": 1,
+        "price": 25.75,
+        "total": 25.75
+      }
+    ],
+    "paymentTerms": 18
+  },
+  {
+    "slug": "8e9a2c",
+    "total": 130.5,
+    "clientName": "Sophie Clark",
+    "status": "paid",
+    "paymentDue": "2023-05-15",
+    "description": "Description for Invoice 10",
+    "senderAddress": {
+      "street": "505 Pine Street",
+      "city": "Sunset City",
+      "postCode": "77889",
+      "country": "USA"
+    },
+    "clientAddress": {
+      "street": "606 Cedar Road",
+      "city": "Valleyview",
+      "postCode": "99000",
+      "country": "USA"
+    },
+    "issueDate": "2023-04-30",
+    "clientEmail": "sophie.clark@example.com",
+    "items": [
+      {
+        "slug": "item19",
+        "name": "Product U",
+        "quantity": 2,
+        "price": 40.0,
+        "total": 80.0
+      },
+      {
+        "slug": "item20",
+        "name": "Product V",
+        "quantity": 1,
+        "price": 50.5,
+        "total": 50.5
+      }
+    ],
+    "paymentTerms": 25
+  }
+]

@@ -34,7 +34,7 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issued       DateTime
+  issueDate    DateTime
   paymentDue   DateTime
   paymentTerms Int
 
@@ -57,7 +57,7 @@ model Invoice {
 }
 
 type InvoiceItem {
-  id       String
+  slug     String
   name     String
   quantity Int
   price    Float

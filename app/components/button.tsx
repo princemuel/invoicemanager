@@ -1,6 +1,6 @@
 import { tw } from "@/helpers/utils";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "cva";
+import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 
 type ButtonVariants = Omit<
@@ -28,7 +28,6 @@ export const Button = forwardRef(
       fullWidth,
       disabled,
       rounded,
-      status,
       asChild,
       className,
       ...restProps
@@ -47,7 +46,6 @@ export const Button = forwardRef(
             modifier,
             size,
             fullWidth,
-            status,
             disabled,
             rounded,
             className,
@@ -81,13 +79,6 @@ export const buttonVariants = cva(
       modifier: {
         plain: "border-none bg-transparent",
         outline: "border border-current bg-transparent",
-      },
-      status: {
-        // Invoice States
-        draft:
-          "bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100",
-        pending: "bg-accent-400/[0.06] text-accent-400",
-        paid: "bg-accent-500/[0.06] text-accent-500",
       },
       size: {
         xs: "text-400 leading-200 -tracking-200",
@@ -133,10 +124,6 @@ export const buttonVariants = cva(
         size: ["sm"],
         // gap-x-1 w-20 h-11 px-2 sm:w-36 sm:gap-x-2 sm:h-12
         className: "px-2 sm:px-4",
-      },
-      {
-        status: ["draft", "pending", "paid"],
-        className: "!h-10 !w-[6.5rem] justify-around !px-4 !py-3 capitalize",
       },
       {
         fullWidth: true,

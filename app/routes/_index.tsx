@@ -5,6 +5,7 @@ import {
   UserButton,
 } from "@clerk/remix";
 import type { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -19,6 +20,7 @@ function PageRoute() {
       <SignedIn>
         <h1>Index route</h1>
         <p>You are signed in!</p>
+        <Link to="/invoices"> Invoices</Link>
         <UserButton />
       </SignedIn>
 

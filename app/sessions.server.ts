@@ -1,17 +1,15 @@
 import { createCookieSessionStorage } from "@remix-run/node";
 import { createThemeSessionResolver } from "remix-themes";
 
-// You can default to 'development' if process.env.NODE_ENV is not set
 const isProduction = process.env.NODE_ENV === "production";
 
 const sessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "__remix-themes",
+    name: "__remix-themes__",
     path: "/",
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "strict",
     secrets: ["s3cr3t"],
-    // Set domain and secure only if in production
     ...(isProduction ?
       { domain: `https://${process.env.VERCEL_URL}`, secure: true }
     : {}),

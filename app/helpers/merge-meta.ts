@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from '@remix-run/node';
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 
 export const mergeMeta = <
   Loader extends LoaderFunction | unknown = unknown,
@@ -7,7 +7,7 @@ export const mergeMeta = <
     unknown
   >,
 >(
-  leafMetaFn: MetaFunction<Loader, ParentsLoaders>
+  leafMetaFn: MetaFunction<Loader, ParentsLoaders>,
 ): MetaFunction<Loader, ParentsLoaders> => {
   return (metaArg) => {
     // Get metadata for the current leaf route
@@ -19,7 +19,7 @@ export const mergeMeta = <
       const metaValue = currentValue.meta.filter(
         (parentMeta) =>
           // Check if similar metadata is not already in the accumulator
-          !accumulator.some((meta) => isSameMetadata(meta, parentMeta))
+          !accumulator.some((meta) => isSameMetadata(meta, parentMeta)),
       );
 
       // Concatenate the filtered metadata to the accumulator
@@ -37,9 +37,9 @@ function isSameMetadata(metaA: any, metaB: any) {
 
   // Check if the name, property, and title are the same
   return (
-    hasSameProperty('name') ||
-    hasSameProperty('property') ||
-    ('title' in metaA && 'title' in metaB)
+    hasSameProperty("name") ||
+    hasSameProperty("property") ||
+    ("title" in metaA && "title" in metaB)
   );
 }
 

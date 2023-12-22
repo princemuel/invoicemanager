@@ -1,7 +1,5 @@
-'use client';
-
-import { useHydrated } from '@/hooks';
-import * as React from 'react';
+import { useHydrated } from "@/hooks";
+import * as React from "react";
 
 type Props = {
   /**

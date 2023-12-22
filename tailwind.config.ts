@@ -137,11 +137,11 @@ export default {
         ".container": {
           "--padding-inline": theme("spacing.6"),
 
-          "--content-maxW": "70rem",
+          "--content-maxW": "60rem",
           "--content-size":
             "min(100% - (var(--padding-inline) * 2), var(--content-maxW))",
 
-          "--breakout-maxW": "80rem",
+          "--breakout-maxW": "70rem",
           "--breakout-size": `calc((var(--breakout-maxW) - var(--content-maxW)) / 2)`,
 
           "--fullWPadding": "minmax(var(--padding-inline), 1fr)",
