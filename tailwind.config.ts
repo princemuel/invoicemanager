@@ -137,7 +137,7 @@ export default {
         ".container": {
           "--padding-inline": theme("spacing.6"),
 
-          "--content-maxW": "64rem",
+          "--content-maxW": "60rem",
           "--content-size":
             "min(100% - (var(--padding-inline) * 2), var(--content-maxW))",
 
