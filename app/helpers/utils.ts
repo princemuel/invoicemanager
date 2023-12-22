@@ -18,6 +18,36 @@ export function tw(...inputs: CxOptions) {
 }
 
 /*---------------------------------*
+            STRING UTILS           *
+  ---------------------------------*
+ */
+
+export function capitalize(string = "") {
+  return string[0].toLocaleUpperCase() + string.slice(1).toLocaleLowerCase();
+}
+
+export const trim = (string = "") => string.trim();
+export const omitFirstChar = (string = "") => string.slice(1);
+
+export function pluralize(word: string, value: number) {
+  return value === 1 ? `${word}` : `${word}s`;
+}
+
+export function truncate(str = "", length = str.length) {
+  return str.length > length ? `${str.substring(0, length)}...` : str;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type EndsWith<W, S extends string> = W extends `${infer _}${S}` ? W : never;
+
+export const endsWith = <Word extends string, Suffix extends string>(
+  str: Word,
+  suffix: Suffix,
+): str is EndsWith<Word, Suffix> => {
+  return str.endsWith(suffix);
+};
+
+/*---------------------------------*
             NUMBER UTILS           *
   ---------------------------------*
  */
@@ -50,7 +80,8 @@ type FirstArg = number | Item[];
 export function calculateTotal<T extends FirstArg>(
   a?: T,
   b?: T extends number ? NonNullable<T>
-  : T extends (infer _)[] ? "total"
+  : // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  T extends (infer _)[] ? "total"
   : never,
 ) {
   if (Array.isArray(a)) {
@@ -114,4 +145,10 @@ export function buildItemCountMsg(message: string) {
       .replace("{{ verb }}", verb)
       .replace("{{ count }}", `${itemCount}`);
   };
+}
+
+export function monthsAgo(value: Date, distance = 0) {
+  const datetime = value;
+  datetime.setMonth(datetime.getMonth() - distance);
+  return datetime;
 }
