@@ -8,6 +8,8 @@ import {
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/datepicker";
 import { TextField } from "@/components/input";
+import { CreateInvoiceItemsDesktop } from "@/components/invoice.items.create.desktop";
+import { CreateInvoiceItemsMobile } from "@/components/invoice.items.create.mobile";
 import { Label } from "@/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
 import { Text } from "@/components/text";
@@ -26,8 +28,8 @@ function PageRoute() {
 
   const { inputProps, dayPickerProps } = useInput({
     defaultSelected: new Date(),
-    fromYear: 2021,
-    toYear: 2023,
+    fromYear: new Date().getFullYear() - 1,
+    toYear: new Date().getFullYear(),
     format: "dd MMM yyyy",
     required: true,
   });
@@ -263,6 +265,7 @@ function PageRoute() {
                             <TextField
                               {...inputProps}
                               className="inline-flex w-full cursor-pointer items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500"
+                              placeholder="Pick a date"
                               readOnly
                             />
                           </FormControl>
@@ -369,8 +372,8 @@ function PageRoute() {
                   Item List
                 </Text>
 
-                {/* <InvoiceItemsMobile className='flex sm:hidden' />
-                <InvoiceItemsDesktop className='hidden sm:flex' /> */}
+                <CreateInvoiceItemsMobile className="flex sm:hidden" />
+                <CreateInvoiceItemsDesktop className="hidden sm:flex" />
               </fieldset>
             </div>
             {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
