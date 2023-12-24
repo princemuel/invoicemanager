@@ -1,4 +1,4 @@
-import { IconArrowDown, IconArrowLeft, IconCalendar } from "@/common";
+import { IconArrowDown, IconCalendar } from "@/common";
 import {
   FormControl,
   FormField,
@@ -8,12 +8,10 @@ import {
   FormProvider,
 } from "@/components/__form__";
 import { Button } from "@/components/button";
-import { DatePicker } from "@/components/datepicker";
 import { TextField } from "@/components/input";
 import { EditInvoiceItemsDesktop } from "@/components/invoice.items.edit.desktop";
 import { EditInvoiceItemsMobile } from "@/components/invoice.items.edit.mobile";
 import { Label } from "@/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
 import { Text } from "@/components/text";
 import { invariant } from "@/helpers/invariant";
 import {
@@ -30,7 +28,6 @@ import {
   ItemSchema,
   StringContraint,
 } from "@/lib/schema";
-import { useUser } from "@clerk/remix";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +35,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { format } from "date-fns";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
 import { z } from "zod";
 
@@ -59,16 +56,14 @@ const schema = z.object({
   items: ItemSchema.array().nonempty(),
 
   slug: z.string(),
-  userId: z.string(),
 });
 const resolver = zodResolver(schema);
 
 export async function action(args: ActionFunctionArgs) {
   const params = args.params;
   const request = args.request;
-  invariant(params.slug, "Missing slug parameter");
 
-  const payload = params.slug;
+  invariant(params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
   if (!userId) return redirect("/sign-in?redirect_url=" + request.url);
@@ -81,18 +76,20 @@ export async function action(args: ActionFunctionArgs) {
 
   if (errors) return json({ errors, defaultValues });
 
-  const updated = { ...data, paymentDue: "", total: 0, userId };
-
   const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
-  updated.paymentDue = new Date(dueTime).toISOString();
-  updated.total = approximate(calculateTotal(updated?.items, "total"), 2);
+  const updated = {
+    ...data,
+    paymentDue: new Date(dueTime).toISOString(),
+    total: approximate(calculateTotal(data?.items, "total"), 2),
+    userId: userId,
+  };
 
   console.log(updated);
 
   // try {
-  //   return redirect(`/invoices/${payload}`);
+  //   return redirect(`/invoices/${invoice?.slug || ''}`);
   // } catch (ex) {
   //   if (ex instanceof Error) console.error(ex.message);
 
@@ -128,8 +125,6 @@ export type FormData = z.infer<typeof schema>;
 
 function PageRoute() {
   const params = useParams();
-  const { user } = useUser();
-
   const data = useLoaderData<typeof loader>();
 
   const { invoice } = data;
@@ -140,7 +135,7 @@ function PageRoute() {
 
     defaultValues: {
       paymentTerms: invoice?.paymentTerms || 1,
-      status: invoice?.status || "pending",
+      status: "pending",
       total: invoice?.total || 0,
 
       clientName: invoice?.clientName || "",
@@ -156,31 +151,20 @@ function PageRoute() {
     },
   });
 
-  const { handleSubmit, register, setValue } = form;
-
-  useEffect(() => {
-    register("status");
-  }, [register]);
+  console.log(form?.formState?.errors);
 
   return (
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
-        <div className="container">
-          <Button className="h-auto w-auto gap-x-3" asChild>
-            <Link to={`/invoices/${params.slug}`}>
-              <span>
-                <IconArrowLeft />
-              </span>
-              <span>Go Back</span>
-            </Link>
-          </Button>
-        </div>
-
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
+          <form
+            onSubmit={form.handleSubmit}
+            className={tw("flex flex-col gap-8")}
+          >
             <header className="container">
-              <Text as="h1" id="heading" size="xl">
-                Edit #{params.slug}
+              <Text as="h1" id="page-heading" size="xl">
+                Edit&nbsp;<span className="text-brand-400">#</span>
+                <span className="uppercase">{params.slug}</span>
               </Text>
             </header>
 
@@ -432,37 +416,22 @@ function PageRoute() {
                       name="issued"
                       render={({ field }) => (
                         <FormItem className="relative col-span-6 flex flex-col sm:col-span-3">
-                          <FormLabel>Invoice Issued Date</FormLabel>
+                          <FormLabel>Issued Date</FormLabel>
 
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500">
-                                  {field.value ?
-                                    <span className="block truncate">
-                                      {format(
-                                        new Date(field.value),
-                                        "dd MMM yyyy",
-                                      )}
-                                    </span>
-                                  : <span>Pick a date</span>}
+                          <FormControl>
+                            <Button
+                              disabled
+                              className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500"
+                            >
+                              <span className="block truncate">
+                                {format(new Date(field.value), "dd MMM yyyy")}
+                              </span>
 
-                                  <span className="pointer-events-none">
-                                    <IconCalendar aria-hidden className="" />
-                                  </span>
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-
-                            <PopoverContent className="mt-2" align="start">
-                              <DatePicker
-                                mode="single"
-                                initialFocus={true}
-                                selected={field.value}
-                                onSelect={field.onChange}
-                              />
-                            </PopoverContent>
-                          </Popover>
+                              <span className="pointer-events-none">
+                                <IconCalendar aria-hidden className="" />
+                              </span>
+                            </Button>
+                          </FormControl>
                         </FormItem>
                       )}
                     />
@@ -569,28 +538,15 @@ function PageRoute() {
               {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
             </section>
 
-            <footer className="sticky bottom-0 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
+            <footer className="sticky bottom-0 z-20 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
               <div className="container">
                 <div className="flex items-center gap-2 sm:gap-4">
-                  <Button variant="soft" asChild>
-                    <Link to="/invoices">Discard</Link>
+                  <Button variant="soft" className="ms-auto " asChild>
+                    <Link to={`/invoices/${invoice.slug}`}>Cancel</Link>
                   </Button>
 
-                  <Button
-                    type="submit"
-                    variant="secondary"
-                    className="ms-auto "
-                    onClick={() => void setValue("status", "draft")}
-                  >
-                    Save as draft
-                  </Button>
-
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    onClick={() => void setValue("status", "pending")}
-                  >
-                    Save & Send
+                  <Button type="submit" variant="primary">
+                    Save Changes
                   </Button>
                 </div>
               </div>

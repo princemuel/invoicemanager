@@ -1,4 +1,4 @@
-import { IconArrowDown, IconArrowLeft, IconCalendar } from "@/common";
+import { IconArrowDown, IconCalendar } from "@/common";
 import {
   FormControl,
   FormField,
@@ -70,16 +70,16 @@ export async function action(args: ActionFunctionArgs) {
 
   if (errors) return json({ errors, defaultValues });
 
-  const updated = { ...data, slug: "", paymentDue: "", total: 0, userId: "" };
-
   const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
-  updated.paymentDue = new Date(dueTime).toISOString();
-  updated.total = approximate(calculateTotal(updated?.items, "total"), 2);
-
-  updated.slug = generateHex.next().value;
-  updated.userId = userId;
+  const updated = {
+    ...data,
+    slug: generateHex.next().value,
+    paymentDue: new Date(dueTime).toISOString(),
+    total: approximate(calculateTotal(data?.items, "total"), 2),
+    userId: userId,
+  };
 
   console.log(updated);
 
@@ -128,21 +128,10 @@ function PageRoute() {
   return (
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
-        <div className="container">
-          <Button className="h-auto w-auto gap-x-3" asChild>
-            <Link to="/invoices">
-              <span>
-                <IconArrowLeft />
-              </span>
-              <span>Go Back</span>
-            </Link>
-          </Button>
-        </div>
-
         <FormProvider {...form}>
           <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
-              <Text as="h1" id="heading" size="xl">
+              <Text as="h1" id="page-heading" size="xl">
                 New Invoice
               </Text>
             </header>
@@ -395,7 +384,7 @@ function PageRoute() {
                       name="issued"
                       render={({ field }) => (
                         <FormItem className="relative col-span-6 flex flex-col sm:col-span-3">
-                          <FormLabel>Invoice Issued Date</FormLabel>
+                          <FormLabel>Issued Date</FormLabel>
 
                           <Popover>
                             <PopoverTrigger asChild>
@@ -538,7 +527,7 @@ function PageRoute() {
               {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
             </section>
 
-            <footer className="sticky bottom-0 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
+            <footer className="sticky bottom-0 z-20 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
               <div className="container">
                 <div className="flex items-center gap-2 sm:gap-4">
                   <Button variant="soft" asChild>
