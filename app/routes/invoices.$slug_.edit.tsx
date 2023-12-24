@@ -10,15 +10,16 @@ import {
 import { Button } from "@/components/button";
 import { DatePicker } from "@/components/datepicker";
 import { TextField } from "@/components/input";
-import { CreateInvoiceItemsDesktop } from "@/components/invoice.items.create.desktop";
-import { CreateInvoiceItemsMobile } from "@/components/invoice.items.create.mobile";
+import { EditInvoiceItemsDesktop } from "@/components/invoice.items.edit.desktop";
+import { EditInvoiceItemsMobile } from "@/components/invoice.items.edit.mobile";
 import { Label } from "@/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
 import { Text } from "@/components/text";
-import { generateHex } from "@/helpers/random-hex.server";
+import { invariant } from "@/helpers/invariant";
 import {
   approximate,
   calculateTotal,
+  hasValues,
   pluralize,
   safeNum,
   tw,
@@ -29,12 +30,13 @@ import {
   ItemSchema,
   StringContraint,
 } from "@/lib/schema";
+import { useUser } from "@clerk/remix";
 import { getAuth } from "@clerk/remix/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
@@ -55,22 +57,31 @@ const schema = z.object({
   issued: z.coerce.date().transform((value) => value.toISOString()),
   description: StringContraint,
   items: ItemSchema.array().nonempty(),
+
+  slug: z.string(),
+  userId: z.string(),
 });
 const resolver = zodResolver(schema);
 
 export async function action(args: ActionFunctionArgs) {
+  const params = args.params;
+  const request = args.request;
+  invariant(params.slug, "Missing slug parameter");
+
+  const payload = params.slug;
+
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId) return redirect("/sign-in?redirect_url=" + request.url);
 
   const {
     errors,
     data,
     receivedValues: defaultValues,
-  } = await getValidatedFormData<FormData>(args.request, resolver);
+  } = await getValidatedFormData<FormData>(request, resolver);
 
   if (errors) return json({ errors, defaultValues });
 
-  const updated = { ...data, slug: "", paymentDue: "", total: 0, userId: "" };
+  const updated = { ...data, paymentDue: "", total: 0, userId };
 
   const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
@@ -78,44 +89,70 @@ export async function action(args: ActionFunctionArgs) {
   updated.paymentDue = new Date(dueTime).toISOString();
   updated.total = approximate(calculateTotal(updated?.items, "total"), 2);
 
-  updated.slug = generateHex.next().value;
-  updated.userId = userId;
-
   console.log(updated);
 
-  try {
-    return json({ data: updated });
-    // return redirect(`/invoices`);
-  } catch (ex) {
-    if (ex instanceof Error) console.error(ex.message);
+  // try {
+  //   return redirect(`/invoices/${payload}`);
+  // } catch (ex) {
+  //   if (ex instanceof Error) console.error(ex.message);
 
-    //@ts-expect-error
-    throw new Response(ex.message, {
-      status: 400,
-      statusText: "Bad Request",
+  //   //@ts-expect-error
+  //   throw new Response(ex.message, {
+  //     status: 400,
+  //     statusText: "Bad Request",
+  //   });
+  // }
+
+  return json({ data });
+}
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  invariant(params.slug, "Missing slug parameter");
+  const payload = params.slug;
+
+  const invoices = await import("../database/db.json").then(
+    (response) => response.default,
+  );
+
+  const invoice = invoices.find((item) => item.slug === payload);
+  if (!invoice)
+    throw new Response(null, {
+      status: 404,
+      statusText: "Not Found",
     });
-  }
+
+  return json({ invoice: invoice });
 }
 
 export type FormData = z.infer<typeof schema>;
 
 function PageRoute() {
+  const params = useParams();
+  const { user } = useUser();
+
+  const data = useLoaderData<typeof loader>();
+
+  const { invoice } = data;
+
   const form = useRemixForm<FormData>({
     mode: "onSubmit",
     resolver: resolver,
+
     defaultValues: {
-      paymentTerms: 1,
-      status: "pending",
-      total: 0,
+      paymentTerms: invoice?.paymentTerms || 1,
+      status: invoice?.status || "pending",
+      total: invoice?.total || 0,
 
-      clientName: "",
-      clientEmail: "",
-      clientAddress: { street: "", city: "", postCode: "", country: "" },
-      senderAddress: { street: "", city: "", postCode: "", country: "" },
+      clientName: invoice?.clientName || "",
+      clientEmail: invoice?.clientEmail || "",
+      clientAddress: { ...(invoice.clientAddress || {}) },
+      senderAddress: { ...(invoice.senderAddress || {}) },
 
-      issued: new Date().toISOString(),
-      description: "",
-      items: [],
+      description: invoice?.description || "",
+      issued: new Date(invoice.issued).toISOString() || "",
+      items: hasValues(invoice?.items) ? invoice?.items : [],
+
+      slug: invoice?.slug,
     },
   });
 
@@ -130,7 +167,7 @@ function PageRoute() {
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
         <div className="container">
           <Button className="h-auto w-auto gap-x-3" asChild>
-            <Link to="/invoices">
+            <Link to={`/invoices/${params.slug}`}>
               <span>
                 <IconArrowLeft />
               </span>
@@ -143,7 +180,7 @@ function PageRoute() {
           <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
               <Text as="h1" id="heading" size="xl">
-                New Invoice
+                Edit #{params.slug}
               </Text>
             </header>
 
@@ -423,12 +460,6 @@ function PageRoute() {
                                 initialFocus={true}
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={(date) => {
-                                  const datetime = new Date();
-                                  datetime.setMonth(datetime.getMonth() - 1);
-
-                                  return date < datetime;
-                                }}
                               />
                             </PopoverContent>
                           </Popover>
@@ -531,8 +562,8 @@ function PageRoute() {
                     Item List
                   </Text>
 
-                  <CreateInvoiceItemsMobile className="flex sm:hidden" />
-                  <CreateInvoiceItemsDesktop className="hidden sm:flex" />
+                  <EditInvoiceItemsMobile className="flex sm:hidden" />
+                  <EditInvoiceItemsDesktop className="hidden sm:flex" />
                 </fieldset>
               </div>
               {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
