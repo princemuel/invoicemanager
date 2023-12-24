@@ -7,7 +7,7 @@ const DEFAULT_HEX_SIZE = 6;
  * @param size The size of the hex string. Default is 6.
  * @returns A generator yielding random hex strings.
  */
-export function* createRandomHex(
+function* createRandomHex(
   size: number = DEFAULT_HEX_SIZE,
 ): Generator<string, string, unknown> {
   let currentRandomHex: string;
@@ -49,3 +49,4 @@ export function* createRandomHex(
     }
   }
 }
+export const generateHex = createRandomHex();

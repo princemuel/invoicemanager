@@ -146,9 +146,3 @@ export function buildItemCountMsg(message: string) {
       .replace("{{ count }}", `${itemCount}`);
   };
 }
-
-export function monthsAgo(value: Date, distance = 0) {
-  const datetime = value;
-  datetime.setMonth(datetime.getMonth() - distance);
-  return datetime;
-}
