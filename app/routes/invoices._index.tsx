@@ -1,8 +1,7 @@
 import { InvoicesDesktop } from "@/components/templates.invoices.desktop";
 import { InvoicesMobile } from "@/components/templates.invoices.mobile";
-import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node";
-
-type Props = {};
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,14 +33,6 @@ function PageRoute() {
 }
 
 export default PageRoute;
-
-type Order = {
-  slug: string;
-  total: number;
-  clientName: string;
-  status: string;
-  paymentDue: string;
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
