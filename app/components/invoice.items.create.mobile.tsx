@@ -1,6 +1,16 @@
-import { tw } from "@/helpers/utils";
-import { useCallback } from "react";
-import { FormControl, FormItem, FormLabel, FormMessage } from "./__form__";
+import { approximate, calculateTotal, endsWith, tw } from "@/helpers/utils";
+import type { FormData } from "@/routes/invoices.create";
+import { useCallback, useEffect } from "react";
+import { get, useFieldArray, type FieldPathValue } from "react-hook-form";
+import { useRemixFormContext } from "remix-hook-form";
+import { v4 as uuid } from "uuid";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./__form__";
 import { Button } from "./button";
 import { TextField } from "./input";
 import { Text } from "./text";
@@ -8,58 +18,121 @@ import { Text } from "./text";
 type Props = { className?: string };
 
 export function CreateInvoiceItemsMobile({ className }: Props) {
-  const addItem = useCallback(() => {}, []);
-  const remove = useCallback((value: number) => {}, []);
+  const { getValues, watch, setValue, control, register } =
+    useRemixFormContext<FormData>();
+
+  const { fields, append, remove } = useFieldArray<FormData>({
+    name: "items",
+    control: control,
+    rules: {
+      required: "Please add at least one item",
+    },
+  });
+
+  useEffect(() => {
+    const subscription = watch((_, { name, type }) => {
+      const value = getValues();
+
+      if (type === "change" && name) {
+        if (endsWith(name, "quantity") || endsWith(name, "price")) {
+          type FieldValueType = FieldPathValue<typeof value, typeof name>;
+
+          const { items } = value;
+          const [, indexString, fieldName] = name.split(".");
+          const index = parseInt(indexString);
+
+          const fieldValue: FieldValueType = get(value, name);
+
+          if (fieldValue) {
+            if (fieldName === "quantity")
+              setValue(
+                `items.${index}.total`,
+                approximate(calculateTotal(fieldValue, items[index].price)),
+              );
+            else if (fieldName === "price")
+              setValue(
+                `items.${index}.total`,
+                approximate(calculateTotal(items[index].quantity, fieldValue)),
+              );
+          }
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [getValues, setValue, watch]);
+
+  const addItem = useCallback(() => {
+    append({ id: uuid(), name: "", quantity: 0, price: 0, total: 0 });
+  }, [append]);
 
   return (
     <div className={tw("flex-col gap-6", className)}>
       <ul className="flex flex-col gap-8">
-        {[1, 2, 3].map((field, index) => {
+        {fields.map((field, index) => {
+          register(`items.${index}.total`);
           return (
             <li
               key={field.toString()}
               className="grid grid-cols-8 gap-x-4 gap-y-6"
             >
-              <FormItem className="col-span-8">
-                <div className="flex items-center justify-between">
-                  <FormLabel>Item Name</FormLabel>
-                  <FormMessage />
-                </div>
+              <FormField
+                name={`items.${index}.name`}
+                render={({ field }) => (
+                  <FormItem className="col-span-8">
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Item Name</FormLabel>
+                      <FormMessage />
+                    </div>
 
-                <FormControl>
-                  <TextField
-                    type="text"
-                    name={`items.${index}.name`}
-                    placeholder="Email Design"
-                  />
-                </FormControl>
-              </FormItem>
+                    <FormControl>
+                      <TextField
+                        type="text"
+                        placeholder="Email Design"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormItem className="col-span-2">
-                <FormLabel>Qty.</FormLabel>
+              <FormField
+                name={`items.${index}.quantity`}
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>Qty.</FormLabel>
 
-                <FormControl>
-                  <TextField
-                    type="number"
-                    name={`items.${index}.quantity`}
-                    placeholder="1"
-                    step={1}
-                  />
-                </FormControl>
-              </FormItem>
+                    <FormControl>
+                      <TextField
+                        type="number"
+                        placeholder="1"
+                        step={1}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormItem className="col-span-3">
-                <FormLabel>Price</FormLabel>
+              <FormField
+                name={`items.${index}.price`}
+                render={({ field }) => (
+                  <FormItem className="col-span-3">
+                    <FormLabel>Price</FormLabel>
 
-                <FormControl>
-                  <TextField
-                    type="number"
-                    name={`items.${index}.price`}
-                    placeholder="200.00"
-                    step={0.01}
-                  />
-                </FormControl>
-              </FormItem>
+                    <FormControl>
+                      <TextField
+                        type="number"
+                        placeholder="200.00"
+                        step={0.01}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
               <FormItem className="col-span-2 self-start">
                 <FormLabel htmlFor={`items.${index}.total`}>Total</FormLabel>
@@ -71,8 +144,7 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
                   weight="bold"
                   className="mt-[1.1rem] text-[#888EB0] dark:text-[#888EB0]"
                 >
-                  {/* {watch(`items.${index}.total`)} */}
-                  1234.00
+                  {watch(`items.${index}.total`)}
                 </Text>
               </FormItem>
 

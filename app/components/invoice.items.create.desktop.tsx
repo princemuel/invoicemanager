@@ -1,6 +1,10 @@
-import { tw } from "@/helpers/utils";
-import { useCallback } from "react";
-import { FormControl, FormItem, FormLabel } from "./__form__";
+import { approximate, calculateTotal, endsWith, tw } from "@/helpers/utils";
+import type { FormData } from "@/routes/invoices.create";
+import { useCallback, useEffect } from "react";
+import { get, useFieldArray, type FieldPathValue } from "react-hook-form";
+import { useRemixFormContext } from "remix-hook-form";
+import { v4 as uuid } from "uuid";
+import { FormControl, FormField, FormItem, FormLabel } from "./__form__";
 import { Button } from "./button";
 import { TextField } from "./input";
 import { Text } from "./text";
@@ -8,8 +12,55 @@ import { Text } from "./text";
 type Props = { className?: string };
 
 export function CreateInvoiceItemsDesktop({ className }: Props) {
-  const addItem = useCallback(() => {}, []);
-  const remove = useCallback((value: number) => {}, []);
+  const { getValues, watch, setValue, control, register } =
+    useRemixFormContext<FormData>();
+
+  const { fields, append, remove } = useFieldArray<FormData>({
+    name: "items",
+    control: control,
+    rules: {
+      required: "Please add at least one item",
+    },
+  });
+
+  useEffect(() => {
+    const subscription = watch((_, { name, type }) => {
+      const value = getValues();
+
+      if (type === "change" && name) {
+        if (endsWith(name, "quantity") || endsWith(name, "price")) {
+          type FieldValueType = FieldPathValue<typeof value, typeof name>;
+
+          const { items } = value;
+          const [, indexString, fieldName] = name.split(".");
+          const index = parseInt(indexString);
+
+          const fieldValue: FieldValueType = get(value, name);
+
+          if (fieldValue) {
+            if (fieldName === "quantity")
+              setValue(
+                `items.${index}.total`,
+                approximate(calculateTotal(fieldValue, items[index].price)),
+              );
+            else if (fieldName === "price")
+              setValue(
+                `items.${index}.total`,
+                approximate(calculateTotal(items[index].quantity, fieldValue)),
+              );
+          }
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [getValues, setValue, watch]);
+
+  const addItem = useCallback(() => {
+    append({ id: uuid(), name: "", quantity: 0, price: 0, total: 0 });
+  }, [append]);
 
   return (
     <div className={tw("flex-col gap-6", className)}>
@@ -29,43 +80,59 @@ export function CreateInvoiceItemsDesktop({ className }: Props) {
       </ul>
 
       <ul className="flex flex-col gap-5">
-        {[1, 2, 3].map((field, index) => {
+        {fields.map((field, index) => {
+          register(`items.${index}.total`);
           return (
             <li
-              key={field.toString()}
+              key={field.id}
               className="grid grid-cols-12 items-center gap-x-4"
             >
-              <FormItem as={FormLabel} className="col-span-5">
-                <FormControl>
-                  <TextField
-                    type="text"
-                    name={`items.${index}.name`}
-                    placeholder="Banner Design"
-                  />
-                </FormControl>
-              </FormItem>
+              <FormField
+                name={`items.${index}.name`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className="col-span-5">
+                    <FormControl>
+                      <TextField
+                        type="text"
+                        placeholder="Banner Design"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormItem as={FormLabel} className="col-span-2">
-                <FormControl>
-                  <TextField
-                    type="number"
-                    name={`items.${index}.quantity`}
-                    placeholder="1"
-                    step={1}
-                  />
-                </FormControl>
-              </FormItem>
+              <FormField
+                name={`items.${index}.quantity`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className="col-span-2">
+                    <FormControl>
+                      <TextField
+                        type="number"
+                        placeholder="1"
+                        step={1}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
-              <FormItem as={FormLabel} className="col-span-2">
-                <FormControl>
-                  <TextField
-                    type="number"
-                    name={`items.${index}.price`}
-                    placeholder="200.00"
-                    step={0.01}
-                  />
-                </FormControl>
-              </FormItem>
+              <FormField
+                name={`items.${index}.price`}
+                render={({ field }) => (
+                  <FormItem as={FormLabel} className="col-span-2">
+                    <FormControl>
+                      <TextField
+                        type="number"
+                        placeholder="200.00"
+                        step={0.01}
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
               <FormItem className="col-span-2">
                 <Text
@@ -76,8 +143,7 @@ export function CreateInvoiceItemsDesktop({ className }: Props) {
                   weight="bold"
                   className="text-[#888EB0] dark:text-[#888EB0]"
                 >
-                  {/* {watch(`items.${index}.total`)} */}
-                  1234.00
+                  {watch(`items.${index}.total`)}
                 </Text>
               </FormItem>
 
