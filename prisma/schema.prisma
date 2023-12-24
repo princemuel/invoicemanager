@@ -28,27 +28,25 @@ model User {
 }
 
 model Invoice {
-  id   String  @id @default(auto()) @map("_id") @db.ObjectId
-  slug String? @unique
-
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issued       DateTime
-  paymentDue   DateTime
+  slug       String?  @unique
+  paymentDue DateTime
+
   paymentTerms Int
-
-  description String
-  status      String? @default("pending")
-
-  senderAddress Address
+  status       String? @default("pending")
+  total        Float
 
   clientName    String
   clientEmail   String
   clientAddress Address
+  senderAddress Address
 
-  items InvoiceItem[]
-  total Float
+  issued      DateTime
+  description String
+  items       InvoiceItem[]
 
   user   User?   @relation(fields: [userId], references: [authId], onDelete: Cascade)
   userId String?
@@ -57,7 +55,7 @@ model Invoice {
 }
 
 type InvoiceItem {
-  slug     String
+  id       String
   name     String
   quantity Int
   price    Float
