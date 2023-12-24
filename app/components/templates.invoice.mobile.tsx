@@ -163,7 +163,9 @@ export function InvoiceMobile({ className }: Props) {
             </ul>
 
             <footer className="flex items-center justify-between bg-accent-300 p-6 dark:bg-brand-900">
-              <Text as="h4">Grand Total</Text>
+              <Text as="h4" className="text-white">
+                Grand Total
+              </Text>
 
               <Text
                 as="output"
