@@ -1,23 +1,17 @@
 import { approximate, calculateTotal, endsWith, tw } from "@/helpers/utils";
-import type { FormData } from "@/routes/invoices.create";
+import type { FormData } from "@/routes/invoices.$slug_.edit";
 import { useCallback, useEffect } from "react";
 import { get, useFieldArray, type FieldPathValue } from "react-hook-form";
 import { useRemixFormContext } from "remix-hook-form";
 import { v4 as uuid } from "uuid";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./__form__";
+import { FormControl, FormField, FormItem, FormLabel } from "./__form__";
 import { Button } from "./button";
 import { TextField } from "./input";
 import { Text } from "./text";
 
 type Props = { className?: string };
 
-export function CreateInvoiceItemsMobile({ className }: Props) {
+export function EditInvoiceItemsDesktop({ className }: Props) {
   const { getValues, watch, setValue, control, register } =
     useRemixFormContext<FormData>();
 
@@ -70,24 +64,37 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
 
   return (
     <div className={tw("flex-col gap-6", className)}>
-      <ul className="flex flex-col gap-8">
+      <ul className="grid grid-cols-12 items-center gap-x-4">
+        <li className="col-span-5">
+          <Text variant="primary">Item Name</Text>
+        </li>
+        <li className="col-span-2">
+          <Text variant="primary">Qty.</Text>
+        </li>
+        <li className="col-span-2">
+          <Text variant="primary">Price</Text>
+        </li>
+        <li className="col-span-2">
+          <Text variant="primary">Total</Text>
+        </li>
+      </ul>
+
+      <ul className="flex flex-col gap-5">
         {fields.map((field, index) => {
           register(`items.${index}.total`);
           return (
-            <li key={field.id} className="grid grid-cols-8 gap-x-4 gap-y-6">
+            <li
+              key={field.id}
+              className="grid grid-cols-12 items-center gap-x-4"
+            >
               <FormField
                 name={`items.${index}.name`}
                 render={({ field }) => (
-                  <FormItem className="col-span-8">
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Item Name</FormLabel>
-                      <FormMessage />
-                    </div>
-
+                  <FormItem as={FormLabel} className="col-span-5">
                     <FormControl>
                       <TextField
                         type="text"
-                        placeholder="Email Design"
+                        placeholder="Banner Design"
                         {...field}
                       />
                     </FormControl>
@@ -98,9 +105,7 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
               <FormField
                 name={`items.${index}.quantity`}
                 render={({ field }) => (
-                  <FormItem className="col-span-2">
-                    <FormLabel>Qty.</FormLabel>
-
+                  <FormItem as={FormLabel} className="col-span-2">
                     <FormControl>
                       <TextField
                         type="number"
@@ -116,9 +121,7 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
               <FormField
                 name={`items.${index}.price`}
                 render={({ field }) => (
-                  <FormItem className="col-span-3">
-                    <FormLabel>Price</FormLabel>
-
+                  <FormItem as={FormLabel} className="col-span-2">
                     <FormControl>
                       <TextField
                         type="number"
@@ -131,21 +134,20 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
                 )}
               />
 
-              <FormItem className="col-span-2 self-start">
-                <FormLabel htmlFor={`items.${index}.total`}>Total</FormLabel>
+              <FormItem className="col-span-2">
                 <Text
                   as="output"
                   htmlFor={`items.${index}.price items.${index}.quantity`}
                   id={`items.${index}.total`}
                   name={`items.${index}.total`}
                   weight="bold"
-                  className="mt-[1.1rem] text-[#888EB0] dark:text-[#888EB0]"
+                  className="text-[#888EB0] dark:text-[#888EB0]"
                 >
                   {watch(`items.${index}.total`)}
                 </Text>
               </FormItem>
 
-              <FormItem className="col-span-1 mt-7 self-center justify-self-center">
+              <FormItem className="col-span-1 justify-self-center">
                 <button
                   type="button"
                   className="inline-block h-5 w-4 bg-[url(/icon-delete.svg)] bg-cover bg-no-repeat hover:bg-[url(/icon-delete-red.svg)] focus:bg-[url(/icon-delete-red.svg)]"

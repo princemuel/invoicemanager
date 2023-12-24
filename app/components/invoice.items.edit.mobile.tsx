@@ -1,5 +1,5 @@
 import { approximate, calculateTotal, endsWith, tw } from "@/helpers/utils";
-import type { FormData } from "@/routes/invoices.create";
+import type { FormData } from "@/routes/invoices.$slug_.edit";
 import { useCallback, useEffect } from "react";
 import { get, useFieldArray, type FieldPathValue } from "react-hook-form";
 import { useRemixFormContext } from "remix-hook-form";
@@ -17,7 +17,7 @@ import { Text } from "./text";
 
 type Props = { className?: string };
 
-export function CreateInvoiceItemsMobile({ className }: Props) {
+export function EditInvoiceItemsMobile({ className }: Props) {
   const { getValues, watch, setValue, control, register } =
     useRemixFormContext<FormData>();
 

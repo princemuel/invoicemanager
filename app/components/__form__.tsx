@@ -2,34 +2,70 @@ import { tw } from "@/helpers/utils";
 import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
+import type { ControllerProps, FieldPath, FieldValues } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { RemixFormProvider, useRemixFormContext } from "remix-hook-form";
 import { Label } from "./label";
 
+type FormFieldContextValue<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+> = {
+  name: TName;
+};
 type FormItemContextValue = {
   id: string;
-  error?: string;
 };
+
+const FormFieldContext = React.createContext({} as FormFieldContextValue);
 
 const FormItemContext = React.createContext({} as FormItemContextValue);
 
 const useFormField = () => {
-  const { id, ...rest } = React.useContext(FormItemContext);
+  const fieldContext = React.useContext(FormFieldContext);
+  const itemContext = React.useContext(FormItemContext);
+  const { getFieldState, formState } = useRemixFormContext();
+
+  const fieldState = getFieldState(fieldContext.name, formState);
+
+  if (!fieldContext) {
+    throw new Error("useFormField should be used within <FormField>");
+  }
+
+  const { id } = itemContext;
 
   return {
     id,
+    name: fieldContext.name,
     formItemId: `${id}-form-item`,
     formDescriptionId: `${id}-form-item-description`,
     formMessageId: `${id}-form-item-message`,
-    ...rest,
+    ...fieldState,
   };
 };
 
+const FormProvider = RemixFormProvider;
+
+const FormField = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  ...props
+}: ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  );
+};
+
 const FormItem = React.forwardRef(
-  ({ as, className, error, ...restProps }, forwardedRef) => {
+  ({ as, className, ...restProps }, forwardedRef) => {
     const id = React.useId();
     const As = as || "div";
 
     return (
-      <FormItemContext.Provider value={{ id, error }}>
+      <FormItemContext.Provider value={{ id }}>
         <As
           className={tw("group flex flex-col gap-3", className)}
           {...restProps}
@@ -38,7 +74,7 @@ const FormItem = React.forwardRef(
       </FormItemContext.Provider>
     );
   },
-) as ForwardRefComponent<"div", { error?: string }>;
+) as ForwardRefComponent<"div", {}>;
 FormItem.displayName = "FormItem";
 
 const FormControl = React.forwardRef<
@@ -87,7 +123,7 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...restProps }, forwardedRef) => {
   const { error, formMessageId } = useFormField();
-  const body = error ? String(error) : children;
+  const body = error ? String(error?.message) : children;
   if (!body) return null;
 
   return (
@@ -127,8 +163,10 @@ FormDescription.displayName = "FormDescription";
 export {
   FormControl,
   FormDescription,
+  FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormProvider,
   useFormField,
 };
