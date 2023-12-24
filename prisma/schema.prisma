@@ -34,7 +34,7 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  issueDate    DateTime
+  issued       DateTime
   paymentDue   DateTime
   paymentTerms Int
 
