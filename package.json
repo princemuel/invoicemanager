@@ -16,11 +16,12 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier . --write \"**/*.{js,mjs,jsx,ts,tsx}\" --cache",
     "format:check": "prettier . --check \"**/*.{js,mjs,jsx,ts,tsx}\" --cache",
-    "postinstall": "npx prisma generate"
+    "postinstall": "pnpm exec prisma generate"
   },
   "dependencies": {
     "@clerk/remix": "^3.1.13",
     "@headlessui/react": "^1.7.17",
+    "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.7.1",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-popover": "^1.0.7",
@@ -39,11 +40,14 @@
     "react": "^18.2.0",
     "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.12.0",
+    "remix-hook-form": "^3.2.3",
     "remix-themes": "^1.2.2",
     "tailwind-merge": "^2.2.0",
     "uuid": "^9.0.1",
+    "validator": "^13.11.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -56,6 +60,8 @@
     "@svgr/plugin-svgo": "^8.1.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
+    "@types/uuid": "^9.0.7",
+    "@types/validator": "^13.11.7",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
@@ -70,6 +76,7 @@
     "prettier-plugin-prisma": "^5.0.0",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "prisma": "^5.7.1",
+    "remix-development-tools": "^3.6.2",
     "tailwind-scrollbar": "^3.0.5",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
@@ -85,6 +92,7 @@
     }
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": "8.x"
   }
 }
