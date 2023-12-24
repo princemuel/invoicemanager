@@ -1,6 +1,6 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import type { loader } from "@/routes/invoices.$slug";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
 import { Text } from "./text";
@@ -75,11 +75,11 @@ export function InvoiceMobile({ className }: Props) {
 
                 <Text
                   as="time"
-                  dateTime={new Date(invoice?.paymentDue).toISOString()}
+                  dateTime={new Date(invoice?.issued).toISOString()}
                   size="sm"
                   className="inline-block"
                 >
-                  {format(new Date(invoice?.paymentDue), "dd MMM yyyy")}
+                  {format(new Date(invoice?.issued), "dd MMM yyyy")}
                 </Text>
               </div>
 
@@ -139,7 +139,7 @@ export function InvoiceMobile({ className }: Props) {
             <ul className="flex flex-col gap-6 p-6 ">
               {hasValues(invoice?.items || []) ?
                 invoice.items.map((item) => (
-                  <li key={item?.slug}>
+                  <li key={item?.id}>
                     <article className="flex flex-col gap-2">
                       <header className="flex items-center justify-between">
                         <Text as="h4" weight="bold">
@@ -180,9 +180,15 @@ export function InvoiceMobile({ className }: Props) {
 
       <div className="sticky bottom-0 w-full bg-white p-6 shadow-100 dark:bg-brand-700">
         <div className="flex items-center justify-between gap-2">
-          <Button variant="soft">Edit</Button>
-          <Button variant="destructive">Delete</Button>
-          <Button variant="primary">Mark as Paid</Button>
+          <Button variant="soft" asChild>
+            <Link to="edit">Edit</Link>
+          </Button>
+          <Button variant="destructive" asChild>
+            <Link to="delete">Delete</Link>
+          </Button>
+          <Button variant="primary" asChild>
+            <Link to="mark-as-paid">Mark as Paid</Link>
+          </Button>
         </div>
       </div>
     </section>

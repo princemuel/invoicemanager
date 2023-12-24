@@ -3,7 +3,8 @@ import { Button } from "@/components/button";
 import { InvoiceDesktop } from "@/components/templates.invoice.desktop";
 import { InvoiceMobile } from "@/components/templates.invoice.mobile";
 import { invariant } from "@/helpers/invariant";
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
 function PageRoute() {
@@ -39,7 +40,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
   );
 
   const invoice = invoices.find((item) => item.slug === payload);
-  if (!invoice) throw new Response("Not Found", { status: 404 });
+  if (!invoice)
+    throw new Response(null, {
+      status: 404,
+      statusText: "Not Found",
+    });
 
   return json({ invoice: invoice });
 }

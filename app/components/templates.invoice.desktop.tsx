@@ -1,6 +1,6 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import type { loader } from "@/routes/invoices.$slug";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
 import { Text } from "./text";
@@ -35,9 +35,15 @@ export function InvoiceDesktop({ className }: Props) {
           </Button>
 
           <div className="ml-auto flex items-center justify-between gap-2">
-            <Button variant="soft">Edit</Button>
-            <Button variant="destructive">Delete</Button>
-            <Button variant="primary">Mark as Paid</Button>
+            <Button variant="soft" asChild>
+              <Link to="edit">Edit</Link>
+            </Button>
+            <Button variant="destructive" asChild>
+              <Link to="delete">Delete</Link>
+            </Button>
+            <Button variant="primary" asChild>
+              <Link to="mark-as-paid">Mark as Paid</Link>
+            </Button>
           </div>
         </div>
       </header>
@@ -82,11 +88,11 @@ export function InvoiceDesktop({ className }: Props) {
 
                 <Text
                   as="time"
-                  dateTime={new Date(invoice?.paymentDue).toISOString()}
+                  dateTime={new Date(invoice?.issued).toISOString()}
                   size="sm"
                   className="inline-block"
                 >
-                  {format(new Date(invoice?.paymentDue), "dd MMM yyyy")}
+                  {format(new Date(invoice?.issued), "dd MMM yyyy")}
                 </Text>
               </div>
 
@@ -170,7 +176,7 @@ export function InvoiceDesktop({ className }: Props) {
               {hasValues(invoice?.items || []) ?
                 invoice.items.map((item) => (
                   <tr
-                    key={item?.slug}
+                    key={item?.id}
                     className="grid grid-cols-4 justify-items-end gap-2"
                   >
                     <Text as="td" weight="bold" className="justify-self-start">
