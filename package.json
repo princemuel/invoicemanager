@@ -45,6 +45,8 @@
     "react-icons": "^4.12.0",
     "remix-hook-form": "^3.2.3",
     "remix-themes": "^1.2.2",
+    "remix-toast": "^1.1.0",
+    "sonner": "^1.2.4",
     "svix": "^1.15.0",
     "tailwind-merge": "^2.2.0",
     "uuid": "^9.0.1",

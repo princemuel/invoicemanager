@@ -83,6 +83,12 @@ dependencies:
   remix-themes:
     specifier: ^1.2.2
     version: 1.2.2(@remix-run/react@2.4.1)(@remix-run/server-runtime@2.4.1)
+  remix-toast:
+    specifier: ^1.1.0
+    version: 1.1.0(@remix-run/server-runtime@2.4.1)
+  sonner:
+    specifier: ^1.2.4
+    version: 1.2.4(react-dom@18.2.0)(react@18.2.0)
   svix:
     specifier: ^1.15.0
     version: 1.15.0
@@ -7590,6 +7596,15 @@ packages:
       '@remix-run/server-runtime': 2.4.1(typescript@5.3.3)
     dev: false
 
+  /remix-toast@1.1.0(@remix-run/server-runtime@2.4.1):
+    resolution: {integrity: sha512-F7Nd/AncB8Jt+4p0k+ylhS091clMfmgWPwee6d+YWHSFX4lLt6vwwu6EB8V1lrxzNOSxrwJ87tUXE0gQy3Occg==}
+    peerDependencies:
+      '@remix-run/server-runtime': '>=1.15'
+    dependencies:
+      '@remix-run/server-runtime': 2.4.1(typescript@5.3.3)
+      zod: 3.22.4
+    dev: false
+
   /require-like@0.1.2:
     resolution: {integrity: sha512-oyrU88skkMtDdauHDuKVrgR+zuItqr6/c//FXzvmxRGMexSDc6hNvJInGW3LL46n+8b50RykrvwSUIIQH2LQ5A==}
     dev: true
@@ -7864,6 +7879,16 @@ packages:
       map-obj: 4.3.0
       snake-case: 3.0.4
       type-fest: 2.19.0
+    dev: false
+
+  /sonner@1.2.4(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-WGLP2QQnomgewaCTsK7YWiLcy5n1Yj83vsL5cP4zHMmpSkmFsCYTpQKhlXJrPE5kzjwbqCkCFXcOpbKc4vaUaA==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /source-map-js@1.0.2:

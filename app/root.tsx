@@ -9,15 +9,19 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  json,
   useLoaderData,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
+import { useEffect } from "react";
 import { Toaster as ToastManager } from "react-hot-toast";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider as RemixThemesProvider,
   useTheme,
 } from "remix-themes";
+import { getToast } from "remix-toast";
+import { toast as notify } from "sonner";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
 import styles from "./globals.css";
 import { tw } from "./helpers/utils";
@@ -25,24 +29,15 @@ import { themeSessionResolver } from "./sessions.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
-  // { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  // {
-  //   rel: "preconnect",
-  //   href: "https://fonts.gstatic.com",
-  //   crossOrigin: "use-credentials",
-  // },
-  // {
-  //   rel: "stylesheet",
-  //   href: "https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&display=swap",
-  // },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
 export const loader = (args: LoaderFunctionArgs) => {
   return rootAuthLoader(args, async ({ request }) => {
     const { getTheme } = await themeSessionResolver(request);
+    const { toast, headers } = await getToast(request);
 
-    return { theme: getTheme() };
+    return json({ toast, theme: getTheme() }, { headers });
   });
 };
 
@@ -51,6 +46,22 @@ export const ErrorBoundary = ClerkErrorBoundary();
 function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
+
+  useEffect(() => {
+    const type = data.toast?.type || "";
+    const message = data.toast?.message;
+
+    const methods = {
+      error: notify.error,
+      success: notify.success,
+      info: notify.info,
+      warning: notify.warning,
+    };
+
+    const lookup = methods?.[type as keyof typeof methods];
+
+    if (type && message && lookup) lookup(message);
+  }, [data.toast?.message, data.toast?.type]);
 
   return (
     <html
