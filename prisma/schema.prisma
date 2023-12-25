@@ -11,16 +11,11 @@ datasource db {
 }
 
 model User {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  authId String @unique @map("auth_id")
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  userAuthId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  firstName String? @map("first_name")
-  lastName  String? @map("last_name")
-  email     String? @unique
-  image     String? @default("placeholder.jpg")
 
   Invoice Invoice[]
 
@@ -48,7 +43,7 @@ model Invoice {
   description String
   items       InvoiceItem[]
 
-  user   User?   @relation(fields: [userId], references: [authId], onDelete: Cascade)
+  user   User?   @relation(fields: [userId], references: [userAuthId], onDelete: Cascade)
   userId String?
 
   @@map("invoices")
