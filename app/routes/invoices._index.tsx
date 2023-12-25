@@ -1,7 +1,9 @@
 import { InvoicesDesktop } from "@/components/templates.invoices.desktop";
 import { InvoicesMobile } from "@/components/templates.invoices.mobile";
+import { db } from "@/database/db.server";
+import { getAuth } from "@clerk/remix/ssr.server";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
@@ -34,13 +36,23 @@ function PageRoute() {
 
 export default PageRoute;
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
+export async function loader(args: LoaderFunctionArgs) {
+  const { userId } = await getAuth(args);
+  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+
+  const url = new URL(args.request.url);
   const statuses = url.searchParams.getAll("status");
 
-  const response = await import("../database/db.json").then(
-    (response) => response.default,
-  );
+  const response = await db.invoice.findMany({
+    where: { userId: userId },
+    select: {
+      slug: true,
+      paymentDue: true,
+      status: true,
+      clientName: true,
+      total: true,
+    },
+  });
 
   const invoices =
     statuses.length > 0 ?

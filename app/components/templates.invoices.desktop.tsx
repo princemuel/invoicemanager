@@ -5,7 +5,7 @@ import {
   hasValues,
   tw,
 } from "@/helpers/utils";
-import { loader } from "@/routes/invoices._index";
+import type { loader } from "@/routes/invoices._index";
 import { Transition } from "@headlessui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
