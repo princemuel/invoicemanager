@@ -15,6 +15,7 @@ import { CreateInvoiceItemsMobile } from "@/components/invoice.items.create.mobi
 import { Label } from "@/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
 import { Text } from "@/components/text";
+import { db } from "@/database/db.server";
 import { generateHex } from "@/helpers/random-hex.server";
 import {
   approximate,
@@ -73,7 +74,7 @@ export async function action(args: ActionFunctionArgs) {
   const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
-  const updated = {
+  const invoice = {
     ...data,
     slug: generateHex.next().value,
     paymentDue: new Date(dueTime).toISOString(),
@@ -81,11 +82,12 @@ export async function action(args: ActionFunctionArgs) {
     userId: userId,
   };
 
-  console.log(updated);
+  console.log(invoice);
 
   try {
-    return json({ data: updated });
-    // return redirect(`/invoices`);
+    await db.invoice.create({ data: invoice });
+
+    return redirect(`/invoices/${invoice?.slug}`);
   } catch (ex) {
     if (ex instanceof Error) console.error(ex.message);
 

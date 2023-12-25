@@ -13,11 +13,13 @@ import { EditInvoiceItemsDesktop } from "@/components/invoice.items.edit.desktop
 import { EditInvoiceItemsMobile } from "@/components/invoice.items.edit.mobile";
 import { Label } from "@/components/label";
 import { Text } from "@/components/text";
+import { db } from "@/database/db.server";
 import { invariant } from "@/helpers/invariant";
 import {
   approximate,
   calculateTotal,
   hasValues,
+  omitFields,
   pluralize,
   safeNum,
   tw,
@@ -62,7 +64,6 @@ const resolver = zodResolver(schema);
 export async function action(args: ActionFunctionArgs) {
   const params = args.params;
   const request = args.request;
-
   invariant(params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
@@ -79,44 +80,48 @@ export async function action(args: ActionFunctionArgs) {
   const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
-  const updated = {
+  const invoice = {
     ...data,
     paymentDue: new Date(dueTime).toISOString(),
     total: approximate(calculateTotal(data?.items, "total"), 2),
     userId: userId,
   };
 
-  console.log(updated);
+  console.log(invoice);
 
-  // try {
-  //   return redirect(`/invoices/${invoice?.slug || ''}`);
-  // } catch (ex) {
-  //   if (ex instanceof Error) console.error(ex.message);
+  try {
+    await db.invoice.update({
+      where: { slug: args.params.slug, userId },
+      data: invoice,
+    });
 
-  //   //@ts-expect-error
-  //   throw new Response(ex.message, {
-  //     status: 400,
-  //     statusText: "Bad Request",
-  //   });
-  // }
-
-  return json({ data });
+    return redirect(`/invoices/${invoice?.slug}`);
+  } catch (ex: any) {
+    console.error(ex.message);
+    throw new Response(ex.message, {
+      status: 400,
+      statusText: "Bad Request",
+    });
+  }
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  invariant(params.slug, "Missing slug parameter");
-  const payload = params.slug;
+export async function loader(args: LoaderFunctionArgs) {
+  invariant(args.params.slug, "Missing slug parameter");
 
-  const invoices = await import("../database/db.json").then(
-    (response) => response.default,
-  );
+  const { userId } = await getAuth(args);
+  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
 
-  const invoice = invoices.find((item) => item.slug === payload);
-  if (!invoice)
+  const response = await db.invoice.findUnique({
+    where: { slug: args.params.slug, userId },
+  });
+
+  if (!response)
     throw new Response(null, {
       status: 404,
       statusText: "Not Found",
     });
+
+  const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
   return json({ invoice: invoice });
 }
