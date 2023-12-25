@@ -41,7 +41,6 @@
     "react-day-picker": "^8.9.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.49.2",
-    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.12.0",
     "remix-hook-form": "^3.2.3",
     "remix-themes": "^1.2.2",

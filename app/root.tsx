@@ -14,14 +14,13 @@ import {
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 import { useEffect } from "react";
-import { Toaster as ToastManager } from "react-hot-toast";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider as RemixThemesProvider,
   useTheme,
 } from "remix-themes";
 import { getToast } from "remix-toast";
-import { toast as notify } from "sonner";
+import { Toaster as ToastManager, toast as notify } from "sonner";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
 import styles from "./globals.css";
 import { tw } from "./helpers/utils";
@@ -92,7 +91,11 @@ function App() {
         <LiveReload />
         <Analytics />
 
-        <ToastManager />
+        <ToastManager
+          position="top-center"
+          theme={theme || "system"}
+          richColors
+        />
         <BreakpointIndicator />
       </body>
     </html>
