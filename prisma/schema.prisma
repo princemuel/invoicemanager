@@ -27,7 +27,7 @@ model Invoice {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  slug       String?  @unique
+  slug       String   @unique
   paymentDue DateTime
 
   paymentTerms Int
