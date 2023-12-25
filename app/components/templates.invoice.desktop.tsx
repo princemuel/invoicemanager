@@ -3,6 +3,7 @@ import type { loader } from "@/routes/invoices.$slug";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
+import { MarkAsPaid } from "./mark-as-paid-button";
 import { Text } from "./text";
 
 type Props = { className?: string };
@@ -41,9 +42,7 @@ export function InvoiceDesktop({ className }: Props) {
             <Button variant="destructive" asChild>
               <Link to="delete">Delete</Link>
             </Button>
-            <Button variant="primary" asChild>
-              <Link to="mark-as-paid">Mark as Paid</Link>
-            </Button>
+            <MarkAsPaid />
           </div>
         </div>
       </header>

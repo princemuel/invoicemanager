@@ -5,8 +5,9 @@ import { InvoiceMobile } from "@/components/templates.invoice.mobile";
 import { db } from "@/database/db.server";
 import { invariant } from "@/helpers/invariant";
 import { omitFields } from "@/helpers/utils";
+import { StringContraint } from "@/lib/schema";
 import { getAuth } from "@clerk/remix/ssr.server";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
@@ -33,6 +34,24 @@ function PageRoute() {
 }
 
 export default PageRoute;
+
+export async function action(args: ActionFunctionArgs) {
+  invariant(args.params.slug, "Missing slug parameter");
+
+  const { userId } = await getAuth(args);
+  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+
+  const formData = await args.request.formData();
+
+  const status = StringContraint.parse(formData.get("status"));
+
+  await db.invoice.update({
+    where: { slug: args.params.slug, userId },
+    data: { status },
+  });
+
+  return json("success", { status: 201 });
+}
 
 export async function loader(args: LoaderFunctionArgs) {
   invariant(args.params.slug, "Missing slug parameter");
