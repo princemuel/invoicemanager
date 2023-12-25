@@ -119,8 +119,8 @@ export function hasValues<T>(
   ---------------------------------*
  */
 
-export function serialize<T>(data: T): NonNullable<T> {
-  return JSON.parse(JSON.stringify(data));
+export function serialize<T>(data: T) {
+  return JSON.parse(JSON.stringify(data)) as NonNullable<T>;
 }
 
 export function singleton<T>(name: string, callback: () => T): NonNullable<T> {
@@ -129,6 +129,19 @@ export function singleton<T>(name: string, callback: () => T): NonNullable<T> {
 
   if (!g.__singletons.has(name)) g.__singletons.set(name, callback());
   return g.__singletons.get(name);
+}
+
+export function omitFields<T extends Record<string, any>, K extends keyof T>(
+  source: T,
+  fieldsToOmit: K[],
+): Omit<T, K> {
+  if (typeof source !== "object" || source === null) {
+    throw new Error("Source must be an object.");
+  }
+
+  return Object.fromEntries(
+    Object.entries(source).filter(([key]) => !fieldsToOmit.includes(key as K)),
+  ) as Omit<T, K>;
 }
 
 /*---------------------------------*

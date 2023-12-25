@@ -2,9 +2,12 @@ import { IconArrowLeft } from "@/common";
 import { Button } from "@/components/button";
 import { InvoiceDesktop } from "@/components/templates.invoice.desktop";
 import { InvoiceMobile } from "@/components/templates.invoice.mobile";
+import { db } from "@/database/db.server";
 import { invariant } from "@/helpers/invariant";
+import { omitFields } from "@/helpers/utils";
+import { getAuth } from "@clerk/remix/ssr.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
 function PageRoute() {
@@ -31,20 +34,23 @@ function PageRoute() {
 
 export default PageRoute;
 
-export async function loader({ params }: LoaderFunctionArgs) {
-  invariant(params.slug, "Missing slug parameter");
-  const payload = params.slug;
+export async function loader(args: LoaderFunctionArgs) {
+  invariant(args.params.slug, "Missing slug parameter");
 
-  const invoices = await import("../database/db.json").then(
-    (response) => response.default,
-  );
+  const { userId } = await getAuth(args);
+  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
 
-  const invoice = invoices.find((item) => item.slug === payload);
-  if (!invoice)
+  const response = await db.invoice.findUnique({
+    where: { slug: args.params.slug, userId },
+  });
+
+  if (!response)
     throw new Response(null, {
       status: 404,
       statusText: "Not Found",
     });
+
+  const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
   return json({ invoice: invoice });
 }
