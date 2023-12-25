@@ -205,7 +205,9 @@ export function InvoiceDesktop({ className }: Props) {
 
             <tfoot className="bg-accent-300 px-8 py-5 dark:bg-brand-900">
               <tr className="flex items-center justify-between">
-                <Text as="th">Amount Due</Text>
+                <Text as="th" className="text-white">
+                  Amount Due
+                </Text>
                 <Text
                   as="td"
                   modifier="inverted"
