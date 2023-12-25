@@ -1,7 +1,7 @@
 [
   {
     "slug": "RT3080",
-    "issueDate": "2021-08-18",
+    "issued": "2021-08-18",
     "paymentDue": "2021-08-19",
     "description": "Re-branding",
     "paymentTerms": 1,
@@ -22,7 +22,7 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item1",
         "name": "Brand Guidelines",
         "quantity": 1,
         "price": 1800.9,
@@ -33,7 +33,7 @@
   },
   {
     "slug": "XM9141",
-    "issueDate": "2021-08-21",
+    "issued": "2021-08-21",
     "paymentDue": "2021-09-20",
     "description": "Graphic Design",
     "paymentTerms": 30,
@@ -54,14 +54,14 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item2",
         "name": "Banner Design",
         "quantity": 1,
         "price": 156.0,
         "total": 156.0
       },
       {
-        "slug": "item18",
+        "id": "item3",
         "name": "Email Design",
         "quantity": 2,
         "price": 200.0,
@@ -72,7 +72,7 @@
   },
   {
     "slug": "RG0314",
-    "issueDate": "2021-09-24",
+    "issued": "2021-09-24",
     "paymentDue": "2021-10-01",
     "description": "Website Redesign",
     "paymentTerms": 7,
@@ -93,7 +93,7 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item4",
         "name": "Website Redesign",
         "quantity": 1,
         "price": 14002.33,
@@ -104,7 +104,7 @@
   },
   {
     "slug": "RT2080",
-    "issueDate": "2021-10-11",
+    "issued": "2021-10-11",
     "paymentDue": "2021-10-12",
     "description": "Logo Concept",
     "paymentTerms": 1,
@@ -125,7 +125,7 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item5",
         "name": "Logo Sketches",
         "quantity": 1,
         "price": 102.04,
@@ -136,7 +136,7 @@
   },
   {
     "slug": "AA1449",
-    "issueDate": "2021-10-7",
+    "issued": "2021-10-7",
     "paymentDue": "2021-10-14",
     "description": "Re-branding",
     "paymentTerms": 7,
@@ -157,14 +157,14 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item6",
         "name": "New Logo",
         "quantity": 1,
         "price": 1532.33,
         "total": 1532.33
       },
       {
-        "slug": "item18",
+        "id": "item7",
         "name": "Brand Guidelines",
         "quantity": 1,
         "price": 2500.0,
@@ -175,7 +175,7 @@
   },
   {
     "slug": "TY9141",
-    "issueDate": "2021-10-01",
+    "issued": "2021-10-01",
     "paymentDue": "2021-10-31",
     "description": "Landing Page Design",
     "paymentTerms": 30,
@@ -196,7 +196,7 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item8",
         "name": "Web Design",
         "quantity": 1,
         "price": 6155.91,
@@ -207,7 +207,7 @@
   },
   {
     "slug": "FV2353",
-    "issueDate": "2021-11-05",
+    "issued": "2021-11-05",
     "paymentDue": "2021-11-12",
     "description": "Logo Re-design",
     "paymentTerms": 7,
@@ -228,7 +228,7 @@
     },
     "items": [
       {
-        "slug": "item17",
+        "id": "item9",
         "name": "Logo Re-design",
         "quantity": 1,
         "price": 3102.04,
@@ -256,18 +256,18 @@
       "postCode": "67890",
       "country": "USA"
     },
-    "issueDate": "2023-01-15",
+    "issued": "2023-01-15",
     "clientEmail": "john.doe@example.com",
     "items": [
       {
-        "slug": "item1",
+        "id": "item10",
         "name": "Product A",
         "quantity": 2,
         "price": 25.0,
         "total": 50.0
       },
       {
-        "slug": "item2",
+        "id": "item11",
         "name": "Product B",
         "quantity": 3,
         "price": 15.0,
@@ -295,18 +295,18 @@
       "postCode": "98765",
       "country": "USA"
     },
-    "issueDate": "2023-02-01",
+    "issued": "2023-02-01",
     "clientEmail": "jane.smith@example.com",
     "items": [
       {
-        "slug": "item3",
+        "id": "item13",
         "name": "Product C",
         "quantity": 1,
         "price": 30.0,
         "total": 30.0
       },
       {
-        "slug": "item4",
+        "id": "item41",
         "name": "Product D",
         "quantity": 2,
         "price": 22.75,
@@ -334,18 +334,18 @@
       "postCode": "98765",
       "country": "USA"
     },
-    "issueDate": "2023-03-01",
+    "issued": "2023-03-01",
     "clientEmail": "eva.white@example.com",
     "items": [
       {
-        "slug": "item11",
+        "id": "item15",
         "name": "Product X",
         "quantity": 3,
         "price": 20.0,
         "total": 60.0
       },
       {
-        "slug": "item12",
+        "id": "item16",
         "name": "Product Y",
         "quantity": 2,
         "price": 30.0,
@@ -373,18 +373,18 @@
       "postCode": "24680",
       "country": "USA"
     },
-    "issueDate": "2023-03-20",
+    "issued": "2023-03-20",
     "clientEmail": "samuel.turner@example.com",
     "items": [
       {
-        "slug": "item13",
+        "id": "ite3m13",
         "name": "Product Z",
         "quantity": 1,
         "price": 50.0,
         "total": 50.0
       },
       {
-        "slug": "item14",
+        "id": "item914",
         "name": "Product W",
         "quantity": 2,
         "price": 20.25,
@@ -412,18 +412,18 @@
       "postCode": "33445",
       "country": "USA"
     },
-    "issueDate": "2023-04-15",
+    "issued": "2023-04-15",
     "clientEmail": "olivia.williams@example.com",
     "items": [
       {
-        "slug": "item15",
+        "id": "ite2m15",
         "name": "Product Q",
         "quantity": 2,
         "price": 60.0,
         "total": 120.0
       },
       {
-        "slug": "item16",
+        "id": "item106",
         "name": "Product R",
         "quantity": 1,
         "price": 60.0,
@@ -451,18 +451,18 @@
       "postCode": "88999",
       "country": "USA"
     },
-    "issueDate": "2023-03-25",
+    "issued": "2023-03-25",
     "clientEmail": "max.miller@example.com",
     "items": [
       {
-        "slug": "item17",
+        "id": "ite1m17",
         "name": "Product S",
         "quantity": 3,
         "price": 15.0,
         "total": 45.0
       },
       {
-        "slug": "item18",
+        "id": "ite4m18",
         "name": "Product T",
         "quantity": 1,
         "price": 25.75,
@@ -490,18 +490,18 @@
       "postCode": "99000",
       "country": "USA"
     },
-    "issueDate": "2023-04-30",
+    "issued": "2023-04-30",
     "clientEmail": "sophie.clark@example.com",
     "items": [
       {
-        "slug": "item19",
+        "id": "ite8m19",
         "name": "Product U",
         "quantity": 2,
         "price": 40.0,
         "total": 80.0
       },
       {
-        "slug": "item20",
+        "id": "item620",
         "name": "Product V",
         "quantity": 1,
         "price": 50.5,
