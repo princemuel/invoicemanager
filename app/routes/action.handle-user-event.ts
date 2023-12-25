@@ -1,3 +1,4 @@
+import { db } from "@/database/db.server";
 import type { WebhookEvent } from "@clerk/remix/api.server";
 import { json, type ActionFunctionArgs } from "@remix-run/node";
 import { Webhook } from "svix";
@@ -17,7 +18,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // If there are no headers, error out
     if (!svix_id || !svix_timestamp || !svix_signature) {
-      return new Response("Error: No Svix Headers", {
+      return new Response("Error: No Webhook Headers", {
         status: 400,
         statusText: "Bad Request",
       });
@@ -27,39 +28,64 @@ export async function action({ request }: ActionFunctionArgs) {
     const body = JSON.stringify(payload);
 
     // Create a new Svix instance
-    const wh = new Webhook(WEBHOOK_SECRET);
+    const webhook = new Webhook(WEBHOOK_SECRET);
 
-    let evt: WebhookEvent;
+    let event: WebhookEvent;
 
     // Verify the payload with the headers
     try {
-      evt = wh.verify(body, {
+      event = webhook.verify(body, {
         "svix-id": svix_id,
         "svix-timestamp": svix_timestamp,
         "svix-signature": svix_signature,
       }) as WebhookEvent;
     } catch (err) {
       console.error("Error verifying webhook:", err);
-      return new Response("Error: Invalid Webhook", {
+      return new Response("Error: Webhook Verification Failed", {
         status: 400,
         statusText: "Bad Request",
       });
     }
 
-    console.log(`WebhookId: ${evt.data.id}`);
-    console.log(`WebhookType: ${evt.type}`);
+    console.log(`WebhookId: ${event.data.id}`);
+    console.log(`WebhookType: ${event.type}`);
     console.log("WebhookBody:", body);
 
-    if (evt.type === "user.created" || evt.type === "user.updated") {
-      console.log(evt.data);
+    if (event.type === "user.created" || event.type === "user.updated") {
+      console.log(event.data.id);
+
+      const client = await db.user.findUnique({
+        where: {
+          userAuthId: event.data.id,
+        },
+      });
+
+      if (!client)
+        await db.user.create({
+          data: {
+            userAuthId: event.data.id,
+          },
+        });
     }
 
-    if (evt.type === "user.deleted") {
-      console.log(evt.data);
+    if (event.type === "user.deleted") {
+      const deleteAllInvoices = db.invoice.deleteMany({
+        where: {
+          userId: event.data.id,
+        },
+      });
+
+      const deleteUser = db.user.delete({
+        where: {
+          userAuthId: event.data.id,
+        },
+      });
+
+      await db.$transaction([deleteAllInvoices, deleteUser]);
     }
 
-    return json("success", { status: 200 });
+    return json("Webhook Request Success", { status: 200 });
   } catch (err) {
-    return json("failed", { status: 400 });
+    return json("Webhook Request Failed", { status: 400 });
   }
 }
