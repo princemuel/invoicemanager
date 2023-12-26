@@ -57,10 +57,16 @@ function App() {
       warning: notify.warning,
     };
 
-    const lookup = methods?.[type as keyof typeof methods];
+    const toast = methods?.[type as keyof typeof methods];
 
-    if (type && message && lookup) lookup(message);
+    if (type && message && toast) toast(message);
   }, [data.toast?.message, data.toast?.type]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `/table-aria.js`;
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <html
