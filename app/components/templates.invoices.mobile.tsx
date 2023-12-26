@@ -29,7 +29,7 @@ export function InvoicesMobile({ className }: Props) {
       <header className="container">
         <div className="flex items-center">
           <div className="flex-1">
-            <Text as="h1" id="page-heading" size="lg">
+            <Text as="h1" id="page-heading" size="lg" weight="bold">
               Invoices
             </Text>
 

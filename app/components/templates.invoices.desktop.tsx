@@ -30,7 +30,7 @@ export function InvoicesDesktop({ className }: Props) {
       <header className="container">
         <div className="flex items-center">
           <div className="flex-1">
-            <Text as="h1" id="page-heading" size="xl">
+            <Text as="h1" id="page-heading" size="xl" weight="bold">
               Invoices
             </Text>
             <Text as="p" aria-live="polite" variant="secondary">

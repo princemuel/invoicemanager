@@ -133,7 +133,7 @@ function PageRoute() {
         <FormProvider {...form}>
           <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
-              <Text as="h1" id="page-heading" size="xl">
+              <Text as="h1" id="page-heading" size="xl" weight="bold">
                 New Invoice
               </Text>
             </header>

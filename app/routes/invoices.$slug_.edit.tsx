@@ -156,8 +156,6 @@ function PageRoute() {
     },
   });
 
-  console.log(form?.formState?.errors);
-
   return (
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
@@ -167,7 +165,7 @@ function PageRoute() {
             className={tw("flex flex-col gap-8")}
           >
             <header className="container">
-              <Text as="h1" id="page-heading" size="xl">
+              <Text as="h1" id="page-heading" size="xl" weight="bold">
                 Edit&nbsp;<span className="text-brand-400">#</span>
                 <span className="uppercase">{params.slug}</span>
               </Text>
