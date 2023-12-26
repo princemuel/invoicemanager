@@ -8,8 +8,13 @@ import { omitFields } from "@/helpers/utils";
 import { StringContraint } from "@/lib/schema";
 import { getAuth } from "@clerk/remix/ssr.server";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import {
+  redirectWithError,
+  redirectWithSuccess,
+  redirectWithWarning,
+} from "remix-toast";
 
 function PageRoute() {
   return (
@@ -41,37 +46,54 @@ export async function action(args: ActionFunctionArgs) {
   invariant(args.params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
   const formData = await args.request.formData();
 
   const status = StringContraint.parse(formData.get("status"));
 
-  await db.invoice.update({
-    where: { slug: args.params.slug, userId },
-    data: { status },
-  });
+  try {
+    const invoice = await db.invoice.update({
+      where: { slug: args.params.slug, userId },
+      data: { status },
+    });
 
-  return json("success", { status: 201 });
+    return redirectWithSuccess(
+      `/invoices/${invoice?.slug}`,
+      `Invoice #${invoice?.slug?.toUpperCase()} Update Success`,
+    );
+  } catch (error) {
+    return redirectWithError(`/invoices`, `Request Failed`);
+  }
 }
 
 export async function loader(args: LoaderFunctionArgs) {
   invariant(args.params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
-  const response = await db.invoice.findUnique({
-    where: { slug: args.params.slug, userId },
-  });
-
-  if (!response)
-    throw new Response(null, {
-      status: 404,
-      statusText: "Not Found",
+  try {
+    const response = await db.invoice.findUnique({
+      where: { slug: args.params.slug, userId },
     });
+    if (!response) throw new Error("Invalid Invoice Id");
 
-  const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
+    const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
-  return json({ invoice: invoice });
+    return json({ invoice: invoice });
+  } catch (e: any) {
+    throw new Response(e.message, {
+      status: 404,
+      statusText: "NotFound",
+    });
+  }
 }

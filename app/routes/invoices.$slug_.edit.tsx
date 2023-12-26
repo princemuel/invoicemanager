@@ -34,11 +34,16 @@ import { getAuth } from "@clerk/remix/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
+import {
+  redirectWithError,
+  redirectWithSuccess,
+  redirectWithWarning,
+} from "remix-toast";
 import { z } from "zod";
 
 const terms = [1, 7, 14, 30];
@@ -67,7 +72,11 @@ export async function action(args: ActionFunctionArgs) {
   invariant(params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
   const {
     errors,
@@ -87,21 +96,18 @@ export async function action(args: ActionFunctionArgs) {
     userId: userId,
   };
 
-  console.log(invoice);
-
   try {
     await db.invoice.update({
       where: { slug: args.params.slug, userId },
       data: invoice,
     });
 
-    return redirect(`/invoices/${invoice?.slug}`);
+    return redirectWithSuccess(
+      `/invoices/${invoice.slug}`,
+      `Invoice #${invoice.slug?.toUpperCase()} Edit Success`,
+    );
   } catch (ex: any) {
-    console.error(ex.message);
-    throw new Response(ex.message, {
-      status: 400,
-      statusText: "Bad Request",
-    });
+    return redirectWithError(`/invoices`, `Request Failed`);
   }
 }
 
@@ -109,7 +115,11 @@ export async function loader(args: LoaderFunctionArgs) {
   invariant(args.params.slug, "Missing slug parameter");
 
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
   const response = await db.invoice.findUnique({
     where: { slug: args.params.slug, userId },

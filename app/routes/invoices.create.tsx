@@ -34,11 +34,12 @@ import { getAuth } from "@clerk/remix/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
+import { redirectWithSuccess, redirectWithWarning } from "remix-toast";
 import { z } from "zod";
 
 const terms = [1, 7, 14, 30];
@@ -61,7 +62,11 @@ const resolver = zodResolver(schema);
 
 export async function action(args: ActionFunctionArgs) {
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
   const {
     errors,
@@ -82,12 +87,13 @@ export async function action(args: ActionFunctionArgs) {
     userId: userId,
   };
 
-  console.log(invoice);
-
   try {
     await db.invoice.create({ data: invoice });
 
-    return redirect(`/invoices/${invoice?.slug}`);
+    return redirectWithSuccess(
+      `/invoices/${invoice?.slug}`,
+      `Invoice #${invoice?.slug?.toUpperCase()} created`,
+    );
   } catch (ex) {
     if (ex instanceof Error) console.error(ex.message);
 
