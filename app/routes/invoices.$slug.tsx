@@ -16,14 +16,16 @@ function PageRoute() {
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-16 flex flex-col gap-8">
         <div className="container">
-          <Button className="h-auto w-auto gap-x-3" asChild>
-            <Link to="/invoices">
-              <span>
-                <IconArrowLeft />
-              </span>
-              <span>Go Back</span>
-            </Link>
-          </Button>
+          <div>
+            <Button className="h-auto w-auto gap-x-3" asChild>
+              <Link to="/invoices">
+                <span>
+                  <IconArrowLeft />
+                </span>
+                <span>Go Back</span>
+              </Link>
+            </Button>
+          </div>
         </div>
 
         <InvoiceMobile className="flex flex-col gap-4 sm:hidden" />
