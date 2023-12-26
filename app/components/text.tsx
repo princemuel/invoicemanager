@@ -38,7 +38,7 @@ Text.displayName = "Text";
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-const text = cva("", {
+export const text = cva("", {
   variants: {
     variant: {
       default: "text-brand-900 dark:text-white",

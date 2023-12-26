@@ -29,7 +29,7 @@ export function InvoicesMobile({ className }: Props) {
       <header className="container">
         <div className="flex items-center">
           <div className="flex-1">
-            <Text as="h1" id="page-heading" size="lg">
+            <Text as="h1" id="page-heading" size="lg" weight="bold">
               Invoices
             </Text>
 
@@ -50,12 +50,11 @@ export function InvoicesMobile({ className }: Props) {
                 </Text>
 
                 <span
-                  className={tw(
-                    "pointer-events-none transform-gpu",
-                    isVisible && "-rotate-180",
-                  )}
+                  className={tw("pointer-events-none transform-gpu", {
+                    "-rotate-180": isVisible,
+                  })}
                 >
-                  <IconArrowDown xlinkTitle="filter invoices by status" />
+                  <IconArrowDown />
                 </span>
               </button>
 

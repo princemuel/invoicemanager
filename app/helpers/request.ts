@@ -1,4 +1,4 @@
-export async function request<Value extends unknown>(
+export async function request<Value>(
   ...args: Parameters<typeof fetch>
 ): Promise<Value> {
   type FetchError = Error & { status?: number };

@@ -1,8 +1,11 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import type { loader } from "@/routes/invoices.$slug";
+import NiceModal from "@ebay/nice-modal-react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
 import { Button } from "./button";
+import DeleteInvoiceModal from "./invoice.delete";
+import { MarkAsPaid } from "./mark-as-paid-button";
 import { Text } from "./text";
 
 type Props = { className?: string };
@@ -185,12 +188,15 @@ export function InvoiceMobile({ className }: Props) {
           <Button variant="soft" asChild>
             <Link to="edit">Edit</Link>
           </Button>
-          <Button variant="destructive" asChild>
-            <Link to="delete">Delete</Link>
+          <Button
+            variant="destructive"
+            onClick={() =>
+              NiceModal.show(DeleteInvoiceModal, { invoiceId: invoice?.slug })
+            }
+          >
+            Delete
           </Button>
-          <Button variant="primary" asChild>
-            <Link to="mark-as-paid">Mark as Paid</Link>
-          </Button>
+          <MarkAsPaid />
         </div>
       </div>
     </section>

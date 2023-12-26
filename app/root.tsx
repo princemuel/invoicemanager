@@ -1,5 +1,6 @@
 import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
+import NiceModal from "@ebay/nice-modal-react";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
@@ -14,14 +15,13 @@ import {
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
 import { useEffect } from "react";
-import { Toaster as ToastManager } from "react-hot-toast";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider as RemixThemesProvider,
   useTheme,
 } from "remix-themes";
 import { getToast } from "remix-toast";
-import { toast as notify } from "sonner";
+import { Toaster as ToastManager, toast as notify } from "sonner";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
 import styles from "./globals.css";
 import { tw } from "./helpers/utils";
@@ -58,10 +58,16 @@ function App() {
       warning: notify.warning,
     };
 
-    const lookup = methods?.[type as keyof typeof methods];
+    const toast = methods?.[type as keyof typeof methods];
 
-    if (type && message && lookup) lookup(message);
+    if (type && message && toast) toast(message);
   }, [data.toast?.message, data.toast?.type]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `/table-aria.js`;
+    document.body.appendChild(script);
+  }, []);
 
   return (
     <html
@@ -86,14 +92,20 @@ function App() {
       </head>
 
       <body className="relative min-h-screen antialiased">
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-        <Analytics />
+        <NiceModal.Provider>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+          <Analytics />
 
-        <ToastManager />
-        <BreakpointIndicator />
+          <ToastManager
+            position="top-center"
+            theme={theme || "system"}
+            richColors
+          />
+          <BreakpointIndicator />
+        </NiceModal.Provider>
       </body>
     </html>
   );
