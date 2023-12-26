@@ -50,12 +50,11 @@ export function InvoicesMobile({ className }: Props) {
                 </Text>
 
                 <span
-                  className={tw(
-                    "pointer-events-none transform-gpu",
-                    isVisible && "-rotate-180",
-                  )}
+                  className={tw("pointer-events-none transform-gpu", {
+                    "-rotate-180": isVisible,
+                  })}
                 >
-                  <IconArrowDown xlinkTitle="filter invoices by status" />
+                  <IconArrowDown />
                 </span>
               </button>
 

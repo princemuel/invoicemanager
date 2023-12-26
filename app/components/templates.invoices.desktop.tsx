@@ -38,39 +38,42 @@ export function InvoicesDesktop({ className }: Props) {
             </Text>
           </div>
 
-          <div className="flex items-center gap-6">
-            <button
-              type="button"
-              className="body-100 flex items-center gap-6 self-center font-bold"
-              onClick={() => setIsVisible((state) => !state)}
-            >
-              <Text as="span" className="inline-block truncate">
-                Filter by status
-              </Text>
-
-              <span
-                className={tw(
-                  "pointer-events-none transform-gpu",
-                  isVisible && "-rotate-180",
-                )}
+          <div className="flex items-center gap-20">
+            <div className="relative z-[1] mt-1 flex w-full flex-1 flex-col">
+              <button
+                type="button"
+                className="flex items-center gap-6 self-center"
+                onClick={() => setIsVisible((state) => !state)}
               >
-                <IconArrowDown xlinkTitle="filter invoices by status" />
-              </span>
-            </button>
+                <Text as="span" weight="bold" className="inline-block truncate">
+                  Filter by status
+                </Text>
 
-            <Transition
-              show={isVisible}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-75 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
-              <InvoiceFilters />
-            </Transition>
+                <span
+                  className={tw("pointer-events-none transform-gpu", {
+                    "-rotate-180": isVisible,
+                  })}
+                >
+                  <IconArrowDown />
+                </span>
+              </button>
 
-            <Button variant="primary" asChild>
+              <Transition
+                show={isVisible}
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <div className="absolute z-10 mt-4 w-full shadow-200 dark:shadow-300">
+                  <InvoiceFilters />
+                </div>
+              </Transition>
+            </div>
+
+            <Button variant="primary" className="flex-1" asChild>
               <Link to="create">
                 <span className="grid aspect-square place-content-center rounded-full bg-white p-2">
                   <IconPlus />
