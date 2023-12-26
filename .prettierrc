@@ -21,11 +21,7 @@
   "tailwindFunctions": ["tw", "cn", "tv", "cva"],
   "tailwindAttributes": ["tw"],
 
-  "plugins": [
-    "prettier-plugin-prisma",
-    "prettier-plugin-tailwindcss",
-    "@svgr/plugin-prettier"
-  ],
+  "plugins": ["prettier-plugin-prisma", "prettier-plugin-tailwindcss"],
 
   "experimentalTernaries": true
 }
