@@ -1,6 +1,6 @@
 import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
-import GlobalModal from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
 import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
@@ -25,7 +25,6 @@ import { Toaster as ToastManager, toast as notify } from "sonner";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
 import styles from "./globals.css";
 import { tw } from "./helpers/utils";
-import "./modals";
 import { themeSessionResolver } from "./sessions.server";
 
 export const links: LinksFunction = () => [
@@ -93,20 +92,20 @@ function App() {
       </head>
 
       <body className="relative min-h-screen antialiased">
-        <GlobalModal.Provider>
+        <NiceModal.Provider>
           <Outlet />
-        </GlobalModal.Provider>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-        <Analytics />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+          <Analytics />
 
-        <ToastManager
-          position="top-center"
-          theme={theme || "system"}
-          richColors
-        />
-        <BreakpointIndicator />
+          <ToastManager
+            position="top-center"
+            theme={theme || "system"}
+            richColors
+          />
+          <BreakpointIndicator />
+        </NiceModal.Provider>
       </body>
     </html>
   );
