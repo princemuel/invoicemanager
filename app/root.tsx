@@ -2,7 +2,11 @@ import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
 import NiceModal from "@ebay/nice-modal-react";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+} from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -10,7 +14,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  json,
   useLoaderData,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";

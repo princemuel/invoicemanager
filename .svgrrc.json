@@ -3,5 +3,5 @@
   "jsxRuntime": "automatic",
   "titleProp": true,
   "filenameCase": "kebab",
-  "plugins": ["@svgr/plugin-svgo", "@svgr/plugin-jsx", "@svgr/plugin-prettier"]
+  "plugins": ["@svgr/plugin-svgo", "@svgr/plugin-jsx"]
 }
