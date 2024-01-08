@@ -20,8 +20,8 @@ import { generateHex } from "@/helpers/random-hex.server";
 import {
   approximate,
   calculateTotal,
+  numberGuard,
   pluralize,
-  safeNum,
   tw,
 } from "@/helpers/utils";
 import {
@@ -76,7 +76,7 @@ export async function action(args: ActionFunctionArgs) {
 
   if (errors) return json({ errors, defaultValues });
 
-  const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
+  const duration = numberGuard(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
   const invoice = {
