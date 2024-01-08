@@ -56,12 +56,16 @@ export function approximate(num = 0, fractionDigits = 2) {
   return Number.parseFloat(num.toFixed(fractionDigits));
 }
 
-export function safeNum(value: any, defaultValue = 0): number {
-  const num = Number(value);
-  return (Number.isNaN(num) || isNaN(num)) && !Object.is(num, 0) ?
-      defaultValue
-    : num;
-}
+/**
+ * Safely parses a value to a number and guards against NaN and negative zero.
+ * @param {any} value - The value to be parsed.
+ * @param {number} [defaultValue=0] - The default value to be returned if parsing fails.
+ * @returns {number} The parsed number or the default value.
+ */
+export const numberGuard = (value: any, defaultValue: number = 0): number => {
+  const parsed = Number(value);
+  return Number.isNaN(parsed) || Object.is(parsed, -0) ? defaultValue : parsed;
+};
 
 export function range(start: number, stop: number, step: number) {
   return Array.from(
@@ -92,7 +96,7 @@ export function calculateTotal<T extends FirstArg>(
   }
 
   // bailout since the function expects 2 number params, or an array params
-  return safeNum(a) * safeNum(b);
+  return numberGuard(a) * numberGuard(b);
 }
 
 export const formatAmount = (price = 0, fractionDigits = 2) => {

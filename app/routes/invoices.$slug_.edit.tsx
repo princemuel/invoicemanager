@@ -19,9 +19,9 @@ import {
   approximate,
   calculateTotal,
   hasValues,
+  numberGuard,
   omitFields,
   pluralize,
-  safeNum,
   tw,
 } from "@/helpers/utils";
 import {
@@ -86,7 +86,7 @@ export async function action(args: ActionFunctionArgs) {
 
   if (errors) return json({ errors, defaultValues });
 
-  const duration = safeNum(data.paymentTerms, 1) * 24 * 3600 * 1000;
+  const duration = numberGuard(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
 
   const invoice = {
@@ -434,7 +434,7 @@ function PageRoute() {
                           <FormControl>
                             <Button
                               disabled
-                              className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500"
+                              className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500"
                             >
                               <span className="block truncate">
                                 {format(new Date(field.value), "dd MMM yyyy")}
@@ -462,7 +462,7 @@ function PageRoute() {
                               <Listbox.Button
                                 title="select a payment term"
                                 as={Button}
-                                className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hover:border-brand-500 focus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hover:border-brand-500 dark:focus:border-brand-500"
+                                className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500"
                               >
                                 {({ value }) => (
                                   <>

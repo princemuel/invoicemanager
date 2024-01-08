@@ -86,3 +86,10 @@
     @apply absolute z-[9999] mx-auto translate-y-[-120%]  bg-brand-500 px-[0.5em] py-[1em] text-white transition-transform focus:translate-y-0 focus:outline focus:outline-offset-2 focus:outline-brand-300;
   }
 }
+
+:is(.cl-formButtonPrimary ) {
+  @apply bg-brand-500 hocus:bg-brand-500 font-sans;
+}
+:is(.cl-footerActionLink ) {
+  @apply text-brand-500 hocus:text-brand-500;
+}

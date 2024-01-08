@@ -148,7 +148,7 @@ export function CreateInvoiceItemsMobile({ className }: Props) {
               <FormItem className="col-span-1 mt-7 self-center justify-self-center">
                 <button
                   type="button"
-                  className="inline-block h-5 w-4 bg-[url(/icon-delete.svg)] bg-cover bg-no-repeat hover:bg-[url(/icon-delete-red.svg)] focus:bg-[url(/icon-delete-red.svg)]"
+                  className="inline-block h-5 w-4 bg-[url(/icon-delete.svg)] bg-cover bg-no-repeat hocus:bg-[url(/icon-delete-red.svg)]"
                   onClick={() => void remove(index)}
                 >
                   <span className="sr-only">Delete Item</span>

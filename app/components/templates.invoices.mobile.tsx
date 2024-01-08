@@ -91,7 +91,7 @@ export function InvoicesMobile({ className }: Props) {
             invoices.map((invoice) => (
               <li
                 key={invoice.slug}
-                className="rounded-lg bg-white px-6 py-8 shadow-100 transition-colors duration-300 ease-in hover:border hover:border-brand-500 focus:border focus:border-brand-500 dark:bg-brand-700"
+                className="rounded-lg bg-white px-6 py-8 shadow-100 transition-colors duration-300 ease-in hocus:border hocus:border-brand-500 dark:bg-brand-700"
               >
                 <Link
                   to={invoice?.slug}

@@ -70,11 +70,11 @@ export const buttonVariants = cva(
       variant: {
         default: "",
         primary:
-          "bg-brand-500 text-white hover:bg-brand-200 focus:bg-brand-200",
+          "bg-brand-500 text-white hocus:bg-brand-200",
         secondary:
-          "bg-accent-300 text-brand-300 hover:bg-brand-900 focus:bg-brand-900 dark:bg-accent-300 dark:text-brand-100 dark:hover:bg-brand-700 dark:focus:bg-brand-700",
-        soft: "bg-neutral-200 text-brand-400 hover:bg-brand-100 focus:bg-brand-100 dark:bg-brand-600 dark:text-brand-100 dark:hover:bg-white dark:focus:bg-white",
-        destructive: "bg-accent-200 text-white hover:bg-accent-100",
+          "bg-accent-300 text-brand-300 hocus:bg-brand-900 dark:bg-accent-300 dark:text-brand-100 dark:hocus:bg-brand-700",
+        soft: "bg-neutral-200 text-brand-400 hocus:bg-brand-100 dark:bg-brand-600 dark:text-brand-100 dark:hocus:bg-white",
+        destructive: "bg-accent-200 text-white hocus:bg-accent-100",
       },
       modifier: {
         plain: "border-none bg-transparent",

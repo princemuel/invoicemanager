@@ -3,7 +3,8 @@ import { InvoicesMobile } from "@/components/templates.invoices.mobile";
 import { db } from "@/database/db.server";
 import { getAuth } from "@clerk/remix/ssr.server";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { redirectWithWarning } from "remix-toast";
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,28 +39,36 @@ export default PageRoute;
 
 export async function loader(args: LoaderFunctionArgs) {
   const { userId } = await getAuth(args);
-  if (!userId) return redirect("/sign-in?redirect_url=" + args.request.url);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
 
-  const url = new URL(args.request.url);
-  const statuses = url.searchParams.getAll("status");
+  try {
+    const url = new URL(args.request.url);
+    const statuses = url.searchParams.getAll("status");
+    const response = await db.invoice.findMany({
+      where: { userId: userId },
+      select: {
+        slug: true,
+        paymentDue: true,
+        status: true,
+        clientName: true,
+        total: true,
+      },
+    });
 
-  const response = await db.invoice.findMany({
-    where: { userId: userId },
-    select: {
-      slug: true,
-      paymentDue: true,
-      status: true,
-      clientName: true,
-      total: true,
-    },
-  });
+    const invoices =
+      statuses.length > 0 ?
+        response.filter((item) =>
+          statuses.some((status) => item.status === status),
+        )
+      : response;
 
-  const invoices =
-    statuses.length > 0 ?
-      response.filter((item) =>
-        statuses.some((status) => item.status === status),
-      )
-    : response;
-
-  return json({ invoices: invoices ?? [] });
+    return json({ invoices });
+  } catch (error) {
+    console.log(error);
+    return json({ invoices: [] });
+  }
 }
