@@ -20,7 +20,9 @@ function PageRoute() {
       <SignedIn>
         <h1>Index route</h1>
         <p>You are signed in!</p>
-        <Link to="/invoices"> Invoices</Link>
+        <Link to="/invoices" className="text-blue-500 underline">
+          Invoices
+        </Link>
         <UserButton />
       </SignedIn>
 
