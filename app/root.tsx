@@ -77,7 +77,7 @@ function App() {
       lang="en"
       dir="ltr"
       data-darkreader-mode="dynamic"
-      data-darkreader-theme={theme ?? ""}
+      data-darkreader-theme={theme ?? "dark"}
       className={tw`__sans__`}
     >
       <head>
