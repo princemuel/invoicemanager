@@ -13,7 +13,7 @@ export function InvoiceFilters() {
   return (
     <Form
       method="GET"
-      className="flex w-28 flex-col items-start gap-2 rounded-lg bg-white p-3 sm:w-48 sm:gap-4 sm:p-6 dark:bg-brand-600"
+      className="flex w-28 flex-col items-start gap-2 rounded-lg bg-white p-3 dark:bg-brand-600 sm:w-48 sm:gap-4 sm:p-6"
       onChange={(e) => submit(e.currentTarget)}
     >
       {stats.map((stat) => (
@@ -29,7 +29,7 @@ export function InvoiceFilters() {
               name="status"
               value={stat}
               defaultChecked={statuses.includes(stat)}
-              className="peer absolute top-0 size-full cursor-pointer appearance-none rounded-sm border border-brand-400/25 bg-brand-100 checked:bg-brand-500 hover:border-brand-500 dark:bg-brand-700 dark:checked:bg-brand-500"
+              className="peer absolute top-0 size-full cursor-pointer appearance-none rounded-sm border border-brand-400/25 bg-brand-100 checked:bg-brand-500 hocus:border-brand-500 dark:bg-brand-700 dark:checked:bg-brand-500"
             />
 
             <IconCheck className="pointer-events-none absolute left-1/2 top-1/4 hidden -translate-x-1/2 peer-checked:block" />
