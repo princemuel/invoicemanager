@@ -1,36 +1,74 @@
-import {
-  RedirectToSignIn,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/remix";
-import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { InvoicesDesktop } from "@/components/templates.invoices.desktop";
+import { InvoicesMobile } from "@/components/templates.invoices.mobile";
+import { db } from "@/database/db.server";
+import { getAuth } from "@clerk/remix/ssr.server";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { redirectWithWarning } from "remix-toast";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Invoices - Invoice Manager" },
+    {
+      property: "og:title",
+      content: "Invoices - Invoice Manager",
+    },
+    {
+      property: "og:description",
+      content: "A list of all my past and current invoices",
+    },
+    {
+      name: "description",
+      content: "A list of all my past and current invoices",
+    },
   ];
 };
 
 function PageRoute() {
   return (
-    <div>
-      <SignedIn>
-        <h1>Index route</h1>
-        <p>You are signed in!</p>
-        <Link to="/invoices" className="text-blue-500 underline">
-          Invoices
-        </Link>
-        <UserButton />
-      </SignedIn>
+    <main aria-labelledby="page-heading" className="w-full">
+      <div className="mt-12" />
 
-      <SignedOut>
-        <RedirectToSignIn />
-      </SignedOut>
-    </div>
+      <InvoicesDesktop className="hidden flex-col gap-12 sm:flex" />
+      <InvoicesMobile className="flex flex-col gap-12 sm:hidden" />
+    </main>
   );
 }
 
 export default PageRoute;
+
+export async function loader(args: LoaderFunctionArgs) {
+  const { userId } = await getAuth(args);
+  if (!userId)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
+
+  try {
+    const url = new URL(args.request.url);
+    const statuses = url.searchParams.getAll("status");
+    const response = await db.invoice.findMany({
+      where: { userId: userId },
+      select: {
+        slug: true,
+        paymentDue: true,
+        status: true,
+        clientName: true,
+        total: true,
+      },
+    });
+
+    const invoices =
+      statuses.length > 0 ?
+        response.filter((item) =>
+          statuses.some((status) => item.status === status),
+        )
+      : response;
+
+    return json({ invoices });
+  } catch (error) {
+    console.log(error);
+    return json({ invoices: [] });
+  }
+}

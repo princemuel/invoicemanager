@@ -539,7 +539,7 @@ function PageRoute() {
               <div className="container">
                 <div className="flex items-center gap-2 sm:gap-4">
                   <Button variant="soft" asChild>
-                    <Link to="/invoices">Discard</Link>
+                    <Link to="/">Discard</Link>
                   </Button>
 
                   <Button
