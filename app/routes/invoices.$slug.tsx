@@ -23,7 +23,7 @@ function PageRoute() {
         <div className="container">
           <div>
             <Button className="h-auto w-auto gap-x-3" asChild>
-              <Link to="/invoices">
+              <Link to="/">
                 <span>
                   <IconArrowLeft />
                 </span>
@@ -67,7 +67,7 @@ export async function action(args: ActionFunctionArgs) {
       `Invoice #${invoice?.slug?.toUpperCase()} Update Success`,
     );
   } catch (error) {
-    return redirectWithError(`/invoices`, `Request Failed`);
+    return redirectWithError(`/`, `Request Failed`);
   }
 }
 

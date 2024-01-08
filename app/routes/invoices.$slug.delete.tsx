@@ -24,10 +24,10 @@ export async function action(args: ActionFunctionArgs) {
     });
 
     return redirectWithSuccess(
-      "/invoices",
+      "/",
       `Invoice with Id #${invoice?.slug} deleted`,
     );
   } catch (e) {
-    return redirectWithError("/invoices", `Request Failed`);
+    return redirectWithError("/", `Request Failed`);
   }
 }

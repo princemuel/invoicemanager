@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/remix";
+import { SignedIn, SignedOut, UserButton } from "@clerk/remix";
 import { ThemeIcon } from "./atoms.theme";
 import { Logo } from "./logo";
 
@@ -12,7 +12,15 @@ export function Sidebar() {
       </div>
 
       <div className="grid h-full w-20 place-content-center border-l border-[#494E6E] md:h-20 md:w-full md:border-0 md:border-t">
-        <UserButton />
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+
+        <SignedOut>
+          <div className="w-8 cursor-pointer overflow-hidden rounded-full">
+            <img src="/placeholder.jpg" width={32} height={32} alt="User" />
+          </div>
+        </SignedOut>
       </div>
     </aside>
   );

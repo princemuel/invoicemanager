@@ -5,7 +5,7 @@ import {
   hasValues,
   tw,
 } from "@/helpers/utils";
-import type { loader } from "@/routes/invoices._index";
+import type { loader } from "@/routes/_index";
 import { Transition } from "@headlessui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
@@ -74,7 +74,7 @@ export function InvoicesDesktop({ className }: Props) {
             </div>
 
             <Button variant="primary" className="flex-1" asChild>
-              <Link to="create">
+              <Link to="/invoices/create">
                 <span className="grid aspect-square place-content-center rounded-full bg-white p-2">
                   <IconPlus />
                 </span>
@@ -94,7 +94,7 @@ export function InvoicesDesktop({ className }: Props) {
                 className="rounded-lg bg-white p-4 shadow-100 transition-colors duration-300 ease-in hocus:border hocus:border-brand-500 dark:bg-brand-700"
               >
                 <Link
-                  to={invoice?.slug}
+                  to={`invoices/${invoice?.slug}`}
                   className="grid grid-flow-col-dense items-center justify-items-end gap-1"
                 >
                   <Text

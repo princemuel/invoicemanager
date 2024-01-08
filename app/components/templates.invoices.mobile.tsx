@@ -5,7 +5,7 @@ import {
   hasValues,
   tw,
 } from "@/helpers/utils";
-import type { loader } from "@/routes/invoices._index";
+import type { loader } from "@/routes/_index";
 import { Transition } from "@headlessui/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
@@ -74,7 +74,7 @@ export function InvoicesMobile({ className }: Props) {
             </div>
 
             <Button variant="primary" className="px-2 " asChild>
-              <Link to="create">
+              <Link to="/invoices/create">
                 <span className="grid aspect-square place-content-center rounded-full bg-white p-2">
                   <IconPlus />
                 </span>
@@ -94,7 +94,7 @@ export function InvoicesMobile({ className }: Props) {
                 className="rounded-lg bg-white px-6 py-8 shadow-100 transition-colors duration-300 ease-in hocus:border hocus:border-brand-500 dark:bg-brand-700"
               >
                 <Link
-                  to={invoice?.slug}
+                  to={`invoices/${invoice?.slug}`}
                   className="grid grid-cols-2 grid-rows-3"
                 >
                   <Text as="p" weight="bold" className="uppercase">

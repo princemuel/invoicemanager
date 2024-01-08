@@ -17,7 +17,7 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { Analytics } from "@vercel/analytics/react";
-import { useEffect } from "react";
+import * as React from "react";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider as RemixThemesProvider,
@@ -26,6 +26,7 @@ import {
 import { getToast } from "remix-toast";
 import { Toaster as ToastManager, toast as notify } from "sonner";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
+import { Sidebar } from "./components/layout.sidebar";
 import styles from "./globals.css";
 import { tw } from "./helpers/utils";
 import { themeSessionResolver } from "./sessions.server";
@@ -50,7 +51,7 @@ function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const type = data.toast?.type || "";
     const message = data.toast?.message;
 
@@ -66,7 +67,7 @@ function App() {
     if (type && message && toast) toast(message);
   }, [data.toast?.message, data.toast?.type]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const script = document.createElement("script");
     script.src = `/table-aria.js`;
     document.body.appendChild(script);
@@ -94,20 +95,28 @@ function App() {
         />
       </head>
 
-      <body className="relative min-h-screen antialiased">
+      <body className="relative flex min-h-screen w-full flex-col bg-white text-brand-900 antialiased dark:bg-brand-800 dark:text-white md:flex-row">
         <NiceModal.Provider>
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          <LiveReload />
-          <Analytics />
+          <React.Fragment>
+            <Sidebar />
+            <Outlet />
+          </React.Fragment>
 
-          <ToastManager
-            position="top-center"
-            theme={theme || "system"}
-            richColors
-          />
-          <BreakpointIndicator />
+          <React.Fragment>
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+            <Analytics />
+          </React.Fragment>
+
+          <React.Fragment>
+            <ToastManager
+              position="top-center"
+              theme={theme ?? "system"}
+              richColors
+            />
+            <BreakpointIndicator />
+          </React.Fragment>
         </NiceModal.Provider>
       </body>
     </html>
