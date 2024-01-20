@@ -49,28 +49,22 @@ export const loader = (args: LoaderFunctionArgs) => {
 
 export const ErrorBoundary = ClerkErrorBoundary();
 
-let timmer = 1;
-
 function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
   React.useEffect(() => {
-    console.log("toast useEffect Ran", timmer);
-    const type = data?.type || "info";
-    const message = data?.message || "";
+    const methods = new Map([
+      ["error", notify.error],
+      ["success", notify.success],
+      ["info", notify.info],
+      ["warning", notify.warning],
+    ]);
 
-    const methods = {
-      error: notify.error,
-      success: notify.success,
-      info: notify.info,
-      warning: notify.warning,
-    };
+    const toast = methods.get(data.type);
 
-    const toast = methods[type];
-
-    if (type && message && toast) toast(message);
-  }, [data?.message, data?.type]);
+    if (data.type && data.message && toast) toast(data.message);
+  }, [data.message, data.type]);
 
   React.useEffect(() => {
     const script = document.createElement("script");
