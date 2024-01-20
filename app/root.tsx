@@ -41,7 +41,9 @@ export const loader = (args: LoaderFunctionArgs) => {
     const { getTheme } = await themeSessionResolver(request);
     const { toast, headers } = await getToast(request);
 
-    return json({ toast, theme: getTheme() }, { headers });
+    const { message, type } = toast || { message: "", type: "" };
+
+    return json({ message, type, theme: getTheme() }, { headers });
   });
 };
 
@@ -52,20 +54,17 @@ function App() {
   const [theme] = useTheme();
 
   React.useEffect(() => {
-    const type = data.toast?.type || "";
-    const message = data.toast?.message;
+    const methods = new Map([
+      ["error", notify.error],
+      ["success", notify.success],
+      ["info", notify.info],
+      ["warning", notify.warning],
+    ]);
 
-    const methods = {
-      error: notify.error,
-      success: notify.success,
-      info: notify.info,
-      warning: notify.warning,
-    };
+    const toast = methods.get(data.type);
 
-    const toast = methods?.[type as keyof typeof methods];
-
-    if (type && message && toast) toast(message);
-  }, [data.toast?.message, data.toast?.type]);
+    if (data.type && data.message && toast) toast(data.message);
+  }, [data.message, data.type]);
 
   React.useEffect(() => {
     const script = document.createElement("script");
@@ -112,7 +111,7 @@ function App() {
           <React.Fragment>
             <ToastManager
               position="top-center"
-              theme={theme ?? "system"}
+              theme={theme ?? "dark"}
               richColors
             />
             <BreakpointIndicator />

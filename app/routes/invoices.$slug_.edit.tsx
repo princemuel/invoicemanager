@@ -69,7 +69,12 @@ const resolver = zodResolver(schema);
 export async function action(args: ActionFunctionArgs) {
   const params = args.params;
   const request = args.request;
-  invariant(params.slug, "Missing slug parameter");
+  invariant(
+    params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    params.slug,
+  );
 
   const { userId } = await getAuth(args);
   if (!userId)
@@ -112,7 +117,12 @@ export async function action(args: ActionFunctionArgs) {
 }
 
 export async function loader(args: LoaderFunctionArgs) {
-  invariant(args.params.slug, "Missing slug parameter");
+  invariant(
+    args.params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    args.params.slug,
+  );
 
   const { userId } = await getAuth(args);
   if (!userId)
@@ -121,19 +131,20 @@ export async function loader(args: LoaderFunctionArgs) {
       "Invalid Session. Please sign in",
     );
 
-  const response = await db.invoice.findUnique({
-    where: { slug: args.params.slug, userId },
-  });
-
-  if (!response)
-    throw new Response(null, {
-      status: 404,
-      statusText: "Not Found",
+  try {
+    const response = await db.invoice.findUniqueOrThrow({
+      where: { slug: args.params.slug, userId },
     });
 
-  const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
+    const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
-  return json({ invoice: invoice });
+    return json({ invoice: invoice });
+  } catch (e: any) {
+    throw new Response(e.message, {
+      status: 404,
+      statusText: "NotFound",
+    });
+  }
 }
 
 export type FormData = z.infer<typeof schema>;
