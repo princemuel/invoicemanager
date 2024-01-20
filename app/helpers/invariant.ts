@@ -1,76 +1,145 @@
-const isProduction = process.env.NODE_ENV === "production";
-const prefix = "Invariant failed";
+export const invariant: Invariant = (
+  predicate,
+  message,
+  ...positionals
+): asserts predicate => {
+  if (!predicate) {
+    throw new InvariantError(message, ...positionals);
+  }
+};
 
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
+invariant.as = (ErrorConstructor, predicate, message, ...positionals) => {
+  if (!predicate) {
+    const formatMessage =
+      positionals.length === 0 ? message : format(message, positionals);
+    let error: Error;
 
-// function invariant<T>(
-//   condition: T,
-//   message?: string | (() => string),
-// ): asserts condition {
-//   if (condition) return;
-
-//   if (isProduction)
-//     throw new Error(
-//       `${prefix}: An unexpected error occurred. Please contact support for assistance.`,
-//     );
-
-//   const provided = typeof message === "function" ? message() : message;
-//   const value = provided ? `${prefix}: ${provided}` : prefix;
-
-//   throw new Error(value);
-// }
-
-type InvariantFormatArg = string | number | boolean | null | undefined;
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-function invariant<T>(
-  condition: T,
-  format: string,
-  ...args: InvariantFormatArg[]
-): asserts condition {
-  const nodeEnv = process.env.NODE_ENV || "development";
-
-  if (nodeEnv !== "production") {
-    if (format === undefined) {
-      throw new Error("invariant requires an error message argument");
+    try {
+      error = Reflect.construct(ErrorConstructor as CustomErrorConstructor, [
+        formatMessage,
+      ]);
+    } catch (err) {
+      error = (ErrorConstructor as CustomErrorFactory)(formatMessage);
     }
+
+    throw error;
+  }
+};
+
+const STACK_FRAMES_TO_IGNORE = 2;
+
+/**
+ * Remove the "outvariant" package trace from the given error.
+ * This scopes down the error stack to the relevant parts
+ * when used in other applications.
+ */
+function cleanErrorStack(error: Error): void {
+  if (!error.stack) {
+    return;
   }
 
-  if (!condition) {
-    let error: Error;
-    if (format === undefined) {
-      error = new Error(
-        "Minified exception occurred; use the non-minified dev environment " +
-          "for the full error message and additional helpful warnings.",
-      );
-    } else {
-      error = new Error(format.replace(/%s/g, () => String(args.shift())));
-      error.name = "InvariantViolation";
-    }
+  const nextStack = error.stack.split("\n");
+  nextStack.splice(1, STACK_FRAMES_TO_IGNORE);
+  error.stack = nextStack.join("\n");
+}
 
-    // @ts-expect-error
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error as Error;
+class InvariantError extends Error {
+  override name = "Invariant Violation";
+
+  constructor(
+    public override readonly message: string,
+    ...positionals: any[]
+  ) {
+    super(message);
+    this.message = format(message, ...positionals);
+    cleanErrorStack(this);
   }
 }
 
-export { invariant };
+interface CustomErrorConstructor {
+  new (message: string): Error;
+}
+
+interface CustomErrorFactory {
+  (message: string): Error;
+}
+
+type CustomError = CustomErrorConstructor | CustomErrorFactory;
+
+type Invariant = {
+  (
+    predicate: unknown,
+    message: string,
+    ...positionals: any[]
+  ): asserts predicate;
+
+  as(
+    ErrorConstructor: CustomError,
+    predicate: unknown,
+    message: string,
+    ...positionals: unknown[]
+  ): asserts predicate;
+};
+
+const POSITIONALS_EXP = /(%?)(%([sdijo]))/g;
+
+function serializePositional(positional: any, flag: string): any {
+  switch (flag) {
+    // Strings.
+    case "s":
+      return positional;
+
+    // Digits.
+    case "d":
+    case "i":
+      return Number(positional);
+
+    // JSON.
+    case "j":
+      return JSON.stringify(positional);
+
+    // Objects.
+    case "o": {
+      // Preserve strings to prevent extra quotes around them.
+      if (typeof positional === "string") return positional;
+
+      const json = JSON.stringify(positional);
+
+      // If the positional isn't serializable, return it as-is.
+      if (json === "{}" || json === "[]" || /^\[object .+?\]$/.test(json)) {
+        return positional;
+      }
+
+      return json;
+    }
+  }
+}
+
+function format(message: string, ...positionals: any[]): string {
+  if (positionals.length === 0) return message;
+
+  let positionalIndex = 0;
+  let formattedMessage = message.replace(
+    POSITIONALS_EXP,
+    (match, isEscaped, _, flag) => {
+      const positional = positionals[positionalIndex];
+      const value = serializePositional(positional, flag);
+
+      if (!isEscaped) {
+        positionalIndex++;
+        return value;
+      }
+
+      return match;
+    },
+  );
+
+  // Append unresolved positionals to string as-is.
+  if (positionalIndex < positionals.length) {
+    formattedMessage += ` ${positionals.slice(positionalIndex).join(" ")}`;
+  }
+
+  formattedMessage = formattedMessage.replace(/%{2,2}/g, "%");
+
+  return formattedMessage;
+}

@@ -9,7 +9,12 @@ import {
 } from "remix-toast";
 
 export async function action(args: ActionFunctionArgs) {
-  invariant(args.params.slug, "Missing slug parameter");
+  invariant(
+    args.params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    args.params.slug,
+  );
 
   const { userId } = await getAuth(args);
   if (!userId)

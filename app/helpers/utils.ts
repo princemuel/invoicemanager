@@ -139,13 +139,15 @@ export function omitFields<T extends Record<string, any>, K extends keyof T>(
   source: T,
   fieldsToOmit: K[],
 ): Omit<T, K> {
-  if (typeof source !== "object" || source === null) {
-    throw new Error("Source must be an object.");
-  }
+  if (!isObject(source)) throw new Error("Source must be an object.");
 
   return Object.fromEntries(
     Object.entries(source).filter(([key]) => !fieldsToOmit.includes(key as K)),
   ) as Omit<T, K>;
+}
+
+export function isObject(value: unknown): value is object {
+  return Object.prototype.toString.call(value) === "[object Object]";
 }
 
 /*---------------------------------*
