@@ -41,19 +41,24 @@ export const loader = (args: LoaderFunctionArgs) => {
     const { getTheme } = await themeSessionResolver(request);
     const { toast, headers } = await getToast(request);
 
-    return json({ toast, theme: getTheme() }, { headers });
+    const { message, type } = toast || { message: "", type: "info" };
+
+    return json({ message, type, theme: getTheme() }, { headers });
   });
 };
 
 export const ErrorBoundary = ClerkErrorBoundary();
+
+let timmer = 1;
 
 function App() {
   const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
   React.useEffect(() => {
-    const type = data.toast?.type || "";
-    const message = data.toast?.message;
+    console.log("toast useEffect Ran", timmer);
+    const type = data?.type || "info";
+    const message = data?.message || "";
 
     const methods = {
       error: notify.error,
@@ -62,10 +67,10 @@ function App() {
       warning: notify.warning,
     };
 
-    const toast = methods?.[type as keyof typeof methods];
+    const toast = methods[type];
 
     if (type && message && toast) toast(message);
-  }, [data.toast?.message, data.toast?.type]);
+  }, [data?.message, data?.type]);
 
   React.useEffect(() => {
     const script = document.createElement("script");
@@ -112,7 +117,7 @@ function App() {
           <React.Fragment>
             <ToastManager
               position="top-center"
-              theme={theme ?? "system"}
+              theme={theme ?? "dark"}
               richColors
             />
             <BreakpointIndicator />
