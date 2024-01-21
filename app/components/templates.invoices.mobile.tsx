@@ -27,8 +27,8 @@ export function InvoicesMobile({ className }: Props) {
   return (
     <div className={tw("", className)}>
       <header className="container">
-        <div className="flex items-center">
-          <div className="flex-1">
+        <div className="flex gap-6 2xs:justify-between">
+          <div className="">
             <Text as="h1" id="page-heading" size="lg" weight="bold">
               Invoices
             </Text>
@@ -38,50 +38,48 @@ export function InvoicesMobile({ className }: Props) {
             </Text>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="relative mt-1 flex w-full flex-col">
-              <button
-                type="button"
-                className="flex w-full items-center gap-6 self-center"
-                onClick={() => setIsVisible((state) => !state)}
+          <div className="relative mt-1 flex flex-col">
+            <button
+              type="button"
+              className="flex w-full items-center gap-6 self-center"
+              onClick={() => setIsVisible((state) => !state)}
+            >
+              <Text as="span" weight="bold" className="inline-block truncate">
+                Filter
+              </Text>
+
+              <span
+                className={tw("pointer-events-none transform-gpu", {
+                  "-rotate-180": isVisible,
+                })}
               >
-                <Text as="span" weight="bold" className="inline-block truncate">
-                  Filter
-                </Text>
+                <IconArrowDown />
+              </span>
+            </button>
 
-                <span
-                  className={tw("pointer-events-none transform-gpu", {
-                    "-rotate-180": isVisible,
-                  })}
-                >
-                  <IconArrowDown />
-                </span>
-              </button>
-
-              <Transition
-                show={isVisible}
-                enter="transition duration-100 ease-out"
-                enterFrom="transform scale-95 opacity-0"
-                enterTo="transform scale-100 opacity-100"
-                leave="transition duration-75 ease-out"
-                leaveFrom="transform scale-100 opacity-100"
-                leaveTo="transform scale-95 opacity-0"
-              >
-                <div className="absolute z-10 mt-4 w-full shadow-200 dark:shadow-300">
-                  <InvoiceFilters />
-                </div>
-              </Transition>
-            </div>
-
-            <Button variant="primary" className="px-2 " asChild>
-              <Link to="/invoices/create">
-                <span className="grid aspect-square place-content-center rounded-full bg-white p-2">
-                  <IconPlus />
-                </span>
-                <span>New</span>
-              </Link>
-            </Button>
+            <Transition
+              show={isVisible}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <div className="absolute z-10 mt-4 w-full shadow-200 dark:shadow-300">
+                <InvoiceFilters />
+              </div>
+            </Transition>
           </div>
+
+          <Button variant="primary" className="px-2 max-2xs:ml-auto" asChild>
+            <Link to="/invoices/create">
+              <span className="grid aspect-square place-content-center rounded-full bg-white p-2">
+                <IconPlus />
+              </span>
+              <span>New</span>
+            </Link>
+          </Button>
         </div>
       </header>
 

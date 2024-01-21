@@ -68,7 +68,6 @@ export async function loader(args: LoaderFunctionArgs) {
 
     return json({ invoices });
   } catch (error) {
-    console.log(error);
     return json({ invoices: [] });
   }
 }

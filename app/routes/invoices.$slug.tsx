@@ -43,7 +43,12 @@ function PageRoute() {
 export default PageRoute;
 
 export async function action(args: ActionFunctionArgs) {
-  invariant(args.params.slug, "Missing slug parameter");
+  invariant(
+    args.params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    args.params.slug,
+  );
 
   const { userId } = await getAuth(args);
   if (!userId)
@@ -72,7 +77,12 @@ export async function action(args: ActionFunctionArgs) {
 }
 
 export async function loader(args: LoaderFunctionArgs) {
-  invariant(args.params.slug, "Missing slug parameter");
+  invariant(
+    args.params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    args.params.slug,
+  );
 
   const { userId } = await getAuth(args);
   if (!userId)
@@ -82,10 +92,9 @@ export async function loader(args: LoaderFunctionArgs) {
     );
 
   try {
-    const response = await db.invoice.findUnique({
+    const response = await db.invoice.findUniqueOrThrow({
       where: { slug: args.params.slug, userId },
     });
-    if (!response) throw new Error("Invalid Invoice Id");
 
     const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
