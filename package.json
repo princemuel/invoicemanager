@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@clerk/remix": "^3.1.16",
+    "@clerk/themes": "^1.7.9",
     "@ebay/nice-modal-react": "^1.2.13",
     "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^3.3.4",

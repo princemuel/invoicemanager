@@ -134,4 +134,13 @@ function Root() {
   );
 }
 
-export default ClerkApp(Root);
+export default ClerkApp(Root, {
+  appearance: {
+    layout: { shimmer: true },
+    variables: {
+      colorPrimary: "#7C5DFA",
+      colorBackground: "#FAFAFA",
+      colorDanger: "#EC5757",
+    },
+  },
+});
