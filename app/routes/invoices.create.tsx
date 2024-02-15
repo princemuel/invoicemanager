@@ -35,7 +35,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
@@ -138,7 +138,7 @@ function PageRoute() {
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
+          <Form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
               <Text as="h1" id="page-heading" size="xl" weight="bold">
                 New Invoice
@@ -564,7 +564,7 @@ function PageRoute() {
                 </div>
               </div>
             </footer>
-          </form>
+          </Form>
         </FormProvider>
       </div>
     </main>
