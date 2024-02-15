@@ -29,8 +29,12 @@ export function capitalize(string = "") {
 export const trim = (string = "") => string.trim();
 export const omitFirstChar = (string = "") => string.slice(1);
 
-export function pluralize(word: string, value: number) {
-  return value === 1 ? `${word}` : `${word}s`;
+export function pluralize<
+  N extends string,
+  C extends number,
+  P extends string = `${N}s`,
+>(noun: N, count: C, plural?: P) {
+  return (count === 1 ? noun : plural ?? `${noun}s`) as C extends 1 ? N : P;
 }
 
 export function truncate(str = "", length = str.length) {
@@ -146,9 +150,9 @@ export function omitFields<T extends Record<string, any>, K extends keyof T>(
   ) as Omit<T, K>;
 }
 
-export function isObject(value: unknown): value is object {
+export const isObject = (value: unknown): value is object => {
   return Object.prototype.toString.call(value) === "[object Object]";
-}
+};
 
 /*---------------------------------*
             MISC                   *

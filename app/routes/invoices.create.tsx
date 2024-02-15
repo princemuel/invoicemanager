@@ -93,6 +93,7 @@ export async function action(args: ActionFunctionArgs) {
     return redirectWithSuccess(
       `/invoices/${invoice?.slug}`,
       `Invoice #${invoice?.slug?.toUpperCase()} created`,
+      { status: 303 },
     );
   } catch (ex) {
     if (ex instanceof Error) console.error(ex.message);
@@ -451,7 +452,8 @@ function PageRoute() {
                                 {({ value }) => (
                                   <>
                                     <span className="block truncate">
-                                      Net {value} {pluralize("Day", value)}
+                                      Net {value}{" "}
+                                      {pluralize("Day", Number(value))}
                                     </span>
 
                                     <span className="pointer-events-none">
@@ -481,7 +483,8 @@ function PageRoute() {
                                       value={term}
                                     >
                                       <span className="block truncate text-400 leading-200 -tracking-200">
-                                        Net {term} {pluralize("Day", term)}
+                                        Net {term}{" "}
+                                        {pluralize("Day", Number(term))}
                                       </span>
                                     </Listbox.Option>
                                   ))}

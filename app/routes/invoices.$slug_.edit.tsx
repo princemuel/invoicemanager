@@ -110,6 +110,7 @@ export async function action(args: ActionFunctionArgs) {
     return redirectWithSuccess(
       `/invoices/${invoice.slug}`,
       `Invoice #${invoice.slug?.toUpperCase()} Edit Success`,
+      { status: 303 },
     );
   } catch (ex: any) {
     return redirectWithError(`/invoices`, `Request Failed`);
@@ -478,7 +479,8 @@ function PageRoute() {
                                 {({ value }) => (
                                   <>
                                     <span className="block truncate">
-                                      Net {value} {pluralize("Day", value)}
+                                      Net {value}{" "}
+                                      {pluralize("Day", Number(value))}
                                     </span>
 
                                     <span className="pointer-events-none">
