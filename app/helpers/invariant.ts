@@ -1,3 +1,4 @@
+// from the outvariant package https://github.com/open-draft/outvariant
 export const invariant: Invariant = (
   predicate,
   message,
@@ -83,7 +84,7 @@ type Invariant = {
 
 const POSITIONALS_EXP = /(%?)(%([sdijo]))/g;
 
-function serializePositional(positional: any, flag: string): any {
+function serializePositional(positional: any, flag: string) {
   switch (flag) {
     // Strings.
     case "s":
@@ -102,7 +103,6 @@ function serializePositional(positional: any, flag: string): any {
     case "o": {
       // Preserve strings to prevent extra quotes around them.
       if (typeof positional === "string") return positional;
-
       const json = JSON.stringify(positional);
 
       // If the positional isn't serializable, return it as-is.
@@ -115,7 +115,7 @@ function serializePositional(positional: any, flag: string): any {
   }
 }
 
-function format(message: string, ...positionals: any[]): string {
+function format(message: string, ...positionals: any[]) {
   if (positionals.length === 0) return message;
 
   let positionalIndex = 0;
