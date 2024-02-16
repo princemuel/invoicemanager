@@ -25,7 +25,7 @@ Invoice Manager is an
 
 ### Screenshot
 
-<!-- ![Invoice Screenshots](./preview.jpg) -->
+![Invoice Manager](./preview.jpg)
 
 ### Links
 
