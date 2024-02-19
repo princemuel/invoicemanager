@@ -35,7 +35,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
@@ -93,6 +93,7 @@ export async function action(args: ActionFunctionArgs) {
     return redirectWithSuccess(
       `/invoices/${invoice?.slug}`,
       `Invoice #${invoice?.slug?.toUpperCase()} created`,
+      { status: 303 },
     );
   } catch (ex) {
     if (ex instanceof Error) console.error(ex.message);
@@ -137,7 +138,7 @@ function PageRoute() {
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
         <FormProvider {...form}>
-          <form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
+          <Form onSubmit={handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
               <Text as="h1" id="page-heading" size="xl" weight="bold">
                 New Invoice
@@ -451,7 +452,8 @@ function PageRoute() {
                                 {({ value }) => (
                                   <>
                                     <span className="block truncate">
-                                      Net {value} {pluralize("Day", value)}
+                                      Net {value}{" "}
+                                      {pluralize("Day", Number(value))}
                                     </span>
 
                                     <span className="pointer-events-none">
@@ -481,7 +483,8 @@ function PageRoute() {
                                       value={term}
                                     >
                                       <span className="block truncate text-400 leading-200 -tracking-200">
-                                        Net {term} {pluralize("Day", term)}
+                                        Net {term}{" "}
+                                        {pluralize("Day", Number(term))}
                                       </span>
                                     </Listbox.Option>
                                   ))}
@@ -561,7 +564,7 @@ function PageRoute() {
                 </div>
               </div>
             </footer>
-          </form>
+          </Form>
         </FormProvider>
       </div>
     </main>

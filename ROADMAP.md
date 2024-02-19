@@ -1,8 +1,8 @@
-# User Stories for Invoice Tracker
+# User Stories for Invoice Manager
 
 The user should be able to:
 
-1. - [x] View the optimal layout for the app depending on their device's screen size
+1. - [x] View the optimal layout for the app depending on the device's screen size
 2. - [x] See hover states for all interactive elements on the page
 3. - [x] Create, read, update, and delete invoices
 4. - [x] Receive form validations when trying to create/edit an invoice

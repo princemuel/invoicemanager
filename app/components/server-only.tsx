@@ -1,5 +1,5 @@
 import { useHydrated } from "@/hooks";
-import * as React from "react";
+import type * as React from "react";
 
 type Props = {
   /**
@@ -25,5 +25,5 @@ type Props = {
  * ```
  */
 export function ServerOnly({ children, fallback = null }: Props) {
-  return useHydrated() ? <>{fallback}</> : <>{children()}</>;
+  return useHydrated() ? fallback : children();
 }
