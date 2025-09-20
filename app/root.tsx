@@ -12,7 +12,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
   useRouteLoaderData,
 } from "react-router";
 import {
@@ -44,10 +43,8 @@ export const loader = (args: Route.LoaderArgs) => {
   });
 };
 
-export function Layout({ children }: { children: React.ReactNode }) {
+function Root() {
   const data = useRouteLoaderData("root");
-  const error = useRouteError();
-
   const [theme] = useTheme();
 
   React.useEffect(() => {
@@ -91,11 +88,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         />
       </head>
 
-      <body className="text-brand-900 dark:bg-brand-800 relative flex min-h-screen w-full flex-col bg-white antialiased md:flex-row dark:text-white">
+      <body className="relative flex min-h-screen w-full flex-col bg-white text-brand-900 antialiased dark:bg-brand-800 dark:text-white md:flex-row">
         <NiceModal.Provider>
           <React.Fragment>
             <Sidebar />
-            {children}
+            <Outlet />
           </React.Fragment>
 
           <React.Fragment>
@@ -131,7 +128,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="container mx-auto p-4 pt-16">
+    <main className="mx-auto p-4 pt-16 container">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
@@ -147,7 +144,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
   return (
     <RemixThemesProvider specifiedTheme={loaderData.theme} themeAction="/action/set-theme">
       <ClerkProvider loaderData={loaderData}>
-        <Outlet />
+        <Root />
       </ClerkProvider>
     </RemixThemesProvider>
   );
