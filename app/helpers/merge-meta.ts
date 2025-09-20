@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "react-router";
 
 export const mergeMeta = <
   Loader extends LoaderFunction | unknown = unknown,

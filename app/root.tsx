@@ -1,56 +1,53 @@
-import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
-import { rootAuthLoader } from "@clerk/remix/ssr.server";
+import { ClerkProvider } from "@clerk/react-router";
+import { rootAuthLoader } from "@clerk/react-router/ssr.server";
 import NiceModal from "@ebay/nice-modal-react";
-import { cssBundleHref } from "@remix-run/css-bundle";
+import { Analytics } from "@vercel/analytics/react";
+import * as React from "react";
+
 import {
-  json,
-  type LinksFunction,
-  type LoaderFunctionArgs,
-} from "@remix-run/node";
-import {
+  data,
+  isRouteErrorResponse,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
-} from "@remix-run/react";
-import { Analytics } from "@vercel/analytics/react";
-import * as React from "react";
+  useRouteError,
+  useRouteLoaderData,
+} from "react-router";
 import {
   PreventFlashOnWrongTheme,
   ThemeProvider as RemixThemesProvider,
   useTheme,
 } from "remix-themes";
 import { getToast } from "remix-toast";
-import { Toaster as ToastManager, toast as notify } from "sonner";
+import { toast as notify, Toaster as ToastManager } from "sonner";
+import type { Route } from "./+types/root";
 import { BreakpointIndicator } from "./components/breakpoint-indicator";
 import { Sidebar } from "./components/layout.sidebar";
-import styles from "./globals.css";
-import { tw } from "./helpers/utils";
+import "./globals.css";
+import { tw } from "./helpers/tailwind";
 import { themeSessionResolver } from "./sessions.server";
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
+export const links: Route.LinksFunction = () => [
+  { rel: "icon", type: "image/svg+xml", href: "/vite.svg" },
 ];
 
-export const loader = (args: LoaderFunctionArgs) => {
+export const loader = (args: Route.LoaderArgs) => {
   return rootAuthLoader(args, async ({ request }) => {
     const { getTheme } = await themeSessionResolver(request);
     const { toast, headers } = await getToast(request);
 
     const { message, type } = toast || { message: "", type: "" };
 
-    return json({ message, type, theme: getTheme() }, { headers });
+    return data({ message, type, theme: getTheme() }, { headers });
   });
 };
 
-export const ErrorBoundary = ClerkErrorBoundary();
+export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData("root");
+  const error = useRouteError();
 
-function App() {
-  const data = useLoaderData<typeof loader>();
   const [theme] = useTheme();
 
   React.useEffect(() => {
@@ -94,26 +91,21 @@ function App() {
         />
       </head>
 
-      <body className="relative flex min-h-screen w-full flex-col bg-white text-brand-900 antialiased dark:bg-brand-800 dark:text-white md:flex-row">
+      <body className="text-brand-900 dark:bg-brand-800 relative flex min-h-screen w-full flex-col bg-white antialiased md:flex-row dark:text-white">
         <NiceModal.Provider>
           <React.Fragment>
             <Sidebar />
-            <Outlet />
+            {children}
           </React.Fragment>
 
           <React.Fragment>
             <ScrollRestoration />
             <Scripts />
-            <LiveReload />
             <Analytics />
           </React.Fragment>
 
           <React.Fragment>
-            <ToastManager
-              position="top-center"
-              theme={theme ?? "dark"}
-              richColors
-            />
+            <ToastManager position="top-center" theme={theme ?? "dark"} richColors />
             <BreakpointIndicator />
           </React.Fragment>
         </NiceModal.Provider>
@@ -122,25 +114,52 @@ function App() {
   );
 }
 
-function Root() {
-  const data = useLoaderData<typeof loader>();
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  let message = "Oops!";
+  let details = "An unexpected error occurred.";
+  let stack: string | undefined;
+
+  if (isRouteErrorResponse(error)) {
+    message = error.status === 404 ? "404" : "Error";
+    details =
+      error.status === 404 ?
+        "The requested page could not be found."
+      : error.statusText || details;
+  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    details = error.message;
+    stack = error.stack;
+  }
+
   return (
-    <RemixThemesProvider
-      specifiedTheme={data.theme}
-      themeAction="/action/set-theme"
-    >
-      <App />
+    <main className="container mx-auto p-4 pt-16">
+      <h1>{message}</h1>
+      <p>{details}</p>
+      {stack && (
+        <pre className="w-full overflow-x-auto p-4">
+          <code>{stack}</code>
+        </pre>
+      )}
+    </main>
+  );
+}
+
+export default function App({ loaderData }: Route.ComponentProps) {
+  return (
+    <RemixThemesProvider specifiedTheme={loaderData.theme} themeAction="/action/set-theme">
+      <ClerkProvider loaderData={loaderData}>
+        <Outlet />
+      </ClerkProvider>
     </RemixThemesProvider>
   );
 }
 
-export default ClerkApp(Root, {
-  appearance: {
-    layout: { shimmer: true },
-    variables: {
-      colorPrimary: "#7C5DFA",
-      colorBackground: "#FAFAFA",
-      colorDanger: "#EC5757",
-    },
-  },
-});
+// export default ClerkApp(Root, {
+//   appearance: {
+//     layout: { shimmer: true },
+//     variables: {
+//       colorPrimary: "#7C5DFA",
+//       colorBackground: "#FAFAFA",
+//       colorDanger: "#EC5757",
+//     },
+//   },
+// });

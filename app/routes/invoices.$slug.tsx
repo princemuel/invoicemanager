@@ -6,17 +6,13 @@ import { db } from "@/database/db.server";
 import { invariant } from "@/helpers/invariant";
 import { omitFields } from "@/helpers/utils";
 import { StringContraint } from "@/lib/schema";
-import { getAuth } from "@clerk/remix/ssr.server";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link } from "@remix-run/react";
-import {
-  redirectWithError,
-  redirectWithSuccess,
-  redirectWithWarning,
-} from "remix-toast";
+import { getAuth } from "@clerk/react-router/ssr.server";
+import { data, Link } from "react-router";
+import { redirectWithError, redirectWithSuccess, redirectWithWarning } from "remix-toast";
 
-function PageRoute() {
+import type { Route } from "./+types/invoices.$slug";
+
+export default function Page({ actionData, loaderData }: Route.ComponentProps) {
   return (
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-16 flex flex-col gap-8">
@@ -40,9 +36,7 @@ function PageRoute() {
   );
 }
 
-export default PageRoute;
-
-export async function action(args: ActionFunctionArgs) {
+export async function action(args: Route.ActionArgs) {
   invariant(
     args.params.slug,
     `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
@@ -50,8 +44,8 @@ export async function action(args: ActionFunctionArgs) {
     args.params.slug,
   );
 
-  const { userId } = await getAuth(args);
-  if (!userId)
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
     return redirectWithWarning(
       "/sign-in?redirect_url=" + args.request.url,
       "Invalid Session. Please sign in",
@@ -76,7 +70,7 @@ export async function action(args: ActionFunctionArgs) {
   }
 }
 
-export async function loader(args: LoaderFunctionArgs) {
+export async function loader(args: Route.LoaderArgs) {
   invariant(
     args.params.slug,
     `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
@@ -84,8 +78,8 @@ export async function loader(args: LoaderFunctionArgs) {
     args.params.slug,
   );
 
-  const { userId } = await getAuth(args);
-  if (!userId)
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
     return redirectWithWarning(
       "/sign-in?redirect_url=" + args.request.url,
       "Invalid Session. Please sign in",
@@ -98,7 +92,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
     const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
-    return json({ invoice: invoice });
+    return data({ invoice: invoice });
   } catch (e: any) {
     throw new Response(e.message, {
       status: 404,

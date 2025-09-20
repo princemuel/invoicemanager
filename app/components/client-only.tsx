@@ -1,5 +1,4 @@
 import { useHydrated } from "@/hooks";
-import type * as React from "react";
 
 type Props = {
   /**

@@ -7,7 +7,7 @@ import {
 } from "@/helpers/utils";
 import type { loader } from "@/routes/_index";
 import { Transition } from "@headlessui/react";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "react-router";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "./button";

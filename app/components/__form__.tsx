@@ -59,38 +59,33 @@ const FormField = <
   );
 };
 
-const FormItem = React.forwardRef(
-  ({ as, className, ...restProps }, forwardedRef) => {
-    const id = React.useId();
-    const As = as || "div";
+const FormItem = React.forwardRef(({ as, className, ...restProps }, forwardedRef) => {
+  const id = React.useId();
+  const As = as || "div";
 
-    return (
-      <FormItemContext.Provider value={{ id }}>
-        <As
-          className={tw("group flex flex-col gap-3", className)}
-          {...restProps}
-          ref={forwardedRef}
-        />
-      </FormItemContext.Provider>
-    );
-  },
-) as ForwardRefComponent<"div", {}>;
+  return (
+    <FormItemContext.Provider value={{ id }}>
+      <As
+        className={tw("group flex flex-col gap-3", className)}
+        {...restProps}
+        ref={forwardedRef}
+      />
+    </FormItemContext.Provider>
+  );
+}) as ForwardRefComponent<"div", {}>;
 FormItem.displayName = "FormItem";
 
 const FormControl = React.forwardRef<
   React.ElementRef<typeof Slot>,
   React.ComponentPropsWithoutRef<typeof Slot>
 >(({ ...restProps }, forwardedRef) => {
-  const { error, formItemId, formDescriptionId, formMessageId } =
-    useFormField();
+  const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
   return (
     <Slot
       id={formItemId}
       aria-describedby={
-        !error ?
-          `${formDescriptionId}`
-        : `${formDescriptionId} ${formMessageId}`
+        !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`
       }
       aria-errormessage={formMessageId}
       aria-invalid={Boolean(error)}
@@ -131,7 +126,7 @@ const FormMessage = React.forwardRef<
       role="alert"
       id={formMessageId}
       className={tw(
-        "text-400 font-medium leading-200 -tracking-200 text-accent-200",
+        "text-400 -tracking-200 text-accent-200 leading-200 font-medium",
         className,
       )}
       {...restProps}

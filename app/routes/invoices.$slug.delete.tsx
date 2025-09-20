@@ -1,14 +1,10 @@
 import { db } from "@/database/db.server";
 import { invariant } from "@/helpers/invariant";
-import { getAuth } from "@clerk/remix/ssr.server";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import {
-  redirectWithError,
-  redirectWithSuccess,
-  redirectWithWarning,
-} from "remix-toast";
+import { getAuth } from "@clerk/react-router/ssr.server";
+import { redirectWithError, redirectWithSuccess, redirectWithWarning } from "remix-toast";
+import type { Route } from "./+types/invoices.$slug.delete";
 
-export async function action(args: ActionFunctionArgs) {
+export async function action(args: Route.ActionArgs) {
   invariant(
     args.params.slug,
     `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
@@ -16,8 +12,8 @@ export async function action(args: ActionFunctionArgs) {
     args.params.slug,
   );
 
-  const { userId } = await getAuth(args);
-  if (!userId)
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
     return redirectWithWarning(
       "/sign-in?redirect_url=" + args.request.url,
       "Invalid Session. Please sign in",
@@ -28,10 +24,7 @@ export async function action(args: ActionFunctionArgs) {
       where: { slug: args.params.slug, userId },
     });
 
-    return redirectWithSuccess(
-      "/",
-      `Invoice with Id #${invoice?.slug} deleted`,
-    );
+    return redirectWithSuccess("/", `Invoice with Id #${invoice?.slug} deleted`);
   } catch (e) {
     return redirectWithError("/", `Request Failed`);
   }

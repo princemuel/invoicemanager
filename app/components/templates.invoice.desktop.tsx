@@ -1,7 +1,7 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import type { loader } from "@/routes/invoices.$slug";
 import NiceModal from "@ebay/nice-modal-react";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "react-router";
 import { format } from "date-fns";
 import { Button } from "./button";
 import DeleteInvoiceModal from "./invoice.delete";

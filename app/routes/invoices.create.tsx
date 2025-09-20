@@ -17,27 +17,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/popover";
 import { Text } from "@/components/text";
 import { db } from "@/database/db.server";
 import { generateHex } from "@/helpers/random-hex.server";
-import {
-  approximate,
-  calculateTotal,
-  numberGuard,
-  pluralize,
-  tw,
-} from "@/helpers/utils";
-import {
-  AddressSchema,
-  EmailContraint,
-  ItemSchema,
-  StringContraint,
-} from "@/lib/schema";
-import { getAuth } from "@clerk/remix/ssr.server";
+import { approximate, calculateTotal, numberGuard, pluralize, tw } from "@/helpers/utils";
+import { AddressSchema, EmailContraint, ItemSchema, StringContraint } from "@/lib/schema";
+import { getAuth } from "@clerk/react-router/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ActionFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment, useEffect } from "react";
+import { Form, Link } from "react-router";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
 import { redirectWithSuccess, redirectWithWarning } from "remix-toast";
 import { z } from "zod";
@@ -60,9 +47,9 @@ const schema = z.object({
 });
 const resolver = zodResolver(schema);
 
-export async function action(args: ActionFunctionArgs) {
-  const { userId } = await getAuth(args);
-  if (!userId)
+export async function action(args: Route.ActionArgs) {
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
     return redirectWithWarning(
       "/sign-in?redirect_url=" + args.request.url,
       "Invalid Session. Please sign in",
@@ -74,7 +61,7 @@ export async function action(args: ActionFunctionArgs) {
     receivedValues: defaultValues,
   } = await getValidatedFormData<FormData>(args.request, resolver);
 
-  if (errors) return json({ errors, defaultValues });
+  if (errors) return data({ errors, defaultValues });
 
   const duration = numberGuard(data.paymentTerms, 1) * 24 * 3600 * 1000;
   const dueTime = duration + Date.parse(data.issued);
@@ -108,7 +95,7 @@ export async function action(args: ActionFunctionArgs) {
 
 export type FormData = z.infer<typeof schema>;
 
-function PageRoute() {
+export default function Page({ actionData, loaderData }: Route.ComponentProps) {
   const form = useRemixForm<FormData>({
     mode: "onSubmit",
     resolver: resolver,
@@ -178,7 +165,7 @@ function PageRoute() {
                     <FormField
                       name="senderAddress.city"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>City</FormLabel>
                             <FormMessage />
@@ -199,7 +186,7 @@ function PageRoute() {
                     <FormField
                       name="senderAddress.postCode"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>Post Code</FormLabel>
                             <FormMessage />
@@ -317,7 +304,7 @@ function PageRoute() {
                     <FormField
                       name="clientAddress.city"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>City</FormLabel>
                             <FormMessage />
@@ -338,7 +325,7 @@ function PageRoute() {
                     <FormField
                       name="clientAddress.postCode"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>Post Code</FormLabel>
                             <FormMessage />
@@ -398,13 +385,10 @@ function PageRoute() {
                           <Popover>
                             <PopoverTrigger asChild>
                               <FormControl>
-                                <Button className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500">
+                                <Button className="border-brand-100 text-brand-900 hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:hocus:border-brand-500 inline-flex w-full items-center justify-between border bg-transparent px-5 py-4 outline-none dark:text-white">
                                   {field.value ?
                                     <span className="block truncate">
-                                      {format(
-                                        new Date(field.value),
-                                        "dd MMM yyyy",
-                                      )}
+                                      {format(new Date(field.value), "dd MMM yyyy")}
                                     </span>
                                   : <span>Pick a date</span>}
 
@@ -439,21 +423,18 @@ function PageRoute() {
                       render={({ field }) => (
                         <Listbox {...field}>
                           <FormItem className="relative col-span-6 flex-col sm:col-span-3">
-                            <Listbox.Label as={Label}>
-                              Payment Terms
-                            </Listbox.Label>
+                            <Listbox.Label as={Label}>Payment Terms</Listbox.Label>
 
                             <div className="relative z-[1]">
                               <Listbox.Button
                                 title="select a payment term"
                                 as={Button}
-                                className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500"
+                                className="border-brand-100 text-brand-900 hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:hocus:border-brand-500 inline-flex w-full items-center justify-between border bg-transparent px-5 py-4 outline-none dark:text-white"
                               >
                                 {({ value }) => (
                                   <>
                                     <span className="block truncate">
-                                      Net {value}{" "}
-                                      {pluralize("Day", Number(value))}
+                                      Net {value} {pluralize("Day", Number(value))}
                                     </span>
 
                                     <span className="pointer-events-none">
@@ -475,16 +456,15 @@ function PageRoute() {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Listbox.Options className="absolute z-20 mt-2 w-full divide-y divide-brand-100 rounded-lg bg-white shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300">
+                                <Listbox.Options className="divide-brand-100 shadow-200 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300 absolute z-20 mt-2 w-full divide-y rounded-lg bg-white transition-all duration-500">
                                   {terms.map((term) => (
                                     <Listbox.Option
                                       key={term.toString()}
-                                      className="ui-selected:text-brand-500 ui-active:text-brand-500 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500 px-5 py-4 font-bold text-brand-900 outline-none dark:text-brand-100"
+                                      className="ui-selected:text-brand-500 ui-active:text-brand-500 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500 text-brand-900 dark:text-brand-100 px-5 py-4 font-bold outline-none"
                                       value={term}
                                     >
-                                      <span className="block truncate text-400 leading-200 -tracking-200">
-                                        Net {term}{" "}
-                                        {pluralize("Day", Number(term))}
+                                      <span className="text-400 -tracking-200 block truncate leading-200">
+                                        Net {term} {pluralize("Day", Number(term))}
                                       </span>
                                     </Listbox.Option>
                                   ))}
@@ -538,7 +518,7 @@ function PageRoute() {
               {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
             </section>
 
-            <footer className="sticky bottom-0 z-20 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
+            <footer className="shadow-300 dark:bg-brand-700 sticky bottom-0 z-20 w-full bg-white p-6">
               <div className="container">
                 <div className="flex items-center gap-2 sm:gap-4">
                   <Button variant="soft" asChild>
@@ -548,7 +528,7 @@ function PageRoute() {
                   <Button
                     type="submit"
                     variant="secondary"
-                    className="ms-auto "
+                    className="ms-auto"
                     onClick={() => void setValue("status", "draft")}
                   >
                     Save as draft
@@ -570,5 +550,3 @@ function PageRoute() {
     </main>
   );
 }
-
-export default PageRoute;

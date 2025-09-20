@@ -1,17 +1,17 @@
 import { IconMoon, IconSun } from "@/common";
 import { tw } from "@/helpers/utils";
-import React from "react";
+import { useCallback, useTransition } from "react";
 import { Theme, useTheme } from "remix-themes";
 import { ClientOnly } from "./client-only";
 
 export const ThemeIcon = () => {
   const [theme, setTheme] = useTheme();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const isDarkMode = theme === Theme.DARK;
   const Icon = isDarkMode ? IconSun : IconMoon;
 
-  const update = React.useCallback(() => {
+  const update = useCallback(() => {
     startTransition(() => {
       setTheme(isDarkMode ? Theme.LIGHT : Theme.DARK);
     });

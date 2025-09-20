@@ -24,27 +24,17 @@ import {
   pluralize,
   tw,
 } from "@/helpers/utils";
-import {
-  AddressSchema,
-  EmailContraint,
-  ItemSchema,
-  StringContraint,
-} from "@/lib/schema";
-import { getAuth } from "@clerk/remix/ssr.server";
+import { AddressSchema, EmailContraint, ItemSchema, StringContraint } from "@/lib/schema";
+import { getAuth } from "@clerk/react-router/ssr.server";
 import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
 import { format } from "date-fns";
 import { Fragment } from "react";
+import { data, Form, Link, useParams } from "react-router";
 import { getValidatedFormData, useRemixForm } from "remix-hook-form";
-import {
-  redirectWithError,
-  redirectWithSuccess,
-  redirectWithWarning,
-} from "remix-toast";
+import { redirectWithError, redirectWithSuccess, redirectWithWarning } from "remix-toast";
 import { z } from "zod";
+import type { Route } from "./+types/invoices.$slug_.edit";
 
 const terms = [1, 7, 14, 30];
 
@@ -66,58 +56,7 @@ const schema = z.object({
 });
 const resolver = zodResolver(schema);
 
-export async function action(args: ActionFunctionArgs) {
-  const params = args.params;
-  const request = args.request;
-  invariant(
-    params.slug,
-    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
-    "string",
-    params.slug,
-  );
-
-  const { userId } = await getAuth(args);
-  if (!userId)
-    return redirectWithWarning(
-      "/sign-in?redirect_url=" + args.request.url,
-      "Invalid Session. Please sign in",
-    );
-
-  const {
-    errors,
-    data,
-    receivedValues: defaultValues,
-  } = await getValidatedFormData<FormData>(request, resolver);
-
-  if (errors) return json({ errors, defaultValues });
-
-  const duration = numberGuard(data.paymentTerms, 1) * 24 * 3600 * 1000;
-  const dueTime = duration + Date.parse(data.issued);
-
-  const invoice = {
-    ...data,
-    paymentDue: new Date(dueTime).toISOString(),
-    total: approximate(calculateTotal(data?.items, "total"), 2),
-    userId: userId,
-  };
-
-  try {
-    await db.invoice.update({
-      where: { slug: args.params.slug, userId },
-      data: invoice,
-    });
-
-    return redirectWithSuccess(
-      `/invoices/${invoice.slug}`,
-      `Invoice #${invoice.slug?.toUpperCase()} Edit Success`,
-      { status: 303 },
-    );
-  } catch (ex: any) {
-    return redirectWithError(`/invoices`, `Request Failed`);
-  }
-}
-
-export async function loader(args: LoaderFunctionArgs) {
+export async function loader(args: Route.LoaderArgs) {
   invariant(
     args.params.slug,
     `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
@@ -125,8 +64,8 @@ export async function loader(args: LoaderFunctionArgs) {
     args.params.slug,
   );
 
-  const { userId } = await getAuth(args);
-  if (!userId)
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
     return redirectWithWarning(
       "/sign-in?redirect_url=" + args.request.url,
       "Invalid Session. Please sign in",
@@ -139,7 +78,7 @@ export async function loader(args: LoaderFunctionArgs) {
 
     const invoice = omitFields(response, ["createdAt", "updatedAt", "id"]);
 
-    return json({ invoice: invoice });
+    return data({ invoice: invoice });
   } catch (e: any) {
     throw new Response(e.message, {
       status: 404,
@@ -150,13 +89,12 @@ export async function loader(args: LoaderFunctionArgs) {
 
 export type FormData = z.infer<typeof schema>;
 
-function PageRoute() {
+export default function Page({ actionData, loaderData: data }: Route.ComponentProps) {
   const params = useParams();
-  const data = useLoaderData<typeof loader>();
 
   const { invoice } = data;
 
-  const form = useRemixForm<FormData>({
+  const form = useRemixForm({
     mode: "onSubmit",
     resolver: resolver,
 
@@ -182,10 +120,7 @@ function PageRoute() {
     <main aria-labelledby="page-heading" className="relative w-full">
       <div className="mt-12 flex flex-col gap-8 lg:mt-16">
         <FormProvider {...form}>
-          <Form
-            onSubmit={form.handleSubmit}
-            className={tw("flex flex-col gap-8")}
-          >
+          <Form onSubmit={form.handleSubmit} className={tw("flex flex-col gap-8")}>
             <header className="container">
               <Text as="h1" id="page-heading" size="xl" weight="bold">
                 Edit&nbsp;<span className="text-brand-400">#</span>
@@ -226,7 +161,7 @@ function PageRoute() {
                     <FormField
                       name="senderAddress.city"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>City</FormLabel>
                             <FormMessage />
@@ -247,7 +182,7 @@ function PageRoute() {
                     <FormField
                       name="senderAddress.postCode"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>Post Code</FormLabel>
                             <FormMessage />
@@ -365,7 +300,7 @@ function PageRoute() {
                     <FormField
                       name="clientAddress.city"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>City</FormLabel>
                             <FormMessage />
@@ -386,7 +321,7 @@ function PageRoute() {
                     <FormField
                       name="clientAddress.postCode"
                       render={({ field }) => (
-                        <FormItem className="col-span-3 max-3xs:col-span-6 sm:col-span-2">
+                        <FormItem className="max-3xs:col-span-6 col-span-3 sm:col-span-2">
                           <div className="flex items-center justify-between">
                             <FormLabel>Post Code</FormLabel>
                             <FormMessage />
@@ -446,7 +381,7 @@ function PageRoute() {
                           <FormControl>
                             <Button
                               disabled
-                              className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500"
+                              className="border-brand-100 text-brand-900 hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:hocus:border-brand-500 inline-flex w-full items-center justify-between border bg-transparent px-5 py-4 outline-none dark:text-white"
                             >
                               <span className="block truncate">
                                 {format(new Date(field.value), "dd MMM yyyy")}
@@ -466,21 +401,18 @@ function PageRoute() {
                       render={({ field }) => (
                         <Listbox {...field}>
                           <FormItem className="relative col-span-6 flex-col sm:col-span-3">
-                            <Listbox.Label as={Label}>
-                              Payment Terms
-                            </Listbox.Label>
+                            <Listbox.Label as={Label}>Payment Terms</Listbox.Label>
 
                             <div className="relative z-[1]">
                               <Listbox.Button
                                 title="select a payment term"
                                 as={Button}
-                                className="inline-flex w-full items-center justify-between border border-brand-100 bg-transparent px-5 py-4 text-brand-900 outline-none hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:text-white dark:hocus:border-brand-500"
+                                className="border-brand-100 text-brand-900 hocus:border-brand-500 dark:border-brand-600 dark:bg-brand-700 dark:hocus:border-brand-500 inline-flex w-full items-center justify-between border bg-transparent px-5 py-4 outline-none dark:text-white"
                               >
                                 {({ value }) => (
                                   <>
                                     <span className="block truncate">
-                                      Net {value}{" "}
-                                      {pluralize("Day", Number(value))}
+                                      Net {value} {pluralize("Day", Number(value))}
                                     </span>
 
                                     <span className="pointer-events-none">
@@ -502,14 +434,14 @@ function PageRoute() {
                                 leaveFrom="opacity-100"
                                 leaveTo="opacity-0"
                               >
-                                <Listbox.Options className="absolute z-20 mt-2 w-full divide-y divide-brand-100 rounded-lg bg-white shadow-200 transition-all duration-500 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300">
+                                <Listbox.Options className="divide-brand-100 shadow-200 dark:divide-brand-600 dark:bg-brand-700 dark:shadow-300 absolute z-20 mt-2 w-full divide-y rounded-lg bg-white transition-all duration-500">
                                   {terms.map((term) => (
                                     <Listbox.Option
                                       key={term.toString()}
-                                      className="ui-selected:text-brand-500 ui-active:text-brand-500 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500 px-5 py-4 font-bold text-brand-900 outline-none dark:text-brand-100"
+                                      className="ui-selected:text-brand-500 ui-active:text-brand-500 dark:ui-selected:text-brand-500 dark:ui-active:text-brand-500 text-brand-900 dark:text-brand-100 px-5 py-4 font-bold outline-none"
                                       value={term}
                                     >
-                                      <span className="block truncate text-400 leading-200 -tracking-200">
+                                      <span className="text-400 -tracking-200 block truncate leading-200">
                                         Net {term} {pluralize("Day", term)}
                                       </span>
                                     </Listbox.Option>
@@ -564,10 +496,10 @@ function PageRoute() {
               {/*<!--------- INVOICE ITEM LIST DETAILS END ---------!>*/}
             </section>
 
-            <footer className="sticky bottom-0 z-20 w-full bg-white p-6 shadow-300 dark:bg-brand-700">
+            <footer className="shadow-300 dark:bg-brand-700 sticky bottom-0 z-20 w-full bg-white p-6">
               <div className="container">
                 <div className="flex items-center gap-2 sm:gap-4">
-                  <Button variant="soft" className="ms-auto " asChild>
+                  <Button variant="soft" className="ms-auto" asChild>
                     <Link to={`/invoices/${invoice.slug}`}>Cancel</Link>
                   </Button>
 
@@ -584,4 +516,53 @@ function PageRoute() {
   );
 }
 
-export default PageRoute;
+export async function action(args: Route.ActionArgs) {
+  const params = args.params;
+  const request = args.request;
+  invariant(
+    params.slug,
+    `Expected \`slug\` to be of type \`%s\` but received type \`%s\``,
+    "string",
+    params.slug,
+  );
+
+  const { isAuthenticated, userId } = await getAuth(args);
+  if (!isAuthenticated)
+    return redirectWithWarning(
+      "/sign-in?redirect_url=" + args.request.url,
+      "Invalid Session. Please sign in",
+    );
+
+  const {
+    errors,
+    data: formData,
+    receivedValues: defaultValues,
+  } = await getValidatedFormData(request, resolver);
+
+  if (errors) return data({ errors, defaultValues });
+
+  const duration = numberGuard(formData.paymentTerms, 1) * 24 * 3600 * 1000;
+  const dueTime = duration + Date.parse(formData.issued);
+
+  const invoice = {
+    ...formData,
+    paymentDue: new Date(dueTime).toISOString(),
+    total: approximate(calculateTotal(formData?.items, "total"), 2),
+    userId: userId,
+  };
+
+  try {
+    await db.invoice.update({
+      where: { slug: args.params.slug, userId },
+      data: invoice,
+    });
+
+    return redirectWithSuccess(
+      `/invoices/${invoice.slug}`,
+      `Invoice #${invoice.slug?.toUpperCase()} Edit Success`,
+      { status: 303 },
+    );
+  } catch (ex: any) {
+    return redirectWithError(`/invoices`, `Request Failed`);
+  }
+}

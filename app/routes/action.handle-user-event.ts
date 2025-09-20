@@ -1,15 +1,15 @@
 import { db } from "@/database/db.server";
-import type { WebhookEvent } from "@clerk/remix/api.server";
-import { json, type ActionFunctionArgs } from "@remix-run/node";
+import type { WebhookEvent } from "@clerk/react-router/api.server";
 import { Webhook } from "svix";
 
-export async function action({ request }: ActionFunctionArgs) {
+import { data } from "react-router";
+import type { Route } from "./+types/action.handle-user-event";
+
+export async function action({ request }: Route.ActionArgs) {
   try {
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
     if (!WEBHOOK_SECRET)
-      throw new Error(
-        "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local",
-      );
+      throw new Error("Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local");
 
     const headers = request.headers;
     const svix_id = headers.get("svix-id");
@@ -84,8 +84,8 @@ export async function action({ request }: ActionFunctionArgs) {
       await db.$transaction([deleteAllInvoices, deleteUser]);
     }
 
-    return json("Webhook Request Success", { status: 200 });
+    return data("Webhook Request Success", { status: 200 });
   } catch (err) {
-    return json("Webhook Request Failed", { status: 400 });
+    return data("Webhook Request Failed", { status: 400 });
   }
 }

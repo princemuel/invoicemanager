@@ -1,8 +1,8 @@
 import { calculateTotal, formatAmount, hasValues, tw } from "@/helpers/utils";
 import type { loader } from "@/routes/invoices.$slug";
 import NiceModal from "@ebay/nice-modal-react";
-import { Link, useLoaderData } from "@remix-run/react";
 import { format } from "date-fns";
+import { Link, useLoaderData } from "react-router";
 import { Button } from "./button";
 import DeleteInvoiceModal from "./invoice.delete";
 import { MarkAsPaid } from "./mark-as-paid-button";
@@ -16,7 +16,7 @@ export function InvoiceMobile({ className }: Props) {
   return (
     <section className={className}>
       <header className="container">
-        <div className="flex items-center justify-between rounded-lg bg-white px-6 py-5 shadow-100 dark:bg-brand-700">
+        <div className="shadow-100 dark:bg-brand-700 flex items-center justify-between rounded-lg bg-white px-6 py-5">
           <Text as="p" variant="accent">
             Status
           </Text>
@@ -27,10 +27,8 @@ export function InvoiceMobile({ className }: Props) {
               "!h-10 !w-[6.5rem] justify-around !px-4 !py-3 capitalize",
               invoice.status === "draft" &&
                 "bg-accent-300/[0.06] text-accent-300 dark:bg-brand-100/[0.06] dark:text-brand-100",
-              invoice.status === "pending" &&
-                "bg-accent-400/[0.06] text-accent-400",
-              invoice.status === "paid" &&
-                "bg-accent-500/[0.06] text-accent-500",
+              invoice.status === "pending" && "bg-accent-400/[0.06] text-accent-400",
+              invoice.status === "paid" && "bg-accent-500/[0.06] text-accent-500",
             )}
           >
             <span className="h-2 w-2 rounded-full bg-current" />
@@ -39,9 +37,9 @@ export function InvoiceMobile({ className }: Props) {
         </div>
       </header>
 
-      <article className="pb-14 container">
-        <div className="flex flex-col gap-12 rounded-lg bg-white px-6 py-8 shadow-100 dark:bg-brand-700">
-          <div className="flex flex-col justify-between gap-7 xs:flex-row">
+      <article className="container pb-14">
+        <div className="shadow-100 dark:bg-brand-700 flex flex-col gap-12 rounded-lg bg-white px-6 py-8">
+          <div className="xs:flex-row flex flex-col justify-between gap-7">
             <div className="> * + * space-y-3">
               <Text as="p" weight="bold" className="uppercase">
                 <span className="text-brand-400">#</span>
@@ -138,8 +136,8 @@ export function InvoiceMobile({ className }: Props) {
             </div>
           </div>
 
-          <section className="overflow-clip rounded-lg bg-neutral-200 dark:bg-brand-600">
-            <ul className="flex flex-col gap-6 p-6 ">
+          <section className="dark:bg-brand-600 overflow-clip rounded-lg bg-neutral-200">
+            <ul className="flex flex-col gap-6 p-6">
               {hasValues(invoice?.items || []) ?
                 invoice.items.map((item) => (
                   <li key={item?.id}>
@@ -165,7 +163,7 @@ export function InvoiceMobile({ className }: Props) {
               : <li></li>}
             </ul>
 
-            <footer className="flex items-center justify-between bg-accent-300 p-6 dark:bg-brand-900">
+            <footer className="bg-accent-300 dark:bg-brand-900 flex items-center justify-between p-6">
               <Text as="h4" className="text-white">
                 Grand Total
               </Text>
@@ -183,16 +181,14 @@ export function InvoiceMobile({ className }: Props) {
         </div>
       </article>
 
-      <div className="sticky bottom-0 w-full bg-white p-6 shadow-100 dark:bg-brand-700">
+      <div className="shadow-100 dark:bg-brand-700 sticky bottom-0 w-full bg-white p-6">
         <div className="flex items-center justify-between gap-2">
           <Button variant="soft" asChild>
             <Link to="edit">Edit</Link>
           </Button>
           <Button
             variant="destructive"
-            onClick={() =>
-              NiceModal.show(DeleteInvoiceModal, { invoiceId: invoice?.slug })
-            }
+            onClick={() => NiceModal.show(DeleteInvoiceModal, { invoiceId: invoice?.slug })}
           >
             Delete
           </Button>
