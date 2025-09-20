@@ -1,13 +1,9 @@
-import { Outlet } from "@remix-run/react";
+import { Outlet } from "react-router";
 
-type Props = {};
-
-function LayoutRoute(props: Props) {
+export default function Layout() {
   return (
     <main className="flex min-h-screen w-full items-center justify-center">
       <Outlet />
     </main>
   );
 }
-
-export default LayoutRoute;

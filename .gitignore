@@ -172,3 +172,5 @@ local
 
 *.pem
 *.local.*
+
+.react-router/

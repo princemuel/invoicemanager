@@ -1,7 +1,5 @@
-import { UserProfile } from "@clerk/remix";
+import { UserProfile } from "@clerk/react-router";
 
-function PageRoute() {
+export default function Page() {
   return <UserProfile path="/user" routing="path" />;
 }
-
-export default PageRoute;
