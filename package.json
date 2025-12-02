@@ -52,7 +52,7 @@
     "svix": "^1.17.0",
     "tailwind-merge": "^2.2.1",
     "uuid": "^9.0.1",
-    "validator": "^13.11.0",
+    "validator": "^13.15.22",
     "zod": "^3.22.4"
   },
   "devDependencies": {
