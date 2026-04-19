@@ -1,8 +1,9 @@
-import "csstype";
+import "react";
 
-declare module "csstype" {
-  interface Properties {
-    // Allow any CSS Custom Properties
-    [key: `--${string}`]: string;
+declare module "react" {
+  interface CSSProperties {
+    [index: `--theme-${string}`]: string & {};
+    [index: `--${string}`]: string & {};
+    [index: string]: string & {};
   }
 }
