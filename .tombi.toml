@@ -1,0 +1,13 @@
+[files]
+exclude = ["node_modules/**/*.toml"]
+
+[format]
+[format.rules]
+key-value-equals-sign-alignment = true
+line-width                      = 96
+
+[lsp]
+goto-type-definition.enabled = false
+
+[schema]
+strict = false

@@ -1,86 +1,106 @@
 * text=auto eol=lf
 
-## SOURCE CODE
-*.bat      text eol=crlf
+# Source code (force LF)
+*.ts                    text eol=lf
+*.tsx                   text eol=lf
+*.js                    text eol=lf
+*.json                  text eol=lf
+*.rs                    text eol=lf
+*.debug                 text eol=lf
+
+# Windows batch scripts keep CRLF
+*.bat                   text eol=crlf
+
+# Generated code (don’t count in language stats)
+index.js                linguist-detectable=false
+index.d.ts              linguist-detectable=false
+*.wasi-browser.js       linguist-detectable=false
+*.wasi.cjs              linguist-detectable=false
+wasi-worker-browser.mjs linguist-detectable=false
+wasi-worker.mjs         linguist-detectable=false
+
+# Jest snapshots
+*.shot                  linguist-language=Jest-Snapshot
+*.shot                  linguist-generated
+
+# JSON with comments
+*.json                  linguist-language=JSON-with-Comments
+
+# Content
+*.mdoc                  linguist-language=Markdown
+
+# Yarn / PnP internals
+/.yarn/**               linguist-vendored
+/.yarn/releases/*       binary
+/.yarn/plugins/**/*     binary
+/.pnp.*                 binary linguist-generated
 
 ## GRAPHICS
-*.ai   binary
-*.bmp  binary
-*.eps  binary
-*.gif  binary
-*.ico  binary
-*.jng  binary
-*.jp2  binary
-*.jpg  binary
-*.jpeg binary
-*.jpx  binary
-*.jxr  binary
-*.pdf  binary
-*.png  binary
-*.psb  binary
-*.psd  binary
+*.ai                    binary
+*.bmp                   binary
+*.eps                   binary
+*.gif                   binary
+*.ico                   binary
+*.jng                   binary
+*.jp2                   binary
+*.jpg                   binary
+*.jpeg                  binary
+*.jpx                   binary
+*.jxr                   binary
+*.pdf                   binary
+*.png                   binary
+*.psb                   binary
+*.psd                   binary
 *.svg  text
-*.svgz binary
-*.tif  binary
-*.tiff binary
-*.wbmp binary
-*.webp binary
+*.svgz                  binary
+*.tif                   binary
+*.tiff                  binary
+*.wbmp                  binary
+*.webp                  binary
 
 ## AUDIO
-*.kar  binary
-*.m4a  binary
-*.mid  binary
-*.midi binary
-*.mp3  binary
-*.ogg  binary
-*.ra   binary
+*.kar                   binary
+*.m4a                   binary
+*.mid                   binary
+*.midi                  binary
+*.mp3                   binary
+*.ogg                   binary
+*.ra                    binary
 
 ## VIDEO
-*.3gpp binary
-*.3gp  binary
-*.as   binary
-*.asf  binary
-*.asx  binary
-*.fla  binary
-*.flv  binary
-*.m4v  binary
-*.mng  binary
-*.mov  binary
-*.mp4  binary
-*.mpeg binary
-*.mpg  binary
-*.ogv  binary
-*.swc  binary
-*.swf  binary
-*.webm binary
+*.3gpp                  binary
+*.3gp                   binary
+*.as                    binary
+*.asf                   binary
+*.asx                   binary
+*.fla                   binary
+*.flv                   binary
+*.m4v                   binary
+*.mng                   binary
+*.mov                   binary
+*.mp4                   binary
+*.mpeg                  binary
+*.mpg                   binary
+*.ogv                   binary
+*.swc                   binary
+*.swf                   binary
+*.webm                  binary
 
 ## ARCHIVES
-*.7z  binary
-*.gz  binary
-*.jar binary
-*.rar binary
-*.tar binary
-*.zip binary
+*.7z                    binary
+*.gz                    binary
+*.jar                   binary
+*.rar                   binary
+*.tar                   binary
+*.zip                   binary
 
 ## FONTS
-*.ttf   binary
-*.eot   binary
-*.otf   binary
-*.woff  binary
-*.woff2 binary
+*.ttf                   binary
+*.eot                   binary
+*.otf                   binary
+*.woff                  binary
+*.woff2                 binary
 
 ## EXECUTABLES
-*.exe binary
-*.pyc binary
-
-# force github to treat out custom jest snapshot extension as normal jest snapshots
-*.shot linguist-language=Jest-Snapshot
-*.shot linguist-generated
-
-/.yarn/**            linguist-vendored
-/.yarn/releases/*    binary
-/.yarn/plugins/**/*  binary
-/.pnp.*              binary linguist-generated
-
-
-*.json  linguist-language=JSON-with-Comments
+*.exe                   binary
+*.pyc                   binary

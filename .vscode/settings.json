@@ -1,22 +1,65 @@
 {
+  "js/ts.experimental.useTsgo": false,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.implicitProjectConfig.target": "ESNext",
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
   "editor.tabSize": 2,
-
-  "editor.inlineSuggest.enabled": true,
   "editor.wordWrap": "bounded",
-  "editor.wordWrapColumn": 96,
+  "editor.wordWrapColumn": 120,
+  "editor.inlineSuggest.enabled": true,
+  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
   "editor.codeActionsOnSave": {
     "source.addMissingImports": "explicit",
+    "source.fixAll": "explicit",
     "source.organizeImports": "explicit",
-    "source.fixAll": "explicit"
+    "source.sortImports": "explicit",
+    "source.removeUnusedImports": "explicit",
+    "source.format.oxc": "always"
   },
-
-  "eslint.codeAction.showDocumentation": {
-    "enable": true
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.quickSuggestions": { "strings": "on" },
+  "dotenv.enableAutocloaking": true,
+  "oxc.enable": true,
+  "json.validate.enable": true,
+  "material-icon-theme.activeIconPack": "react_redux",
+  "material-icon-theme.folders.theme": "specific",
+  "template-string-converter.enabled": true,
+  "template-string-converter.convertWithinTemplateString": true,
+  "template-string-converter.convertOutermostQuotes": true,
+  "template-string-converter.autoRemoveTemplateString": true,
+  "template-string-converter.addBracketsToProps": true,
+  "npm-intellisense.packageSubfoldersIntellisense": true,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["([\"'`][^\"'`]*.*?[\"'`])", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ],
+  "tailwindCSS.includeLanguages": {
+    "xslt": "html"
   },
-
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "tailwindCSS.rootFontSize": 16,
-  "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "dotenv.enableAutocloaking": false,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  // "[javascript]": {
+  //   "editor.defaultFormatter": "oxc.oxc-vscode"
+  // },
+  // "[typescript]": {
+  //   "editor.defaultFormatter": "oxc.oxc-vscode"
+  // },
+  // "[javascriptreact]": {
+  //   "editor.defaultFormatter": "oxc.oxc-vscode"
+  // },
+  // "[typescriptreact]": {
+  //   "editor.defaultFormatter": "oxc.oxc-vscode"
+  // },
+  // "[jsonc]": {
+  //   "editor.defaultFormatter": "oxc.oxc-vscode"
+  // },
+  "svg.preview.background": "editor",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }
