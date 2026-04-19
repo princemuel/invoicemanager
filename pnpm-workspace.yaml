@@ -1,7 +1,6 @@
-onlyBuiltDependencies:
-  - '@clerk/shared'
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - prisma
+allowBuilds:
+  '@clerk/shared': true
+  '@prisma/client': true
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
